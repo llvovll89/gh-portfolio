@@ -3,6 +3,9 @@
 
 @theme {
     --color-primary: #09f;
+    --color-main: #1c1b1b;
+    --user-select-none: none;
+    --color-sub-gary: #cecece73;
 }
 
 * {
