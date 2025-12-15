@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@import "./styles/font.css";
+
+@theme {
+    --color-primary: #09f;
+}
+
+* {
+    font-family: "Pretendard", sans-serif;
+}
