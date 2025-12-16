@@ -18,12 +18,12 @@
 - Vite, React, TypeScript, TailwindCSS 기본 설정 완료   
 
 ## 2025-12-16
-- feat: 전역상태 추가 (사이드바용, 헤더용)   
-- feat: 헤더, 컨텐츠, 푸터 분리   
-- feat: 헤더 클릭 시 선택한 path에 따른 style 적용   
-- feat: 사이드바 토글 버튼 추가   
-- feat: 전체 레이아웃 스타일 적용   
-
+- feat - 전역상태 추가 (사이드바용, 헤더용)   
+- feat - 헤더, 컨텐츠, 푸터 분리   
+- feat - 헤더 클릭 시 선택한 path에 따른 style 적용   
+- feat - 사이드바 토글 버튼 추가   
+- feat - 전체 레이아웃 스타일 적용   
+- feat - footer 리사이즈 이벤트 적용 (height)
 ## 향후 계획
 - 각 페이지별 내용 채우기
 - 디자인 개선
