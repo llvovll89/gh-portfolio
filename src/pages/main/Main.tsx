@@ -1,13 +1,22 @@
-import { Aside } from "./contents/aside";
-import { Bottom } from "./contents/bottom";
-import { Header } from "./contents/header";
+import {Aside} from "../../components/aside/Aside";
+import { Contents } from "../../components/contents/Contents";
+import {Bottom} from "../../components/footer/Footer";
+import {Header} from "../../components/header/Header";
 
 export const Main = () => {
     return (
-        <section className="w-screen min-h-screen flex flex-col relative bg-main">
+        <>
             <Header />
             <Aside />
+            <Contents className="select-none">
+                <section className="w-full h-full bg-white py-4 px-5 flex flex-col items-center">
+                    <header className=""></header>
+                    <article className="flex flex-col w-full">
+                        <h1 className="text-2xl font-bold w-full flex justify-start">Web Developer "김건호"</h1>
+                    </article>
+                </section>
+            </Contents>
             <Bottom />
-        </section>
+        </>
     );
 };
