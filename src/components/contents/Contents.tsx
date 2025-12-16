@@ -7,11 +7,22 @@ interface ContentsProps {
 }
 
 export const Contents = ({children, className}: ContentsProps) => {
-    const {isVisibleSidebar} = useContext(GlobalStateContext);
+    const {layoutState} = useContext(GlobalStateContext);
+
+    console.log(layoutState.resizeFooterHeight);
 
     return (
         <section
-            className={`${isVisibleSidebar ? "w-full translate-x-0" : "w-[calc(100%-300px)] translate-x-75"} absolute top-10 h-[calc(100%-290px)] transition-all ease-linear ${className}`}
+            className={`${
+                layoutState.isVisibleSidebar
+                    ? "w-full translate-x-0"
+                    : "w-[calc(100%-300px)] translate-x-75"
+            } absolute top-10 transition-width ${className}`}
+            style={{
+                height: `calc(100% - ${
+                    layoutState.resizeFooterHeight || 250
+                }px)`,
+            }}
         >
             {children}
         </section>

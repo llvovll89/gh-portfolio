@@ -1,17 +1,29 @@
 import {createContext, useState} from "react";
 
+interface LayoutState {
+    isVisibleSidebar: boolean;
+    setIsVisibleSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+    resizeFooterHeight: number;
+    setResizeFooterHeight: React.Dispatch<React.SetStateAction<number>>;
+}
+
 interface GlobalStateContextProps {
     selectedPath: string;
     setSelectedPath: React.Dispatch<React.SetStateAction<string>>;
-    isVisibleSidebar: boolean;
-    setIsVisibleSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+    layoutState: LayoutState;
+    setLayoutState: React.Dispatch<React.SetStateAction<LayoutState>>;
 }
 
 export const GlobalStateContext = createContext<GlobalStateContextProps>({
     selectedPath: "",
     setSelectedPath: () => {},
-    isVisibleSidebar: true,
-    setIsVisibleSidebar: () => {},
+    layoutState: {
+        isVisibleSidebar: true,
+        setIsVisibleSidebar: () => {},
+        resizeFooterHeight: 0,
+        setResizeFooterHeight: () => {},
+    },
+    setLayoutState: () => {},
 });
 
 export const GlobalStateProvider = ({
@@ -19,16 +31,21 @@ export const GlobalStateProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const [pathState, setPathState] = useState<string>("");
-    const [isVisibleSidebar, setIsVisibleSidebar] = useState<boolean>(true);
+    const [selectedPath, setSelectedPath] = useState<string>("");
+    const [layoutState, setLayoutState] = useState<LayoutState>({
+        isVisibleSidebar: true,
+        setIsVisibleSidebar: () => {},
+        resizeFooterHeight: 0,
+        setResizeFooterHeight: () => {},
+    });
 
     return (
         <GlobalStateContext.Provider
             value={{
-                selectedPath: pathState,
-                setSelectedPath: setPathState,
-                isVisibleSidebar,
-                setIsVisibleSidebar,
+                selectedPath,
+                setSelectedPath,
+                layoutState,
+                setLayoutState,
             }}
         >
             {children}
