@@ -5,11 +5,11 @@ import { GlobalStateContext } from "../../../../context/GlobalState.context";
 import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
 
 export const Folder = () => {
-    const { selectedPathState } = useContext(GlobalStateContext);
+    const { selectedPathState, selectedTheme } = useContext(GlobalStateContext);
     const handlePushPath = useHandlePushPath();
 
     return (
-        <section className="w-[calc(100%-40px)] flex flex-col bg-base-navy overflow-hidden">
+        <section className={`w-[calc(100%-40px)] flex flex-col ${selectedTheme.mode} overflow-hidden`}>
             <header className="w-full h-10 px-3 flex items-center text-xs text-white overflow-hidden tracking-[1px]">
                 탐색기
             </header>
