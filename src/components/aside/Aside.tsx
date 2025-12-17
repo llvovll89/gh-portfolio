@@ -1,33 +1,61 @@
-import {useContext} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import {GlobalStateContext} from "../../context/GlobalState.context";
+import {useDragging} from "../../hooks/useDragging";
+import {Navbar} from "./navbar/Navbar";
+import {NOT_FOUND, routesPath} from "../../routes/route";
+import {NavType} from "./constants/nav.type";
+import {Folder} from "./contents/Folder";
 
 export const Aside = () => {
+    const [selectedNav, setSelectedNav] = useState<NavType | null>(
+        NavType.FOLDER
+    );
     const {layoutState, setLayoutState} = useContext(GlobalStateContext);
+    const asideRef = useRef<HTMLDivElement>(null);
+    const handleMouseDown = useDragging({targetRef: asideRef, type: "sidebar"});
+
+    const handleClickNav = (nav: NavType) => {
+        if (selectedNav === nav) {
+            setSelectedNav(null);
+        } else {
+            setSelectedNav(nav);
+        }
+    };
+
+    useEffect(() => {
+        setLayoutState((prev) => ({
+            ...prev,
+            resizeSidebarWidth: selectedNav ? 300 : 40,
+        }));
+    }, [selectedNav]);
 
     return (
         <aside
-            className={`${
-                layoutState.isVisibleSidebar ? "-translate-x-75" : ""
-            } w-75 absolute left-0 top-0 h-screen transition-all ease-linear bg-main border-r border-sub-gary/30 flex flex-col z-1`}
+            ref={asideRef}
+            style={{
+                width: layoutState.resizeSidebarWidth,
+            }}
+            className={`translate-x-0 absolute left-0 top-0 h-screen transition-transform ease-in-out bg-main border-r border-sub-gary/30 flex z-1`}
         >
-            <section className="flex flex-col bg-background-main-color">
-                <header className="w-full h-8 px-2 flex items-center text-xs text-white">
-                    EXPLORER
-                </header>
-                <article className="w-full h-[calc(100%-32px)]"></article>
-            </section>
+            <Navbar selectedNav={selectedNav} onClickNav={handleClickNav} />
 
-            <button
-                className="absolute left-75 z-10 top-1/2 -translate-y-1/2 cursor-pointer bg-primary/50 rounded-tr-[5px] rounded-br-[5px] text-xl p-1"
-                onClick={() =>
-                    setLayoutState({
-                        ...layoutState,
-                        isVisibleSidebar: !layoutState.isVisibleSidebar,
-                    })
-                }
-            >
-                {layoutState.isVisibleSidebar ? "👉" : "👈"}
-            </button>
+            {selectedNav === NavType.FOLDER && <Folder />}
+
+            {selectedNav && (
+                <div
+                    style={{
+                        width: 8,
+                        height: "100vh",
+                        cursor: "ew-resize",
+                        background: "rgba(0,0,0,0.1)",
+                        position: "absolute",
+                        top: 0,
+                        right: 0,
+                        zIndex: 10,
+                    }}
+                    onMouseDown={handleMouseDown}
+                />
+            )}
         </aside>
     );
 };

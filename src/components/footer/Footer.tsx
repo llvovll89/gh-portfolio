@@ -1,49 +1,21 @@
-import {useContext, useEffect, useRef} from "react";
+import {useContext, useRef} from "react";
 import {GlobalStateContext} from "../../context/GlobalState.context";
+import {useDragging} from "../../hooks/useDragging";
 
 export const Bottom = () => {
-    const {layoutState, setLayoutState} = useContext(GlobalStateContext);
-    const isDragging = useRef(false);
+    const {layoutState} = useContext(GlobalStateContext);
     const footerRef = useRef<HTMLDivElement>(null);
 
-    const handleMouseDown = (e: React.MouseEvent) => {
-        isDragging.current = true;
-        footerRef.current!.style.cursor = "ns-resize";
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-        if (!isDragging.current) return;
-        // 화면 아래에서부터의 높이 계산
-        const windowHeight = window.innerHeight;
-        const newHeight = windowHeight - e.clientY;
-        setLayoutState((prev) => ({
-            ...prev,
-            resizeFooterHeight: Math.max(50, newHeight), // 최소 높이 50px
-        }));
-    };
-
-    const handleMouseUp = () => {
-        isDragging.current = false;
-        footerRef.current!.style.cursor = "";
-    };
-
-    useEffect(() => {
-        window.addEventListener("mousemove", handleMouseMove);
-        window.addEventListener("mouseup", handleMouseUp);
-
-        return () => {
-            window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mouseup", handleMouseUp);
-        };
-    }, []);
+    const handleMouseDown = useDragging({targetRef: footerRef, type: "footer"});
 
     return (
         <footer
             ref={footerRef}
-            className={`${
-                layoutState.isVisibleSidebar ? "w-full" : "w-[calc(100%-300px)]"
-            } bg-main absolute bottom-0 right-0 border-t border-sub-gary/30 transition-width ease-linear`}
-            style={{height: layoutState.resizeFooterHeight || 250}}
+            className={` bg-main absolute bottom-0 right-0 border-t border-sub-gary/30 transition-transform ease-in-out`}
+            style={{
+                width: `calc(100% - ${layoutState.resizeSidebarWidth}px)`,
+                height: layoutState.resizeFooterHeight || 250,
+            }}
         >
             <div
                 style={{
