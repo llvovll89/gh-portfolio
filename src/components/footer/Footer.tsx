@@ -14,7 +14,7 @@ export const Bottom = () => {
             className={` bg-main absolute bottom-0 right-0 border-t border-sub-gary/30 transition-transform ease-in-out`}
             style={{
                 width: `calc(100% - ${layoutState.resizeSidebarWidth}px)`,
-                height: layoutState.resizeFooterHeight || 250,
+                height: layoutState.resizeFooterHeight,
             }}
         >
             <div

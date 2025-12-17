@@ -2,12 +2,12 @@ import {createContext, useState} from "react";
 import {MAIN} from "../routes/route";
 import {NavType} from "../components/aside/constants/Nav.type";
 
-interface LayoutState {
+export interface LayoutState {
     resizeFooterHeight: number;
     resizeSidebarWidth: number;
 }
 
-interface SelectedPathState {
+export interface SelectedPathState {
     list: string[];
     state: string;
 }
@@ -46,7 +46,7 @@ export const GlobalStateProvider = ({
 }) => {
     const [selectedPath, setSelectedPath] = useState<string>("");
     const [layoutState, setLayoutState] = useState<LayoutState>({
-        resizeFooterHeight: 0,
+        resizeFooterHeight: 250,
         resizeSidebarWidth: 300,
     });
     const [selectedPathState, setSelectedPathState] =
