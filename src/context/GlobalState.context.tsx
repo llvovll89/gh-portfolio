@@ -1,6 +1,7 @@
-import {createContext, useState} from "react";
-import {MAIN} from "../routes/route";
-import {NavType} from "../components/aside/constants/Nav.type";
+import { createContext, useState } from "react";
+import { MAIN } from "../routes/route";
+import { NavType } from "../components/aside/constants/Nav.type";
+import { ThemeMode } from "./constatns/Theme.type";
 
 export interface LayoutState {
     resizeFooterHeight: number;
@@ -10,6 +11,11 @@ export interface LayoutState {
 export interface SelectedPathState {
     list: string[];
     state: string;
+}
+
+interface SelectedThemeState {
+    mode: ThemeMode;
+    isVisibleThemeDropdown: boolean;
 }
 
 interface GlobalStateContextProps {
@@ -23,20 +29,27 @@ interface GlobalStateContextProps {
     >;
     selectedNav: NavType | null;
     setSelectedNav: React.Dispatch<React.SetStateAction<NavType | null>>;
+    selectedTheme: SelectedThemeState;
+    setSelectedTheme: React.Dispatch<React.SetStateAction<SelectedThemeState>>;
 }
 
 export const GlobalStateContext = createContext<GlobalStateContextProps>({
     selectedPath: "",
-    setSelectedPath: () => {},
+    setSelectedPath: () => { },
     layoutState: {
         resizeFooterHeight: 0,
         resizeSidebarWidth: 300,
     },
-    setLayoutState: () => {},
-    selectedPathState: {list: [], state: ""},
-    setSelectedPathState: () => {},
+    setLayoutState: () => { },
+    selectedPathState: { list: [], state: "" },
+    setSelectedPathState: () => { },
     selectedNav: null,
-    setSelectedNav: () => {},
+    setSelectedNav: () => { },
+    selectedTheme: {
+        mode: ThemeMode.SUB_NAVY,
+        isVisibleThemeDropdown: false,
+    },
+    setSelectedTheme: () => { },
 });
 
 export const GlobalStateProvider = ({
@@ -54,6 +67,10 @@ export const GlobalStateProvider = ({
             list: [MAIN],
             state: MAIN,
         });
+    const [selectedTheme, setSelectedTheme] = useState<SelectedThemeState>({
+        mode: ThemeMode.SUB_NAVY,
+        isVisibleThemeDropdown: false,
+    });
 
     const [selectedNav, setSelectedNav] = useState<NavType | null>(
         NavType.FOLDER
@@ -70,6 +87,8 @@ export const GlobalStateProvider = ({
                 setSelectedPathState,
                 selectedNav,
                 setSelectedNav,
+                selectedTheme,
+                setSelectedTheme,
             }}
         >
             {children}

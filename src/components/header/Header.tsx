@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import { routesPath } from "../../routes/route";
 import { useContext } from "react";
 import { GlobalStateContext } from "../../context/GlobalState.context";
+import { ThemeMode } from "../../context/constatns/Theme.type";
+import { Theme } from "./theme/Theme";
 
 export const Header = () => {
-    const { layoutState, selectedPathState, setSelectedPathState } =
+    const { layoutState, selectedPathState, setSelectedPathState, selectedTheme, setSelectedTheme } =
         useContext(GlobalStateContext);
 
     const selectedStyle = (path: string) => {
@@ -45,10 +47,10 @@ export const Header = () => {
 
     return (
         <header
-            className={`absolute top-0 right-0 h-10 bg-base-navy border-b border-sub-gary/30 flex items-center`}
+            className={`${selectedTheme.mode} absolute top-0 right-0 h-10 border-b border-sub-gary/10 flex items-center`}
             style={{ width: `calc(100% - ${layoutState.resizeSidebarWidth}px)` }}
         >
-            <ul className={`w-full flex items-center h-full`}>
+            <ul className={`w-[calc(100%-40px)] flex items-center h-full`}>
                 {selectedPathState.list.map((path) => {
                     const route = routesPath.find((r) => r.path === path);
                     if (!route) return null;
@@ -85,6 +87,8 @@ export const Header = () => {
                     );
                 })}
             </ul>
+
+            <Theme />
         </header>
     );
 };

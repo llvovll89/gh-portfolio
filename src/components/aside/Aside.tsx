@@ -14,6 +14,7 @@ export const Aside = () => {
         selectedPathState,
         selectedNav,
         setSelectedNav,
+        selectedTheme
     } = useContext(GlobalStateContext);
     const asideRef = useRef<HTMLDivElement>(null);
     const handleMouseDown = useDragging({ targetRef: asideRef, type: "sidebar" });
@@ -46,7 +47,7 @@ export const Aside = () => {
             style={{
                 width: layoutState.resizeSidebarWidth,
             }}
-            className={`translate-x-0 absolute left-0 top-0 h-screen transition-transform ease-in-out bg-base-navy border-r border-sub-gary/30 flex z-1`}
+            className={`translate-x-0 absolute left-0 top-0 h-screen transition-transform ease-in-out ${selectedTheme.mode} border-r border-sub-gary/30 flex z-1`}
         >
             <Navbar selectedNav={selectedNav} onClickNav={handleClickNav} />
 
