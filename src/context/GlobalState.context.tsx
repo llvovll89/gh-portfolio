@@ -33,7 +33,7 @@ export const GlobalStateProvider = ({
 }) => {
     const [selectedPath, setSelectedPath] = useState<string>("");
     const [layoutState, setLayoutState] = useState<LayoutState>({
-        isVisibleSidebar: true,
+        isVisibleSidebar: false,
         setIsVisibleSidebar: () => {},
         resizeFooterHeight: 0,
         setResizeFooterHeight: () => {},
