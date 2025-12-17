@@ -1,10 +1,10 @@
 import {createContext, useState} from "react";
 
 interface LayoutState {
-    isVisibleSidebar: boolean;
-    setIsVisibleSidebar: React.Dispatch<React.SetStateAction<boolean>>;
     resizeFooterHeight: number;
     setResizeFooterHeight: React.Dispatch<React.SetStateAction<number>>;
+    resizeSidebarWidth: number;
+    setResizeSidebarWidth?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 interface GlobalStateContextProps {
@@ -18,10 +18,10 @@ export const GlobalStateContext = createContext<GlobalStateContextProps>({
     selectedPath: "",
     setSelectedPath: () => {},
     layoutState: {
-        isVisibleSidebar: true,
-        setIsVisibleSidebar: () => {},
         resizeFooterHeight: 0,
         setResizeFooterHeight: () => {},
+        resizeSidebarWidth: 300,
+        setResizeSidebarWidth: () => {},
     },
     setLayoutState: () => {},
 });
@@ -33,10 +33,10 @@ export const GlobalStateProvider = ({
 }) => {
     const [selectedPath, setSelectedPath] = useState<string>("");
     const [layoutState, setLayoutState] = useState<LayoutState>({
-        isVisibleSidebar: false,
-        setIsVisibleSidebar: () => {},
         resizeFooterHeight: 0,
         setResizeFooterHeight: () => {},
+        resizeSidebarWidth: 300,
+        setResizeSidebarWidth: () => {},
     });
 
     return (

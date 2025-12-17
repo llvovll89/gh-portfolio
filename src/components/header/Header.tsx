@@ -15,28 +15,17 @@ export const Header = () => {
 
     return (
         <header
-            className={`${
-                !layoutState.isVisibleSidebar
-                    ? "w-[calc(100%-300px)] translate-x-75"
-                    : "translate-x-0 w-full"
-            } transition-all duration-350 ease-linear absolute top-0 h-10 bg-main border-b border-sub-gary/30 flex items-center`}
+            className={`absolute top-0 right-0 h-10 bg-main border-b border-sub-gary/30 flex items-center`}
+            style={{width: `calc(100% - ${layoutState.resizeSidebarWidth}px)`}}
         >
-            <ul
-                className={`${
-                    layoutState.isVisibleSidebar && "justify-center"
-                } w-full flex items-center h-full`}
-            >
+            <ul className={`w-full flex items-center h-full`}>
                 {routesPath
                     .filter((r) => r.path !== NOT_FOUND)
                     .map((r) => (
                         <li
                             onClick={() => setSelectedPath(r.path)}
                             key={r.path}
-                            className={`${selectedStyle(r.path).bgColor} ${
-                                layoutState.isVisibleSidebar &&
-                                r.path === MAIN &&
-                                "border-l"
-                            } min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[13px] flex items-center cursor-pointer user-select-none`}
+                            className={`${selectedStyle(r.path).bgColor} min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[13px] flex items-center cursor-pointer user-select-none`}
                         >
                             <Link
                                 to={r.path}

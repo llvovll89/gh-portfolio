@@ -9,16 +9,11 @@ interface ContentsProps {
 export const Contents = ({children, className}: ContentsProps) => {
     const {layoutState} = useContext(GlobalStateContext);
 
-    console.log(layoutState.resizeFooterHeight);
-
     return (
         <section
-            className={`${
-                layoutState.isVisibleSidebar
-                    ? "w-full translate-x-0"
-                    : "w-[calc(100%-300px)] translate-x-75"
-            } absolute top-10 transition-width ${className}`}
+            className={`absolute top-10 right-0 transition-width ${className} transition-transform ease-in-out`}
             style={{
+                width: `calc(100% - ${layoutState.resizeSidebarWidth}px)`,
                 height: `calc(100% - ${
                     layoutState.resizeFooterHeight || 250
                 }px)`,
