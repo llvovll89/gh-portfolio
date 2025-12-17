@@ -1,20 +1,33 @@
-import {createContext, useState} from "react";
+import { createContext, useState } from "react";
+
+export interface submitCliCommandType {
+    value: string;
+    isVisibleCommandUi: boolean;
+}
 
 interface KeyboardContextProps {
     isVisibleKeyboardInfo: boolean;
     setIsVisibleKeyboardInfo: React.Dispatch<React.SetStateAction<boolean>>;
     toggleKeyboardInfo: () => void;
+    submitCliCommand: {
+        value: string;
+        isVisibleCommandUi: boolean;
+    };
+    setSubmitCliCommand: React.Dispatch<React.SetStateAction<submitCliCommandType>>;
 }
 
 export const KeyboardContext = createContext<KeyboardContextProps>({
     isVisibleKeyboardInfo: false,
-    setIsVisibleKeyboardInfo: () => {},
-    toggleKeyboardInfo: () => {},
+    setIsVisibleKeyboardInfo: () => { },
+    toggleKeyboardInfo: () => { },
+    submitCliCommand: { value: "", isVisibleCommandUi: false },
+    setSubmitCliCommand: () => { },
 });
 
-export const KeyboardProvider = ({children}: {children: React.ReactNode}) => {
+export const KeyboardProvider = ({ children }: { children: React.ReactNode }) => {
     const [isVisibleKeyboardInfo, setIsVisibleKeyboardInfo] =
         useState<boolean>(false);
+    const [submitCliCommand, setSubmitCliCommand] = useState<submitCliCommandType>({ value: "", isVisibleCommandUi: false });
 
     const toggleKeyboardInfo = () => {
         setIsVisibleKeyboardInfo((prev) => !prev);
@@ -26,6 +39,8 @@ export const KeyboardProvider = ({children}: {children: React.ReactNode}) => {
                 isVisibleKeyboardInfo,
                 setIsVisibleKeyboardInfo,
                 toggleKeyboardInfo,
+                submitCliCommand,
+                setSubmitCliCommand,
             }}
         >
             {children}

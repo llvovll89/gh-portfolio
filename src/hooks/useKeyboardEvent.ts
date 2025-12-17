@@ -1,19 +1,21 @@
-import {useContext, useEffect} from "react";
-import {KeyboardContext} from "../context/KeyboardState.context";
-import {GlobalStateContext} from "../context/GlobalState.context";
-import {NavType} from "../components/aside/constants/Nav.type";
+import { useContext, useEffect } from "react";
+import { KeyboardContext } from "../context/KeyboardState.context";
+import { GlobalStateContext } from "../context/GlobalState.context";
+
 import {
     handleActiveFolderUI,
     handleActiveSearchUI,
+    handleAllClear,
+    handleCliEnterEvent,
     handleCloseKeyboardInfoUI,
     handleToggleFooterUI,
 } from "../utils/keyboardEvents";
 
-const notAllowedTags = ["input", "textarea", "select"];
+const notAllowedTags = ["input", "select"];
 
 export const useKeyboardEvent = () => {
-    const {setIsVisibleKeyboardInfo} = useContext(KeyboardContext);
-    const {setLayoutState, setSelectedNav} = useContext(GlobalStateContext);
+    const { setIsVisibleKeyboardInfo, setSubmitCliCommand } = useContext(KeyboardContext);
+    const { setLayoutState, setSelectedNav } = useContext(GlobalStateContext);
 
     const handleKeyDown = (event: KeyboardEvent) => {
         const target = event.target as HTMLElement;
@@ -27,6 +29,8 @@ export const useKeyboardEvent = () => {
         handleCloseKeyboardInfoUI(event, setIsVisibleKeyboardInfo);
         handleActiveFolderUI(event, setSelectedNav);
         handleActiveSearchUI(event, setSelectedNav);
+        handleCliEnterEvent(event, setSubmitCliCommand);
+        handleAllClear(event, setSubmitCliCommand, setIsVisibleKeyboardInfo);
     };
 
     useEffect(() => {
