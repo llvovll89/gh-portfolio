@@ -1,18 +1,23 @@
-import {useContext, useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useRef} from "react";
 import {GlobalStateContext} from "../../context/GlobalState.context";
 import {useDragging} from "../../hooks/useDragging";
 import {Navbar} from "./navbar/Navbar";
-import {NOT_FOUND, routesPath} from "../../routes/route";
-import {NavType} from "./constants/nav.type";
-import {Folder} from "./contents/Folder";
+import {Folder} from "./contents/folder/Folder";
+import {useNavigate} from "react-router-dom";
+import {NavType} from "./constants/Nav.type";
+import {Search} from "./contents/search/Search";
 
 export const Aside = () => {
-    const [selectedNav, setSelectedNav] = useState<NavType | null>(
-        NavType.FOLDER
-    );
-    const {layoutState, setLayoutState} = useContext(GlobalStateContext);
+    const {
+        layoutState,
+        setLayoutState,
+        selectedPathState,
+        selectedNav,
+        setSelectedNav,
+    } = useContext(GlobalStateContext);
     const asideRef = useRef<HTMLDivElement>(null);
     const handleMouseDown = useDragging({targetRef: asideRef, type: "sidebar"});
+    const navigate = useNavigate();
 
     const handleClickNav = (nav: NavType) => {
         if (selectedNav === nav) {
@@ -29,6 +34,12 @@ export const Aside = () => {
         }));
     }, [selectedNav]);
 
+    useEffect(() => {
+        if (selectedPathState.state) {
+            navigate(selectedPathState.state);
+        }
+    }, [selectedPathState.state]);
+
     return (
         <aside
             ref={asideRef}
@@ -40,6 +51,7 @@ export const Aside = () => {
             <Navbar selectedNav={selectedNav} onClickNav={handleClickNav} />
 
             {selectedNav === NavType.FOLDER && <Folder />}
+            {selectedNav === NavType.SEARCH && <Search />}
 
             {selectedNav && (
                 <div
