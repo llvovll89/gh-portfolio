@@ -1,8 +1,8 @@
-import {useContext} from "react";
-import {KeyboardContext} from "../../context/KeyboardState.context";
+import { useContext } from "react";
+import { KeyboardContext } from "../../context/KeyboardState.context";
 
 export const KeyboardInfo = () => {
-    const {setIsVisibleKeyboardInfo} = useContext(KeyboardContext);
+    const { setIsVisibleKeyboardInfo } = useContext(KeyboardContext);
 
     return (
         <section className="fixed left-0 top-0 flex items-center justify-center w-screen h-screen bg-[rgba(0,0,0,0.55)]">
@@ -44,6 +44,22 @@ export const KeyboardInfo = () => {
                         </span>
                         <span className="flex items-center text-sm">
                             Ctrl + F12
+                        </span>
+                    </li>
+                    <li className="text-white flex w-full justify-between h-10">
+                        <span className="flex items-center">
+                            입력창 입력 후 실행
+                        </span>
+                        <span className="flex items-center text-sm">
+                            Ctrl + Enter
+                        </span>
+                    </li>
+                    <li className="text-white flex w-full justify-between h-10">
+                        <span className="flex items-center">
+                            모든 모달/입력창 닫기
+                        </span>
+                        <span className="flex items-center text-sm">
+                            Escape (2번 연속)
                         </span>
                     </li>
                 </ul>

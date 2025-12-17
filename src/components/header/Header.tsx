@@ -1,10 +1,10 @@
-import {Link} from "react-router-dom";
-import {routesPath} from "../../routes/route";
-import {useContext} from "react";
-import {GlobalStateContext} from "../../context/GlobalState.context";
+import { Link } from "react-router-dom";
+import { routesPath } from "../../routes/route";
+import { useContext } from "react";
+import { GlobalStateContext } from "../../context/GlobalState.context";
 
 export const Header = () => {
-    const {layoutState, selectedPathState, setSelectedPathState} =
+    const { layoutState, selectedPathState, setSelectedPathState } =
         useContext(GlobalStateContext);
 
     const selectedStyle = (path: string) => {
@@ -45,8 +45,8 @@ export const Header = () => {
 
     return (
         <header
-            className={`absolute top-0 right-0 h-10 bg-main border-b border-sub-gary/30 flex items-center`}
-            style={{width: `calc(100% - ${layoutState.resizeSidebarWidth}px)`}}
+            className={`absolute top-0 right-0 h-10 bg-base-navy border-b border-sub-gary/30 flex items-center`}
+            style={{ width: `calc(100% - ${layoutState.resizeSidebarWidth}px)` }}
         >
             <ul className={`w-full flex items-center h-full`}>
                 {selectedPathState.list.map((path) => {
@@ -61,9 +61,8 @@ export const Header = () => {
                                 }))
                             }
                             key={route.path}
-                            className={`${
-                                selectedStyle(route.path).bgColor
-                            } min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[13px] flex items-center cursor-pointer user-select-none gap-1 justify-center`}
+                            className={`${selectedStyle(route.path).bgColor
+                                } min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[13px] flex items-center cursor-pointer user-select-none gap-1 justify-center`}
                         >
                             <span className="">📍</span>
                             <Link to={route.path} className="h-full">

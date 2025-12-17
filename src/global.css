@@ -4,8 +4,12 @@
 @theme {
     --color-primary: #09f;
     --color-main: #1c1b1b;
-    --user-select-none: none;
+    --color-navy: #0C0B10;
     --color-sub-gary: #cecece73;
+    --color-sub-navy: #1F1E25;
+    --color-base-navy: #0C0B10;
+
+    --user-select-none: none;
 }
 
 * {
