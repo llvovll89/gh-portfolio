@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Main",
+        "file": "src/pages/main/Main.tsx",
+        "code": "export const Main = () => { return ( <> <Header /> <Aside /> <Contents className=\"select-none\"> <section className=\"w-full h-full bg-white py-4 px-5 flex flex-col items-center\"> <header className=\"\"></header> <article className=\"flex flex-col w-full\"> <h1 className=\"text-2xl font-bold w-full flex justify-start\">Web Developer \\\"김건호\\\"</h1> </article> </section> </Contents> <Bottom /> </> ); };"
+    },
+    {
+        "name": "About",
+        "file": "about/About.tsx",
+        "code": "export const About = () => { ... }"
+    },
+    {
+        "name": "Projects",
+        "file": "projects/Projects.tsx",
+        "code": "export const Projects = () => { ... }"
+    },
+    {
+        "name": "Contact",
+        "file": "contact/Contact.tsx",
+        "code": "export const Contact = () => { ... }"
+    }
+]

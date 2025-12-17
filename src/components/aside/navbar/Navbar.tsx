@@ -13,7 +13,7 @@ export const Navbar = ({selectedNav, onClickNav}: NavbarProps) => {
                     key={item.type}
                     onClick={() => onClickNav(item.type)}
                     className={`cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center ${
-                        selectedNav === item.type ? "bg-primary/20" : ""
+                        selectedNav === item.type ? "bg-sub-gary/20" : ""
                     }`}
                 >
                     <item.icon className="w-6 h-6" />
