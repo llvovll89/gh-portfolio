@@ -46,7 +46,7 @@ export const GlobalStateContext = createContext<GlobalStateContextProps>({
     selectedNav: null,
     setSelectedNav: () => { },
     selectedTheme: {
-        mode: ThemeMode.SUB_NAVY,
+        mode: ThemeMode.BASE_NAVY,
         isVisibleThemeDropdown: false,
     },
     setSelectedTheme: () => { },
@@ -68,7 +68,7 @@ export const GlobalStateProvider = ({
             state: MAIN,
         });
     const [selectedTheme, setSelectedTheme] = useState<SelectedThemeState>({
-        mode: ThemeMode.SUB_NAVY,
+        mode: ThemeMode.BASE_NAVY,
         isVisibleThemeDropdown: false,
     });
 

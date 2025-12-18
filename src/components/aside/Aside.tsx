@@ -1,11 +1,12 @@
-import { useContext, useEffect, useRef } from "react";
-import { GlobalStateContext } from "../../context/GlobalState.context";
-import { useDragging } from "../../hooks/useDragging";
-import { Navbar } from "./navbar/Navbar";
-import { Folder } from "./contents/folder/Folder";
-import { useNavigate } from "react-router-dom";
-import { NavType } from "./constants/Nav.type";
-import { Search } from "./contents/search/Search";
+import {useContext, useEffect, useRef} from "react";
+import {GlobalStateContext} from "../../context/GlobalState.context";
+import {useDragging} from "../../hooks/useDragging";
+import {Navbar} from "./navbar/Navbar";
+import {Folder} from "./contents/folder/Folder";
+import {useNavigate} from "react-router-dom";
+import {NavType} from "./constants/Nav.type";
+import {Search} from "./contents/search/Search";
+import {GitControl} from "./contents/gitControl/GitControl";
 
 export const Aside = () => {
     const {
@@ -14,10 +15,10 @@ export const Aside = () => {
         selectedPathState,
         selectedNav,
         setSelectedNav,
-        selectedTheme
+        selectedTheme,
     } = useContext(GlobalStateContext);
     const asideRef = useRef<HTMLDivElement>(null);
-    const handleMouseDown = useDragging({ targetRef: asideRef, type: "sidebar" });
+    const handleMouseDown = useDragging({targetRef: asideRef, type: "sidebar"});
     const navigate = useNavigate();
 
     const handleClickNav = (nav: NavType) => {
@@ -52,6 +53,7 @@ export const Aside = () => {
             <Navbar selectedNav={selectedNav} onClickNav={handleClickNav} />
 
             {selectedNav === NavType.FOLDER && <Folder />}
+            {selectedNav === NavType.GIT_CONTROL && <GitControl />}
             {selectedNav === NavType.SEARCH && <Search />}
 
             {selectedNav && (

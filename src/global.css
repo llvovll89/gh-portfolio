@@ -16,3 +16,19 @@
 * {
     font-family: "Pretendard", sans-serif;
 }
+
+.scrolls::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+.scrolls::-webkit-scrollbar-thumb {
+    height: 30%;
+    background: #333131;
+    opacity: 0.5;
+    border-radius: 4px;
+}
+
+.scrolls::-webkit-scrollbar-track {
+    background: rgba(41, 45, 45, 0.1);
+}
