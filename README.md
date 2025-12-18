@@ -39,6 +39,11 @@
 - feat - cli UI 추가
 - feat: Git Branch / Commit List 노출 및 UI 구현
 - feat: 아무것도 선택된 폴더가 없을 시 보여줄 화면 레이아웃 구현
+- feat: CLI 입력 OUTPUT 창 구현
+- refactor: 테마 색상 추가 및 변경
+- refactor: 모든 페이지 기본 contents 및 title 추가
+- feat: Default, AppChileComponet 추가
+- ...
 
 ## 향후 계획
 - 각 페이지별 내용 채우기
