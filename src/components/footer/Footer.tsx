@@ -1,13 +1,13 @@
-import { useContext, useRef } from "react";
-import { GlobalStateContext } from "../../context/GlobalState.context";
-import { useDragging } from "../../hooks/useDragging";
-import { Cli } from "./cli/Cli";
+import {useContext, useRef} from "react";
+import {GlobalStateContext} from "../../context/GlobalState.context";
+import {useDragging} from "../../hooks/useDragging";
+import {Cli} from "./cli/Cli";
 
 export const Bottom = () => {
-    const { layoutState, selectedTheme } = useContext(GlobalStateContext);
+    const {layoutState, selectedTheme} = useContext(GlobalStateContext);
     const footerRef = useRef<HTMLDivElement>(null);
 
-    const handleMouseDown = useDragging({ targetRef: footerRef, type: "footer" });
+    const handleMouseDown = useDragging({targetRef: footerRef, type: "footer"});
 
     return (
         <footer
@@ -18,7 +18,9 @@ export const Bottom = () => {
                 height: layoutState.resizeFooterHeight,
             }}
         >
-            <header className={`select-none text-sub-gary text-xs w-full h-8 flex items-center gap-2 px-3 ${selectedTheme.mode}`}>
+            <header
+                className={`select-none text-sub-gary text-xs w-full h-8 flex items-center gap-2 px-3 ${selectedTheme.mode}`}
+            >
                 <span className="border-b border-primary">TERMINAL</span>
             </header>
 
@@ -28,7 +30,7 @@ export const Bottom = () => {
                 style={{
                     height: 8,
                     cursor: "ns-resize",
-                    background: "rgba(0,0,0,0.001)",
+                    background: "transparent",
                     position: "absolute",
                     top: 0,
                     left: 0,

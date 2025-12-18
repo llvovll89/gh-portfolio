@@ -18,14 +18,16 @@ export const Theme = () => {
 
     const convertThemeModeToLabel = (mode: ThemeMode) => {
         switch (mode) {
-            case ThemeMode.GRAY:
-                return "회색";
+            case ThemeMode.SUB_GREEN:
+                return "서브 그린";
             case ThemeMode.DARK:
                 return "다크";
+            case ThemeMode.SUB_PINK:
+                return "서브 핑크";
             case ThemeMode.BASE_NAVY:
                 return "기본 네이비";
-            case ThemeMode.SUB_PRIMARY:
-                return "서브 프라이머리";
+            case ThemeMode.SUB_BLUE:
+                return "서브 블루";
             default:
                 return "";
         }

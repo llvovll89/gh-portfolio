@@ -15,7 +15,7 @@ export const Contents = ({children, className}: ContentsProps) => {
             style={{
                 width: `calc(100% - ${layoutState.resizeSidebarWidth}px)`,
                 height: `calc(100% - ${
-                    layoutState.resizeFooterHeight || 250
+                    layoutState.resizeFooterHeight + 40
                 }px)`,
             }}
         >
