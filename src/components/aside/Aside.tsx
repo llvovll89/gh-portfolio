@@ -62,7 +62,7 @@ export const Aside = () => {
                         width: 8,
                         height: "100vh",
                         cursor: "ew-resize",
-                        background: "rgba(0,0,0,0.1)",
+                        background: "transparent",
                         position: "absolute",
                         top: 0,
                         right: 0,

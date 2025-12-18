@@ -1,5 +1,5 @@
 import { NavType } from "../components/aside/constants/Nav.type";
-import type { LayoutState } from "../context/GlobalState.context";
+import type { LayoutState, SelectedPathState } from "../context/GlobalState.context";
 import type { submitCliCommandType } from "../context/KeyboardState.context";
 
 /**

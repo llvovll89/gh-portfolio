@@ -1,13 +1,19 @@
-import { Link } from "react-router-dom";
-import { routesPath } from "../../routes/route";
-import { useContext } from "react";
-import { GlobalStateContext } from "../../context/GlobalState.context";
-import { ThemeMode } from "../../context/constatns/Theme.type";
-import { Theme } from "./theme/Theme";
+import {Link} from "react-router-dom";
+import {routesPath} from "../../routes/route";
+import {useContext} from "react";
+import {GlobalStateContext} from "../../context/GlobalState.context";
+import {Theme} from "./theme/Theme";
+import {useRedirectionPage} from "../../hooks/useRedirectionPage";
 
 export const Header = () => {
-    const { layoutState, selectedPathState, setSelectedPathState, selectedTheme, setSelectedTheme } =
-        useContext(GlobalStateContext);
+    const {
+        layoutState,
+        selectedPathState,
+        setSelectedPathState,
+        selectedTheme,
+    } = useContext(GlobalStateContext);
+
+    useRedirectionPage();
 
     const selectedStyle = (path: string) => {
         return {
@@ -48,7 +54,7 @@ export const Header = () => {
     return (
         <header
             className={`${selectedTheme.mode} absolute top-0 right-0 h-10 border-b border-sub-gary/10 flex items-center`}
-            style={{ width: `calc(100% - ${layoutState.resizeSidebarWidth}px)` }}
+            style={{width: `calc(100% - ${layoutState.resizeSidebarWidth}px)`}}
         >
             <ul className={`w-[calc(100%-40px)] flex items-center h-full`}>
                 {selectedPathState.list.map((path) => {
@@ -63,8 +69,9 @@ export const Header = () => {
                                 }))
                             }
                             key={route.path}
-                            className={`${selectedStyle(route.path).bgColor
-                                } min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[13px] flex items-center cursor-pointer user-select-none gap-1 justify-center`}
+                            className={`${
+                                selectedStyle(route.path).bgColor
+                            } min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[13px] flex items-center cursor-pointer user-select-none gap-1 justify-center`}
                         >
                             <span className="">📍</span>
                             <Link to={route.path} className="h-full">

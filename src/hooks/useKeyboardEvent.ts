@@ -1,6 +1,6 @@
-import { useContext, useEffect } from "react";
-import { KeyboardContext } from "../context/KeyboardState.context";
-import { GlobalStateContext } from "../context/GlobalState.context";
+import {useContext, useEffect} from "react";
+import {KeyboardContext} from "../context/KeyboardState.context";
+import {GlobalStateContext} from "../context/GlobalState.context";
 
 import {
     handleActiveFolderUI,
@@ -14,8 +14,9 @@ import {
 const notAllowedTags = ["input", "select"];
 
 export const useKeyboardEvent = () => {
-    const { setIsVisibleKeyboardInfo, setSubmitCliCommand } = useContext(KeyboardContext);
-    const { setLayoutState, setSelectedNav } = useContext(GlobalStateContext);
+    const {setIsVisibleKeyboardInfo, setSubmitCliCommand} =
+        useContext(KeyboardContext);
+    const {setLayoutState, setSelectedNav} = useContext(GlobalStateContext);
 
     const handleKeyDown = (event: KeyboardEvent) => {
         const target = event.target as HTMLElement;

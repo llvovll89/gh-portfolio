@@ -1,5 +1,5 @@
 import { FcOpenedFolder } from "react-icons/fc";
-import { NOT_FOUND, routesPath } from "../../../../routes/route";
+import { DEFAULT, NOT_FOUND, routesPath } from "../../../../routes/route";
 import { useContext } from "react";
 import { GlobalStateContext } from "../../../../context/GlobalState.context";
 import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
@@ -16,7 +16,7 @@ export const Folder = () => {
 
             <ul className="w-full h-[calc(100%-40px)]">
                 {routesPath
-                    .filter((r) => r.path !== NOT_FOUND)
+                    .filter((r) => r.path !== NOT_FOUND && r.path !== DEFAULT)
                     .map((r) => (
                         <li
                             onClick={() => handlePushPath(r.path)}
