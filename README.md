@@ -37,6 +37,8 @@
 ## 2025-12-18
 - feat - 테마모드 기능추가
 - feat - cli UI 추가
+- feat: Git Branch / Commit List 노출 및 UI 구현
+- feat: 아무것도 선택된 폴더가 없을 시 보여줄 화면 레이아웃 구현
 
 ## 향후 계획
 - 각 페이지별 내용 채우기
