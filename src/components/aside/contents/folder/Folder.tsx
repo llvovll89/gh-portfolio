@@ -24,7 +24,7 @@ export const Folder = () => {
                             className={`${selectedPathState.state === r.path
                                 ? "bg-sub-gary/20"
                                 : ""
-                                } w-full h-8 flex items-center px-3 text-white text-sm cursor-pointer hover:bg-primary/20 user-select-none gap-1`}
+                                } w-full h-8 flex items-center px-3 text-white cursor-pointer text-xs hover:bg-primary/20 user-select-none gap-1`}
                         >
                             <FcOpenedFolder className="w-5 h-5" />
                             {r.name}
