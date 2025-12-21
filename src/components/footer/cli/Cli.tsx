@@ -1,10 +1,10 @@
-import {useContext} from "react";
-import {KeyboardContext} from "../../../context/KeyboardState.context";
-import {GlobalStateContext} from "../../../context/GlobalState.context";
+import { useContext } from "react";
+import { KeyboardContext } from "../../../context/KeyboardState.context";
+import { GlobalStateContext } from "../../../context/GlobalState.context";
 
 export const Cli = () => {
-    const {selectedTheme} = useContext(GlobalStateContext);
-    const {setSubmitCliCommand} = useContext(KeyboardContext);
+    const { selectedTheme } = useContext(GlobalStateContext);
+    const { setSubmitCliCommand } = useContext(KeyboardContext);
 
     return (
         <section className="w-full h-[calc(100%-32px)] flex flex-col">
@@ -29,6 +29,7 @@ export const Cli = () => {
                             value: event.target.value,
                         }))
                     }
+                    placeholder="Hello, I'm Gunho"
                     className="resize-none w-full h-full outline-none"
                     autoFocus
                 ></textarea>
