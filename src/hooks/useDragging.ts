@@ -7,7 +7,7 @@ interface UseDraggingProps {
 }
 
 export const useDragging = ({targetRef, type}: UseDraggingProps) => {
-    const {setLayoutState} = useContext(GlobalStateContext);
+    const {setLayoutState, selectedNav} = useContext(GlobalStateContext);
     const isDragging = useRef(false);
 
     const handleMouseDown = (e: React.MouseEvent) => {
@@ -28,12 +28,12 @@ export const useDragging = ({targetRef, type}: UseDraggingProps) => {
 
             setLayoutState((prev) => ({
                 ...prev,
-                resizeSidebarWidth: Math.max(50, e.clientX), // 최소 너비 100px
+                resizeSidebarWidth: Math.max(125, e.clientX), // 최소 너비 125px
             }));
         } else if (type === "footer") {
             setLayoutState((prev) => ({
                 ...prev,
-                resizeFooterHeight: Math.max(50, newHeight), // 최소 높이 50px
+                resizeFooterHeight: Math.max(100, newHeight), // 최소 높이 100px
             }));
         }
     };
