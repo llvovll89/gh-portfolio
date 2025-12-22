@@ -12,10 +12,10 @@ export const Default = () => {
             <Header />
             <Aside />
             <Contents className="select-none">
-                <section className="w-full h-full bg-white p-3 flex flex-col items-center">
+                <section className="w-full h-full text-white p-3 flex flex-col items-center">
                     <DefaultPageHeader />
                     <MainContents />
-                    <Footer />
+                    {/* <Footer /> */}
                 </section>
             </Contents>
             <Bottom />

@@ -7,7 +7,7 @@ export const DefaultPageHeader = () => {
         <header className="w-full h-10 flex items-center justify-between">
             <div className="flex flex-col gap-0.5">
                 <p className="text-md font-bold">Geon Ho Kim</p>
-                <p className="text-xs font-semibold text-[rgba(0,0,0,0.6)]">Web Developer (Full Stack)</p>
+                <p className="text-xs font-semibold">Web Developer (Full Stack)</p>
             </div>
 
             <div className="flex items-center gap-2">
