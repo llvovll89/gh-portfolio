@@ -5,3 +5,11 @@ export enum ThemeMode {
     SUB_PINK = "bg-sub-pink",
     SUB_GREEN = "bg-sub-green",
 }
+
+export const returnWhiteText = [
+    ThemeMode.DARK,
+    ThemeMode.SUB_GREEN,
+    ThemeMode.SUB_BLUE,
+    ThemeMode.SUB_PINK,
+    ThemeMode.BASE_NAVY,
+];
