@@ -4,15 +4,15 @@ import { Bottom } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
 import { CommonPageHeader } from "../common/innerHeader/CommonPageHeader";
 
-export const Main = () => {
+export const Blog = () => {
     return (
         <>
             <Header />
             <Aside />
             <Contents className="select-none">
-                <CommonPageHeader title="MAIN" />
+                <CommonPageHeader />
             </Contents>
             <Bottom />
         </>
-    );
+    )
 };

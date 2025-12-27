@@ -1,7 +1,7 @@
-import {createContext, useState} from "react";
-import {DEFAULT, MAIN} from "../routes/route";
-import {NavType} from "../components/aside/constants/Nav.type";
-import {ThemeMode} from "./constatns/Theme.type";
+import { createContext, useState } from "react";
+import { DEFAULT } from "../routes/route";
+import { NavType } from "../components/aside/constants/Nav.type";
+import { ThemeMode } from "./constatns/Theme.type";
 
 export interface LayoutState {
     resizeFooterHeight: number;
@@ -35,21 +35,21 @@ interface GlobalStateContextProps {
 
 export const GlobalStateContext = createContext<GlobalStateContextProps>({
     selectedPath: "",
-    setSelectedPath: () => {},
+    setSelectedPath: () => { },
     layoutState: {
         resizeFooterHeight: 0,
         resizeSidebarWidth: 300,
     },
-    setLayoutState: () => {},
-    selectedPathState: {list: [], state: ""},
-    setSelectedPathState: () => {},
+    setLayoutState: () => { },
+    selectedPathState: { list: [], state: "" },
+    setSelectedPathState: () => { },
     selectedNav: null,
-    setSelectedNav: () => {},
+    setSelectedNav: () => { },
     selectedTheme: {
         mode: ThemeMode.BASE_NAVY,
         isVisibleThemeDropdown: false,
     },
-    setSelectedTheme: () => {},
+    setSelectedTheme: () => { },
 });
 
 export const GlobalStateProvider = ({
