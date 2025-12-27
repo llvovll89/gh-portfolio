@@ -1,12 +1,12 @@
-import {useContext} from "react";
-import {KeyboardContext} from "../../context/KeyboardState.context";
-import {keyboardKeyAndStateMock} from "./constants/mock";
+import { useContext } from "react";
+import { KeyboardContext } from "../../context/KeyboardState.context";
+import { keyboardKeyAndStateMock } from "./constants/mock";
 
 export const KeyboardInfo = () => {
-    const {setIsVisibleKeyboardInfo} = useContext(KeyboardContext);
+    const { setIsVisibleKeyboardInfo } = useContext(KeyboardContext);
 
     return (
-        <section className="fixed left-0 top-0 flex items-center justify-center w-screen h-screen bg-[rgba(0,0,0,0.55)] z-10">
+        <section className="fixed left-0 top-0 flex items-center justify-center w-screen h-screen bg-[rgba(0,0,0,0.55)] z-20">
             <div className="flex flex-col w-100 min-h-50">
                 <header className="w-full h-10 bg-main flex items-center justify-between px-3">
                     <p>키보드 이벤트</p>

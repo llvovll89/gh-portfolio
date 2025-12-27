@@ -43,7 +43,7 @@ export const Theme = () => {
     });
 
     return (
-        <div ref={themeModeRef} onClick={handleChangeTheme} className={`${selectedTheme.isVisibleThemeDropdown ? "border-primary/70" : "border-sub-gary/30"} w-9 rounded-[5px] h-[85%] border flex items-center justify-center cursor-pointer relative border-l border-r ${selectedTheme.mode}`}>
+        <div ref={themeModeRef} onClick={handleChangeTheme} className={`${selectedTheme.isVisibleThemeDropdown ? "border-primary/70" : "border-sub-gary/30"} w-9 rounded-[5px] h-[85%] border z-10 flex items-center justify-center cursor-pointer relative border-l border-r ${selectedTheme.mode}`}>
             <img src="/assets/images/icons/png/theme.png" className="w-full h-full" />
 
             {selectedTheme.isVisibleThemeDropdown &&

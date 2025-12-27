@@ -1,12 +1,12 @@
-import {useContext, useEffect, useRef} from "react";
-import {GlobalStateContext} from "../../context/GlobalState.context";
-import {useDragging} from "../../hooks/useDragging";
-import {Navbar} from "./navbar/Navbar";
-import {Folder} from "./contents/folder/Folder";
-import {useNavigate} from "react-router-dom";
-import {NavType} from "./constants/Nav.type";
-import {Search} from "./contents/search/Search";
-import {GitControl} from "./contents/gitControl/GitControl";
+import { useContext, useEffect, useRef } from "react";
+import { GlobalStateContext } from "../../context/GlobalState.context";
+import { useDragging } from "../../hooks/useDragging";
+import { Navbar } from "./navbar/Navbar";
+import { Folder } from "./contents/folder/Folder";
+import { useNavigate } from "react-router-dom";
+import { NavType } from "./constants/Nav.type";
+import { Search } from "./contents/search/Search";
+import { GitControl } from "./contents/gitControl/GitControl";
 
 export const Aside = () => {
     const {
@@ -18,7 +18,7 @@ export const Aside = () => {
         selectedTheme,
     } = useContext(GlobalStateContext);
     const asideRef = useRef<HTMLDivElement>(null);
-    const handleMouseDown = useDragging({targetRef: asideRef, type: "sidebar"});
+    const handleMouseDown = useDragging({ targetRef: asideRef, type: "sidebar" });
     const navigate = useNavigate();
 
     const handleClickNav = (nav: NavType) => {
@@ -48,7 +48,7 @@ export const Aside = () => {
             style={{
                 width: layoutState.resizeSidebarWidth,
             }}
-            className={`translate-x-0 absolute left-0 top-0 h-screen transition-transform ease-in-out ${selectedTheme.mode} border-r border-sub-gary/30 flex z-1`}
+            className={`translate-x-0 absolute left-0 top-0 h-screen transition-transform ease-in-out ${selectedTheme.mode} border-r border-sub-gary/30 flex z-20`}
         >
             <Navbar selectedNav={selectedNav} onClickNav={handleClickNav} />
 

@@ -1,19 +1,15 @@
 import { useContext } from "react";
 import { GlobalStateContext } from "../../context/GlobalState.context";
 import { Link } from "react-router-dom";
+import { BackgroundLogo } from "../../components/backgroundLogo/BackgroundLogo";
 
 export const NotFound = () => {
     const { selectedTheme } = useContext(GlobalStateContext);
 
     return (
         <section className={`w-screen h-screen flex items-center justify-center text-red-500 font-bold select-none ${selectedTheme.mode} bg-no-repeat bg-center`}>
-            <div
-                className="absolute inset-0 opacity-20 bg-no-repeat bg-center"
-                style={{
-                    backgroundImage: "url('/assets/logo/GH_logo_small_white.png')",
-                    backgroundSize: '35%'
-                }}
-            />
+
+            <BackgroundLogo opacity={20} size="25%" />
 
             <div className="absolute top-20 left-20 w-72 h-72 bg-red-500/10 rounded-full blur-3xl animate-pulse" />
             <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000" />

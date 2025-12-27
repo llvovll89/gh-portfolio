@@ -16,7 +16,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
     const { selectedTheme } = useContext(GlobalStateContext);
 
     return (
-        <nav className="relative w-10 flex flex-col items-center h-screen z-1 border-r border-sub-gary/30 text-white select-none">
+        <nav className="relative w-10 flex flex-col items-center h-screen z-10 border-r border-sub-gary/30 text-white select-none">
             {NAV_ITEMS.map((item) => (
                 <button
                     key={item.type}
