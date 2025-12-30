@@ -4,13 +4,15 @@
 @theme {
     --color-primary: #09f;
     --color-main: #1c1b1b;
-    --color-navy: #0C0B10;
+    --color-navy: #0c0b10;
     --color-sub-gary: #cecece73;
-    --color-sub-navy: #1F1E25;
-    --color-base-navy: #0C0B10;
+    --color-sub-navy: #1f1e25;
+    --color-base-navy: #0c0b10;
     --color-sub-blue: #1e52e3;
     --color-sub-green: #43b54e;
     --color-sub-pink: #d46876;
+    --color-main-teal: #009d85;
+    --color-sub-teal: #8bc783;
 
     --user-select-none: none;
 }
