@@ -1,5 +1,5 @@
-import {CONTACT, PROJECTS} from "../../../../routes/route";
-import {useHandlePushPath} from "../../../../hooks/useHandlePushPath";
+import { CONTACT, PROJECTS } from "../../../../routes/route";
+import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
 
 export const MainContents = () => {
     const handlePushPath = useHandlePushPath();

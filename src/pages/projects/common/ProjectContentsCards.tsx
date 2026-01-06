@@ -40,6 +40,7 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                                     key={index}
                                     to={project.link.projectUrl}
                                     className="text-white bg-primary/80 px-2 py-1 hover:underline rounded-[5px]"
+                                    target="_blank"
                                 >
                                     프로젝트 보기
                                 </Link>
@@ -47,6 +48,7 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                                     key={index}
                                     to={project.link.repositoryUrl}
                                     className="text-white bg-primary/80 px-2 py-1 hover:underline rounded-[5px]"
+                                    target="_blank"
                                 >
                                     깃허브 저장소
                                 </Link>

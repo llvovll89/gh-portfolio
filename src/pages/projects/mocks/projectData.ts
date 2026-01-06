@@ -19,8 +19,8 @@ export const projects = [
         scale: "개인 프로젝트",
         image: "/assets/images/projects/blackTie.png",
         link: {
-            repositoryUrl: "https://github.com/llvovll89/movieapp",
-            projectUrl: "https://llvovll89.github.io/movieapp/",
+            repositoryUrl: "https://github.com/llvovll89/blacktie",
+            projectUrl: "https://llvovll89.github.io/blacktie/",
         },
         description: "평소 영화와 드라마 보는 것을 좋아해서 저만의 사이트를 만들어보고자 제작하였습니다.",
         skills: ["React", "TypeScript", "Redux", "TMDB API"],
