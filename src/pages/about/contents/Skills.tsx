@@ -1,5 +1,5 @@
 import {FaJava, FaReact} from "react-icons/fa";
-import {RiJavascriptLine, RiTailwindCssFill} from "react-icons/ri";
+import {RiTailwindCssFill} from "react-icons/ri";
 import {SiPostgresql, SiRedux, SiSpring} from "react-icons/si";
 import {TbBrandTypescript} from "react-icons/tb";
 
