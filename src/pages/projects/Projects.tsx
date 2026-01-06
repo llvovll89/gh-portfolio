@@ -1,9 +1,9 @@
-import {Aside} from "../../components/aside/Aside";
-import {Contents} from "../../components/contents/Contents";
-import {Bottom} from "../../components/footer/Footer";
-import {Header} from "../../components/header/Header";
-import {CommonPageHeader} from "../common/innerHeader/CommonPageHeader";
-import {ProjectContentsCards} from "./common/ProjectContentsCards";
+import { Aside } from "../../components/aside/Aside";
+import { Contents } from "../../components/contents/Contents";
+import { Bottom } from "../../components/footer/Footer";
+import { Header } from "../../components/header/Header";
+import { CommonPageHeader } from "../common/innerHeader/CommonPageHeader";
+import { ProjectContentsCards } from "./common/ProjectContentsCards";
 
 export const Projects = () => {
     return (
@@ -12,7 +12,7 @@ export const Projects = () => {
             <Aside />
             <Contents className="select-none gap-4">
                 <CommonPageHeader />
-                <section className="w-full grid grid-cols-3 h-full gap-1">
+                <section className="w-full grid grid-cols-2 h-full gap-1">
                     <ProjectContentsCards />
                 </section>
             </Contents>
