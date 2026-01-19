@@ -22,7 +22,7 @@ export const About = () => {
             <Aside />
             <Contents className="select-none">
                 <CommonPageHeader />
-                <section className="w-full h-full overflow-hidden pt-10 flex gap-4">
+                <section className="w-full h-full pt-10 flex gap-4 overflow-auto scrolls">
                     <section className="w-[40%] h-full flex gap-4 items-center justify-center">
                         <div className="w-full h-full relative flex flex-col items-center gap-4">
                             <img
@@ -39,7 +39,7 @@ export const About = () => {
                                 <Img
                                     src="/assets/logo/GH_logo_small_white.png"
                                     className={`${convertThemeLogoColor(
-                                        selectedTheme.mode
+                                        selectedTheme.mode,
                                     )} w-14 mt-5`}
                                 />
                             </ul>
