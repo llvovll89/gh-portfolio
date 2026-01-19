@@ -1,14 +1,24 @@
-import type { Project } from "../mocks/projectData";
+import type {Project} from "../mocks/projectData";
 
 interface CardDescAndSkillsProps {
     project: Project;
 }
 
-export const CardDescAndSkills = ({ project }: CardDescAndSkillsProps) => {
+export const CardDescAndSkills = ({project}: CardDescAndSkillsProps) => {
+    const convertNewDetailedDescription =
+        project.detailedDescription.split(".");
+
     return (
         <div className="w-full flex flex-col justify-between gap-2">
             <div className="w-full text-white">
-                <p>{project.description}</p>
+                {convertNewDetailedDescription.map((desc, descIndex) => {
+                    if (desc.trim() === "") return null;
+                    return (
+                        <p key={descIndex} className="text-sm leading-relaxed">
+                            {desc.trim()}.
+                        </p>
+                    );
+                })}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -25,5 +35,5 @@ export const CardDescAndSkills = ({ project }: CardDescAndSkillsProps) => {
                 </div>
             </div>
         </div>
-    )
+    );
 };

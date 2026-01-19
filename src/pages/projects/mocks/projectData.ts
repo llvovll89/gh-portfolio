@@ -4,6 +4,7 @@ export interface Project {
     image: string;
     scale: string;
     description: string;
+    detailedDescription: string;
     link: {
         repositoryUrl: string;
         projectUrl: string;
@@ -22,8 +23,11 @@ export const projects = [
             repositoryUrl: "https://github.com/llvovll89/blacktie",
             projectUrl: "https://llvovll89.github.io/blacktie/",
         },
-        description: "평소 영화와 드라마 보는 것을 좋아해서 저만의 사이트를 만들어보고자 제작하였습니다.",
-        skills: ["React", "TypeScript", "Redux", "TMDB API"],
+        description:
+            "TMDB API를 활용하여 인기있는 영화와 드라마 정보를 제공하는 웹사이트입니다.",
+        detailedDescription: `TMDB API를 활용하여 인기있는 영화와 드라마 정보를 제공하는 웹사이트입니다. 
+            사용자들은 장르별로 콘텐츠를 탐색하고, 상세 페이지에서 줄거리, 출연진, 예고편 등을 확인할 수 있습니다. 또한, 반응형 디자인을 적용하여 다양한 기기에서 최적의 사용자 경험을 제공합니다.`,
+        skills: ["React", "Redux", "TMDB API", "Styled-Components"],
         projectMembers: ["김건호"],
     },
     {
@@ -35,8 +39,11 @@ export const projects = [
             repositoryUrl: "https://github.com/llvovll89/modart",
             projectUrl: "https://llvovll89.github.io/modart/",
         },
-        description: "OOTD (데일리룩) 사진을 공유하는 사이트를 만들고싶어 제작하였습니다.",
-        skills: ["React", "TypeScript", "Redux", "Firebase", "Styled-Components"],
+        description:
+            "사용자들이 자신의 데일리룩 사진을 업로드하고 공유할 수 있는 패션 커뮤니티 플랫폼입니다.",
+        detailedDescription:
+            "사용자들이 자신의 데일리룩 사진을 업로드하고 공유할 수 있는 플랫폼입니다. 각 사진에는 해시태그를 추가하여 스타일을 분류할 수 있으며, 다른 사용자들의 사진을 탐색하고 좋아요를 누를 수 있습니다. 또한, 인기 있는 스타일과 트렌드를 쉽게 확인할 수 있도록 디자인되었습니다.",
+        skills: ["React", "Redux", "Firebase", "Styled-Components"],
         projectMembers: ["김건호"],
     },
 ] as Project[];
