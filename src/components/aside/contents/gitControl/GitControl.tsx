@@ -16,11 +16,11 @@ export const GitControl = () => {
         try {
             const responseBranchList = await octokit.request(
                 "GET /repos/{owner}/{repo}/branches",
-                githubGetRequestParams()
+                githubGetRequestParams(),
             );
 
             const branchList = responseBranchList.data.map(
-                (branch) => branch.name
+                (branch) => branch.name,
             );
 
             setGitStates((prev) => ({
@@ -36,11 +36,11 @@ export const GitControl = () => {
         try {
             const responseCommitList = await octokit.request(
                 `GET /repos/{owner}/{repo}/commits?sha=${selectedBranch}`,
-                githubGetRequestParams()
+                githubGetRequestParams(),
             );
 
             const commitList = responseCommitList.data.map(
-                (commit: any) => commit
+                (commit: any) => commit,
             );
 
             setGitStates((prev) => ({
@@ -78,7 +78,7 @@ export const GitControl = () => {
                     <li
                         onClick={() => {
                             setSelectedBranch((prev) =>
-                                prev === branch ? null : branch
+                                prev === branch ? null : branch,
                             );
                         }}
                         key={branch}
@@ -102,7 +102,7 @@ export const GitControl = () => {
                             selectedBranch === branch && (
                                 <section
                                     onClick={(e) => e.stopPropagation()}
-                                    className={`w-full max-h-100 ${selectedTheme.mode} overflow-auto select-none scrolls text-white`}
+                                    className={`w-full max-h-100 ${selectedTheme.mode} overflow-auto scrolls select-none scrolls text-white`}
                                 >
                                     {gitStates.commits.map((commit) => (
                                         <article
@@ -138,7 +138,8 @@ export const GitControl = () => {
                                                 <span>
                                                     {
                                                         new Date(
-                                                            commit.commit.author.date
+                                                            commit.commit.author
+                                                                .date,
                                                         )
                                                             .toISOString()
                                                             .split("T")[0]
