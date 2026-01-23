@@ -1,8 +1,7 @@
-import {useContext, useEffect, useRef} from "react";
+import {useContext, useRef} from "react";
 import {GlobalStateContext} from "../../context/GlobalState.context";
 import {useDragging} from "../../hooks/useDragging";
 import {Cli} from "./cli/Cli";
-import {handleToggleFooterUI} from "../../utils/keyboardEvents";
 import {useCheckedMobileSize} from "../../hooks/useCheckedMobileSize";
 
 const COLLAPSED_HEIGHT = 32; // 헤더 바 높이(h-8)
@@ -31,14 +30,6 @@ export const Bottom = () => {
             resizeFooterHeight: Math.max(prev.resizeFooterHeight, OPEN_HEIGHT),
         }));
     };
-
-    useEffect(() => {
-        const onKeyDown = (event: KeyboardEvent) => {
-            handleToggleFooterUI(event, setLayoutState);
-        };
-        window.addEventListener("keydown", onKeyDown);
-        return () => window.removeEventListener("keydown", onKeyDown);
-    }, [setLayoutState]);
 
     return (
         <footer

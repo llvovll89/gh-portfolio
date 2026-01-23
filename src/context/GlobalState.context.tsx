@@ -72,9 +72,7 @@ export const GlobalStateProvider = ({
         isVisibleThemeDropdown: false,
     });
 
-    const [selectedNav, setSelectedNav] = useState<NavType | null>(
-        NavType.FOLDER,
-    );
+    const [selectedNav, setSelectedNav] = useState<NavType | null>(null);
 
     return (
         <GlobalStateContext.Provider
