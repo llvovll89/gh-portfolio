@@ -3,7 +3,6 @@ import {Header} from "../../components/header/Header";
 import {Aside} from "../../components/aside/Aside";
 import {Bottom} from "../../components/footer/Footer";
 import {MainContents} from "./contents/main/MainContents";
-import {Footer} from "./contents/footer/Footer";
 import {CommonPageHeader} from "../common/innerHeader/CommonPageHeader";
 
 export const Default = () => {
@@ -14,7 +13,6 @@ export const Default = () => {
             <Contents className="select-none">
                 <CommonPageHeader />
                 <MainContents />
-                {/* <Footer /> */}
             </Contents>
             <Bottom />
         </>

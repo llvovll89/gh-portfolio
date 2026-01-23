@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-export const CommuniCationCard = () => {
+export const CommunicationCard = () => {
     const EMAIL = import.meta.env.VITE_EMAIL;
     const GITHUB = import.meta.env.VITE_GITHUB;
 

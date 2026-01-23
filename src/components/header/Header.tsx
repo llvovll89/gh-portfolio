@@ -33,10 +33,10 @@ export const Header = () => {
                 };
             }
 
-            let newState: string | undefined;
+            let newState: string;
 
             if (newList.length === 0) {
-                newState = undefined;
+                newState = "";
             } else if (idx > 0) {
                 newState = newList[idx - 1]; // 왼쪽
             } else {

@@ -1,6 +1,5 @@
 import {useContext} from "react";
 import {KeyboardContext} from "../../../context/KeyboardState.context";
-import {GlobalStateContext} from "../../../context/GlobalState.context";
 import {runCliCommand} from "../../../utils/runCliCommand";
 
 export const Cli = () => {

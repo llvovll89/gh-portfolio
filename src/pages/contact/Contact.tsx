@@ -2,7 +2,7 @@ import {Aside} from "../../components/aside/Aside";
 import {Contents} from "../../components/contents/Contents";
 import {Bottom} from "../../components/footer/Footer";
 import {Header} from "../../components/header/Header";
-import {CommuniCationCard} from "./contents/CommnuicationCard";
+import {CommunicationCard} from "./contents/CommnuiCationCard";
 import {MessageCardForm} from "./contents/MessageCardForm";
 
 export const Contact = () => {
@@ -25,7 +25,7 @@ export const Contact = () => {
 
                     <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 items-start">
                         {/* 왼쪽: 연락 카드 */}
-                        <CommuniCationCard />
+                        <CommunicationCard />
 
                         {/* 오른쪽: 폼 */}
                         <MessageCardForm />

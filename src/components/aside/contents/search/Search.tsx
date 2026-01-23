@@ -1,21 +1,16 @@
-import mocks from "@/mocks/MockData.json";
-import { useContext, useState } from "react";
-import { NOT_FOUND, routesPath } from "../../../../routes/route";
-import { GlobalStateContext } from "../../../../context/GlobalState.context";
-import { FcOpenedFolder } from "react-icons/fc";
-import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
+import {useContext, useState} from "react";
+import {NOT_FOUND, routesPath} from "../../../../routes/route";
+import {GlobalStateContext} from "../../../../context/GlobalState.context";
+import {FcOpenedFolder} from "react-icons/fc";
+import {useHandlePushPath} from "../../../../hooks/useHandlePushPath";
 
 export const Search = () => {
     const [list, setList] = useState<string[]>([]);
-    const { selectedPathState, selectedTheme } = useContext(GlobalStateContext);
+    const {selectedPathState, selectedTheme} = useContext(GlobalStateContext);
     const handlePushPath = useHandlePushPath();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const query = e.target.value.trim();
-        // const results = mocks.filter((item) => {
-        //     console.log(item.name);
-        //     return item.name.toLowerCase().includes(query.toLowerCase());
-        // });
 
         if (!query) {
             setList([]);
@@ -27,8 +22,8 @@ export const Search = () => {
             .filter((route) => route.path !== NOT_FOUND)
             .filter((route) =>
                 keywords.some((keyword) =>
-                    route.name.toLowerCase().includes(keyword.toLowerCase())
-                )
+                    route.name.toLowerCase().includes(keyword.toLowerCase()),
+                ),
             )
             .map((route) => route.path);
 
@@ -36,7 +31,9 @@ export const Search = () => {
     };
 
     return (
-        <section className={`w-[calc(100%-40px)] flex flex-col ${selectedTheme.mode} overflow-hidden`}>
+        <section
+            className={`w-[calc(100%-40px)] flex flex-col ${selectedTheme.mode} overflow-hidden`}
+        >
             <header className="w-full h-10 px-3 flex items-center text-xs text-white overflow-hidden tracking-[1px]">
                 검색
             </header>
@@ -60,10 +57,11 @@ export const Search = () => {
                             <li
                                 onClick={() => handlePushPath(r.path)}
                                 key={r.path}
-                                className={`${selectedPathState.state === r.path
-                                    ? "bg-sub-gary/20"
-                                    : ""
-                                    } w-full h-8 flex items-center px-3 text-white text-sm cursor-pointer hover:bg-primary/20 gap-1`}
+                                className={`${
+                                    selectedPathState.state === r.path
+                                        ? "bg-sub-gary/20"
+                                        : ""
+                                } w-full h-8 flex items-center px-3 text-white text-sm cursor-pointer hover:bg-primary/20 gap-1`}
                             >
                                 <FcOpenedFolder className="w-5 h-5" />
                                 {r.name}
