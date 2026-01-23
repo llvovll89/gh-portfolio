@@ -10,7 +10,7 @@ export const CardDescAndSkills = ({project}: CardDescAndSkillsProps) => {
 
     return (
         <div className="w-full flex flex-col justify-between gap-2">
-            <div className="w-full text-white">
+            <div className="w-full">
                 {convertNewDetailedDescription.map((desc, descIndex) => {
                     if (desc.trim() === "") return null;
                     return (
@@ -27,7 +27,7 @@ export const CardDescAndSkills = ({project}: CardDescAndSkillsProps) => {
                     {project.skills.map((skill, skillIndex) => (
                         <span
                             key={skillIndex}
-                            className="bg-white/20 text-white px-2 py-1 rounded-[5px] text-sm"
+                            className="bg-black/80 text-white px-2 py-1 rounded-[5px] text-sm"
                         >
                             {skill}
                         </span>

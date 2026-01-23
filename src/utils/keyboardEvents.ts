@@ -1,6 +1,9 @@
-import { NavType } from "../components/aside/constants/Nav.type";
-import type { LayoutState, SelectedPathState } from "../context/GlobalState.context";
-import type { submitCliCommandType } from "../context/KeyboardState.context";
+import {NavType} from "../components/aside/constants/Nav.type";
+import type {LayoutState} from "../context/GlobalState.context";
+import type {submitCliCommandType} from "../context/KeyboardState.context";
+
+const COLLAPSED_HEIGHT = 32;
+const OPEN_HEIGHT = 220;
 
 /**
  *
@@ -10,16 +13,16 @@ import type { submitCliCommandType } from "../context/KeyboardState.context";
  */
 export const handleToggleFooterUI = (
     event: KeyboardEvent,
-    setLayoutState: React.Dispatch<React.SetStateAction<LayoutState>>
+    setLayoutState: React.Dispatch<React.SetStateAction<LayoutState>>,
 ) => {
     if (event.ctrlKey && event.code === "Backquote") {
         event.preventDefault();
 
         setLayoutState((prev) => {
-            const isFooterVisible = prev.resizeFooterHeight > 50;
+            const isOpen = prev.resizeFooterHeight > COLLAPSED_HEIGHT;
             return {
                 ...prev,
-                resizeFooterHeight: isFooterVisible ? 50 : 250,
+                resizeFooterHeight: isOpen ? COLLAPSED_HEIGHT : OPEN_HEIGHT,
             };
         });
     }
@@ -33,7 +36,7 @@ export const handleToggleFooterUI = (
  */
 export const handleCloseKeyboardInfoUI = (
     event: KeyboardEvent,
-    setIsVisibleKeyboardInfo: React.Dispatch<React.SetStateAction<boolean>>
+    setIsVisibleKeyboardInfo: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
     if (event.ctrlKey && event.code === "F12") {
         event.preventDefault();
@@ -49,11 +52,13 @@ export const handleCloseKeyboardInfoUI = (
  */
 export const handleActiveFolderUI = (
     event: KeyboardEvent,
-    setSelectedNav: React.Dispatch<React.SetStateAction<NavType | null>>
+    setSelectedNav: React.Dispatch<React.SetStateAction<NavType | null>>,
 ) => {
     if (event.ctrlKey && event.code === "KeyY") {
         event.preventDefault();
-        setSelectedNav(NavType.FOLDER);
+        setSelectedNav((prev) =>
+            prev === NavType.FOLDER ? null : NavType.FOLDER,
+        );
     }
 };
 
@@ -65,11 +70,13 @@ export const handleActiveFolderUI = (
  */
 export const handleActiveSearchUI = (
     event: KeyboardEvent,
-    setSelectedNav: React.Dispatch<React.SetStateAction<NavType | null>>
+    setSelectedNav: React.Dispatch<React.SetStateAction<NavType | null>>,
 ) => {
     if (event.ctrlKey && event.code === "KeyF") {
-        event.preventDefault();
-        setSelectedNav(NavType.SEARCH);
+        event.preventDefault(); // 브라우저 기본 찾기(Ctrl+F) 방지
+        setSelectedNav((prev) =>
+            prev === NavType.SEARCH ? null : NavType.SEARCH,
+        );
     }
 };
 
@@ -78,7 +85,12 @@ export const handleActiveSearchUI = (
  * @param event 키보드 이벤트
  * @description CLI 입력창에서 Ctrl + Enter 이벤트
  */
-export const handleCliEnterEvent = (event: KeyboardEvent, setSubmitCliCommand: React.Dispatch<React.SetStateAction<submitCliCommandType>>) => {
+export const handleCliEnterEvent = (
+    event: KeyboardEvent,
+    setSubmitCliCommand: React.Dispatch<
+        React.SetStateAction<submitCliCommandType>
+    >,
+) => {
     if (event.ctrlKey && event.code === "Enter") {
         event.preventDefault();
         setSubmitCliCommand((prev) => ({
@@ -90,14 +102,20 @@ export const handleCliEnterEvent = (event: KeyboardEvent, setSubmitCliCommand: R
 };
 
 let escPressCount = 0;
-let escTimer: NodeJS.Timeout | null = null;
+let escTimer: ReturnType<typeof setTimeout> | null = null;
 
 /**
- * 
+ *
  * @param event 키보드 이벤트
  * @description CLI 입력창과 키보드 단축키 정보 모달 모두 닫기 이벤트 (ESC 2번 연속 클릭)
  */
-export const handleAllClear = (event: KeyboardEvent, setSubmitCliCommand: React.Dispatch<React.SetStateAction<submitCliCommandType>>, setIsVisibleKeyboardInfo: React.Dispatch<React.SetStateAction<boolean>>) => {
+export const handleAllClear = (
+    event: KeyboardEvent,
+    setSubmitCliCommand: React.Dispatch<
+        React.SetStateAction<submitCliCommandType>
+    >,
+    setIsVisibleKeyboardInfo: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
     if (event.code === "Escape") {
         event.preventDefault();
 
@@ -108,7 +126,7 @@ export const handleAllClear = (event: KeyboardEvent, setSubmitCliCommand: React.
         }
 
         if (escPressCount === 2) {
-            setSubmitCliCommand({ value: "", isVisibleCommandUi: false });
+            setSubmitCliCommand({value: "", isVisibleCommandUi: false});
             setIsVisibleKeyboardInfo(false);
             escPressCount = 0;
         } else {

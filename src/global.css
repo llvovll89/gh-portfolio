@@ -36,3 +36,9 @@
 .scrolls::-webkit-scrollbar-track {
     background: rgba(41, 45, 45, 0.1);
 }
+
+span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

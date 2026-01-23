@@ -6,53 +6,128 @@ interface UseDraggingProps {
     type: "sidebar" | "footer";
 }
 
-export const useDragging = ({targetRef, type}: UseDraggingProps) => {
-    const {setLayoutState, selectedNav} = useContext(GlobalStateContext);
-    const isDragging = useRef(false);
+type InputKind = "pointer" | "mouse" | "touch" | null;
 
-    const handleMouseDown = (e: React.MouseEvent) => {
+export const useDragging = ({targetRef, type}: UseDraggingProps) => {
+    const {setLayoutState} = useContext(GlobalStateContext);
+
+    const isDragging = useRef(false);
+    const activeInput = useRef<InputKind>(null);
+
+    const setCursor = (value: string) => {
+        if (targetRef?.current) targetRef.current.style.cursor = value;
+    };
+
+    const getClient = (
+        e: MouseEvent | PointerEvent | TouchEvent,
+    ): {clientX: number; clientY: number} | null => {
+        // TouchEvent
+        if ("touches" in e) {
+            const t = e.touches[0] ?? e.changedTouches[0];
+            if (!t) return null;
+            return {clientX: t.clientX, clientY: t.clientY};
+        }
+        // MouseEvent / PointerEvent
+        return {clientX: e.clientX, clientY: e.clientY};
+    };
+
+    const applyDrag = (clientX: number, clientY: number) => {
+        if (type === "sidebar") {
+            if (clientX > 600) return; // 최대 너비 600px
+            setLayoutState((prev) => ({
+                ...prev,
+                resizeSidebarWidth: Math.max(125, clientX), // 최소 너비 125px
+            }));
+            return;
+        }
+
+        // footer
+        const windowHeight = window.innerHeight;
+        const newHeight = windowHeight - clientY;
+
+        setLayoutState((prev) => ({
+            ...prev,
+            resizeFooterHeight: Math.max(0, newHeight), // 최소 높이 100px
+        }));
+    };
+
+    const handleStart = (
+        e: React.MouseEvent | React.TouchEvent | React.PointerEvent,
+    ) => {
         isDragging.current = true;
-        if (targetRef && targetRef.current) {
-            targetRef.current.style.cursor = "ns-resize";
+
+        // 어떤 입력으로 시작했는지 기록(중복 이벤트 방지)
+        if (e.type === "pointerdown") activeInput.current = "pointer";
+        else if (e.type === "touchstart") activeInput.current = "touch";
+        else activeInput.current = "mouse";
+
+        setCursor(type === "sidebar" ? "ew-resize" : "ns-resize");
+
+        if ("pointerId" in e) {
+            try {
+                (e.currentTarget as HTMLElement).setPointerCapture?.(
+                    e.pointerId,
+                );
+            } catch {
+                // ignore
+            }
         }
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMoveNative = (e: MouseEvent | PointerEvent | TouchEvent) => {
         if (!isDragging.current) return;
 
-        const windowHeight = window.innerHeight;
-        const newHeight = windowHeight - e.clientY;
+        // 입력 타입 섞여서 들어오는 중복 move 방지
+        if (activeInput.current === "pointer" && e.type !== "pointermove")
+            return;
+        if (activeInput.current === "touch" && e.type !== "touchmove") return;
+        if (activeInput.current === "mouse" && e.type !== "mousemove") return;
 
-        if (type === "sidebar") {
-            if (e.clientX > 600) return; // 최대 너비 600px
+        // 터치는 스크롤 방지(리스너를 passive:false로 등록해야 동작)
+        if (e.type === "touchmove") e.preventDefault?.();
 
-            setLayoutState((prev) => ({
-                ...prev,
-                resizeSidebarWidth: Math.max(125, e.clientX), // 최소 너비 125px
-            }));
-        } else if (type === "footer") {
-            setLayoutState((prev) => ({
-                ...prev,
-                resizeFooterHeight: Math.max(100, newHeight), // 최소 높이 100px
-            }));
-        }
+        const pos = getClient(e);
+        if (!pos) return;
+
+        applyDrag(pos.clientX, pos.clientY);
     };
 
-    const handleMouseUp = () => {
+    const handleEndNative = () => {
         isDragging.current = false;
-        if (targetRef && targetRef.current) {
-            targetRef.current.style.cursor = "";
-        }
+        activeInput.current = null;
+        setCursor("");
     };
 
     useEffect(() => {
-        window.addEventListener("mousemove", handleMouseMove);
-        window.addEventListener("mouseup", handleMouseUp);
+        // Pointer Events (권장)
+        window.addEventListener("pointermove", handleMoveNative);
+        window.addEventListener("pointerup", handleEndNative);
+        window.addEventListener("pointercancel", handleEndNative);
+
+        // Touch fallback (iOS 등)
+        window.addEventListener("touchmove", handleMoveNative, {
+            passive: false,
+        });
+        window.addEventListener("touchend", handleEndNative);
+        window.addEventListener("touchcancel", handleEndNative);
+
+        // Mouse fallback
+        window.addEventListener("mousemove", handleMoveNative);
+        window.addEventListener("mouseup", handleEndNative);
+
         return () => {
-            window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mouseup", handleMouseUp);
+            window.removeEventListener("pointermove", handleMoveNative);
+            window.removeEventListener("pointerup", handleEndNative);
+            window.removeEventListener("pointercancel", handleEndNative);
+
+            window.removeEventListener("touchmove", handleMoveNative as any);
+            window.removeEventListener("touchend", handleEndNative);
+            window.removeEventListener("touchcancel", handleEndNative);
+
+            window.removeEventListener("mousemove", handleMoveNative);
+            window.removeEventListener("mouseup", handleEndNative);
         };
     }, []);
 
-    return handleMouseDown;
+    return handleStart;
 };
