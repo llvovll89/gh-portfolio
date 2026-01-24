@@ -1,9 +1,9 @@
-import {Contents} from "../../components/contents/Contents";
-import {Header} from "../../components/header/Header";
-import {Aside} from "../../components/aside/Aside";
-import {Bottom} from "../../components/footer/Footer";
-import {MainContents} from "./contents/main/MainContents";
-import {CommonPageHeader} from "../common/innerHeader/CommonPageHeader";
+import { Contents } from "../../components/contents/Contents";
+import { Header } from "../../components/header/Header";
+import { Aside } from "../../components/aside/Aside";
+import { Bottom } from "../../components/footer/Footer";
+import { MainContents } from "./contents/main/MainContents";
+import { CommonPageHeader } from "../common/innerHeader/CommonPageHeader";
 
 export const Default = () => {
     return (

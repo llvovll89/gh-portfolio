@@ -1,15 +1,15 @@
-import {useContext} from "react";
-import {GlobalStateContext} from "../../context/GlobalState.context";
-import {convertThemeTextColor} from "../../utils/convertThemeTextColor";
-import {useCheckedMobileSize} from "../../hooks/useCheckedMobileSize";
+import { useContext } from "react";
+import { GlobalStateContext } from "../../context/GlobalState.context";
+import { convertThemeTextColor } from "../../utils/convertThemeTextColor";
+import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
 
 interface ContentsProps {
     children?: React.ReactNode;
     className?: string;
 }
 
-export const Contents = ({children, className}: ContentsProps) => {
-    const {layoutState, selectedTheme} = useContext(GlobalStateContext);
+export const Contents = ({ children, className }: ContentsProps) => {
+    const { layoutState, selectedTheme } = useContext(GlobalStateContext);
     const isMobileSize = useCheckedMobileSize();
 
     return (

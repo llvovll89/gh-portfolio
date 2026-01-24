@@ -48,9 +48,26 @@ span {
 }
 
 @media (max-width: 564px) {
+
     input,
     select,
     textarea {
         font-size: 16px;
     }
+}
+
+@keyframes soft-float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+.gh-soft-float {
+    animation: soft-float 8s ease-in-out infinite;
 }
