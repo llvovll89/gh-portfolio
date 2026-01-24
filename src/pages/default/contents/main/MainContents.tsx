@@ -1,8 +1,6 @@
 import { CONTACT, PROJECTS } from "../../../../routes/route";
 import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
 import { Img } from "../../../../components/Img";
-import { useContext } from "react";
-import { GlobalStateContext } from "../../../../context/GlobalState.context";
 import { useCheckedMobileSize } from "../../../../hooks/useCheckedMobileSize";
 
 export const MainContents = () => {
