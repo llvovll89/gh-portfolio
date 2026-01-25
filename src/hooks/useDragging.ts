@@ -1,5 +1,5 @@
-import {useContext, useEffect, useRef} from "react";
-import {GlobalStateContext} from "../context/GlobalState.context";
+import { useContext, useEffect, useRef } from "react";
+import { GlobalStateContext } from "../context/GlobalState.context";
 
 interface UseDraggingProps {
     targetRef: React.RefObject<HTMLDivElement | null>;
@@ -8,8 +8,8 @@ interface UseDraggingProps {
 
 type InputKind = "pointer" | "mouse" | "touch" | null;
 
-export const useDragging = ({targetRef, type}: UseDraggingProps) => {
-    const {setLayoutState} = useContext(GlobalStateContext);
+export const useDragging = ({ targetRef, type }: UseDraggingProps) => {
+    const { setLayoutState } = useContext(GlobalStateContext);
 
     const isDragging = useRef(false);
     const activeInput = useRef<InputKind>(null);
@@ -20,15 +20,15 @@ export const useDragging = ({targetRef, type}: UseDraggingProps) => {
 
     const getClient = (
         e: MouseEvent | PointerEvent | TouchEvent,
-    ): {clientX: number; clientY: number} | null => {
+    ): { clientX: number; clientY: number } | null => {
         // TouchEvent
         if ("touches" in e) {
             const t = e.touches[0] ?? e.changedTouches[0];
             if (!t) return null;
-            return {clientX: t.clientX, clientY: t.clientY};
+            return { clientX: t.clientX, clientY: t.clientY };
         }
         // MouseEvent / PointerEvent
-        return {clientX: e.clientX, clientY: e.clientY};
+        return { clientX: e.clientX, clientY: e.clientY };
     };
 
     const applyDrag = (clientX: number, clientY: number) => {

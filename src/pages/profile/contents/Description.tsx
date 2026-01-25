@@ -1,6 +1,6 @@
 export const Description = () => {
     return (
-        <ul className="w-full text-sm mt-2">
+        <ul className="w-full text-[clamp(0.8rem,2vw,1rem)]">
             <li>새로운 기술을 배우는것에 흥미가있는 개발자 김건호 입니다.</li>
             <li>
                 주로 프론트엔드 개발을 주로 하지만 백엔드 개발에도 관심이 많아

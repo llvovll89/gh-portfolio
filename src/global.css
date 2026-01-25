@@ -71,3 +71,21 @@ span {
 .gh-soft-float {
     animation: soft-float 8s ease-in-out infinite;
 }
+
+.opacity-flash {
+    animation: opacity-flash 2s ease-in-out infinite;
+}
+
+@keyframes opacity-flash {
+
+    0%,
+    100% {
+        opacity: 0.75;
+        color: rgba(255, 255, 255, 0.15);
+
+    }
+
+    50% {
+        opacity: 0.25;
+    }
+}
