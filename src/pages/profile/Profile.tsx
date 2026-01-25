@@ -1,21 +1,13 @@
-import { useContext } from "react";
 import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
 import { Bottom } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
-import { Img } from "../../components/Img";
 import { CommonPageHeader } from "../common/innerHeader/CommonPageHeader";
-import { Description } from "./contents/Description";
 import { Skills } from "./contents/Skills";
-import { Title } from "./contents/Title";
 import { Education } from "./contents/Education";
 import { PersonalHistory } from "./contents/PersonalHistory";
-import { convertThemeLogoColor } from "../../utils/convertThemeTextColor";
-import { GlobalStateContext } from "../../context/GlobalState.context";
 
 export const Profile = () => {
-    const { selectedTheme } = useContext(GlobalStateContext);
-
     return (
         <>
             <Header />

@@ -3,7 +3,6 @@ import { GlobalStateContext } from "../../context/GlobalState.context";
 import { useDragging } from "../../hooks/useDragging";
 import { Navbar } from "./navbar/Navbar";
 import { Folder } from "./contents/folder/Folder";
-import { useNavigate } from "react-router-dom";
 import { NavType } from "./constants/Nav.type";
 import { Search } from "./contents/search/Search";
 import { GitControl } from "./contents/gitControl/GitControl";
@@ -12,14 +11,12 @@ export const Aside = () => {
     const {
         layoutState,
         setLayoutState,
-        selectedPathState,
         selectedNav,
         setSelectedNav,
         selectedTheme,
     } = useContext(GlobalStateContext);
     const asideRef = useRef<HTMLDivElement>(null);
     const handleMouseDown = useDragging({ targetRef: asideRef, type: "sidebar" });
-    const navigate = useNavigate();
 
     const handleClickNav = (nav: NavType) => {
         if (selectedNav === nav) {
@@ -60,7 +57,7 @@ export const Aside = () => {
                         // 모바일 터치 타겟 확장 (md 이상은 얇게)
                         "w-5 md:w-2",
                         // 터치 가능해 보이게: 얇은 배경 + 경계 + 눌림 피드백
-                        "bg-gradient-to-l from-slate-900/10 to-transparent",
+                        "bg-linear-to-l from-slate-900/10 to-transparent",
                         "active:from-primary/20",
                         "transition-colors",
                         // 드래그 중 스크롤/제스처 간섭 방지
