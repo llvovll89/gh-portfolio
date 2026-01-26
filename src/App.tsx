@@ -8,7 +8,7 @@ function App() {
     return (
         <GlobalStateProvider>
             <KeyboardProvider>
-                <section className="w-screen min-h-screen flex flex-col relative overflow-hidden">
+                <section className="w-full min-h-screen flex flex-col relative overflow-hidden">
                     <AppChildContainer />
 
                     <Routes>

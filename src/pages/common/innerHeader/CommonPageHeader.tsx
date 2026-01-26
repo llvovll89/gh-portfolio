@@ -45,14 +45,17 @@ export const CommonPageHeader = ({title}: CommonPageHeaderProps) => {
                 <Link
                     to="https://github.com/llvovll89"
                     target="_blank"
-                    className="flex items-center gap-1 text-[clamp(0.8rem,1.5vw,1rem)] font-medium hover:underline"
+                    className="flex items-center gap-1 text-[clamp(0.9rem,1.5vw,1.2rem)] font-medium hover:underline
+                        hover:text-gray-800 dark:hover:text-gray-200 transition-all
+                    "
                 >
                     <FaGithub />
                 </Link>
                 <Link
                     to="https://velog.io/@llvovll89/posts"
                     target="_blank"
-                    className="flex items-center gap-1 text-[clamp(0.8rem,1.5vw,1rem)] font-medium hover:underline"
+                    className="flex items-center gap-1 text-[clamp(0.9rem,1.5vw,1.2rem)] font-medium hover:underline
+                    hover:text-gray-800 dark:hover:text-gray-200 transition-all"
                 >
                     <SiVelog className="w-4 h-4" />
                 </Link>
