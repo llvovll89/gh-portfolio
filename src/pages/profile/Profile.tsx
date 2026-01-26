@@ -1,11 +1,10 @@
-import { Aside } from "../../components/aside/Aside";
-import { Contents } from "../../components/contents/Contents";
-import { Bottom } from "../../components/footer/Footer";
-import { Header } from "../../components/header/Header";
-import { CommonPageHeader } from "../common/innerHeader/CommonPageHeader";
-import { Skills } from "./contents/Skills";
-import { Education } from "./contents/Education";
-import { PersonalHistory } from "./contents/PersonalHistory";
+import {Aside} from "../../components/aside/Aside";
+import {Contents} from "../../components/contents/Contents";
+import {Header} from "../../components/header/Header";
+import {CommonPageHeader} from "../common/innerHeader/CommonPageHeader";
+import {Skills} from "./contents/Skills";
+import {Education} from "./contents/Education";
+import {PersonalHistory} from "./contents/PersonalHistory";
 
 export const Profile = () => {
     return (
@@ -17,7 +16,8 @@ export const Profile = () => {
                 <section className="w-full h-full md:pt-8 md:pb-8 pt-4 pb-6 md:px-4 px-1 flex md:flex-row flex-col gap-4 overflow-auto scrolls">
                     <section className="md:w-[40%] w-full h-full flex gap-4 items-center justify-center">
                         <div className="w-full h-full relative flex flex-col items-center gap-4">
-                            <h2 className="font-bold text-[clamp(1.5rem,2vw,2.5rem)] flex items-center gap-2">Profile
+                            <h2 className="font-bold text-[clamp(1.5rem,2vw,2.5rem)] flex items-center gap-2">
+                                Profile
                                 <div className="grid grid-cols-2">
                                     <span className="w-4 h-4 rounded-full bg-primary border-2 border-white/50"></span>
                                     <span className="w-4 h-4 rounded-full bg-primary border-2 border-white/50"></span>
@@ -85,7 +85,6 @@ export const Profile = () => {
                     </section>
                 </section>
             </Contents>
-            <Bottom />
         </>
     );
 };

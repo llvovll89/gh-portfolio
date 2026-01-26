@@ -1,6 +1,5 @@
 import {Aside} from "../../components/aside/Aside";
 import {Contents} from "../../components/contents/Contents";
-import {Bottom} from "../../components/footer/Footer";
 import {Header} from "../../components/header/Header";
 import {CommunicationCard} from "./contents/CommnuiCationCard";
 import {MessageCardForm} from "./contents/MessageCardForm";
@@ -32,7 +31,6 @@ export const Contact = () => {
                     </div>
                 </section>
             </Contents>
-            <Bottom />
         </>
     );
 };

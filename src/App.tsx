@@ -3,8 +3,12 @@ import {GlobalStateProvider} from "./context/GlobalState.context";
 import {KeyboardProvider} from "./context/KeyboardState.context";
 import {routesPath} from "./routes/route";
 import {AppChildContainer} from "./components/appChildContainer/AppChildContainer";
+import {Bottom} from "./components/footer/Footer";
+import {useCheckedMobile} from "./hooks/useCheckedMobile";
 
 function App() {
+    const isMobile = useCheckedMobile();
+
     return (
         <GlobalStateProvider>
             <KeyboardProvider>
@@ -20,6 +24,8 @@ function App() {
                             />
                         ))}
                     </Routes>
+
+                    {!isMobile && <Bottom />}
                 </section>
             </KeyboardProvider>
         </GlobalStateProvider>

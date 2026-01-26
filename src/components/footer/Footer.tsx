@@ -1,18 +1,18 @@
-import { useContext, useRef } from "react";
-import { GlobalStateContext } from "../../context/GlobalState.context";
-import { useDragging } from "../../hooks/useDragging";
-import { Cli } from "./cli/Cli";
-import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
+import {useContext, useRef} from "react";
+import {GlobalStateContext} from "../../context/GlobalState.context";
+import {useDragging} from "../../hooks/useDragging";
+import {Cli} from "./cli/Cli";
+import {useCheckedMobileSize} from "../../hooks/useCheckedMobileSize";
 
 const COLLAPSED_HEIGHT = 32; // 헤더 바 높이(h-8)
 const OPEN_HEIGHT = 220; // 열렸을 때 최소 높이
 
 export const Bottom = () => {
-    const { layoutState, selectedTheme, setLayoutState } =
+    const {layoutState, selectedTheme, setLayoutState} =
         useContext(GlobalStateContext);
 
     const footerRef = useRef<HTMLDivElement>(null);
-    const handleMouseDown = useDragging({ targetRef: footerRef, type: "footer" });
+    const handleMouseDown = useDragging({targetRef: footerRef, type: "footer"});
 
     const isOpen = layoutState.resizeFooterHeight > COLLAPSED_HEIGHT;
     const isMobileSize = useCheckedMobileSize();
