@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import type {Project} from "../mocks/projectData";
 import {CardDescAndSkills} from "./CardDescAndSkills";
-import {CardHeader} from "./CardHeader";
 
 interface CardDetailProps {
     selected: Project;
