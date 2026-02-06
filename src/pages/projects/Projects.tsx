@@ -11,7 +11,7 @@ export const Projects = () => {
             <Aside />
             <Contents className="select-none gap-4">
                 <CommonPageHeader />
-                <section className="w-full flex flex-col gap-2 h-full gap-1 relative">
+                <section className="w-full flex flex-col gap-2 h-full relative">
                     <ProjectContentsCards />
                 </section>
             </Contents>
