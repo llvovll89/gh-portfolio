@@ -38,7 +38,7 @@ export const GlobalStateContext = createContext<GlobalStateContextProps>({
     setSelectedPath: () => {},
     layoutState: {
         resizeFooterHeight: 0,
-        resizeSidebarWidth: 220,
+        resizeSidebarWidth: 0,
     },
     setLayoutState: () => {},
     selectedPathState: {list: [], state: ""},
@@ -59,7 +59,7 @@ export const GlobalStateProvider = ({
 }) => {
     const [selectedPath, setSelectedPath] = useState<string>("");
     const [layoutState, setLayoutState] = useState<LayoutState>({
-        resizeFooterHeight: 220,
+        resizeFooterHeight: 32,
         resizeSidebarWidth: 300,
     });
     const [selectedPathState, setSelectedPathState] =
