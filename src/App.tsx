@@ -1,4 +1,4 @@
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useLocation} from "react-router-dom";
 import {GlobalStateProvider} from "./context/GlobalState.context";
 import {KeyboardProvider} from "./context/KeyboardState.context";
 import {routesPath} from "./routes/route";
@@ -8,6 +8,8 @@ import {useCheckedMobile} from "./hooks/useCheckedMobile";
 
 function App() {
     const isMobile = useCheckedMobile();
+    const location = useLocation();
+    const isBlogDetailPage = location.pathname.startsWith("/blog/") && location.pathname !== "/blog/";
 
     return (
         <GlobalStateProvider>
@@ -25,7 +27,7 @@ function App() {
                         ))}
                     </Routes>
 
-                    {!isMobile && <Bottom />}
+                    {!isMobile && !isBlogDetailPage && <Bottom />}
                 </section>
             </KeyboardProvider>
         </GlobalStateProvider>
