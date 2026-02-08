@@ -1,12 +1,14 @@
-import {useMemo, useState} from "react";
-import {projects} from "../mocks/projectData";
-import {CardDetail} from "./CardDetail";
+import { useMemo, useState } from "react";
+import { projects } from "../mocks/projectData";
+import { CardDetail } from "./CardDetail";
+import { useTranslation } from "react-i18next";
 
 interface CardProps {
     className?: string;
 }
 
-export const ProjectContentsCards = ({className}: CardProps) => {
+export const ProjectContentsCards = ({ className }: CardProps) => {
+    const { t } = useTranslation();
     const [selectedProject, setSelectedProject] = useState<number | null>(null);
 
     const selected = useMemo(
@@ -59,7 +61,7 @@ export const ProjectContentsCards = ({className}: CardProps) => {
                                 {/* 상세보기 배지 */}
                                 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
                                     <span className="inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur-sm border border-white/20 px-3 py-1.5 text-xs font-semibold text-slate-900 shadow-lg">
-                                        <span>상세보기</span>
+                                        <span>{t("pages.projects.viewDetails")}</span>
                                         <span className="text-[10px] translate-y-[0.5px]">→</span>
                                     </span>
                                 </div>

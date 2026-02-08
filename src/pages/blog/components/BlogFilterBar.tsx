@@ -3,6 +3,7 @@ import { BlogTagFilter } from "./BlogTagFilter";
 import { BlogSortToggle } from "./BlogSortToggle";
 import { BlogViewToggle } from "./BlogViewToggle";
 import { HiX } from "react-icons/hi";
+import { useTranslation } from "react-i18next";
 
 interface BlogFilterBarProps {
     searchQuery: string;
@@ -35,6 +36,7 @@ export const BlogFilterBar = ({
     totalPosts,
     filteredCount,
 }: BlogFilterBarProps) => {
+    const { t } = useTranslation();
     const hasActiveFilters = searchQuery || selectedTags.length > 0;
 
     const clearAllFilters = () => {
@@ -100,7 +102,7 @@ export const BlogFilterBar = ({
                                             selectedTags.filter((t) => t !== tag)
                                         )
                                     }
-                                    aria-label={`${tag} 태그 제거`}
+                                    aria-label={t("pages.blog.filter.removeTag", { tag })}
                                     className="hover:text-primary/70 transition-colors"
                                 >
                                     <HiX className="w-3.5 h-3.5" />
@@ -118,8 +120,8 @@ export const BlogFilterBar = ({
                         aria-live="polite"
                     >
                         {filteredCount === totalPosts
-                            ? `${totalPosts}개의 포스트`
-                            : `${filteredCount} / ${totalPosts}개 표시`}
+                            ? t("pages.blog.count.total", { count: totalPosts })
+                            : t("pages.blog.count.filtered", { filtered: filteredCount, total: totalPosts })}
                     </span>
 
                     {hasActiveFilters && (
@@ -135,7 +137,7 @@ export const BlogFilterBar = ({
                                 "transition-all duration-200",
                             ].join(" ")}
                         >
-                            필터 초기화
+                            {t("pages.blog.filter.resetFilters")}
                         </button>
                     )}
                 </div>

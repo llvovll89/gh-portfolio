@@ -4,10 +4,15 @@ import { GlobalStateContext } from "../../../../context/GlobalState.context";
 import { FcOpenedFolder } from "react-icons/fc";
 import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
 import { CiSquareRemove } from "react-icons/ci";
+import { MdHistory, MdClearAll } from "react-icons/md";
+import { useTranslation } from "react-i18next";
 
 const RECENT_STORAGE_KEY = "gh-portfolio:search-recent-paths";
+const FREQUENCY_STORAGE_KEY = "gh-portfolio:search-frequency";
+const SEARCH_HISTORY_KEY = "gh-portfolio:search-history";
 const MAX_RESULTS = 20;
 const MAX_RECENTS = 8;
+const MAX_SEARCH_HISTORY = 5;
 
 type RouteItem = (typeof routesPath)[number];
 
@@ -21,7 +26,13 @@ function getKeywords(q: string) {
     return normalized.split(" ").filter(Boolean);
 }
 
-function scoreRoute(routeName: string, keywords: string[], fullQueryLower: string) {
+function scoreRoute(
+    routeName: string,
+    keywords: string[],
+    fullQueryLower: string,
+    frequencyMap: Record<string, number>,
+    routePath: string,
+) {
     const nameLower = routeName.toLowerCase();
     if (!keywords.length) return 0;
 
@@ -48,7 +59,64 @@ function scoreRoute(routeName: string, keywords: string[], fullQueryLower: strin
     // 짧은 이름 약간 우대
     score += Math.max(0, 20 - routeName.length * 0.5);
 
+    // 빈도수 보너스 (자주 방문한 페이지 우선)
+    const frequency = frequencyMap[routePath] || 0;
+    score += Math.min(frequency * 5, 100); // 최대 100점까지 보너스
+
     return score;
+}
+
+// 빈도수 데이터 로드
+function loadFrequency(): Record<string, number> {
+    try {
+        if (typeof window === "undefined") return {};
+        const raw = localStorage.getItem(FREQUENCY_STORAGE_KEY);
+        if (!raw) return {};
+        const parsed: unknown = JSON.parse(raw);
+        if (typeof parsed !== "object" || parsed === null) return {};
+        return parsed as Record<string, number>;
+    } catch {
+        return {};
+    }
+}
+
+// 빈도수 데이터 저장
+function saveFrequency(frequencyMap: Record<string, number>) {
+    try {
+        localStorage.setItem(FREQUENCY_STORAGE_KEY, JSON.stringify(frequencyMap));
+    } catch {
+        // ignore
+    }
+}
+
+// 빈도수 증가
+function incrementFrequency(path: string, frequencyMap: Record<string, number>) {
+    const next = { ...frequencyMap, [path]: (frequencyMap[path] || 0) + 1 };
+    saveFrequency(next);
+    return next;
+}
+
+// 검색어 히스토리 로드
+function loadSearchHistory(): string[] {
+    try {
+        if (typeof window === "undefined") return [];
+        const raw = localStorage.getItem(SEARCH_HISTORY_KEY);
+        if (!raw) return [];
+        const parsed: unknown = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return [];
+        return parsed.filter((x): x is string => typeof x === "string");
+    } catch {
+        return [];
+    }
+}
+
+// 검색어 히스토리 저장
+function saveSearchHistory(history: string[]) {
+    try {
+        localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history));
+    } catch {
+        // ignore
+    }
 }
 
 function escapeRegExp(s: string) {
@@ -94,10 +162,18 @@ function HighlightedText({
 export const Search = () => {
     const { selectedPathState, selectedTheme } = useContext(GlobalStateContext);
     const handlePushPath = useHandlePushPath();
+    const { t } = useTranslation();
 
     const [query, setQuery] = useState("");
     const [debouncedQuery, setDebouncedQuery] = useState("");
     const [activeIndex, setActiveIndex] = useState(0);
+    const [frequencyMap, setFrequencyMap] = useState<Record<string, number>>(() =>
+        loadFrequency(),
+    );
+    const [searchHistory, setSearchHistory] = useState<string[]>(() =>
+        loadSearchHistory(),
+    );
+    const [showSearchHistory, setShowSearchHistory] = useState(false);
     const [recentPaths, setRecentPaths] = useState<string[]>(() => {
         try {
             if (typeof window === "undefined") return [];
@@ -130,6 +206,23 @@ export const Search = () => {
         persistRecents(next);
     };
 
+    const addSearchHistory = (query: string) => {
+        const trimmed = normalizeQuery(query);
+        if (!trimmed) return;
+
+        const next = [
+            trimmed,
+            ...searchHistory.filter((q) => q !== trimmed),
+        ].slice(0, MAX_SEARCH_HISTORY);
+
+        setSearchHistory(next);
+        saveSearchHistory(next);
+    };
+
+    const clearAllRecents = () => {
+        persistRecents([]);
+    };
+
     // debounce query
     useEffect(() => {
         const t = window.setTimeout(() => {
@@ -160,26 +253,58 @@ export const Search = () => {
         const scored = searchableRoutes
             .map((r) => ({
                 route: r,
-                score: scoreRoute(r.name, keywords, fullQueryLower),
+                score: scoreRoute(r.name, keywords, fullQueryLower, frequencyMap, r.path),
             }))
             .filter((x) => x.score > 0)
             .sort((a, b) => b.score - a.score);
 
         return scored.slice(0, MAX_RESULTS).map((x) => x.route);
-    }, [debouncedQuery, keywords, searchableRoutes]);
+    }, [debouncedQuery, keywords, searchableRoutes, frequencyMap]);
 
     const listboxId = "search-results-listbox";
 
     const openRoute = (path: string) => {
         pushRecent(path);
+        setFrequencyMap((prev) => incrementFrequency(path, prev));
+        if (debouncedQuery.trim()) {
+            addSearchHistory(debouncedQuery);
+        }
         handlePushPath(path);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        // 검색어 히스토리 네비게이션
+        if (showSearchHistory && searchHistory.length > 0) {
+            if (e.key === "ArrowDown") {
+                e.preventDefault();
+                setActiveIndex((prev) =>
+                    Math.min(prev + 1, searchHistory.length - 1),
+                );
+                return;
+            }
+
+            if (e.key === "ArrowUp") {
+                e.preventDefault();
+                setActiveIndex((prev) => Math.max(prev - 1, 0));
+                return;
+            }
+
+            if (e.key === "Enter") {
+                e.preventDefault();
+                const picked = searchHistory[activeIndex];
+                if (picked) {
+                    setQuery(picked);
+                    setShowSearchHistory(false);
+                }
+                return;
+            }
+        }
+
         if (e.key === "Escape") {
             setQuery("");
             setDebouncedQuery("");
             setActiveIndex(0);
+            setShowSearchHistory(false);
             inputRef.current?.focus();
             return;
         }
@@ -206,7 +331,12 @@ export const Search = () => {
     };
 
     const showResults = keywords.length > 0;
-    const showRecents = !showResults && recentPaths.length > 0;
+    const showRecents = !showResults && !showSearchHistory && recentPaths.length > 0;
+    const shouldShowSearchHistory =
+        showSearchHistory &&
+        !showResults &&
+        searchHistory.length > 0 &&
+        query.trim() === "";
 
     const handleDelete = (e: React.MouseEvent, path: string) => {
         e.preventDefault();
@@ -225,7 +355,7 @@ export const Search = () => {
             className={`w-[calc(100%-40px)] flex flex-col ${selectedTheme.mode} overflow-hidden`}
         >
             <header className="w-full h-10 px-3 flex items-center text-xs text-white overflow-hidden tracking-[1px]">
-                검색
+                {t("search.title")}
             </header>
 
             <div className="w-full flex h-10 bg-sub-gary/20 items-center px-3">
@@ -234,8 +364,17 @@ export const Search = () => {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    onFocus={() => {
+                        if (!query.trim() && searchHistory.length > 0) {
+                            setShowSearchHistory(true);
+                            setActiveIndex(0);
+                        }
+                    }}
+                    onBlur={() => {
+                        setTimeout(() => setShowSearchHistory(false), 200);
+                    }}
                     type="text"
-                    placeholder="검색어를 입력하세요"
+                    placeholder={t("search.placeholder")}
                     className="focus:border-primary transition-all w-full h-7 bg-base-navy border border-sub-gary/30 rounded-sm px-2 tracking-wide text-white outline-none text-xs"
                     autoFocus
                     role="combobox"
@@ -247,13 +386,61 @@ export const Search = () => {
                 />
             </div>
 
+            {/* 검색어 히스토리 */}
+            {shouldShowSearchHistory && (
+                <div
+                    onContextMenu={(e) => {
+                        e.preventDefault();
+                    }}
+                    className="w-full h-[calc(100%-80px)] p-2 text-white overflow-y-auto"
+                >
+                    <div className="px-2 py-1 text-[11px] text-white/70 flex items-center gap-1">
+                        <MdHistory />
+                        {t("search.recentSearches")}
+                    </div>
+                    <ul className="flex flex-col gap-1">
+                        {searchHistory.map((term, idx) => {
+                            const isActive = idx === activeIndex;
+                            return (
+                                <li
+                                    key={idx}
+                                    onMouseEnter={() => setActiveIndex(idx)}
+                                    onClick={() => {
+                                        setQuery(term);
+                                        setShowSearchHistory(false);
+                                    }}
+                                    className={[
+                                        "w-full h-8 flex items-center px-3 text-white text-sm cursor-pointer gap-1 rounded-sm",
+                                        "hover:bg-primary/20",
+                                        isActive ? "ring-1 ring-primary/40" : "",
+                                    ].join(" ")}
+                                >
+                                    <MdHistory className="w-4 h-4 opacity-70" />
+                                    {term}
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
+            )}
+
             {/* 최근 방문 */}
             {showRecents && (
                 <div onContextMenu={(e) => {
                     e.preventDefault();
                 }} className="w-full h-[calc(100%-80px)] p-2 text-white overflow-y-auto">
-                    <div className="px-2 py-1 text-[11px] text-white/70">
-                        최근 방문
+                    <div className="px-2 py-1 text-[11px] text-white/70 flex items-center justify-between">
+                        <span>{t("search.recentVisits")}</span>
+                        {recentPaths.length > 0 && (
+                            <button
+                                onClick={clearAllRecents}
+                                className="flex items-center gap-1 hover:text-primary transition-colors text-[10px]"
+                                title={t("search.clearAll")}
+                            >
+                                <MdClearAll fontSize={16} />
+                                {t("search.clearAll")}
+                            </button>
+                        )}
                     </div>
                     <ul className="flex flex-col gap-1">
                         {recentPaths
@@ -287,13 +474,13 @@ export const Search = () => {
                 <div className="w-full h-[calc(100%-80px)] p-2 text-white overflow-y-auto">
                     {results.length === 0 ? (
                         <div className="px-3 py-2 text-sm text-white/70">
-                            검색 결과가 없습니다.
+                            {t("search.noResults")}
                         </div>
                     ) : (
                         <ul
                             id={listboxId}
                             role="listbox"
-                            aria-label="검색 결과"
+                            aria-label={t("search.searchResults")}
                             className="flex flex-col gap-1"
                         >
                             {results.map((r, idx) => {

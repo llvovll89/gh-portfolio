@@ -1,10 +1,14 @@
+import { useTranslation } from "react-i18next";
+
 export const PersonalHistory = () => {
+    const { t } = useTranslation();
+
     const careerList = [
         {
             period: "2023. 07 ~ 2026. 02",
-            company: "아이지아이에스",
+            companyKey: "pages.profile.personalHistory.company",
             position: "Frontend Developer",
-            description: "웹 애플리케이션 개발 및 유지보수",
+            descriptionKey: "pages.profile.personalHistory.description",
             isActive: true,
         },
     ];
@@ -15,7 +19,7 @@ export const PersonalHistory = () => {
                 <div className="flex-1 md:flex-none md:w-20 h-px bg-linear-to-r from-transparent via-primary/50 to-primary" />
                 <h1 className="text-[clamp(1.2rem,2.5vw,2rem)] shrink-0 whitespace-nowrap font-bold text-white/90 pr-2 flex items-center gap-2">
                     <span className="text-2xl">💼</span>
-                    경력사항
+                    {t("pages.profile.personalHistory.title")}
                 </h1>
             </div>
 
@@ -63,7 +67,7 @@ export const PersonalHistory = () => {
                                 <div className="flex items-start justify-between gap-4">
                                     <div className="space-y-1">
                                         <h3 className="text-base md:text-lg font-bold text-white/90">
-                                            {career.company}
+                                            {t(career.companyKey)}
                                         </h3>
                                         <p className="text-xs md:text-sm text-primary font-medium">
                                             {career.position}
@@ -72,7 +76,7 @@ export const PersonalHistory = () => {
 
                                     {career.isActive && (
                                         <span className="px-2.5 py-1 rounded-full bg-primary/10 border border-primary/30 text-[10px] md:text-xs text-primary font-semibold whitespace-nowrap">
-                                            재직중
+                                            {t("pages.profile.personalHistory.currentlyEmployed")}
                                         </span>
                                     )}
                                 </div>
@@ -87,7 +91,7 @@ export const PersonalHistory = () => {
 
                                 {/* 설명 */}
                                 <p className="text-xs md:text-sm text-white/60 leading-relaxed">
-                                    {career.description}
+                                    {t(career.descriptionKey)}
                                 </p>
 
                                 {/* 하단 액센트 */}

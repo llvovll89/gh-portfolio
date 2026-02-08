@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { HiChevronDown, HiFilter } from "react-icons/hi";
 import { useClosePopup } from "../../../hooks/useClosePopup";
+import { useTranslation } from "react-i18next";
 
 interface BlogTagFilterProps {
     availableTags: string[];
@@ -15,6 +16,7 @@ export const BlogTagFilter = ({
     onTagsChange,
     tagCounts,
 }: BlogTagFilterProps) => {
+    const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -60,8 +62,8 @@ export const BlogTagFilter = ({
                 <HiFilter className="w-4 h-4" />
                 <span>
                     {selectedTags.length > 0
-                        ? `태그 (${selectedTags.length})`
-                        : "모든 태그"}
+                        ? t("pages.blog.filter.selectedTags", { count: selectedTags.length })
+                        : t("pages.blog.filter.allTags")}
                 </span>
                 <HiChevronDown
                     className={[
@@ -74,7 +76,7 @@ export const BlogTagFilter = ({
             {isOpen && (
                 <div
                     role="menu"
-                    aria-label="태그 필터"
+                    aria-label={t("pages.blog.filter.tagFilter")}
                     className={[
                         "absolute top-full left-0 mt-2 z-50",
                         "w-72 max-h-96 overflow-y-auto",
@@ -88,7 +90,7 @@ export const BlogTagFilter = ({
                     <div className="sticky top-0 z-10 bg-white dark:bg-zinc-900 border-b border-zinc-200/80 dark:border-zinc-800 px-4 py-3">
                         <div className="flex items-center justify-between">
                             <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                                태그 필터
+                                {t("pages.blog.filter.tagFilter")}
                             </span>
                             {selectedTags.length > 0 && (
                                 <button
@@ -100,7 +102,7 @@ export const BlogTagFilter = ({
                                         "transition-colors",
                                     ].join(" ")}
                                 >
-                                    전체 해제
+                                    {t("pages.blog.filter.clearAll")}
                                 </button>
                             )}
                         </div>
@@ -109,7 +111,7 @@ export const BlogTagFilter = ({
                     <div className="p-2">
                         {availableTags.length === 0 ? (
                             <div className="px-3 py-6 text-center text-sm text-zinc-500 dark:text-zinc-400">
-                                사용 가능한 태그가 없습니다
+                                {t("pages.blog.filter.noTags")}
                             </div>
                         ) : (
                             availableTags.map((tag) => {

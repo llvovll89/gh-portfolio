@@ -7,6 +7,7 @@ import { loadPosts } from "../../utils/loadPosts";
 import { BlogCard } from "./contents/BlogCard";
 import { BlogFilterBar } from "./components/BlogFilterBar";
 import { BlogGroupedView } from "./components/BlogGroupedView";
+import { useTranslation } from "react-i18next";
 import {
     extractAllTags,
     filterPosts,
@@ -22,6 +23,7 @@ const STORAGE_KEYS = {
 } as const;
 
 export const Blog = () => {
+    const { t } = useTranslation();
     // 전체 포스트 로드
     const allPosts = useMemo(() => loadPosts(), []);
 
@@ -94,7 +96,7 @@ export const Blog = () => {
                 <section className="py-4">
                     <div className="mb-6">
                         <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
-                            포스트
+                            {t("pages.blog.posts")}
                         </h2>
 
                         <BlogFilterBar
@@ -116,18 +118,18 @@ export const Blog = () => {
 
                     {allPosts.length === 0 ? (
                         <p className="text-zinc-700 dark:text-zinc-300">
-                            아직 글이 없습니다.{" "}
-                            <span className="font-mono">src/content/posts</span>
-                            에 <span className="font-mono">.md</span> 파일을
-                            추가해보세요.
+                            {t("pages.blog.noPosts")}{" "}
+                            {t("pages.blog.addPostsHint")}{" "}
+                            <span className="font-mono">src/content/posts</span>{" "}
+                            <span className="font-mono">.md</span>.
                         </p>
                     ) : sortedPosts.length === 0 ? (
                         <div className="text-center py-12">
                             <p className="text-lg text-zinc-700 dark:text-zinc-300 mb-2">
-                                검색 결과가 없습니다
+                                {t("pages.blog.noResults")}
                             </p>
                             <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                                다른 검색어나 필터를 시도해보세요
+                                {t("pages.blog.noResultsHint")}
                             </p>
                         </div>
                     ) : viewMode === "list" ? (

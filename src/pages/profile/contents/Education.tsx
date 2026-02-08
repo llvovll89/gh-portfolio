@@ -1,15 +1,19 @@
+import { useTranslation } from "react-i18next";
+
 export const Education = () => {
+    const { t } = useTranslation();
+
     const educationList = [
         {
             date: "2013. 02",
-            school: "대구 청구고등학교",
-            status: "졸업",
+            schoolKey: "pages.profile.education.highSchool",
+            statusKey: "pages.profile.education.graduated",
             icon: "🎓",
         },
         {
             date: "2020. 02",
-            school: "대구 대학교",
-            status: "졸업",
+            schoolKey: "pages.profile.education.university",
+            statusKey: "pages.profile.education.graduated",
             icon: "🏫",
         },
     ];
@@ -20,7 +24,7 @@ export const Education = () => {
                 <div className="flex-1 md:flex-none md:w-20 h-px bg-linear-to-r from-transparent via-primary/50 to-primary" />
                 <h1 className="text-[clamp(1.2rem,2.5vw,2rem)] font-bold text-white/90 pr-2 flex items-center gap-2">
                     <span className="text-2xl">🎓</span>
-                    학력사항
+                    {t("pages.profile.education.title")}
                 </h1>
             </div>
 
@@ -59,11 +63,11 @@ export const Education = () => {
                                         {edu.date}
                                     </span>
                                     <span className="px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] md:text-xs text-primary font-medium">
-                                        {edu.status}
+                                        {t(edu.statusKey)}
                                     </span>
                                 </div>
                                 <h3 className="text-sm md:text-base font-bold text-white/90">
-                                    {edu.school}
+                                    {t(edu.schoolKey)}
                                 </h3>
                             </div>
                         </div>

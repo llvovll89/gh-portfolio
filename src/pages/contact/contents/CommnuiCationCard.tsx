@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { HiMail, HiUser, HiCalendar, HiLocationMarker, HiBriefcase, HiCheckCircle } from "react-icons/hi";
 import { FaGithub } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 export const CommunicationCard = () => {
+    const { t } = useTranslation();
     const EMAIL = import.meta.env.VITE_EMAIL;
     const GITHUB = import.meta.env.VITE_GITHUB;
 
@@ -22,9 +24,9 @@ export const CommunicationCard = () => {
         }
 
         if (years > 0) {
-            return `${years}년 ${months}개월`;
+            return t("pages.contact.communicationCard.careerYearsMonths", { years, months });
         }
-        return `${months}개월`;
+        return t("pages.contact.communicationCard.careerMonths", { months });
     };
 
     useEffect(() => {
@@ -73,10 +75,10 @@ export const CommunicationCard = () => {
                 <div>
                     <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
                         <HiUser className="w-5 h-5 text-primary" />
-                        빠르게 연락하기
+                        {t("pages.contact.communicationCard.quickContact")}
                     </h2>
                     <p className="mt-2 text-sm text-white/70">
-                        아래 채널로 편하게 연락 주세요.
+                        {t("pages.contact.communicationCard.contactPrompt")}
                     </p>
                 </div>
 
@@ -84,15 +86,15 @@ export const CommunicationCard = () => {
                     type="button"
                     onClick={handleCopyEmail}
                     className="relative shrink-0 rounded-lg border border-primary/30 bg-primary/10 px-3 py-2 text-xs font-medium text-primary hover:bg-primary/20 transition-all active:scale-95"
-                    title="이메일 복사"
+                    title={t("pages.contact.communicationCard.copyEmail")}
                 >
-                    이메일 복사
+                    {t("pages.contact.communicationCard.copyEmail")}
                 </button>
 
                 {copied && (
                     <div className="fixed top-20 right-4 md:right-8 rounded-lg bg-primary/90 px-4 py-2.5 text-sm font-medium text-white shadow-lg flex items-center gap-2 animate-[fadeIn_0.2s_ease-out]">
                         <HiCheckCircle className="w-4 h-4" />
-                        이메일이 복사되었습니다!
+                        {t("pages.contact.communicationCard.emailCopied")}
                     </div>
                 )}
             </div>
@@ -103,29 +105,29 @@ export const CommunicationCard = () => {
                     <div className="flex items-start gap-2">
                         <HiUser className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
                         <div>
-                            <dt className="text-xs text-white/50">이름</dt>
-                            <dd className="mt-1 font-semibold text-white">김건호</dd>
+                            <dt className="text-xs text-white/50">{t("pages.contact.communicationCard.name")}</dt>
+                            <dd className="mt-1 font-semibold text-white">{t("pages.contact.communicationCard.nameValue")}</dd>
                         </div>
                     </div>
                     <div className="flex items-start gap-2">
                         <HiBriefcase className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
                         <div>
-                            <dt className="text-xs text-white/50">경력</dt>
+                            <dt className="text-xs text-white/50">{t("pages.contact.communicationCard.career")}</dt>
                             <dd className="mt-1 font-semibold text-white">{calculateCareer()}</dd>
                         </div>
                     </div>
                     <div className="flex items-start gap-2">
                         <HiCalendar className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
                         <div>
-                            <dt className="text-xs text-white/50">생년월일</dt>
+                            <dt className="text-xs text-white/50">{t("pages.contact.communicationCard.birthDate")}</dt>
                             <dd className="mt-1 font-semibold text-white">1994-05-04</dd>
                         </div>
                     </div>
                     <div className="flex items-start gap-2">
                         <HiLocationMarker className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
                         <div>
-                            <dt className="text-xs text-white/50">거주지</dt>
-                            <dd className="mt-1 font-semibold text-white">대구광역시</dd>
+                            <dt className="text-xs text-white/50">{t("pages.contact.communicationCard.residence")}</dt>
+                            <dd className="mt-1 font-semibold text-white">{t("pages.contact.communicationCard.residenceValue")}</dd>
                         </div>
                     </div>
                 </dl>
@@ -148,7 +150,7 @@ export const CommunicationCard = () => {
                             </p>
                         </div>
                         <span className="text-xs text-white/60 group-hover:text-primary transition-colors shrink-0">
-                            보내기 →
+                            {t("pages.contact.communicationCard.sendAction")}
                         </span>
                     </div>
                 </a>
@@ -170,7 +172,7 @@ export const CommunicationCard = () => {
                             </p>
                         </div>
                         <span className="text-xs text-white/60 group-hover:text-primary transition-colors shrink-0">
-                            열기 →
+                            {t("pages.contact.communicationCard.openAction")}
                         </span>
                     </div>
                 </a>
@@ -181,7 +183,7 @@ export const CommunicationCard = () => {
                 <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                     <p className="text-sm text-white/70">
-                        관심 분야{" "}
+                        {t("pages.contact.communicationCard.interests")}{" "}
                         <span className="text-white font-semibold ml-1">
                             Frontend / Full-stack
                         </span>
@@ -200,7 +202,7 @@ export const CommunicationCard = () => {
                 </div>
 
                 <p className="text-sm text-white/60 pt-2 border-t border-white/5">
-                    협업/채용/사이드프로젝트 문의 모두 환영합니다.
+                    {t("pages.contact.communicationCard.welcomeMessage")}
                 </p>
             </div>
         </div>

@@ -1,4 +1,5 @@
 import { HiViewGrid, HiViewList } from "react-icons/hi";
+import { useTranslation } from "react-i18next";
 
 interface BlogViewToggleProps {
     viewMode: "list" | "grouped";
@@ -9,10 +10,11 @@ export const BlogViewToggle = ({
     viewMode,
     onViewModeChange,
 }: BlogViewToggleProps) => {
+    const { t } = useTranslation();
     return (
         <div
             role="radiogroup"
-            aria-label="보기 방식 선택"
+            aria-label={t("pages.blog.view.label")}
             className={[
                 "inline-flex items-center gap-1 h-11 p-1",
                 "rounded-2xl border",
@@ -35,7 +37,7 @@ export const BlogViewToggle = ({
                 ].join(" ")}
             >
                 <HiViewList className="w-4 h-4" />
-                <span className="whitespace-nowrap">리스트</span>
+                <span className="whitespace-nowrap">{t("pages.blog.view.list")}</span>
             </button>
 
             <button
@@ -53,7 +55,7 @@ export const BlogViewToggle = ({
                 ].join(" ")}
             >
                 <HiViewGrid className="w-4 h-4" />
-                <span className="whitespace-nowrap">그룹화</span>
+                <span className="whitespace-nowrap">{t("pages.blog.view.grouped")}</span>
             </button>
         </div>
     );

@@ -1,11 +1,14 @@
-import {Aside} from "../../components/aside/Aside";
-import {Contents} from "../../components/contents/Contents";
-import {Header} from "../../components/header/Header";
-import {CommunicationCard} from "./contents/CommnuiCationCard";
-import {MessageCardForm} from "./contents/MessageCardForm";
-import {HiMailOpen} from "react-icons/hi";
+import { Aside } from "../../components/aside/Aside";
+import { Contents } from "../../components/contents/Contents";
+import { Header } from "../../components/header/Header";
+import { CommunicationCard } from "./contents/CommnuiCationCard";
+import { MessageCardForm } from "./contents/MessageCardForm";
+import { HiMailOpen } from "react-icons/hi";
+import { useTranslation } from "react-i18next";
 
 export const Contact = () => {
+    const { t } = useTranslation();
+
     return (
         <>
             <Header />
@@ -19,11 +22,11 @@ export const Contact = () => {
                                 <HiMailOpen className="w-6 h-6 text-primary" />
                             </div>
                             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
-                                Contact
+                                {t("pages.contact.title")}
                             </h1>
                         </div>
                         <p className="text-sm md:text-base text-white/70 max-w-2xl leading-relaxed">
-                            채용/협업/사이드 프로젝트 문의 모두 환영합니다. 가장 빠른 채널은 이메일입니다.
+                            {t("pages.contact.subtitle")}
                         </p>
                     </div>
 

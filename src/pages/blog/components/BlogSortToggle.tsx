@@ -1,4 +1,5 @@
 import { HiSortAscending, HiSortDescending } from "react-icons/hi";
+import { useTranslation } from "react-i18next";
 
 interface BlogSortToggleProps {
     sortOrder: "asc" | "desc";
@@ -9,15 +10,19 @@ export const BlogSortToggle = ({
     sortOrder,
     onSortChange,
 }: BlogSortToggleProps) => {
+    const { t } = useTranslation();
+
     const handleToggle = () => {
         onSortChange(sortOrder === "desc" ? "asc" : "desc");
     };
+
+    const orderLabel = sortOrder === "desc" ? t("pages.blog.sort.newest") : t("pages.blog.sort.oldest");
 
     return (
         <button
             type="button"
             onClick={handleToggle}
-            aria-label={`정렬 순서: ${sortOrder === "desc" ? "최신순" : "오래된순"}`}
+            aria-label={t("pages.blog.sort.label", { order: orderLabel })}
             aria-pressed={sortOrder === "desc"}
             className={[
                 "flex items-center gap-2 h-11 px-4",
@@ -37,7 +42,7 @@ export const BlogSortToggle = ({
                 <HiSortAscending className="w-5 h-5" />
             )}
             <span className="whitespace-nowrap">
-                {sortOrder === "desc" ? "최신순" : "오래된순"}
+                {orderLabel}
             </span>
         </button>
     );

@@ -2,6 +2,7 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { GlobalStateContext } from "../../../../context/GlobalState.context";
 import { githubGetRequestParams, octokit } from "../../../../http/api";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 type RepoName = "gh-portfolio" | "modart" | "blacktie";
 
@@ -12,6 +13,7 @@ type RepoState = {
 
 export const GitControl = () => {
     const repos = useMemo(() => ["gh-portfolio", "modart", "blacktie"] as const, []);
+    const { t } = useTranslation();
 
     const [gitStates, setGitStates] = useState<Record<RepoName, RepoState>>({
         "gh-portfolio": { branches: [], commits: [] },
@@ -96,7 +98,7 @@ export const GitControl = () => {
     return (
         <section className={`w-[calc(100%-40px)] flex flex-col ${selectedTheme.mode} overflow-y-auto text-white`}>
             <header className="h-10 flex items-center px-3 border-b border-sub-gary/30 text-xs">
-                Git Repositories
+                {t("gitControl.title")}
             </header>
 
             <div className="w-full">
@@ -127,7 +129,7 @@ export const GitControl = () => {
 
                                         {isSelected(repo, branch) && gitStates[repo].commits.length > 0 && (
                                             <span className="text-[10px]">
-                                                commit {gitStates[repo].commits.length}
+                                                {t("gitControl.commits")} {gitStates[repo].commits.length}
                                             </span>
                                         )}
                                     </div>
@@ -166,7 +168,7 @@ export const GitControl = () => {
                                                                     <Link
                                                                         to={profileUrl}
                                                                         target="_blank"
-                                                                        title={`${authorName} 깃허브 프로필 이동`}
+                                                                        title={t("gitControl.viewProfile")}
                                                                     >
                                                                         <img
                                                                             src={avatarUrl}
@@ -190,7 +192,7 @@ export const GitControl = () => {
                                                             target="_blank"
                                                             className="underline hover:text-primary w-max"
                                                         >
-                                                            Commit 보러가기
+                                                            {t("gitControl.viewCommit")}
                                                         </Link>
                                                     </article>
                                                 );

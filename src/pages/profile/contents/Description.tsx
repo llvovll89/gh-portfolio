@@ -1,18 +1,19 @@
+import { useTranslation } from "react-i18next";
+
 export const Description = () => {
+    const { t } = useTranslation();
+
     return (
         <ul className="w-full text-[clamp(0.8rem,2vw,1rem)]">
-            <li>새로운 기술을 배우는것에 흥미가있는 개발자 김건호 입니다.</li>
+            <li>{t("pages.profile.description.intro")}</li>
             <li>
-                주로 프론트엔드 개발을 주로 하지만 백엔드 개발에도 관심이 많아
-                풀스택 개발자로 성장하고자 노력중입니다.
+                {t("pages.profile.description.frontend")}
             </li>
             <li>
-                협업과 소통을 중요하게 생각하며, 팀원들과 함께 성장하는 개발자가
-                되고자 합니다.
+                {t("pages.profile.description.collaboration")}
             </li>
             <li>
-                사용자 경험을 최우선으로 생각하며, 직관적이고 사용하기 쉬운
-                인터페이스를 만드는것에 열정을 가지고 있습니다.
+                {t("pages.profile.description.ux")}
             </li>
         </ul>
     );

@@ -1,0 +1,181 @@
+{
+  "nav": {
+    "explorer": "Explorer",
+    "search": "Search",
+    "gitControl": "Git Control",
+    "extensions": "Extensions",
+    "bookmarks": "Bookmarks",
+    "settings": "Settings"
+  },
+  "folder": {
+    "title": "Explorer"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Enter search term",
+    "noResults": "No results found.",
+    "searchResults": "Search Results",
+    "recentSearches": "Recent Searches",
+    "recentVisits": "Recent Visits",
+    "clearAll": "Clear All"
+  },
+  "gitControl": {
+    "title": "Git Control",
+    "repository": "Repository",
+    "commits": "Commits",
+    "noCommits": "No commits",
+    "viewProfile": "View GitHub Profile",
+    "viewCommit": "View Commit"
+  },
+  "extensions": {
+    "title": "Extensions",
+    "noExtensions": "No extensions installed",
+    "name": "Extension name",
+    "description": "Description (optional)",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "add": "Add",
+    "cancel": "Cancel"
+  },
+  "bookmarks": {
+    "title": "Bookmarks",
+    "noBookmarks": "No bookmarks",
+    "addPrompt": "Click + to add bookmark",
+    "selectPage": "Select a page to bookmark"
+  },
+  "settings": {
+    "title": "Settings",
+    "shortcutsTab": "Shortcuts",
+    "general": "General",
+    "keyboardShortcuts": "Available keyboard shortcuts",
+    "language": "Language",
+    "animationSpeed": "Animation Speed",
+    "slow": "Slow",
+    "normal": "Normal",
+    "fast": "Fast",
+    "storedInLocalStorage": "Settings are stored in local storage",
+    "shortcutsList": {
+      "toggleTerminal": "Toggle Terminal",
+      "toggleKeyboardInfo": "Toggle Keyboard Info",
+      "toggleFolder": "Toggle Folder Explorer",
+      "toggleSearch": "Toggle Search UI",
+      "executeCommand": "Execute CLI Command",
+      "closeAll": "Close All UI"
+    }
+  },
+  "footer": {
+    "terminal": "Terminal"
+  },
+  "pages": {
+    "profile": {
+      "title": "Profile",
+      "skills": "Skills",
+      "description": {
+        "intro": "I'm Gunho Kim, a developer passionate about learning new technologies.",
+        "frontend": "While I primarily focus on frontend development, I'm also interested in backend development and strive to grow as a full-stack developer.",
+        "collaboration": "I value collaboration and communication, and aim to grow together with my teammates.",
+        "ux": "I prioritize user experience and am passionate about creating intuitive and user-friendly interfaces."
+      },
+      "education": {
+        "title": "Education",
+        "graduated": "Graduated",
+        "highSchool": "Daegu Cheonggu High School",
+        "university": "Daegu University"
+      },
+      "personalHistory": {
+        "title": "Work Experience",
+        "company": "IGIS",
+        "description": "Web application development and maintenance",
+        "currentlyEmployed": "Current"
+      }
+    },
+    "projects": {
+      "title": "Projects",
+      "viewDetails": "View Details",
+      "close": "Close",
+      "viewProject": "View Project",
+      "viewRepository": "GitHub Repository",
+      "projectIntro": "Project Overview",
+      "techStack": "Tech Stack",
+      "team": "Team"
+    },
+    "contact": {
+      "title": "Contact",
+      "subtitle": "Feel free to reach out for job opportunities, collaborations, or side projects. Email is the fastest channel.",
+      "communicationCard": {
+        "quickContact": "Quick Contact",
+        "contactPrompt": "Reach out through the channels below.",
+        "copyEmail": "Copy Email",
+        "emailCopied": "Email copied to clipboard!",
+        "name": "Name",
+        "nameValue": "Gunho Kim",
+        "career": "Experience",
+        "careerYearsMonths": "{{years}}yr {{months}}mo",
+        "careerMonths": "{{months}}mo",
+        "birthDate": "Birth Date",
+        "residence": "Location",
+        "residenceValue": "Daegu, South Korea",
+        "sendAction": "Send →",
+        "openAction": "Open →",
+        "interests": "Interests",
+        "welcomeMessage": "Open to collaboration, job opportunities, and side projects."
+      },
+      "messageForm": {
+        "title": "Leave a Message",
+        "description": "Click 'Send via Email App' after filling out the form to open your default email client.",
+        "name": "Name",
+        "namePlaceholder": "John Doe",
+        "email": "Reply Email",
+        "emailPlaceholder": "name@example.com",
+        "message": "Message",
+        "messagePlaceholder": "I'd like to discuss project/collaboration...",
+        "reset": "Reset",
+        "send": "Send via Email App",
+        "infoNotice": "Form submission is not stored on the server and will be sent via your email client."
+      }
+    },
+    "blog": {
+      "title": "Blog",
+      "posts": "Posts",
+      "noPosts": "No posts yet.",
+      "addPostsHint": "Add .md files to",
+      "noResults": "No results found",
+      "noResultsHint": "Try different keywords or filters",
+      "search": {
+        "label": "Search blog posts",
+        "placeholder": "Search by title, summary, tags...",
+        "clear": "Clear search"
+      },
+      "filter": {
+        "tagFilter": "Tag Filter",
+        "allTags": "All Tags",
+        "selectedTags": "Tags ({{count}})",
+        "clearAll": "Clear All",
+        "noTags": "No tags available",
+        "removeTag": "Remove {{tag}} tag",
+        "resetFilters": "Reset Filters"
+      },
+      "sort": {
+        "label": "Sort order: {{order}}",
+        "newest": "Newest",
+        "oldest": "Oldest"
+      },
+      "view": {
+        "label": "View mode",
+        "list": "List",
+        "grouped": "Grouped"
+      },
+      "count": {
+        "total": "{{count}} posts",
+        "filtered": "{{filtered}} / {{total}} shown"
+      }
+    }
+  },
+  "common": {
+    "add": "Add",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit"
+  }
+}

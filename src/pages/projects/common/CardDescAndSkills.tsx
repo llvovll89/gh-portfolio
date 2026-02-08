@@ -1,12 +1,13 @@
-import type {Project} from "../mocks/projectData";
+import type { Project } from "../mocks/projectData";
+import { useTranslation } from "react-i18next";
 
 interface CardDescAndSkillsProps {
     project: Project;
 }
 
-export const CardDescAndSkills = ({project}: CardDescAndSkillsProps) => {
-    const convertNewDetailedDescription =
-        project.detailedDescription.split(".");
+export const CardDescAndSkills = ({ project }: CardDescAndSkillsProps) => {
+    const { t } = useTranslation();
+    const convertNewDetailedDescription = project.detailedDescription.split(".");
 
     return (
         <div className="w-full flex flex-col gap-6">
@@ -14,7 +15,7 @@ export const CardDescAndSkills = ({project}: CardDescAndSkillsProps) => {
             <div className="w-full space-y-3">
                 <div className="flex items-center gap-2">
                     <div className="h-5 w-1 rounded-full bg-primary" />
-                    <h4 className="text-base font-semibold text-slate-900">프로젝트 소개</h4>
+                    <h4 className="text-base font-semibold text-slate-900">{t("pages.projects.projectIntro")}</h4>
                 </div>
                 <div className="space-y-2 pl-3">
                     {convertNewDetailedDescription.map((desc, descIndex) => {
@@ -35,7 +36,7 @@ export const CardDescAndSkills = ({project}: CardDescAndSkillsProps) => {
             <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-2">
                     <div className="h-5 w-1 rounded-full bg-primary" />
-                    <h4 className="text-base font-semibold text-slate-900">기술 스택</h4>
+                    <h4 className="text-base font-semibold text-slate-900">{t("pages.projects.techStack")}</h4>
                 </div>
                 <div className="flex flex-wrap gap-2 pl-3">
                     {project.skills.map((skill, skillIndex) => (
@@ -61,7 +62,7 @@ export const CardDescAndSkills = ({project}: CardDescAndSkillsProps) => {
                 <div className="flex flex-col gap-3">
                     <div className="flex items-center gap-2">
                         <div className="h-5 w-1 rounded-full bg-primary" />
-                        <h4 className="text-base font-semibold text-slate-900">팀 구성</h4>
+                        <h4 className="text-base font-semibold text-slate-900">{t("pages.projects.team")}</h4>
                     </div>
                     <div className="flex flex-wrap gap-2 pl-3">
                         {project.projectMembers.map((member, index) => (

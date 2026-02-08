@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { HiSearch, HiX } from "react-icons/hi";
+import { useTranslation } from "react-i18next";
 
 interface BlogSearchInputProps {
     value: string;
@@ -12,6 +13,7 @@ export const BlogSearchInput = ({
     onChange,
     onDebouncedChange,
 }: BlogSearchInputProps) => {
+    const { t } = useTranslation();
     const [isDebouncing, setIsDebouncing] = useState(false);
 
     // 디바운싱 처리 (200ms)
@@ -52,8 +54,8 @@ export const BlogSearchInput = ({
             <input
                 type="text"
                 role="searchbox"
-                aria-label="블로그 포스트 검색"
-                placeholder="제목, 요약, 태그로 검색..."
+                aria-label={t("pages.blog.search.label")}
+                placeholder={t("pages.blog.search.placeholder")}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 onKeyDown={handleKeyDown}
@@ -73,7 +75,7 @@ export const BlogSearchInput = ({
                 <button
                     type="button"
                     onClick={handleClear}
-                    aria-label="검색어 지우기"
+                    aria-label={t("pages.blog.search.clear")}
                     className={[
                         "absolute right-3 top-1/2 -translate-y-1/2",
                         "p-1 rounded-full",
