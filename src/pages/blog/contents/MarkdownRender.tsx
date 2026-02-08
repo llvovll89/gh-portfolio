@@ -5,7 +5,7 @@ type Props = {
     content: string;
 };
 
-export const MarkdownRenderer = ({content}: Props) => {
+export const MarkdownRenderer = ({ content }: Props) => {
     const overflowXStyle = `max-w-full overflow-x-auto whitespace-nowrap`;
 
     return (
@@ -64,7 +64,7 @@ export const MarkdownRenderer = ({content}: Props) => {
                             {...props}
                         />
                     ),
-                    code: ({className, children, ...props}) => {
+                    code: ({ className, children, ...props }) => {
                         const isBlock = Boolean(className); // ```ts 같은 경우 className에 language-xxx 들어옴
                         if (isBlock) {
                             return (
