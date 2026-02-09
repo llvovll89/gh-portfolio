@@ -1,25 +1,37 @@
 import { useContext, useState, useEffect } from "react";
 import { GlobalStateContext } from "../../../../context/GlobalState.context";
-import { VscSettingsGear, VscKey } from "react-icons/vsc";
+import { VscSettingsGear, VscKey, VscEdit, VscRefresh } from "react-icons/vsc";
 import { useTranslation } from "react-i18next";
+import { useKeyboardShortcuts } from "../../../../hooks/useKeyboardShortcuts";
+import { KeyboardShortcutId } from "../../../../types/Keyboard.types";
+import {
+    formatKeyCombo,
+    SHORTCUT_DESCRIPTIONS_KO,
+    SHORTCUT_DESCRIPTIONS_EN,
+} from "../../../../constants/keyboardConstants";
 
 interface GeneralSettings {
     language: string;
     animationSpeed: string;
 }
 
-const KEYBOARD_SHORTCUTS = [
-    { key: "Ctrl + `", translationKey: "settings.shortcutsList.toggleTerminal" },
-    { key: "Ctrl + F12", translationKey: "settings.shortcutsList.toggleKeyboardInfo" },
-    { key: "Ctrl + Y", translationKey: "settings.shortcutsList.toggleFolder" },
-    { key: "Ctrl + F", translationKey: "settings.shortcutsList.toggleSearch" },
-    { key: "Ctrl + Enter", translationKey: "settings.shortcutsList.executeCommand" },
-    { key: "ESC (2번)", translationKey: "settings.shortcutsList.closeAll" },
+const SHORTCUT_IDS = [
+    KeyboardShortcutId.TOGGLE_FOOTER,
+    KeyboardShortcutId.TOGGLE_KEYBOARD_INFO,
+    KeyboardShortcutId.TOGGLE_FOLDER,
+    KeyboardShortcutId.TOGGLE_SEARCH,
+    KeyboardShortcutId.TOGGLE_SIDEBAR,
+    KeyboardShortcutId.TOGGLE_PANEL,
+    KeyboardShortcutId.COMMAND_PALETTE,
+    KeyboardShortcutId.CLI_ENTER,
+    KeyboardShortcutId.ALL_CLEAR,
 ];
 
 export const Settings = () => {
     const { selectedTheme } = useContext(GlobalStateContext);
     const { t, i18n } = useTranslation();
+    const { shortcuts, resetShortcut, resetAllShortcuts, isCustomized } =
+        useKeyboardShortcuts();
     const [activeTab, setActiveTab] = useState<"shortcuts" | "general">(
         "shortcuts",
     );
@@ -47,6 +59,13 @@ export const Settings = () => {
 
     const handleChangeAnimationSpeed = (speed: string) => {
         saveSettings({ ...generalSettings, animationSpeed: speed });
+    };
+
+    const getShortcutDescription = (id: KeyboardShortcutId): string => {
+        const lang = i18n.language;
+        return lang === "ko"
+            ? SHORTCUT_DESCRIPTIONS_KO[id]
+            : SHORTCUT_DESCRIPTIONS_EN[id];
     };
 
     return (
@@ -83,24 +102,54 @@ export const Settings = () => {
             <div className="w-full h-[calc(100%-80px)] overflow-y-auto">
                 {activeTab === "shortcuts" ? (
                     <div className="p-3">
-                        <p className="text-[10px] text-white/70 mb-3">
-                            {t("settings.keyboardShortcuts")}
-                        </p>
+                        <div className="flex items-center justify-between mb-3">
+                            <p className="text-[10px] text-white/70">
+                                {t("settings.keyboardShortcuts")}
+                            </p>
+                            <button
+                                onClick={resetAllShortcuts}
+                                className="flex items-center gap-1 px-2 py-1 text-[10px] text-white/70 hover:text-white hover:bg-sub-gary/20 rounded transition-colors"
+                                title="모두 초기화"
+                            >
+                                <VscRefresh className="w-3 h-3" />
+                                {t("settings.resetAll") || "초기화"}
+                            </button>
+                        </div>
                         <ul className="space-y-2">
-                            {KEYBOARD_SHORTCUTS.map((shortcut, index) => (
+                            {SHORTCUT_IDS.map((id) => (
                                 <li
-                                    key={index}
-                                    className="flex items-center justify-between p-2 bg-sub-gary/20 rounded"
+                                    key={id}
+                                    className="flex items-center justify-between p-2 bg-sub-gary/20 rounded hover:bg-sub-gary/30 transition-colors group"
                                 >
-                                    <span className="text-[10px] text-white/70">
-                                        {t(shortcut.translationKey)}
+                                    <span className="text-[10px] text-white/70 flex-1">
+                                        {getShortcutDescription(id)}
                                     </span>
-                                    <kbd className="px-2 py-1 text-[10px] bg-sub-gary/40 text-white rounded border border-sub-gary/30">
-                                        {shortcut.key}
-                                    </kbd>
+                                    <div className="flex items-center gap-2">
+                                        <kbd
+                                            className={`px-2 py-1 text-[10px] bg-sub-gary/40 text-white rounded border ${isCustomized(id)
+                                                    ? "border-primary/50"
+                                                    : "border-sub-gary/30"
+                                                }`}
+                                        >
+                                            {formatKeyCombo(shortcuts[id])}
+                                        </kbd>
+                                        {isCustomized(id) && (
+                                            <button
+                                                onClick={() => resetShortcut(id)}
+                                                className="opacity-0 group-hover:opacity-100 p-1 text-white/50 hover:text-white rounded transition-all"
+                                                title="기본값으로 복원"
+                                            >
+                                                <VscRefresh className="w-3 h-3" />
+                                            </button>
+                                        )}
+                                    </div>
                                 </li>
                             ))}
                         </ul>
+                        <p className="mt-4 text-[9px] text-white/50 italic">
+                            {t("settings.shortcutsNote") ||
+                                "* 단축키는 localStorage에 저장됩니다"}
+                        </p>
                     </div>
                 ) : (
                     <div className="p-3 space-y-4">

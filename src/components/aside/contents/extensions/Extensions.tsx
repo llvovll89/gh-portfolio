@@ -74,7 +74,7 @@ export const Extensions = () => {
                 </button>
             </header>
 
-            <div className="w-full h-[calc(100%-40px)] overflow-y-auto">
+            <div className="w-full h-[calc(100%-40px)] overflow-y-auto scrolls">
                 {showAddForm && (
                     <div className="p-3 border-b border-sub-gary/30">
                         <input

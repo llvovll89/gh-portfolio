@@ -27,7 +27,7 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
         <div
             className={[
                 "fixed inset-0 z-50 flex items-center justify-center p-4",
-                "bg-slate-950/55 backdrop-blur-md",
+                "bg-black/70 backdrop-blur-md",
                 "transition-opacity duration-200",
                 isVisible ? "opacity-100" : "opacity-0",
             ].join(" ")}
@@ -38,9 +38,9 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
             <div
                 className={[
                     "relative w-full max-w-4xl max-h-[90vh] overflow-y-auto scrolls",
-                    "rounded-2xl border border-slate-200/80",
-                    "bg-white text-slate-900",
-                    "shadow-[0_30px_90px_rgba(2,6,23,0.35)]",
+                    "rounded-2xl border border-[#3e3e42]",
+                    "bg-[#000000] text-slate-100",
+                    "shadow-[0_30px_90px_rgba(0,0,0,0.5)]",
                     "transition-all duration-300 ease-out",
                     isVisible
                         ? "opacity-100 scale-100 translate-y-0"
@@ -49,13 +49,13 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* 프로젝트 이미지 헤더 */}
-                <div className="relative h-64 w-full overflow-hidden bg-slate-100">
+                <div className="relative h-64 w-full overflow-hidden bg-[#252526]">
                     <img
                         src={selected.image}
                         alt={selected.title}
                         className="h-full w-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
 
                     {/* subtle highlight */}
                     <div className="pointer-events-none absolute inset-0">
@@ -68,11 +68,11 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                             onClick={handleClose}
                             className={[
                                 "group relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full",
-                                "bg-white/90 backdrop-blur-sm text-slate-700",
-                                "border border-white/50 shadow-lg",
+                                "bg-[#2a2a2d]/90 backdrop-blur-sm text-slate-300",
+                                "border border-[#3e3e42] shadow-lg",
                                 "transition-all duration-200",
-                                "hover:bg-white hover:scale-110 hover:text-slate-900",
-                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900",
+                                "hover:bg-[#2a2a2d] hover:scale-110 hover:text-white",
+                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1e1e1e]",
                             ].join(" ")}
                             aria-label={t("pages.projects.close")}
                         >
@@ -97,10 +97,10 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                     {/* 타이틀과 배지 */}
                     <div className="mb-6">
                         <div className="flex items-center gap-3 mb-3">
-                            <h3 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
+                            <h3 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-100">
                                 {selected.title}
                             </h3>
-                            <span className="inline-flex items-center rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-sm font-semibold text-primary">
+                            <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
                                 {selected.scale}
                             </span>
                         </div>
@@ -111,7 +111,7 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                     <CardDescAndSkills project={selected} />
 
                     {/* 액션 버튼 */}
-                    <div className="mt-8 flex flex-wrap items-center justify-end gap-3 pt-6 border-t border-slate-100">
+                    <div className="mt-8 flex flex-wrap items-center justify-end gap-3 pt-6 border-t border-[#3e3e42]">
                         <a
                             href={selected.link.projectUrl}
                             className={[
@@ -120,7 +120,7 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                                 "shadow-lg shadow-primary/25",
                                 "transition-all duration-200",
                                 "hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5",
-                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2",
+                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1e1e1e]",
                             ].join(" ")}
                             target="_blank"
                             rel="noreferrer"
@@ -135,10 +135,10 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                             href={selected.link.repositoryUrl}
                             className={[
                                 "group inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold",
-                                "border-2 border-slate-200 bg-white text-slate-800",
+                                "border-2 border-[#3e3e42] bg-[#2a2a2d] text-slate-300",
                                 "transition-all duration-200",
-                                "hover:border-slate-300 hover:bg-slate-50 hover:-translate-y-0.5",
-                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2",
+                                "hover:border-primary/40 hover:bg-[#252526] hover:text-white hover:-translate-y-0.5",
+                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1e1e1e]",
                             ].join(" ")}
                             target="_blank"
                             rel="noreferrer"

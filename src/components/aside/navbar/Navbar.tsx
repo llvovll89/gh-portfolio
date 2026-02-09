@@ -1,16 +1,16 @@
-import {CiKeyboard} from "react-icons/ci";
-import {NAV_ITEMS, NavType} from "../constants/Nav.type";
-import {useContext} from "react";
-import {KeyboardContext} from "../../../context/KeyboardState.context";
-import {KeyboardInfo} from "../../keyboardInfo/KeyboardInfo";
+import { CiKeyboard } from "react-icons/ci";
+import { NAV_ITEMS, NavType } from "../constants/Nav.type";
+import { useContext } from "react";
+import { KeyboardContext } from "../../../context/KeyboardState.context";
+import { KeyboardInfo } from "../../keyboardInfo/KeyboardInfo";
 
 interface NavbarProps {
     selectedNav: NavType | null;
     onClickNav: (navType: NavType) => void;
 }
 
-export const Navbar = ({selectedNav, onClickNav}: NavbarProps) => {
-    const {toggleKeyboardInfo, isVisibleKeyboardInfo} =
+export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
+    const { toggleKeyboardInfo, isVisibleKeyboardInfo } =
         useContext(KeyboardContext);
 
     return (
@@ -19,11 +19,10 @@ export const Navbar = ({selectedNav, onClickNav}: NavbarProps) => {
                 <button
                     key={item.type}
                     onClick={() => onClickNav(item.type)}
-                    className={`cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center ${
-                        selectedNav === item.type ? "bg-sub-gary/20" : ""
-                    }`}
+                    className={`cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center ${selectedNav === item.type ? "bg-sub-gary/20" : ""
+                        }`}
                 >
-                    <item.icon className="w-6 h-6" />
+                    <item.icon className="w-5 h-5" />
                 </button>
             ))}
 

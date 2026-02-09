@@ -1,10 +1,11 @@
-import {useContext, useEffect} from "react";
-import {KeyboardContext} from "../../context/KeyboardState.context";
-import {LogViewer} from "../LogViewer/LogViewer";
-import {useKeyboardEvent} from "../../hooks/useKeyboardEvent";
+import { useContext, useEffect } from "react";
+import { KeyboardContext } from "../../context/KeyboardState.context";
+import { LogViewer } from "../LogViewer/LogViewer";
+import { useKeyboardEvent } from "../../hooks/useKeyboardEvent";
+import { CommandPalette } from "../commandPalette/CommandPalette";
 
 export const AppChildContainer = () => {
-    const {submitCliCommand, setSubmitCliCommand} = useContext(KeyboardContext);
+    const { submitCliCommand, setSubmitCliCommand } = useContext(KeyboardContext);
     useKeyboardEvent();
 
     useEffect(() => {
@@ -16,5 +17,10 @@ export const AppChildContainer = () => {
         };
     }, []);
 
-    return <>{submitCliCommand.isVisibleCommandUi && <LogViewer />}</>;
+    return (
+        <>
+            {submitCliCommand.isVisibleCommandUi && <LogViewer />}
+            <CommandPalette />
+        </>
+    );
 };

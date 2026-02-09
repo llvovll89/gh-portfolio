@@ -1,10 +1,13 @@
-import {useContext} from "react";
-import {KeyboardContext} from "../../context/KeyboardState.context";
-import {keyboardKeyAndStateMock} from "./constants/mock";
-import {Portal} from "../Portal";
+import { useContext } from "react";
+import { KeyboardContext } from "../../context/KeyboardState.context";
+import { keyboardKeyAndStateMock } from "./constants/mock";
+import { Portal } from "../Portal";
+import { useFocusTrap } from "../../hooks/useKeyboardNavigation";
 
 export const KeyboardInfo = () => {
-    const {setIsVisibleKeyboardInfo} = useContext(KeyboardContext);
+    const { setIsVisibleKeyboardInfo, isVisibleKeyboardInfo } =
+        useContext(KeyboardContext);
+    const containerRef = useFocusTrap(isVisibleKeyboardInfo);
 
     return (
         <Portal>
@@ -16,6 +19,7 @@ export const KeyboardInfo = () => {
                 onClick={() => setIsVisibleKeyboardInfo(false)}
             >
                 <div
+                    ref={containerRef}
                     className={[
                         "relative w-full max-w-xl overflow-hidden rounded-[5px]",
                         "border border-slate-200/80 bg-white text-slate-900",

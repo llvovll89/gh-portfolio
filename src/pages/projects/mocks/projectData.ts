@@ -46,4 +46,20 @@ export const projects = [
         skills: ["React", "Redux", "Firebase", "Styled-Components"],
         projectMembers: ["김건호"],
     },
+    {
+        id: 3,
+        title: "kimgeonho.dev",
+        scale: "개인 프로젝트",
+        image: "/assets/images/projects/kimgeonho.png",
+        link: {
+            repositoryUrl: "https://github.com/llvovll89/gh-portfolio",
+            projectUrl: "https://kimgeonho.vercel.app/",
+        },
+        description:
+            "VS Code UI 컨셉을 적용한 인터랙티브 포트폴리오 웹사이트입니다.",
+        detailedDescription:
+            "VS Code의 UI를 모티브로 제작한 포트폴리오 웹사이트입니다. 사이드바, 터미널, 단축키 등 개발 환경의 친숙한 인터페이스를 활용하여 독특한 사용자 경험을 제공합니다. 프로젝트 소개, 블로그 포스팅, GitHub 연동 기능을 포함하고 있으며, 다양한 테마와 키보드 단축키를 지원합니다.",
+        skills: ["React", "TypeScript", "Vite", "Tailwind CSS", "React Router", "Octokit"],
+        projectMembers: ["김건호"],
+    },
 ] as Project[];

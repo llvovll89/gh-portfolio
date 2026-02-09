@@ -28,12 +28,34 @@
 
 ## 키보드/CLI UX 패턴(중요)
 - 전역 단축키는 `src/hooks/useKeyboardEvent.ts` → `src/utils/keyboardEvents.ts`로 위임.
-  - 기존 단축키 예: `Ctrl + \``(푸터 터미널 토글), `Ctrl+F`(검색 토글), `Ctrl+Y`(폴더 토글), `Ctrl+F12`(단축키 안내 토글), `ESC` 2회(모두 닫기)
-  - 폼 요소(`input`, `select`) 포커스 중에는 기본 단축키를 대부분 막는 규칙이 있음(예외: Ctrl 조합).
+  - 기존 단축키:
+    - `Ctrl + \``(푸터 터미널 토글)
+    - `Ctrl+F`(검색 토글)
+    - `Ctrl+Y`(폴더 토글)
+    - `Ctrl+F12`(단축키 안내 토글)
+    - `Ctrl+B`(사이드바 토글)
+    - `Ctrl+J`(하단 패널 토글)
+    - `Ctrl+Shift+P`(명령 팔레트)
+    - `ESC` 2회(모두 닫기)
+  - 폼 요소(`input`, `select`, `textarea`) 포커스 중에는 기본 단축키를 대부분 막는 규칙(예외: Ctrl 조합).
+  - 단축키 시스템:
+    - 타입 정의: `src/types/Keyboard.types.ts`
+    - 상수 및 유틸: `src/constants/keyboardConstants.ts`
+    - 커스터마이징 훅: `src/hooks/useKeyboardShortcuts.ts` (localStorage 저장)
+    - 키보드 네비게이션 훅: `src/hooks/useKeyboardNavigation.ts` (포커스 트랩, 화살표 네비게이션)
+- 명령 팔레트: `src/components/commandPalette/CommandPalette.tsx`
+  - VS Code 스타일 명령 검색 및 실행
+  - 키보드 네비게이션 지원 (↑↓, Enter, ESC)
+  - 포커스 트랩 적용
 - 터미널 입력/출력:
   - 입력 UI: `src/components/footer/cli/Cli.tsx`의 `<textarea>`.
   - 커맨드 파서는 `src/utils/runCliCommand.ts`. 새 명령을 추가할 때는 이 함수의 `switch`에 케이스 추가.
-  - `clear`는 “출력 비우기”로 특수 처리(출력 문자열을 `""`로).
+  - `clear`는 "출력 비우기"로 특수 처리(출력 문자열을 `""`로).
+- 접근성:
+  - 모달/다이얼로그에 포커스 트랩 적용 (`useFocusTrap` 훅 사용)
+  - ARIA 속성 사용 (role, aria-modal, aria-label, aria-activedescendant 등)
+  - Tab/Shift+Tab 네비게이션 지원
+  - 화살표 키 네비게이션 지원 (`useArrowNavigation` 훅)
 
 ## 블로그(마크다운) 데이터 흐름
 - 소스: `src/content/posts/*.md`
@@ -54,6 +76,11 @@
 
 ## 코드 변경 시 주의사항(이 레포 기준)
 - 라우트 추가/변경은 `src/routes/route.ts`의 `PATHS` + `routesPath`를 소스 오브 트루스로 유지.
-- 전역 단축키 추가는 `src/utils/keyboardEvents.ts`에 함수로 추가하고 `useKeyboardEvent.ts`에서 호출하는 방식 유지.
+- 전역 단축키 추가는 다음 과정을 따름:
+  1. `KeyboardShortcutId` enum에 새 ID 추가 (`src/types/Keyboard.types.ts`)
+  2. `DEFAULT_KEY_COMBINATIONS`에 키 조합 추가 (`src/constants/keyboardConstants.ts`)
+  3. `SHORTCUT_DESCRIPTIONS_KO/EN`에 설명 추가 (`src/constants/keyboardConstants.ts`)
+  4. 핸들러 함수 작성 (`src/utils/keyboardEvents.ts`)
+  5. `useKeyboardEvent.ts`에서 핸들러 호출
 - 테마 추가는 `ThemeMode` enum(`src/context/constatns/Theme.type.ts`) + `src/global.css`의 토큰/클래스 정의를 함께 업데이트.
 - `@` alias는 `vite.config.ts`에서 `src`로 매핑됨(새 파일에서 `@/..` 임포트 가능).

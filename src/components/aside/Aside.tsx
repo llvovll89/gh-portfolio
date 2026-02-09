@@ -6,7 +6,6 @@ import { Folder } from "./contents/folder/Folder";
 import { NavType } from "./constants/Nav.type";
 import { Search } from "./contents/search/Search";
 import { GitControl } from "./contents/gitControl/GitControl";
-import { Extensions } from "./contents/extensions/Extensions";
 import { Bookmarks } from "./contents/bookmarks/Bookmarks";
 import { Settings } from "./contents/settings/Settings";
 
@@ -49,7 +48,6 @@ export const Aside = () => {
             {selectedNav === NavType.FOLDER && <Folder />}
             {selectedNav === NavType.GIT_CONTROL && <GitControl />}
             {selectedNav === NavType.SEARCH && <Search />}
-            {selectedNav === NavType.EXTENSIONS && <Extensions />}
             {selectedNav === NavType.BOOKMARKS && <Bookmarks />}
             {selectedNav === NavType.SETTINGS && <Settings />}
 
