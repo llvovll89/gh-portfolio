@@ -43,9 +43,40 @@ type PullRequest = {
     draft: boolean;
 };
 
+type Branch = {
+    name: string;
+};
+
+type Commit = {
+    sha: string;
+    commit: {
+        message: string;
+        author: {
+            name: string;
+            date: string;
+        };
+    };
+    author: {
+        login: string;
+        avatar_url: string;
+        html_url: string;
+    } | null;
+    committer: {
+        login: string;
+        avatar_url: string;
+        html_url: string;
+    } | null;
+    html_url: string;
+};
+
+type GitHubIssueResponse = {
+    pull_request?: unknown;
+    labels: Array<{ name: string; color: string } | unknown>;
+} & Omit<Issue, 'labels'>;
+
 type RepoState = {
     branches: string[];
-    commits: any[];
+    commits: Commit[];
     stats: RepoStats | null;
     issues: Issue[];
     pullRequests: PullRequest[];
@@ -74,10 +105,10 @@ export const GitControl = () => {
             "GET /repos/{owner}/{repo}/branches",
             githubGetRequestParams(repo),
         );
-        return response.data.map((b: any) => b.name as string);
+        return response.data.map((b: Branch) => b.name);
     };
 
-    const getCommitsByRepoBranch = async (repo: RepoName, branch: string) => {
+    const getCommitsByRepoBranch = async (repo: RepoName, branch: string): Promise<Commit[]> => {
         const response = await octokit.request(
             "GET /repos/{owner}/{repo}/commits",
             {
@@ -85,7 +116,7 @@ export const GitControl = () => {
                 sha: branch,
             },
         );
-        return response.data as any[];
+        return response.data as Commit[];
     };
 
     const getRepoStats = async (repo: RepoName): Promise<RepoStats> => {
@@ -111,7 +142,20 @@ export const GitControl = () => {
             },
         );
         // PR은 제외 (GitHub API에서 issue에 PR도 포함됨)
-        return response.data.filter((issue: any) => !issue.pull_request);
+        return response.data
+            .filter((issue: GitHubIssueResponse) => !issue.pull_request)
+            .map((issue: GitHubIssueResponse) => ({
+                ...issue,
+                labels: issue.labels
+                    .filter((label: unknown) => typeof label === 'object' && label !== null && 'name' in label && 'color' in label)
+                    .map((label: unknown) => {
+                        const labelObj = label as { name?: string; color?: string };
+                        return {
+                            name: labelObj.name || '',
+                            color: labelObj.color || '000000',
+                        };
+                    }),
+            }));
     };
 
     const getPullRequestsByRepo = async (repo: RepoName): Promise<PullRequest[]> => {
@@ -123,7 +167,10 @@ export const GitControl = () => {
                 per_page: 20,
             },
         );
-        return response.data;
+        return response.data.map((pr: any) => ({
+            ...pr,
+            draft: pr.draft ?? false,
+        }));
     };
 
     useEffect(() => {
@@ -275,7 +322,7 @@ export const GitControl = () => {
                                 </div>
 
                                 {/* 탭 콘텐츠 */}
-                                <div className="max-h-[400px] overflow-y-auto scrolls">
+                                <div className="max-h-100 overflow-y-auto scrolls">
                                     {/* Branches 탭 */}
                                     {activeTab === "branches" && (
                                         <div>
@@ -309,7 +356,7 @@ export const GitControl = () => {
                                                             onClick={(e) => e.stopPropagation()}
                                                             className={`w-full max-h-100 ${selectedTheme.mode} overflow-auto scrolls select-none text-white mt-2`}
                                                         >
-                                                            {gitStates[repo].commits.map((commit: any) => {
+                                                            {gitStates[repo].commits.map((commit: Commit) => {
                                                                 const authorName =
                                                                     commit?.commit?.author?.name ?? commit?.author?.login ?? "unknown";
                                                                 const dateStr =
