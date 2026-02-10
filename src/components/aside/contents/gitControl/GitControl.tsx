@@ -24,7 +24,7 @@ type Issue = {
         login: string;
         avatar_url: string;
         html_url: string;
-    };
+    } | null;
     labels: { name: string; color: string }[];
 };
 
@@ -39,7 +39,7 @@ type PullRequest = {
         login: string;
         avatar_url: string;
         html_url: string;
-    };
+    } | null;
     draft: boolean;
 };
 
@@ -390,11 +390,15 @@ export const GitControl = () => {
                                                         className="block px-3 py-3 border-b border-sub-gary/20 hover:bg-sub-gary/10 transition-colors"
                                                     >
                                                         <div className="flex items-start gap-2">
-                                                            <img
-                                                                src={issue.user.avatar_url}
-                                                                alt={issue.user.login}
-                                                                className="w-6 h-6 rounded-full"
-                                                            />
+                                                            {issue.user ? (
+                                                                <img
+                                                                    src={issue.user.avatar_url}
+                                                                    alt={issue.user.login}
+                                                                    className="w-6 h-6 rounded-full"
+                                                                />
+                                                            ) : (
+                                                                <div className="w-6 h-6 rounded-full bg-sub-gary/30" />
+                                                            )}
                                                             <div className="flex-1">
                                                                 <div className="flex items-center gap-2 mb-1">
                                                                     <span className={`text-[10px] px-2 py-0.5 rounded ${
@@ -452,11 +456,15 @@ export const GitControl = () => {
                                                         className="block px-3 py-3 border-b border-sub-gary/20 hover:bg-sub-gary/10 transition-colors"
                                                     >
                                                         <div className="flex items-start gap-2">
-                                                            <img
-                                                                src={pr.user.avatar_url}
-                                                                alt={pr.user.login}
-                                                                className="w-6 h-6 rounded-full"
-                                                            />
+                                                            {pr.user ? (
+                                                                <img
+                                                                    src={pr.user.avatar_url}
+                                                                    alt={pr.user.login}
+                                                                    className="w-6 h-6 rounded-full"
+                                                                />
+                                                            ) : (
+                                                                <div className="w-6 h-6 rounded-full bg-sub-gary/30" />
+                                                            )}
                                                             <div className="flex-1">
                                                                 <div className="flex items-center gap-2 mb-1">
                                                                     <span className={`text-[10px] px-2 py-0.5 rounded ${
