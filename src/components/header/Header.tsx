@@ -153,7 +153,7 @@ export const Header = () => {
                     {/* 뒤로 가기 버튼 */}
                     <button
                         onClick={() => navigate(-1)}
-                        className="h-full px-3 hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors"
+                        className="h-full px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors"
                         title="뒤로 가기"
                     >
                         <svg
@@ -176,7 +176,7 @@ export const Header = () => {
                     {/* 앞으로 가기 버튼 */}
                     <button
                         onClick={() => navigate(1)}
-                        className="h-full px-3 hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
+                        className="h-full px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
                         title="앞으로 가기"
                     >
                         <svg
@@ -199,7 +199,7 @@ export const Header = () => {
                     {/* 새로고침 버튼 */}
                     <button
                         onClick={() => window.location.reload()}
-                        className="h-full px-3 hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
+                        className="h-full px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
                         title="새로고침"
                     >
                         <svg
@@ -222,7 +222,7 @@ export const Header = () => {
                     {/* 풀스크린 토글 버튼 */}
                     <button
                         onClick={toggleFullscreen}
-                        className="h-full px-3 hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
+                        className="h-full px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
                         title={isFullscreen ? "전체 화면 종료 (F11)" : "전체 화면 (F11)"}
                     >
                         {isFullscreen ? (
@@ -259,7 +259,7 @@ export const Header = () => {
                     </button>
 
                     {/* 시계 */}
-                    <div className="h-full px-4 flex items-center text-white/70 text-[13px] border-l border-sub-gary/10 user-select-none">
+                    <div className="h-full px-4 flex items-center text-white/90 font-bold text-sm select-none border-l border-sub-gary/10 user-select-none">
                         {formatTime(currentTime)}
                     </div>
                 </div>
