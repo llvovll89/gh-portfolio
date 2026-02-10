@@ -2,12 +2,22 @@ import { useContext } from "react";
 import { GlobalStateContext } from "../../context/GlobalState.context";
 import { Link } from "react-router-dom";
 import { BackgroundLogo } from "../../components/backgroundLogo/BackgroundLogo";
+import { ThemeMode } from "../../context/constatns/Theme.type";
 
 export const NotFound = () => {
     const { selectedTheme } = useContext(GlobalStateContext);
 
+    // 커스텀 테마 적용
+    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
+        ? { backgroundColor: selectedTheme.customColor }
+        : {};
+
+    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
+        ? ""
+        : selectedTheme.mode;
+
     return (
-        <section className={`w-screen h-screen flex items-center justify-center text-red-500 font-bold select-none ${selectedTheme.mode} bg-no-repeat bg-center`}>
+        <section className={`w-screen h-screen flex items-center justify-center text-red-500 font-bold select-none ${backgroundClass} bg-no-repeat bg-center`} style={backgroundStyle}>
 
             <BackgroundLogo opacity={20} size="25%" />
 

@@ -3,6 +3,7 @@ import {GlobalStateContext} from "../../context/GlobalState.context";
 import {useDragging} from "../../hooks/useDragging";
 import {Cli} from "./cli/Cli";
 import {useCheckedMobileSize} from "../../hooks/useCheckedMobileSize";
+import {ThemeMode} from "../../context/constatns/Theme.type";
 
 const COLLAPSED_HEIGHT = 32; // 헤더 바 높이(h-8)
 const OPEN_HEIGHT = 220; // 열렸을 때 최소 높이
@@ -16,6 +17,15 @@ export const Bottom = () => {
 
     const isOpen = layoutState.resizeFooterHeight > COLLAPSED_HEIGHT;
     const isMobileSize = useCheckedMobileSize();
+
+    // 커스텀 테마 적용
+    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
+        ? { backgroundColor: selectedTheme.customColor }
+        : {};
+
+    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
+        ? ""
+        : selectedTheme.mode;
 
     const closeFooter = () => {
         setLayoutState((prev) => ({
@@ -34,10 +44,11 @@ export const Bottom = () => {
     return (
         <footer
             ref={footerRef}
-            className={`absolute z-10 bottom-0 right-0 border-t border-sub-gary/30 ${selectedTheme.mode} overflow-hidden`}
+            className={`absolute z-10 bottom-0 right-0 border-t border-sub-gary/30 ${backgroundClass} overflow-hidden`}
             style={{
                 width: `calc(100% - ${isMobileSize ? "40" : layoutState.resizeSidebarWidth}px)`,
                 height: layoutState.resizeFooterHeight || COLLAPSED_HEIGHT,
+                ...backgroundStyle,
             }}
         >
             <header

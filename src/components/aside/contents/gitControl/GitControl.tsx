@@ -3,6 +3,7 @@ import { GlobalStateContext } from "../../../../context/GlobalState.context";
 import { githubGetRequestParams, octokit } from "../../../../http/api";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { ThemeMode } from "../../../../context/constatns/Theme.type";
 
 type RepoName = "gh-portfolio" | "modart" | "blacktie";
 
@@ -99,6 +100,15 @@ export const GitControl = () => {
     const [selectedRepo, setSelectedRepo] = useState<RepoName | null>(null);
 
     const { selectedTheme } = useContext(GlobalStateContext);
+
+    // 커스텀 테마 적용
+    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
+        ? { backgroundColor: selectedTheme.customColor }
+        : {};
+
+    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
+        ? ""
+        : selectedTheme.mode;
 
     const getBranchesByRepo = async (repo: RepoName) => {
         const response = await octokit.request(
@@ -245,7 +255,7 @@ export const GitControl = () => {
     };
 
     return (
-        <section className={`w-[calc(100%-40px)] flex flex-col ${selectedTheme.mode} overflow-y-auto text-white`}>
+        <section className={`w-[calc(100%-40px)] flex flex-col ${backgroundClass} overflow-y-auto text-white`} style={backgroundStyle}>
             <header className="h-10 flex items-center px-3 border-b border-sub-gary/30 text-xs">
                 {t("gitControl.title")}
             </header>
@@ -354,7 +364,8 @@ export const GitControl = () => {
                                                     {isSelected(repo, branch) && gitStates[repo].commits.length > 0 && (
                                                         <section
                                                             onClick={(e) => e.stopPropagation()}
-                                                            className={`w-full max-h-100 ${selectedTheme.mode} overflow-auto scrolls select-none text-white mt-2`}
+                                                            className={`w-full max-h-100 ${backgroundClass} overflow-auto scrolls select-none text-white mt-2`}
+                                                            style={backgroundStyle}
                                                         >
                                                             {gitStates[repo].commits.map((commit: Commit) => {
                                                                 const authorName =

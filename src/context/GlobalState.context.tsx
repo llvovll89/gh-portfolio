@@ -1,4 +1,4 @@
-import {createContext, useState} from "react";
+import {createContext, useState, useEffect} from "react";
 import {DEFAULT} from "../routes/route";
 import {NavType} from "../components/aside/constants/Nav.type";
 import {ThemeMode} from "./constatns/Theme.type";
@@ -16,7 +16,10 @@ export interface SelectedPathState {
 interface SelectedThemeState {
     mode: ThemeMode;
     isVisibleThemeDropdown: boolean;
+    customColor?: string;
 }
+
+const THEME_STORAGE_KEY = 'portfolio-theme-settings';
 
 interface GlobalStateContextProps {
     selectedPath: string;
@@ -67,12 +70,40 @@ export const GlobalStateProvider = ({
             list: [],
             state: DEFAULT,
         });
-    const [selectedTheme, setSelectedTheme] = useState<SelectedThemeState>({
-        mode: ThemeMode.BASE_NAVY,
-        isVisibleThemeDropdown: false,
+    const [selectedTheme, setSelectedTheme] = useState<SelectedThemeState>(() => {
+        // 초기값을 localStorage에서 로드
+        try {
+            const stored = localStorage.getItem(THEME_STORAGE_KEY);
+            if (stored) {
+                const parsed = JSON.parse(stored);
+                return {
+                    mode: parsed.mode || ThemeMode.BASE_NAVY,
+                    isVisibleThemeDropdown: false,
+                    customColor: parsed.customColor,
+                };
+            }
+        } catch (error) {
+            console.error('Failed to load theme settings:', error);
+        }
+        return {
+            mode: ThemeMode.BASE_NAVY,
+            isVisibleThemeDropdown: false,
+        };
     });
 
     const [selectedNav, setSelectedNav] = useState<NavType | null>(null);
+
+    // 테마 변경 시 localStorage에 저장
+    useEffect(() => {
+        try {
+            localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify({
+                mode: selectedTheme.mode,
+                customColor: selectedTheme.customColor,
+            }));
+        } catch (error) {
+            console.error('Failed to save theme settings:', error);
+        }
+    }, [selectedTheme.mode, selectedTheme.customColor]);
 
     return (
         <GlobalStateContext.Provider

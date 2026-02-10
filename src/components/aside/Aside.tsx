@@ -8,6 +8,7 @@ import { Search } from "./contents/search/Search";
 import { GitControl } from "./contents/gitControl/GitControl";
 import { Bookmarks } from "./contents/bookmarks/Bookmarks";
 import { Settings } from "./contents/settings/Settings";
+import { ThemeMode } from "../../context/constatns/Theme.type";
 
 export const Aside = () => {
     const {
@@ -19,6 +20,15 @@ export const Aside = () => {
     } = useContext(GlobalStateContext);
     const asideRef = useRef<HTMLDivElement>(null);
     const handleMouseDown = useDragging({ targetRef: asideRef, type: "sidebar" });
+
+    // 커스텀 테마 적용
+    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
+        ? { backgroundColor: selectedTheme.customColor }
+        : {};
+
+    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
+        ? ""
+        : selectedTheme.mode;
 
     const handleClickNav = (nav: NavType) => {
         if (selectedNav === nav) {
@@ -40,8 +50,9 @@ export const Aside = () => {
             ref={asideRef}
             style={{
                 width: layoutState.resizeSidebarWidth,
+                ...backgroundStyle,
             }}
-            className={`translate-x-0 absolute left-0 top-0 h-screen transition-transform ease-in-out ${selectedTheme.mode} border-r border-sub-gary/30 flex z-20`}
+            className={`translate-x-0 absolute left-0 top-0 h-screen transition-transform ease-in-out ${backgroundClass} border-r border-sub-gary/30 flex z-20`}
         >
             <Navbar selectedNav={selectedNav} onClickNav={handleClickNav} />
 

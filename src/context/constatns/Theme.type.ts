@@ -6,6 +6,7 @@ export enum ThemeMode {
     SUB_GREEN = "bg-sub-green",
     MAIN_TEAL = "bg-main-teal",
     SUB_TEAL = "bg-sub-teal",
+    CUSTOM = "bg-custom",
 }
 
 export const returnWhiteText = [
@@ -16,4 +17,13 @@ export const returnWhiteText = [
     ThemeMode.BASE_NAVY,
     ThemeMode.MAIN_TEAL,
     ThemeMode.SUB_TEAL,
+];
+
+export const RECOMMENDED_COLORS = [
+    "#1e3a8a", // 진한 파란색
+    "#831843", // 진한 자주색
+    "#166534", // 진한 초록색
+    "#92400e", // 진한 갈색
+    "#4c1d95", // 진한 보라색
+    "#0f766e", // 진한 청록색
 ];

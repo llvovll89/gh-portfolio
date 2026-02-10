@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { GlobalStateContext } from "../../../../context/GlobalState.context";
 import { VscExtensions, VscTrash, VscAdd } from "react-icons/vsc";
 import { useTranslation } from "react-i18next";
+import { ThemeMode } from "../../../../context/constatns/Theme.type";
 
 interface Extension {
     id: string;
@@ -19,6 +20,15 @@ export const Extensions = () => {
         name: "",
         description: "",
     });
+
+    // 커스텀 테마 적용
+    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
+        ? { backgroundColor: selectedTheme.customColor }
+        : {};
+
+    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
+        ? ""
+        : selectedTheme.mode;
 
     useEffect(() => {
         const stored = localStorage.getItem("portfolio-extensions");
@@ -61,7 +71,8 @@ export const Extensions = () => {
 
     return (
         <section
-            className={`w-full flex flex-col ${selectedTheme.mode} overflow-hidden`}
+            className={`w-full flex flex-col ${backgroundClass} overflow-hidden`}
+            style={backgroundStyle}
         >
             <header className="w-full h-10 px-3 flex items-center justify-between text-xs text-white overflow-hidden tracking-[1px]">
                 <span>{t("extensions.title")}</span>

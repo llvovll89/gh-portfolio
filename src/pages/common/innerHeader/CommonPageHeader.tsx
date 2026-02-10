@@ -8,7 +8,10 @@ import {GlobalStateContext} from "../../../context/GlobalState.context";
 import {
     convertThemeLogoColor,
     convertThemeTextColor,
+    getTextColorFromBg,
+    getLogoColorFromBg,
 } from "../../../utils/convertThemeTextColor";
+import {ThemeMode} from "../../../context/constatns/Theme.type";
 
 interface CommonPageHeaderProps {
     title?: string;
@@ -17,14 +20,32 @@ interface CommonPageHeaderProps {
 export const CommonPageHeader = ({title}: CommonPageHeaderProps) => {
     const {selectedTheme} = useContext(GlobalStateContext);
 
+    // 커스텀 테마 적용
+    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
+        ? { backgroundColor: selectedTheme.customColor }
+        : {};
+
+    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
+        ? ""
+        : selectedTheme.mode;
+
+    const textColor = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
+        ? getTextColorFromBg(selectedTheme.customColor)
+        : convertThemeTextColor(selectedTheme.mode);
+
+    const logoColor = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
+        ? getLogoColorFromBg(selectedTheme.customColor)
+        : convertThemeLogoColor(selectedTheme.mode);
+
     return (
         <header
             className={`
                 w-full h-14 flex items-center justify-between px-4
-                ${selectedTheme.mode} ${convertThemeTextColor(selectedTheme.mode)}
+                ${backgroundClass} ${textColor}
                 border-b border-sub-gary/30
                 bg-sub-navy/20
             `}
+            style={backgroundStyle}
         >
             {/* Left Section - Home & Profile */}
             <div className="flex items-center gap-4">
@@ -43,7 +64,7 @@ export const CommonPageHeader = ({title}: CommonPageHeaderProps) => {
                         Geon Ho Kim
                         <Img
                             src="/assets/logo/GH_logo_small_white.png"
-                            className={`${convertThemeLogoColor(selectedTheme.mode)} w-4 h-4`}
+                            className={`${logoColor} w-4 h-4`}
                         />
                     </p>
                     <p className="text-[clamp(0.7rem,1.2vw,0.85rem)] font-medium opacity-70">

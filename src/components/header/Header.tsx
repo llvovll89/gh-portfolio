@@ -4,6 +4,7 @@ import {useContext, useEffect, useState} from "react";
 import {GlobalStateContext} from "../../context/GlobalState.context";
 import {Theme} from "./theme/Theme";
 import {useRedirectionPage} from "../../hooks/useRedirectionPage";
+import {ThemeMode} from "../../context/constatns/Theme.type";
 
 export const Header = () => {
     const {
@@ -18,6 +19,15 @@ export const Header = () => {
     const [currentTime, setCurrentTime] = useState(new Date());
 
     useRedirectionPage();
+
+    // 커스텀 테마 적용
+    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
+        ? { backgroundColor: selectedTheme.customColor }
+        : {};
+
+    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
+        ? ""
+        : selectedTheme.mode;
 
     // 시계 업데이트
     useEffect(() => {
@@ -102,9 +112,10 @@ export const Header = () => {
     return (
         <>
             <header
-                className={`${selectedTheme.mode} absolute top-0 right-0 h-10 border-b border-sub-gary/10 flex items-center justify-between z-20 overflow-x-auto scrolls`}
+                className={`${backgroundClass} absolute top-0 right-0 h-10 border-b border-sub-gary/10 flex items-center justify-between z-20 overflow-x-auto scrolls`}
                 style={{
                     width: `calc(100% - ${layoutState.resizeSidebarWidth}px)`,
+                    ...backgroundStyle,
                 }}
             >
                 <ul className={`flex items-center h-full flex-1`}>

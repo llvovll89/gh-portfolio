@@ -7,6 +7,7 @@ import {
     NOT_FOUND,
     BLOG_DETAIL,
 } from "../../../../routes/route";
+import { ThemeMode } from "../../../../context/constatns/Theme.type";
 import {
     VscBookmark,
     VscTrash,
@@ -27,6 +28,16 @@ export const Bookmarks = () => {
         useContext(GlobalStateContext);
     const handlePushPath = useHandlePushPath();
     const { t } = useTranslation();
+
+    // 커스텀 테마 적용
+    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
+        ? { backgroundColor: selectedTheme.customColor }
+        : {};
+
+    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
+        ? ""
+        : selectedTheme.mode;
+
     const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
     const [showAddForm, setShowAddForm] = useState(false);
 
@@ -78,7 +89,8 @@ export const Bookmarks = () => {
 
     return (
         <section
-            className={`w-full flex flex-col ${selectedTheme.mode} overflow-hidden`}
+            className={`w-full flex flex-col ${backgroundClass} overflow-hidden`}
+            style={backgroundStyle}
         >
             <header className="w-full h-10 px-3 flex items-center justify-between text-xs text-white overflow-hidden tracking-[1px]">
                 <span>{t("bookmarks.title")}</span>

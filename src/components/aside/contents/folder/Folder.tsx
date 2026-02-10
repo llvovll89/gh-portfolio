@@ -9,15 +9,26 @@ import { useContext } from "react";
 import { GlobalStateContext } from "../../../../context/GlobalState.context";
 import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
 import { useTranslation } from "react-i18next";
+import { ThemeMode } from "../../../../context/constatns/Theme.type";
 
 export const Folder = () => {
     const { selectedPathState, selectedTheme } = useContext(GlobalStateContext);
     const handlePushPath = useHandlePushPath();
     const { t } = useTranslation();
 
+    // 커스텀 테마 적용
+    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
+        ? { backgroundColor: selectedTheme.customColor }
+        : {};
+
+    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
+        ? ""
+        : selectedTheme.mode;
+
     return (
         <section
-            className={`w-full flex flex-col ${selectedTheme.mode} overflow-hidden`}
+            className={`w-full flex flex-col ${backgroundClass} overflow-hidden`}
+            style={backgroundStyle}
         >
             <header className="w-full h-10 px-3 flex items-center text-xs text-white overflow-hidden tracking-[1px]">
                 {t("folder.title")}
