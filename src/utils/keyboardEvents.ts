@@ -237,3 +237,21 @@ export const handleToggleCommandPalette: BooleanStateHandler = (
         setState((prev) => !prev);
     }
 };
+
+/**
+ * 풀스크린 토글 핸들러
+ * @param event 키보드 이벤트
+ * @description F11로 전체 화면을 토글함
+ */
+export const handleToggleFullscreen = (event: KeyboardEvent) => {
+    const combo = DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_FULLSCREEN];
+
+    if (matchesKeyCombination(event, combo)) {
+        event.preventDefault();
+
+        // window 객체에 있는 toggleFullscreen 함수 호출
+        if (typeof (window as any).toggleFullscreen === "function") {
+            (window as any).toggleFullscreen();
+        }
+    }
+};

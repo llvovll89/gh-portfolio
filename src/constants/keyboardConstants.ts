@@ -66,6 +66,9 @@ export const DEFAULT_KEY_COMBINATIONS: Record<
         ctrl: true,
         shift: true,
     },
+    [KeyboardShortcutId.TOGGLE_FULLSCREEN]: {
+        key: "F11",
+    },
 } as const;
 
 /**
@@ -81,6 +84,7 @@ export const SHORTCUT_DESCRIPTIONS_KO: Record<KeyboardShortcutId, string> = {
     [KeyboardShortcutId.TOGGLE_SIDEBAR]: "사이드바 토글",
     [KeyboardShortcutId.TOGGLE_PANEL]: "하단 패널 토글",
     [KeyboardShortcutId.COMMAND_PALETTE]: "명령 팔레트 열기",
+    [KeyboardShortcutId.TOGGLE_FULLSCREEN]: "전체 화면 토글",
 } as const;
 
 /**
@@ -96,6 +100,7 @@ export const SHORTCUT_DESCRIPTIONS_EN: Record<KeyboardShortcutId, string> = {
     [KeyboardShortcutId.TOGGLE_SIDEBAR]: "Toggle Sidebar",
     [KeyboardShortcutId.TOGGLE_PANEL]: "Toggle Bottom Panel",
     [KeyboardShortcutId.COMMAND_PALETTE]: "Open Command Palette",
+    [KeyboardShortcutId.TOGGLE_FULLSCREEN]: "Toggle Fullscreen",
 } as const;
 
 /**

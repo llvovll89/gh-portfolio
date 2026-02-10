@@ -76,10 +76,13 @@ export const Blog = () => {
         [allPosts, debouncedQuery, selectedTags]
     );
 
-    const sortedPosts = useMemo(
-        () => sortPosts(filteredPosts, sortOrder),
-        [filteredPosts, sortOrder]
-    );
+    const sortedPosts = useMemo(() => {
+        // 검색어가 있을 때는 이미 filterPosts에서 점수 순으로 정렬했으므로 날짜 정렬 건너뜀
+        if (debouncedQuery.trim()) {
+            return filteredPosts;
+        }
+        return sortPosts(filteredPosts, sortOrder);
+    }, [filteredPosts, sortOrder, debouncedQuery]);
 
     const groupedPosts = useMemo(
         () => (viewMode === "grouped" ? groupPostsByTag(sortedPosts) : {}),
@@ -93,8 +96,9 @@ export const Blog = () => {
             <Contents>
                 <CommonPageHeader />
 
-                <section className="py-4">
-                    <div className="mb-6">
+                <div className="flex flex-col h-[calc(100vh-8rem)] py-4">
+                    {/* 고정 헤더 및 필터바 */}
+                    <div className="flex-none mb-6">
                         <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
                             {t("pages.blog.posts")}
                         </h2>
@@ -116,32 +120,37 @@ export const Blog = () => {
                         />
                     </div>
 
-                    {allPosts.length === 0 ? (
-                        <p className="text-zinc-700 dark:text-zinc-300">
-                            {t("pages.blog.noPosts")}{" "}
-                            {t("pages.blog.addPostsHint")}{" "}
-                            <span className="font-mono">src/content/posts</span>{" "}
-                            <span className="font-mono">.md</span>.
-                        </p>
-                    ) : sortedPosts.length === 0 ? (
-                        <div className="text-center py-12">
-                            <p className="text-lg text-zinc-700 dark:text-zinc-300 mb-2">
-                                {t("pages.blog.noResults")}
+                    {/* 스크롤 가능한 포스트 리스트 영역 */}
+                    <div className="flex-1 overflow-y-auto pr-2 scrolls">
+                        {allPosts.length === 0 ? (
+                            <p className="text-zinc-700 dark:text-zinc-300">
+                                {t("pages.blog.noPosts")}{" "}
+                                {t("pages.blog.addPostsHint")}{" "}
+                                <span className="font-mono">src/content/posts</span>{" "}
+                                <span className="font-mono">.md</span>.
                             </p>
-                            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                                {t("pages.blog.noResultsHint")}
-                            </p>
-                        </div>
-                    ) : viewMode === "list" ? (
-                        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                            {sortedPosts.map((p) => (
-                                <BlogCard key={p.slug} p={p} />
-                            ))}
-                        </ul>
-                    ) : (
-                        <BlogGroupedView posts={groupedPosts} />
-                    )}
-                </section>
+                        ) : sortedPosts.length === 0 ? (
+                            <div className="text-center py-12">
+                                <p className="text-lg text-zinc-700 dark:text-zinc-300 mb-2">
+                                    {t("pages.blog.noResults")}
+                                </p>
+                                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                                    {t("pages.blog.noResultsHint")}
+                                </p>
+                            </div>
+                        ) : viewMode === "list" ? (
+                            <ul className="flex flex-col gap-3 pb-4">
+                                {sortedPosts.map((p) => (
+                                    <BlogCard key={p.slug} p={p} />
+                                ))}
+                            </ul>
+                        ) : (
+                            <div className="pb-4">
+                                <BlogGroupedView posts={groupedPosts} />
+                            </div>
+                        )}
+                    </div>
+                </div>
             </Contents>
         </>
     );

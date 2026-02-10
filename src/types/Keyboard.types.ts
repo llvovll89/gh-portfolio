@@ -85,4 +85,5 @@ export enum KeyboardShortcutId {
     TOGGLE_SIDEBAR = "toggle_sidebar",
     TOGGLE_PANEL = "toggle_panel",
     COMMAND_PALETTE = "command_palette",
+    TOGGLE_FULLSCREEN = "toggle_fullscreen",
 }

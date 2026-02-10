@@ -10,6 +10,7 @@ import {
     handleCloseKeyboardInfoUI,
     handleToggleCommandPalette,
     handleToggleFooterUI,
+    handleToggleFullscreen,
     handleTogglePanelUI,
     handleToggleSidebarUI,
 } from "@/utils/keyboardEvents";
@@ -61,6 +62,9 @@ export const useKeyboardEvent = () => {
 
             // CLI 관련 핸들러
             handleCliEnterEvent(event, setSubmitCliCommand);
+
+            // 풀스크린 핸들러
+            handleToggleFullscreen(event);
 
             // 전체 초기화 핸들러
             handleAllClear(
