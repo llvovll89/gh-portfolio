@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { GlobalStateContext } from "../../../../context/GlobalState.context";
-import { VscSettingsGear, VscKey, VscEdit, VscRefresh } from "react-icons/vsc";
+import { VscSettingsGear, VscKey, VscRefresh } from "react-icons/vsc";
 import { useTranslation } from "react-i18next";
 import { useKeyboardShortcuts } from "../../../../hooks/useKeyboardShortcuts";
 import { KeyboardShortcutId } from "../../../../types/Keyboard.types";
