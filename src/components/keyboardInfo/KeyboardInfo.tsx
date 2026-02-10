@@ -21,7 +21,7 @@ export const KeyboardInfo = () => {
                 <div
                     ref={containerRef}
                     className={[
-                        "relative w-full max-w-xl overflow-hidden rounded-[5px]",
+                        "relative w-full max-w-sm sm:max-w-md md:max-w-xl overflow-hidden rounded-[5px]",
                         "border border-slate-200/80 bg-white text-slate-900",
                         "shadow-[0_30px_90px_rgba(2,6,23,0.35)]",
                     ].join(" ")}
@@ -33,16 +33,16 @@ export const KeyboardInfo = () => {
                         <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/35 to-transparent" />
                     </div>
 
-                    <header className="relative flex items-center justify-between px-5 py-4 border-b border-slate-200/70">
+                    <header className="relative flex items-center justify-between px-3 sm:px-5 py-3 sm:py-4 border-b border-slate-200/70 gap-2">
                         <div className="flex items-center gap-2">
-                            <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900/5 ring-1 ring-slate-200">
+                            <span className="inline-flex h-7 w-7 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-slate-900/5 ring-1 ring-slate-200 text-sm sm:text-base">
                                 ⌘
                             </span>
                             <div className="leading-tight">
-                                <p className="text-sm font-semibold tracking-tight">
+                                <p className="text-xs sm:text-sm font-semibold tracking-tight">
                                     키보드 단축키
                                 </p>
-                                <p className="text-xs text-slate-500">
+                                <p className="text-[10px] sm:text-xs text-slate-500">
                                     자주 쓰는 키 조합 모음
                                 </p>
                             </div>
@@ -52,7 +52,7 @@ export const KeyboardInfo = () => {
                             type="button"
                             onClick={() => setIsVisibleKeyboardInfo(false)}
                             className={[
-                                "inline-flex items-center justify-center rounded-lg px-3 py-2 text-sm font-medium",
+                                "inline-flex items-center justify-center rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium",
                                 "border border-slate-200 bg-white text-slate-700",
                                 "transition-colors",
                                 "hover:bg-slate-50",
@@ -64,7 +64,7 @@ export const KeyboardInfo = () => {
                         </button>
                     </header>
 
-                    <ul className="relative max-h-[70vh] overflow-y-auto px-5 py-4">
+                    <ul className="relative max-h-[60vh] sm:max-h-[70vh] overflow-y-auto px-3 sm:px-5 py-3 sm:py-4">
                         {keyboardKeyAndStateMock.map((item) => (
                             <li
                                 key={item.key}
@@ -98,8 +98,8 @@ export const KeyboardInfo = () => {
                         ))}
                     </ul>
 
-                    <div className="relative px-5 py-4 border-t border-slate-200/70 flex items-center justify-between">
-                        <p className="text-xs text-slate-500">
+                    <div className="relative px-3 sm:px-5 py-3 sm:py-4 border-t border-slate-200/70 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                        <p className="text-[10px] sm:text-xs text-slate-500">
                             팁: <span className="font-medium">ESC</span>를 두 번
                             누르면 열려있는 UI를 한 번에 닫을 수 있어요.
                         </p>

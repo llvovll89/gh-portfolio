@@ -23,7 +23,7 @@ export const MessageCardForm = () => {
     };
 
     return (
-        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 md:p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_18px_60px_rgba(0,0,0,0.45)] space-y-5">
+        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-3 md:p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_18px_60px_rgba(0,0,0,0.45)] space-y-5">
             {/* 헤더 */}
             <div className="pb-4 border-b border-white/10">
                 <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">

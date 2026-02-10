@@ -69,15 +69,15 @@ export const CommunicationCard = () => {
         setCopied(ok);
     };
     return (
-        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-5 md:p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_18px_60px_rgba(0,0,0,0.45)] space-y-5">
+        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-3 md:p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_18px_60px_rgba(0,0,0,0.45)] space-y-5">
             {/* 헤더 */}
-            <div className="flex items-start justify-between gap-3 pb-4 border-b border-white/10">
+            <div className="flex items-start justify-between gap-3 sm:pb-4 pb-3 border-b border-white/10">
                 <div>
-                    <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
+                    <h2 className="text-[clamp(1rem,2vw,1.5rem)] md:text-2xl font-bold flex items-center gap-2">
                         <HiUser className="w-5 h-5 text-primary" />
                         {t("pages.contact.communicationCard.quickContact")}
                     </h2>
-                    <p className="mt-2 text-sm text-white/70">
+                    <p className="mt-2 text-[clamp(0.75rem,1vw,0.875rem)] text-white/70">
                         {t("pages.contact.communicationCard.contactPrompt")}
                     </p>
                 </div>
@@ -105,29 +105,29 @@ export const CommunicationCard = () => {
                     <div className="flex items-start gap-2">
                         <HiUser className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
                         <div>
-                            <dt className="text-xs text-white/50">{t("pages.contact.communicationCard.name")}</dt>
-                            <dd className="mt-1 font-semibold text-white">{t("pages.contact.communicationCard.nameValue")}</dd>
+                            <dt className="text-[clamp(0.7rem,1vw,0.8rem)] text-white/50">{t("pages.contact.communicationCard.name")}</dt>
+                            <dd className="mt-1 font-semibold text-white text-[clamp(0.75rem,1vw,0.8rem)]">{t("pages.contact.communicationCard.nameValue")}</dd>
                         </div>
                     </div>
                     <div className="flex items-start gap-2">
                         <HiBriefcase className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
                         <div>
-                            <dt className="text-xs text-white/50">{t("pages.contact.communicationCard.career")}</dt>
-                            <dd className="mt-1 font-semibold text-white">{calculateCareer()}</dd>
+                            <dt className="text-[clamp(0.7rem,1vw,0.8rem)] text-white/50">{t("pages.contact.communicationCard.career")}</dt>
+                            <dd className="mt-1 font-semibold text-white text-[clamp(0.75rem,1vw,0.8rem)]">{calculateCareer()}</dd>
                         </div>
                     </div>
                     <div className="flex items-start gap-2">
                         <HiCalendar className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
                         <div>
-                            <dt className="text-xs text-white/50">{t("pages.contact.communicationCard.birthDate")}</dt>
-                            <dd className="mt-1 font-semibold text-white">1994-05-04</dd>
+                            <dt className="text-[clamp(0.7rem,1vw,0.8rem)] text-white/50">{t("pages.contact.communicationCard.birthDate")}</dt>
+                            <dd className="mt-1 font-semibold text-white text-[clamp(0.75rem,1vw,0.8rem)]">1994-05-04</dd>
                         </div>
                     </div>
                     <div className="flex items-start gap-2">
                         <HiLocationMarker className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
                         <div>
-                            <dt className="text-xs text-white/50">{t("pages.contact.communicationCard.residence")}</dt>
-                            <dd className="mt-1 font-semibold text-white">{t("pages.contact.communicationCard.residenceValue")}</dd>
+                            <dt className="text-[clamp(0.7rem,1vw,0.8rem)] text-white/50">{t("pages.contact.communicationCard.residence")}</dt>
+                            <dd className="mt-1 font-semibold text-white text-[clamp(0.75rem,1vw,0.8rem)]">{t("pages.contact.communicationCard.residenceValue")}</dd>
                         </div>
                     </div>
                 </dl>

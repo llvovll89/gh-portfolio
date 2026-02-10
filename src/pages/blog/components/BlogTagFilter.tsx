@@ -47,7 +47,7 @@ export const BlogTagFilter = ({
                 aria-haspopup="menu"
                 aria-expanded={isOpen}
                 className={[
-                    "flex items-center gap-2 h-11 px-4",
+                    "flex items-center gap-2 sm:h-11 h-9 px-4",
                     "rounded-2xl border",
                     selectedTags.length > 0
                         ? "border-primary/50 bg-primary/5 dark:bg-primary/10"

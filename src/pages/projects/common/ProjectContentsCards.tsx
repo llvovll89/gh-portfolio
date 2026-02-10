@@ -27,7 +27,7 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                             key={`${project.title}-${index}`}
                             onClick={() => setSelectedProject(index)}
                             className={[
-                                "cursor-pointer group relative flex items-start gap-4 p-4 rounded-lg border text-left",
+                                "cursor-pointer group relative flex sm:flex-row flex-col items-start sm:gap-4 gap-2 p-4 rounded-lg border text-left",
                                 "bg-[#181818] transition-all duration-200",
                                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70",
                                 isSelected
@@ -36,12 +36,12 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                             ].join(" ")}
                         >
                             {/* 프로젝트 번호 */}
-                            <div className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-[#2a2a2d] border border-[#3e3e42] text-xs font-semibold text-slate-400">
+                            <div className="sm:static absolute z-1 shrink-0 flex items-center justify-center sm:w-8 sm:h-8 w-7 h-7 left-2 top-2 rounded-full sm:bg-[#2a2a2d] bg-[#121212] border sm:border-[#3e3e42] border-[#CECECE]/20 text-xs font-semibold text-slate-400">
                                 {index + 1}
                             </div>
 
                             {/* 썸네일 이미지 */}
-                            <div className="relative shrink-0 w-20 h-20 md:w-24 md:h-24 rounded-md overflow-hidden bg-[#252526] border border-[#3e3e42]">
+                            <div className="relative shrink-0 w-full h-34 sm:w-24 sm:h-24 rounded-md overflow-hidden bg-[#252526] border border-[#3e3e42]">
                                 <img
                                     src={project.image}
                                     alt={project.title}
@@ -62,12 +62,12 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                                             {project.title}
                                         </h2>
                                         <span className="h-1 w-1 rounded-full bg-slate-600" />
-                                        <span className="text-xs text-slate-400">
+                                        <span className="text-[clamp(0.65rem,1vw,0.9rem)] text-slate-400">
                                             {project.scale}
                                         </span>
                                     </div>
 
-                                    <p className="text-sm text-slate-400 line-clamp-2">
+                                    <p className="text-[clamp(0.75rem,1vw,1rem)] text-slate-400 line-clamp-2">
                                         {project.description}
                                     </p>
                                 </div>
@@ -94,7 +94,7 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                             </div>
 
                             {/* 상세보기 아이콘 */}
-                            <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                            <div className="sm:block hidden shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                 <div className="flex items-center justify-center w-8 h-8 rounded bg-primary/10 text-primary">
                                     <span className="text-sm">→</span>
                                 </div>

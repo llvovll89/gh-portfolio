@@ -14,18 +14,17 @@ export const Contact = () => {
             <Header />
             <Aside />
             <Contents className="select-none">
-                <section className="relative w-full max-w-6xl mx-auto overflow-scroll scrolls px-4 md:px-6">
-                    {/* 헤더 텍스트 */}
-                    <div className="relative mb-8 md:mb-10">
-                        <div className="flex items-center gap-3 mb-3">
+                <section className="relative w-full max-w-6xl mx-auto overflow-scroll scrolls px-2 md:px-6">
+                    <div className="relative mb-6 sm:mb-10">
+                        <div className="flex items-center gap-3 sm:mb-3 mb-1.5">
                             <div className="p-2 bg-primary/10 rounded-lg">
                                 <HiMailOpen className="w-6 h-6 text-primary" />
                             </div>
-                            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+                            <h1 className="text-[clamp(1.5rem,3vw,2.25rem)] font-extrabold tracking-tight">
                                 {t("pages.contact.title")}
                             </h1>
                         </div>
-                        <p className="text-sm md:text-base text-white/70 max-w-2xl leading-relaxed">
+                        <p className="text-[clamp(0.78rem,1vw,0.875rem)] md:text-base text-white/70 max-w-2xl leading-relaxed">
                             {t("pages.contact.subtitle")}
                         </p>
                     </div>

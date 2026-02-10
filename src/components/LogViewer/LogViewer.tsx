@@ -1,6 +1,6 @@
-import {useContext, useMemo} from "react";
-import {KeyboardContext} from "../../context/KeyboardState.context";
-import {Portal} from "../Portal";
+import { useContext, useMemo } from "react";
+import { KeyboardContext } from "../../context/KeyboardState.context";
+import { Portal } from "../Portal";
 
 const urlRegex = /(https?:\/\/[^\s]+)/g;
 
@@ -25,7 +25,7 @@ const renderWithLinks = (line: string) => {
 };
 
 export const LogViewer = () => {
-    const {submitCliCommand, setSubmitCliCommand} = useContext(KeyboardContext);
+    const { submitCliCommand, setSubmitCliCommand } = useContext(KeyboardContext);
 
     const lines = useMemo(() => {
         const v = submitCliCommand.value ?? "";
@@ -69,7 +69,7 @@ export const LogViewer = () => {
             >
                 <div
                     className={[
-                        "relative w-full max-w-3xl overflow-hidden rounded-2xl",
+                        "relative w-full max-w-sm sm:max-w-lg md:max-w-2xl lg:max-w-3xl overflow-hidden rounded-2xl",
                         "border border-slate-200/80 bg-white text-slate-900",
                         "shadow-[0_30px_90px_rgba(2,6,23,0.35)]",
                     ].join(" ")}
@@ -81,34 +81,34 @@ export const LogViewer = () => {
                         <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/35 to-transparent" />
                     </div>
 
-                    <header className="relative flex items-center justify-between px-5 py-4 border-b border-slate-200/70">
-                        <div className="min-w-0">
-                            <p className="text-sm font-semibold tracking-tight">
+                    <header className="relative flex items-center justify-between px-3 sm:px-5 py-3 sm:py-4 border-b border-slate-200/70 gap-2">
+                        <div className="min-w-0 flex-1">
+                            <p className="text-xs sm:text-sm font-semibold tracking-tight">
                                 CLI Command Output
                             </p>
-                            <p className="text-xs text-slate-500 truncate">
+                            <p className="text-[10px] sm:text-xs text-slate-500 truncate">
                                 텍스트 / 링크 자동 인식 / 복사 / 다운로드
                             </p>
                         </div>
 
-                        <div className="flex items-center gap-2 shrink-0">
+                        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                             <button
                                 onClick={copy}
-                                className="rounded-lg px-3 py-2 text-xs font-medium border border-slate-200 bg-white hover:bg-slate-50"
+                                className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-medium border border-slate-200 bg-white hover:bg-slate-50"
                                 type="button"
                             >
                                 복사
                             </button>
                             <button
                                 onClick={download}
-                                className="rounded-lg px-3 py-2 text-xs font-medium border border-slate-200 bg-white hover:bg-slate-50"
+                                className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-medium border border-slate-200 bg-white hover:bg-slate-50"
                                 type="button"
                             >
                                 다운로드
                             </button>
                             <button
                                 onClick={close}
-                                className="rounded-lg px-3 py-2 text-xs font-medium bg-primary text-white hover:bg-primary/90"
+                                className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-medium bg-primary text-white hover:bg-primary/90"
                                 type="button"
                             >
                                 닫기
@@ -116,16 +116,16 @@ export const LogViewer = () => {
                         </div>
                     </header>
 
-                    <div className="relative max-h-[70vh] overflow-auto p-4">
+                    <div className="relative max-h-[60vh] sm:max-h-[70vh] overflow-auto p-3 sm:p-4">
                         <div className="rounded-xl border border-slate-200 bg-slate-950 text-slate-100 overflow-hidden">
-                            <div className="flex items-center gap-2 px-4 py-2 border-b border-white/10 text-[11px] text-white/70">
-                                <span className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
-                                <span className="h-2.5 w-2.5 rounded-full bg-yellow-300/80" />
-                                <span className="h-2.5 w-2.5 rounded-full bg-green-400/80" />
-                                <span className="ml-2">Output</span>
+                            <div className="flex items-center gap-2 px-3 sm:px-4 py-2 border-b border-white/10 text-[10px] sm:text-[11px] text-white/70">
+                                <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-red-400/80" />
+                                <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-yellow-300/80" />
+                                <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-green-400/80" />
+                                <span className="ml-1 sm:ml-2">Output</span>
                             </div>
 
-                            <pre className="m-0 p-4 text-xs leading-relaxed font-mono whitespace-pre-wrap">
+                            <pre className="m-0 p-3 sm:p-4 text-[10px] sm:text-xs leading-relaxed font-mono whitespace-pre-wrap">
                                 {lines.map((line, idx) => (
                                     <div key={idx} className="wrap-break-word">
                                         {renderWithLinks(line)}

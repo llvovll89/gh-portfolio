@@ -96,10 +96,10 @@ export const Blog = () => {
             <Contents>
                 <CommonPageHeader />
 
-                <div className="flex flex-col h-[calc(100vh-8rem)] py-4">
+                <div className="flex flex-col h-[calc(100vh-8rem)] sm:py-4 py-1 md:px-0 px-2">
                     {/* 고정 헤더 및 필터바 */}
                     <div className="flex-none mb-6">
-                        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
+                        <h2 className="text-[clamp(0.85rem,1.5vw,1.25rem)] font-bold text-zinc-900 dark:text-zinc-100 mb-4">
                             {t("pages.blog.posts")}
                         </h2>
 

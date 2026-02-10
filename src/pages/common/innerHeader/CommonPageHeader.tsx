@@ -1,24 +1,24 @@
-import {FaGithub} from "react-icons/fa";
-import {SiVelog} from "react-icons/si";
-import {HiHome} from "react-icons/hi";
-import {Link} from "react-router-dom";
-import {Img} from "../../../components/Img";
-import {useContext} from "react";
-import {GlobalStateContext} from "../../../context/GlobalState.context";
+import { FaGithub } from "react-icons/fa";
+import { SiVelog } from "react-icons/si";
+import { HiHome } from "react-icons/hi";
+import { Link } from "react-router-dom";
+import { Img } from "../../../components/Img";
+import { useContext } from "react";
+import { GlobalStateContext } from "../../../context/GlobalState.context";
 import {
     convertThemeLogoColor,
     convertThemeTextColor,
     getTextColorFromBg,
     getLogoColorFromBg,
 } from "../../../utils/convertThemeTextColor";
-import {ThemeMode} from "../../../context/constatns/Theme.type";
+import { ThemeMode } from "../../../context/constatns/Theme.type";
 
 interface CommonPageHeaderProps {
     title?: string;
 }
 
-export const CommonPageHeader = ({title}: CommonPageHeaderProps) => {
-    const {selectedTheme} = useContext(GlobalStateContext);
+export const CommonPageHeader = ({ title }: CommonPageHeaderProps) => {
+    const { selectedTheme } = useContext(GlobalStateContext);
 
     // 커스텀 테마 적용
     const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
@@ -40,10 +40,11 @@ export const CommonPageHeader = ({title}: CommonPageHeaderProps) => {
     return (
         <header
             className={`
-                w-full h-14 flex items-center justify-between px-4
+                w-full sm:h-14 h-12 flex items-center justify-between px-4
                 ${backgroundClass} ${textColor}
                 border-b border-sub-gary/30
                 bg-sub-navy/20
+                pb-2
             `}
             style={backgroundStyle}
         >

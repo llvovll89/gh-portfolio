@@ -67,9 +67,7 @@ export const MainContents = () => {
             </div>
 
             <div className="relative flex flex-col lg:flex-row items-center gap-12 lg:gap-16 h-full">
-                {/* 왼쪽: 메인 콘텐츠 */}
-                <section className="flex-1 space-y-8 animate-[fadeIn_0.8s_ease-out]">
-                    {/* 상단 배지 */}
+                <section className="w-full flex-1 space-y-8 animate-[fadeIn_0.8s_ease-out]">
                     <div className="flex flex-wrap items-center justify-between gap-4">
                         <div className="group flex items-center gap-3">
                             <div className="relative">
@@ -90,7 +88,6 @@ export const MainContents = () => {
                         </div>
                     </div>
 
-                    {/* 메인 타이틀 */}
                     <div className="space-y-6">
                         <div className="space-y-3">
                             <h1 className="text-[clamp(1.8rem,4vw,4.5rem)] font-black tracking-tight leading-[1.1]">
@@ -111,7 +108,6 @@ export const MainContents = () => {
                         </p>
                     </div>
 
-                    {/* 설명 섹션 */}
                     <div className="space-y-2 text-[clamp(0.9rem,1.1vw,1.05rem)] text-white/70 leading-relaxed max-w-xl animate-[fadeIn_1.2s_ease-out_0.5s] opacity-0 [animation-fill-mode:forwards]">
                         <p className="flex items-start gap-2">
                             <span className="text-primary mt-1">▹</span>
@@ -131,7 +127,6 @@ export const MainContents = () => {
                         </p>
                     </div>
 
-                    {/* 스킬 태그 */}
                     <div className="flex flex-wrap gap-3 animate-[fadeIn_1.4s_ease-out_0.7s] opacity-0 [animation-fill-mode:forwards]">
                         {skills.map((skill) => (
                             <div
@@ -148,7 +143,6 @@ export const MainContents = () => {
                         ))}
                     </div>
 
-                    {/* CTA 버튼 */}
                     <div className="flex flex-wrap gap-4 pt-4 animate-[fadeIn_1.6s_ease-out_0.9s] opacity-0 [animation-fill-mode:forwards]">
                         <button
                             onClick={() => handlePushPath(PROJECTS)}

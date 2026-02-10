@@ -3,6 +3,7 @@ import { GlobalStateContext } from "../../context/GlobalState.context";
 import { convertThemeTextColor, getTextColorFromBg } from "../../utils/convertThemeTextColor";
 import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
 import { ThemeMode } from "../../context/constatns/Theme.type";
+import { LAYOUT_CONSTANTS } from "../../constants/layout";
 
 interface ContentsProps {
     children?: React.ReactNode;
@@ -30,9 +31,9 @@ export const Contents = ({ children, className }: ContentsProps) => {
         <section
             className={`absolute top-10 right-0 flex flex-col transition-width transition-transform ease-in-out overflow-auto gap-4 scrolls min-h-[calc(100dvh-40px)]
                 max-h-[calc(100dvh-40px)]
-                py-3 sm:py-4 md:py-6 ${isMobileSize ? "pl-12 pr-3" : "px-3 sm:px-4 md:px-6"} ${className} ${backgroundClass} ${textColor}`}
+                py-2 sm:py-4 md:py-6 ${isMobileSize ? "pl-1 pr-1" : "px-3 sm:px-4 md:px-6"} ${className} ${backgroundClass} ${textColor}`}
             style={{
-                width: `calc(100% - ${isMobileSize ? 0 : layoutState.resizeSidebarWidth}px)`,
+                width: `calc(100% - ${isMobileSize ? LAYOUT_CONSTANTS.MOBILE_SIDEBAR_WIDTH : layoutState.resizeSidebarWidth}px)`,
                 ...backgroundStyle,
             }}
         >

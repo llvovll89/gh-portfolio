@@ -1,11 +1,11 @@
-import {Link} from "react-router-dom";
-import type {BlogPost} from "../../../utils/loadPosts";
+import { Link } from "react-router-dom";
+import type { BlogPost } from "../../../utils/loadPosts";
 
 interface BlogCardProps {
     p: BlogPost;
 }
 
-export const BlogCard = ({p}: BlogCardProps) => {
+export const BlogCard = ({ p }: BlogCardProps) => {
     return (
         <li className="list-none">
             <Link
@@ -44,7 +44,7 @@ export const BlogCard = ({p}: BlogCardProps) => {
                     </h3>
 
                     {(p.summary || p.body) && (
-                        <p className="line-clamp-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                        <p className="line-clamp-2 text-[clamp(0.75rem,1vw,0.875rem)] leading-relaxed text-zinc-600 dark:text-zinc-400">
                             {p.summary ?? p.body}
                         </p>
                     )}

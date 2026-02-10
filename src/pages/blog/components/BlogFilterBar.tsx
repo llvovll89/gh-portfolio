@@ -58,7 +58,7 @@ export const BlogFilterBar = ({
                 </div>
 
                 {/* 필터 및 정렬 버튼들 */}
-                <div className="flex gap-3 flex-wrap sm:flex-nowrap">
+                <div className="flex sm:gap-3 gap-2 flex-wrap sm:flex-nowrap">
                     <BlogTagFilter
                         availableTags={availableTags}
                         selectedTags={selectedTags}
@@ -115,7 +115,7 @@ export const BlogFilterBar = ({
                 {/* 결과 카운트 및 필터 초기화 */}
                 <div className="flex items-center gap-3 ml-auto">
                     <span
-                        className="text-sm text-zinc-600 dark:text-zinc-400 tabular-nums"
+                        className="text-[clamp(0.75rem,1vw,0.875rem)] text-zinc-600 dark:text-zinc-400 tabular-nums"
                         role="status"
                         aria-live="polite"
                     >

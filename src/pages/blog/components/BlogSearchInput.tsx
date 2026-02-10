@@ -60,7 +60,7 @@ export const BlogSearchInput = ({
                 onChange={(e) => onChange(e.target.value)}
                 onKeyDown={handleKeyDown}
                 className={[
-                    "w-full h-11 pl-10 pr-10",
+                    "w-full sm:h-11 h-9 pl-10 pr-10",
                     "rounded-2xl border",
                     "border-zinc-200/80 dark:border-zinc-800/50",
                     "bg-white dark:bg-zinc-900/50",

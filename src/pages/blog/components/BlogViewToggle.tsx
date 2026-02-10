@@ -16,7 +16,7 @@ export const BlogViewToggle = ({
             role="radiogroup"
             aria-label={t("pages.blog.view.label")}
             className={[
-                "inline-flex items-center gap-1 h-11 p-1",
+                "inline-flex items-center gap-1 sm:h-11 h-9 p-1",
                 "rounded-2xl border",
                 "border-zinc-200/80 dark:border-zinc-800/50",
                 "bg-zinc-100/50 dark:bg-zinc-900/50",

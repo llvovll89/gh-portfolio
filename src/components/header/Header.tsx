@@ -1,10 +1,12 @@
-import {Link, useNavigate} from "react-router-dom";
-import {routesPath} from "../../routes/route";
-import {useContext, useEffect, useState} from "react";
-import {GlobalStateContext} from "../../context/GlobalState.context";
-import {Theme} from "./theme/Theme";
-import {useRedirectionPage} from "../../hooks/useRedirectionPage";
-import {ThemeMode} from "../../context/constatns/Theme.type";
+import { Link, useNavigate } from "react-router-dom";
+import { routesPath } from "../../routes/route";
+import { useContext, useEffect, useState } from "react";
+import { GlobalStateContext } from "../../context/GlobalState.context";
+import { Theme } from "./theme/Theme";
+import { useRedirectionPage } from "../../hooks/useRedirectionPage";
+import { ThemeMode } from "../../context/constatns/Theme.type";
+import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
+import { LAYOUT_CONSTANTS } from "../../constants/layout";
 
 export const Header = () => {
     const {
@@ -17,6 +19,7 @@ export const Header = () => {
     const navigate = useNavigate();
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [currentTime, setCurrentTime] = useState(new Date());
+    const isMobileSize = useCheckedMobileSize();
 
     useRedirectionPage();
 
@@ -114,11 +117,11 @@ export const Header = () => {
             <header
                 className={`${backgroundClass} absolute top-0 right-0 h-10 border-b border-sub-gary/10 flex items-center justify-between z-20 overflow-x-auto scrolls`}
                 style={{
-                    width: `calc(100% - ${layoutState.resizeSidebarWidth}px)`,
+                    width: `calc(100% - ${isMobileSize ? LAYOUT_CONSTANTS.MOBILE_SIDEBAR_WIDTH : layoutState.resizeSidebarWidth}px)`,
                     ...backgroundStyle,
                 }}
             >
-                <ul className={`flex items-center h-full flex-1`}>
+                <ul className={`flex items-center h-full flex-1 overflow-x-auto`}>
                     {selectedPathState.list.map((path) => {
                         const route = routesPath.find((r) => r.path === path);
                         if (!route) return null;
@@ -131,13 +134,12 @@ export const Header = () => {
                                     }))
                                 }
                                 key={route.path}
-                                className={`${
-                                    selectedStyle(route.path).bgColor
-                                } min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[13px] flex items-center cursor-pointer user-select-none gap-1 justify-center`}
+                                className={`${selectedStyle(route.path).bgColor
+                                    } min-w-20 sm:min-w-24 md:min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[11px] sm:text-[12px] md:text-[13px] flex items-center cursor-pointer user-select-none gap-0.5 sm:gap-1 justify-center px-1.5 sm:px-2`}
                             >
-                                <span className="">📍</span>
+                                <span className="text-xs sm:text-sm">📍</span>
                                 <Link to={route.path} className="h-full">
-                                    <span className="h-full flex items-center">
+                                    <span className="h-full flex items-center whitespace-nowrap">
                                         {route.name}.tsx
                                     </span>
                                 </Link>
@@ -148,9 +150,9 @@ export const Header = () => {
                                         e.stopPropagation();
                                         handleClosePAth(route.path);
                                     }}
-                                    className="h-full w-4 cursor-pointer"
+                                    className="h-full w-3 sm:w-4 cursor-pointer"
                                 >
-                                    <span className="text-white text-xs">
+                                    <span className="text-white text-[11px] sm:text-xs">
                                         X
                                     </span>
                                 </button>
@@ -160,16 +162,17 @@ export const Header = () => {
                 </ul>
 
                 {/* 우측 컨트롤 버튼들 */}
-                <div className="flex items-center h-full border-l border-sub-gary/10">
+                <div className="flex items-center h-full border-l border-sub-gary/10 shrink-0">
                     {/* 뒤로 가기 버튼 */}
                     <button
                         onClick={() => navigate(-1)}
-                        className="h-full px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors"
+                        className="h-full px-1.5 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors"
                         title="뒤로 가기"
                     >
                         <svg
-                            width="16"
-                            height="16"
+                            width="14"
+                            height="14"
+                            className="sm:w-4 sm:h-4"
                             viewBox="0 0 16 16"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
@@ -184,15 +187,16 @@ export const Header = () => {
                         </svg>
                     </button>
 
-                    {/* 앞으로 가기 버튼 */}
+                    {/* 앞으로 가기 버튼 - 모바일에서 숨김 */}
                     <button
                         onClick={() => navigate(1)}
-                        className="h-full px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
+                        className="hidden sm:flex h-full px-1.5 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
                         title="앞으로 가기"
                     >
                         <svg
-                            width="16"
-                            height="16"
+                            width="14"
+                            height="14"
+                            className="sm:w-4 sm:h-4"
                             viewBox="0 0 16 16"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
@@ -210,12 +214,13 @@ export const Header = () => {
                     {/* 새로고침 버튼 */}
                     <button
                         onClick={() => window.location.reload()}
-                        className="h-full px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
+                        className="h-full px-1.5 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
                         title="새로고침"
                     >
                         <svg
-                            width="16"
-                            height="16"
+                            width="14"
+                            height="14"
+                            className="sm:w-4 sm:h-4"
                             viewBox="0 0 16 16"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
@@ -230,16 +235,17 @@ export const Header = () => {
                         </svg>
                     </button>
 
-                    {/* 풀스크린 토글 버튼 */}
+                    {/* 풀스크린 토글 버튼 - 모바일에서 숨김 */}
                     <button
                         onClick={toggleFullscreen}
-                        className="h-full px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
+                        className="hidden md:flex h-full px-1.5 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
                         title={isFullscreen ? "전체 화면 종료 (F11)" : "전체 화면 (F11)"}
                     >
                         {isFullscreen ? (
                             <svg
-                                width="16"
-                                height="16"
+                                width="14"
+                                height="14"
+                                className="sm:w-4 sm:h-4"
                                 viewBox="0 0 16 16"
                                 fill="none"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -253,8 +259,9 @@ export const Header = () => {
                             </svg>
                         ) : (
                             <svg
-                                width="16"
-                                height="16"
+                                width="14"
+                                height="14"
+                                className="sm:w-4 sm:h-4"
                                 viewBox="0 0 16 16"
                                 fill="none"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -270,7 +277,7 @@ export const Header = () => {
                     </button>
 
                     {/* 시계 */}
-                    <div className="h-full px-4 flex items-center text-white/90 font-bold text-sm select-none border-l border-sub-gary/10 user-select-none">
+                    <div className="h-full px-2 sm:px-3 md:px-4 flex items-center text-white/90 font-bold text-xs sm:text-sm select-none border-l border-sub-gary/10 user-select-none">
                         {formatTime(currentTime)}
                     </div>
                 </div>

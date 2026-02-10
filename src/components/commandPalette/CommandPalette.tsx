@@ -28,7 +28,7 @@ export const CommandPalette = () => {
         setIsVisibleCommandPalette,
         toggleKeyboardInfo,
     } = useContext(KeyboardContext);
-    const {setLayoutState, setSelectedNav} = useContext(GlobalStateContext);
+    const { setLayoutState, setSelectedNav } = useContext(GlobalStateContext);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedIndex, setSelectedIndex] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -169,7 +169,7 @@ export const CommandPalette = () => {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 pt-24"
+            className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 pt-12 sm:pt-16 md:pt-24 px-4"
             onClick={closeCommandPalette}
             role="dialog"
             aria-modal="true"
@@ -177,7 +177,7 @@ export const CommandPalette = () => {
         >
             <div
                 ref={containerRef}
-                className="w-full max-w-2xl rounded-lg bg-[#252526] shadow-2xl"
+                className="w-full max-w-sm sm:max-w-lg md:max-w-2xl rounded-lg bg-[#252526] shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* 검색 입력 */}
@@ -218,8 +218,8 @@ export const CommandPalette = () => {
                                 onClick={() => executeCommand(command)}
                                 onMouseEnter={() => setSelectedIndex(index)}
                                 className={`flex w-full items-center justify-between px-4 py-3 text-left transition-colors ${index === selectedIndex
-                                        ? "bg-[#094771] text-white"
-                                        : "text-[#cccccc] hover:bg-[#2a2d2e]"
+                                    ? "bg-[#094771] text-white"
+                                    : "text-[#cccccc] hover:bg-[#2a2d2e]"
                                     }`}
                                 role="option"
                                 aria-selected={index === selectedIndex}
