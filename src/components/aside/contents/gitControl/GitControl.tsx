@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ThemeMode } from "../../../../context/constatns/Theme.type";
 
-type RepoName = "gh-portfolio" | "modart" | "blacktie";
+type RepoName = "gh-portfolio" | "modart" | "blacktie" | "MealLog";
 
 type RepoStats = {
     stars: number;
@@ -86,13 +86,14 @@ type RepoState = {
 type TabType = "branches" | "issues" | "pullRequests";
 
 export const GitControl = () => {
-    const repos = useMemo(() => ["gh-portfolio", "modart", "blacktie"] as const, []);
+    const repos = useMemo(() => ["gh-portfolio", "modart", "blacktie", "MealLog"] as const, []);
     const { t } = useTranslation();
 
     const [gitStates, setGitStates] = useState<Record<RepoName, RepoState>>({
         "gh-portfolio": { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
         modart: { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
         blacktie: { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
+        MealLog: { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
     });
 
     const [selected, setSelected] = useState<{ repo: RepoName; branch: string } | null>(null);
@@ -268,9 +269,9 @@ export const GitControl = () => {
                             onClick={() => handleRepoClick(repo)}
                             className="px-3 py-2 bg-white/5 border-b border-sub-gary/20 cursor-pointer hover:bg-white/10 transition-colors"
                         >
-                            <div className="flex items-center justify-between">
-                                <span className="text-xs font-semibold">{repo}</span>
-                                <span className="text-[10px] text-white/50">
+                            <div className="flex items-center justify-between gap-2">
+                                <span className="text-xs font-semibold truncate">{repo}</span>
+                                <span className="text-[10px] text-white/50 flex-shrink-0">
                                     {selectedRepo === repo ? "▼" : "▶"}
                                 </span>
                             </div>
@@ -351,11 +352,11 @@ export const GitControl = () => {
                                                             : "border-sub-gary/20"
                                                         }`}
                                                 >
-                                                    <div className="w-full flex items-center justify-between">
-                                                        <span>{branch}</span>
+                                                    <div className="w-full flex items-center justify-between gap-2">
+                                                        <span className="truncate">{branch}</span>
 
                                                         {isSelected(repo, branch) && gitStates[repo].commits.length > 0 && (
-                                                            <span className="text-[10px]">
+                                                            <span className="text-[10px] flex-shrink-0">
                                                                 {t("gitControl.commits")} {gitStates[repo].commits.length}
                                                             </span>
                                                         )}
@@ -390,13 +391,14 @@ export const GitControl = () => {
                                                                         key={commit.sha}
                                                                         className="w-full py-2 flex flex-col border-b border-sub-gary/20 hover:bg-sub-gary/10 cursor-default gap-[6px] text-[10px]"
                                                                     >
-                                                                        <div className="w-full flex items-center justify-between">
-                                                                            <div className="flex items-center gap-1">
+                                                                        <div className="w-full flex items-center justify-between gap-2">
+                                                                            <div className="flex items-center gap-1 min-w-0 flex-1">
                                                                                 {profileUrl && avatarUrl ? (
                                                                                     <Link
                                                                                         to={profileUrl}
                                                                                         target="_blank"
                                                                                         title={t("gitControl.viewProfile")}
+                                                                                        className="flex-shrink-0"
                                                                                     >
                                                                                         <img
                                                                                             src={avatarUrl}
@@ -406,12 +408,12 @@ export const GitControl = () => {
                                                                                     </Link>
                                                                                 ) : null}
 
-                                                                                <span>{authorName}</span>
+                                                                                <span className="truncate">{authorName}</span>
                                                                             </div>
-                                                                            <span>{dateStr}</span>
+                                                                            <span className="flex-shrink-0">{dateStr}</span>
                                                                         </div>
 
-                                                                        <p className="text-[12px] font-bold">
+                                                                        <p className="text-[12px] font-bold line-clamp-2">
                                                                             {commit?.commit?.message}
                                                                         </p>
 
@@ -457,20 +459,20 @@ export const GitControl = () => {
                                                             ) : (
                                                                 <div className="w-6 h-6 rounded-full bg-sub-gary/30" />
                                                             )}
-                                                            <div className="flex-1">
+                                                            <div className="flex-1 min-w-0">
                                                                 <div className="flex items-center gap-2 mb-1">
-                                                                    <span className={`text-[10px] px-2 py-0.5 rounded ${
+                                                                    <span className={`text-[10px] px-2 py-0.5 rounded flex-shrink-0 ${
                                                                         issue.state === "open"
                                                                             ? "bg-green-500/20 text-green-400"
                                                                             : "bg-purple-500/20 text-purple-400"
                                                                     }`}>
                                                                         {issue.state}
                                                                     </span>
-                                                                    <span className="text-[10px] text-white/50">
+                                                                    <span className="text-[10px] text-white/50 flex-shrink-0">
                                                                         #{issue.number}
                                                                     </span>
                                                                 </div>
-                                                                <p className="text-xs font-medium mb-1">{issue.title}</p>
+                                                                <p className="text-xs font-medium mb-1 line-clamp-2">{issue.title}</p>
                                                                 {issue.labels.length > 0 && (
                                                                     <div className="flex flex-wrap gap-1">
                                                                         {issue.labels.slice(0, 3).map((label) => (
@@ -523,9 +525,9 @@ export const GitControl = () => {
                                                             ) : (
                                                                 <div className="w-6 h-6 rounded-full bg-sub-gary/30" />
                                                             )}
-                                                            <div className="flex-1">
-                                                                <div className="flex items-center gap-2 mb-1">
-                                                                    <span className={`text-[10px] px-2 py-0.5 rounded ${
+                                                            <div className="flex-1 min-w-0">
+                                                                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                                                                    <span className={`text-[10px] px-2 py-0.5 rounded flex-shrink-0 ${
                                                                         pr.state === "open"
                                                                             ? "bg-green-500/20 text-green-400"
                                                                             : pr.state === "closed"
@@ -535,15 +537,15 @@ export const GitControl = () => {
                                                                         {pr.state}
                                                                     </span>
                                                                     {pr.draft && (
-                                                                        <span className="text-[10px] px-2 py-0.5 rounded bg-gray-500/20 text-gray-400">
+                                                                        <span className="text-[10px] px-2 py-0.5 rounded bg-gray-500/20 text-gray-400 flex-shrink-0">
                                                                             draft
                                                                         </span>
                                                                     )}
-                                                                    <span className="text-[10px] text-white/50">
+                                                                    <span className="text-[10px] text-white/50 flex-shrink-0">
                                                                         #{pr.number}
                                                                     </span>
                                                                 </div>
-                                                                <p className="text-xs font-medium mb-1">{pr.title}</p>
+                                                                <p className="text-xs font-medium mb-1 line-clamp-2">{pr.title}</p>
                                                                 <p className="text-[10px] text-white/50">
                                                                     {new Date(pr.created_at).toLocaleDateString()}
                                                                 </p>

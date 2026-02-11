@@ -1,13 +1,14 @@
 import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
-import { CommonPageHeader } from "../common/innerHeader/CommonPageHeader";
 import { FaReact, FaGithub, FaFigma } from "react-icons/fa";
 import { TbBrandTypescript, TbBrandVscode } from "react-icons/tb";
-import { SiNotion, SiPostman, SiSlack, SiTailwindcss } from "react-icons/si";
+import { SiPostman, SiSlack, SiTailwindcss, SiPostgresql, SiOracle, SiJira } from "react-icons/si";
 import { BiLogoSpringBoot } from "react-icons/bi";
+import { useTranslation } from "react-i18next";
 
 export const Uses = () => {
+    const { t } = useTranslation();
     const toolCategories = [
         {
             title: "개발 도구",
@@ -69,6 +70,18 @@ export const Uses = () => {
                     description: "백엔드 프레임워크",
                     link: "https://spring.io/projects/spring-boot",
                 },
+                {
+                    name: "PostgreSQL",
+                    icon: SiPostgresql,
+                    description: "오픈소스 관계형 데이터베이스",
+                    link: "https://www.postgresql.org/",
+                },
+                {
+                    name: "Oracle",
+                    icon: SiOracle,
+                    description: "엔터프라이즈 데이터베이스",
+                    link: "https://www.oracle.com/database/",
+                },
             ],
         },
         {
@@ -86,10 +99,10 @@ export const Uses = () => {
                     link: "https://www.figma.com/",
                 },
                 {
-                    name: "Notion",
-                    icon: SiNotion,
-                    description: "문서화 및 노트",
-                    link: "https://www.notion.so/",
+                    name: "Jira",
+                    icon: SiJira,
+                    description: "프로젝트 관리 및 이슈 트래킹",
+                    link: "https://www.atlassian.com/software/jira",
                 },
                 {
                     name: "Slack",
@@ -106,26 +119,7 @@ export const Uses = () => {
             <Header />
             <Aside />
             <Contents className="select-none">
-                <CommonPageHeader />
-                <section className="relative w-full max-w-6xl mx-auto overflow-auto scrolls px-2 md:px-6 py-4 md:py-8">
-                    {/* 헤더 */}
-                    <div className="relative mb-8 md:mb-12">
-                        <div className="flex items-center gap-3 mb-3">
-                            <div className="p-2 bg-primary/10 rounded-lg">
-                                <span className="text-2xl">🔧</span>
-                            </div>
-                            <h1 className="text-[clamp(1.8rem,3vw,2.5rem)] font-extrabold tracking-tight text-white/90">
-                                사용 도구
-                            </h1>
-                        </div>
-                        <p className="text-sm md:text-base text-white/70 max-w-2xl leading-relaxed">
-                            제가 일상적으로 사용하는 개발 도구, 기술 스택, 협업 도구들을 소개합니다.
-                        </p>
-
-                        {/* 구분선 */}
-                        <div className="mt-6 h-px w-full bg-linear-to-r from-transparent via-primary/30 to-transparent" />
-                    </div>
-
+                <section className="relative w-full max-w-7xl mx-auto overflow-auto scrolls px-2 md:px-6 py-4 md:py-8">
                     {/* 도구 카테고리 */}
                     <div className="space-y-8 md:space-y-12">
                         {toolCategories.map((category, idx) => (

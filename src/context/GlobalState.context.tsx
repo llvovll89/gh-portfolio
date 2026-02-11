@@ -34,6 +34,8 @@ interface GlobalStateContextProps {
     setSelectedNav: React.Dispatch<React.SetStateAction<NavType | null>>;
     selectedTheme: SelectedThemeState;
     setSelectedTheme: React.Dispatch<React.SetStateAction<SelectedThemeState>>;
+    isTerminalVisible: boolean;
+    setIsTerminalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const GlobalStateContext = createContext<GlobalStateContextProps>({
@@ -53,6 +55,8 @@ export const GlobalStateContext = createContext<GlobalStateContextProps>({
         isVisibleThemeDropdown: false,
     },
     setSelectedTheme: () => {},
+    isTerminalVisible: false,
+    setIsTerminalVisible: () => {},
 });
 
 export const GlobalStateProvider = ({
@@ -92,6 +96,7 @@ export const GlobalStateProvider = ({
     });
 
     const [selectedNav, setSelectedNav] = useState<NavType | null>(null);
+    const [isTerminalVisible, setIsTerminalVisible] = useState<boolean>(false);
 
     // 테마 변경 시 localStorage에 저장
     useEffect(() => {
@@ -118,6 +123,8 @@ export const GlobalStateProvider = ({
                 setSelectedNav,
                 selectedTheme,
                 setSelectedTheme,
+                isTerminalVisible,
+                setIsTerminalVisible,
             }}
         >
             {children}

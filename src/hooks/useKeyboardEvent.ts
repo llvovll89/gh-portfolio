@@ -26,7 +26,7 @@ export const useKeyboardEvent = () => {
         setSubmitCliCommand,
         setIsVisibleCommandPalette,
     } = useContext(KeyboardContext);
-    const { setLayoutState, setSelectedNav } = useContext(GlobalStateContext);
+    const { setLayoutState, setSelectedNav, setIsTerminalVisible } = useContext(GlobalStateContext);
 
     /**
      * 키보드 이벤트 핸들러
@@ -48,9 +48,9 @@ export const useKeyboardEvent = () => {
             }
 
             // 레이아웃 관련 핸들러
-            handleToggleFooterUI(event, setLayoutState);
+            handleToggleFooterUI(event, setLayoutState, setIsTerminalVisible);
             handleToggleSidebarUI(event, setLayoutState);
-            handleTogglePanelUI(event, setLayoutState);
+            handleTogglePanelUI(event, setLayoutState, setIsTerminalVisible);
 
             // 네비게이션 관련 핸들러
             handleActiveFolderUI(event, setSelectedNav);
@@ -79,6 +79,7 @@ export const useKeyboardEvent = () => {
             setIsVisibleKeyboardInfo,
             setSubmitCliCommand,
             setIsVisibleCommandPalette,
+            setIsTerminalVisible,
         ],
     );
 

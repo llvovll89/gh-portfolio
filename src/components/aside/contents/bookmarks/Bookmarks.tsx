@@ -151,11 +151,11 @@ export const Bookmarks = () => {
                                 <li key={page.path}>
                                     <button
                                         onClick={() =>
-                                            handleAddBookmark(page.path, page.name)
+                                            handleAddBookmark(page.path, t(page.name))
                                         }
                                         className="w-full text-left px-2 py-1.5 text-xs bg-sub-gary/20 text-white rounded hover:bg-primary/20 transition-colors"
                                     >
-                                        {page.name}
+                                        {t(page.name)}
                                     </button>
                                 </li>
                             ))}

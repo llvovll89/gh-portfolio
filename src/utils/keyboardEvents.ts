@@ -13,32 +13,44 @@ import type {
     LayoutStateHandler,
     MultiStateHandler,
     NavStateHandler,
+    TerminalStateHandler,
 } from "@/types/Keyboard.types";
 
 /**
  * Footer UI 토글 핸들러
  * @param event 키보드 이벤트
  * @param setLayoutState 레이아웃 전역 state
- * @description Ctrl + ` 로 footer를 열고 닫음
+ * @param setIsTerminalVisible 터미널 표시 상태
+ * @description Ctrl + ` 로 터미널을 열고 닫음
  */
-export const handleToggleFooterUI: LayoutStateHandler = (
+export const handleToggleFooterUI: TerminalStateHandler = (
     event,
     setLayoutState,
+    setIsTerminalVisible,
 ) => {
     const combo = DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_FOOTER];
 
     if (matchesKeyCombination(event, combo)) {
         event.preventDefault();
 
-        setLayoutState((prev) => {
-            const isOpen =
-                prev.resizeFooterHeight > LAYOUT_HEIGHTS.FOOTER_COLLAPSED;
-            return {
-                ...prev,
-                resizeFooterHeight: isOpen
-                    ? LAYOUT_HEIGHTS.FOOTER_COLLAPSED
-                    : LAYOUT_HEIGHTS.FOOTER_OPEN,
-            };
+        setIsTerminalVisible((prev) => {
+            const newVisibility = !prev;
+
+            if (newVisibility) {
+                // 터미널을 표시하고 열기
+                setLayoutState((prevLayout) => ({
+                    ...prevLayout,
+                    resizeFooterHeight: LAYOUT_HEIGHTS.FOOTER_OPEN,
+                }));
+            } else {
+                // 터미널 숨기기
+                setLayoutState((prevLayout) => ({
+                    ...prevLayout,
+                    resizeFooterHeight: LAYOUT_HEIGHTS.FOOTER_COLLAPSED,
+                }));
+            }
+
+            return newVisibility;
         });
     }
 };
@@ -195,26 +207,37 @@ export const handleToggleSidebarUI: LayoutStateHandler = (
  * 하단 패널 토글 핸들러 (새로운 단축키)
  * @param event 키보드 이벤트
  * @param setLayoutState 레이아웃 전역 state
+ * @param setIsTerminalVisible 터미널 표시 상태
  * @description Ctrl + J로 하단 패널을 토글함 (footer와 유사)
  */
-export const handleTogglePanelUI: LayoutStateHandler = (
+export const handleTogglePanelUI: TerminalStateHandler = (
     event,
     setLayoutState,
+    setIsTerminalVisible,
 ) => {
     const combo = DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_PANEL];
 
     if (matchesKeyCombination(event, combo)) {
         event.preventDefault();
 
-        setLayoutState((prev) => {
-            const isOpen =
-                prev.resizeFooterHeight > LAYOUT_HEIGHTS.FOOTER_COLLAPSED;
-            return {
-                ...prev,
-                resizeFooterHeight: isOpen
-                    ? LAYOUT_HEIGHTS.FOOTER_COLLAPSED
-                    : LAYOUT_HEIGHTS.FOOTER_OPEN,
-            };
+        setIsTerminalVisible((prev) => {
+            const newVisibility = !prev;
+
+            if (newVisibility) {
+                // 터미널을 표시하고 열기
+                setLayoutState((prevLayout) => ({
+                    ...prevLayout,
+                    resizeFooterHeight: LAYOUT_HEIGHTS.FOOTER_OPEN,
+                }));
+            } else {
+                // 터미널 숨기기
+                setLayoutState((prevLayout) => ({
+                    ...prevLayout,
+                    resizeFooterHeight: LAYOUT_HEIGHTS.FOOTER_COLLAPSED,
+                }));
+            }
+
+            return newVisibility;
         });
     }
 };

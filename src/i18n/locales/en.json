@@ -169,7 +169,25 @@
         "total": "{{count}} posts",
         "filtered": "{{filtered}} / {{total}} shown"
       }
+    },
+    "resume": {
+      "title": "Resume",
+      "description": "Check out my experience and tech stack."
+    },
+    "uses": {
+      "title": "Uses",
+      "description": "Here are the development tools, tech stacks, and collaboration tools I use daily."
     }
+  },
+  "routes": {
+    "default": "Default",
+    "projects": "Projects",
+    "blog": "Blog",
+    "blogDetail": "Blog Detail",
+    "resume": "Resume",
+    "uses": "Uses",
+    "contact": "Contact",
+    "notFound": "Not Found"
   },
   "common": {
     "add": "Add",

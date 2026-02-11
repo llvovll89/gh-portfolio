@@ -26,11 +26,11 @@ export const MessageCardForm = () => {
         <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-3 md:p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_18px_60px_rgba(0,0,0,0.45)] space-y-5">
             {/* 헤더 */}
             <div className="pb-4 border-b border-white/10">
-                <h2 className="text-xl md:text-2xl font-bold flex items-center gap-2">
+                <h2 className="text-[clamp(1rem,2vw,1.25rem)] md:text-2xl font-bold flex items-center gap-2">
                     <HiChatAlt2 className="w-5 h-5 text-primary" />
                     {t("pages.contact.messageForm.title")}
                 </h2>
-                <p className="mt-2 text-sm text-white/70">
+                <p className="mt-2 text-[clamp(0.75rem,1vw,0.9rem)] text-white/70">
                     {t("pages.contact.messageForm.description")}
                 </p>
             </div>
@@ -45,7 +45,7 @@ export const MessageCardForm = () => {
                     <input
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="rounded-xl border border-white/10 bg-gradient-to-br from-black/30 to-black/10 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/30 transition-all placeholder:text-white/30"
+                        className="rounded-xl border border-white/10 bg-gradient-to-br from-black/30 to-black/10 sm:px-4 px-3 sm:py-3 py-2 outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/30 transition-all placeholder:text-white/30"
                         placeholder={t("pages.contact.messageForm.namePlaceholder")}
                         autoComplete="name"
                     />
@@ -59,7 +59,7 @@ export const MessageCardForm = () => {
                     <input
                         value={fromEmail}
                         onChange={(e) => setFromEmail(e.target.value)}
-                        className="rounded-xl border border-white/10 bg-gradient-to-br from-black/30 to-black/10 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/30 transition-all placeholder:text-white/30"
+                        className="rounded-xl border border-white/10 bg-linear-to-br from-black/30 to-black/10 sm:px-4 px-3 sm:py-3 py-2 outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/30 transition-all placeholder:text-white/30"
                         placeholder={t("pages.contact.messageForm.emailPlaceholder")}
                         autoComplete="email"
                         inputMode="email"
@@ -74,7 +74,7 @@ export const MessageCardForm = () => {
                     <textarea
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        className="min-h-40 md:min-h-36 resize-y rounded-xl border border-white/10 bg-gradient-to-br from-black/30 to-black/10 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/30 transition-all placeholder:text-white/30"
+                        className="min-h-40 md:min-h-36 resize-y rounded-xl border border-white/10 bg-linear-to-br from-black/30 to-black/10 sm:px-4 px-3 sm:py-3 py-2 outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/30 transition-all text-[clamp(0.75rem,1vw,0.875rem)] placeholder:text-white/30"
                         placeholder={t("pages.contact.messageForm.messagePlaceholder")}
                     />
                 </label>
@@ -84,7 +84,7 @@ export const MessageCardForm = () => {
                     <button
                         type="button"
                         onClick={handleReset}
-                        className="rounded-xl border border-white/10 bg-gradient-to-r from-black/30 to-black/10 px-4 py-2.5 text-sm font-medium text-white/80 hover:border-white/20 hover:bg-white/5 transition-all active:scale-95 flex items-center gap-2"
+                        className="rounded-xl border border-white/10 bg-linear-to-r from-black/30 to-black/10 flex-1 sm:px-4 px-3 sm:py-2.5 py-2 text-sm font-medium text-white/80 hover:border-white/20 hover:bg-white/5 transition-all active:scale-95 flex items-center justify-center gap-2"
                     >
                         <HiRefresh className="w-4 h-4" />
                         {t("pages.contact.messageForm.reset")}
@@ -92,7 +92,7 @@ export const MessageCardForm = () => {
 
                     <a
                         href={mailtoHref}
-                        className="rounded-xl bg-gradient-to-r from-primary to-primary/80 px-5 py-2.5 text-sm font-semibold text-white hover:from-primary/90 hover:to-primary/70 transition-all active:scale-95 flex items-center gap-2 shadow-lg shadow-primary/20"
+                        className="rounded-xl bg-linear-to-r from-primary to-primary/80 sm:px-5 px-4 sm:py-2.5 py-2 text-sm font-semibold text-white hover:from-primary/90 hover:to-primary/70 transition-all active:scale-95 flex items-center gap-2 shadow-lg shadow-primary/20"
                     >
                         <HiPaperAirplane className="w-4 h-4" />
                         {t("pages.contact.messageForm.send")}
@@ -100,7 +100,7 @@ export const MessageCardForm = () => {
                 </div>
 
                 {/* 안내 문구 */}
-                <div className="flex items-start gap-2 rounded-lg bg-primary/5 border border-primary/20 px-3 py-2.5">
+                <div className="flex items-start gap-2 rounded-lg bg-primary/5 border border-primary/20 sm:px-3 px-2 sm:py-2.5 py-2">
                     <HiInformationCircle className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
                     <p className="text-xs text-white/60">
                         {t("pages.contact.messageForm.infoNotice")}

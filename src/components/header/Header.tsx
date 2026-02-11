@@ -139,7 +139,7 @@ export const Header = () => {
                             >
                                 <span className="text-xs sm:text-sm">📍</span>
                                 <Link to={route.path} className="h-full">
-                                    <span className="h-full flex items-center whitespace-nowrap">
+                                    <span className="h-full flex items-center whitespace-nowrap overflow-hidden text-ellipsis">
                                         {route.name}.tsx
                                     </span>
                                 </Link>
@@ -150,11 +150,24 @@ export const Header = () => {
                                         e.stopPropagation();
                                         handleClosePAth(route.path);
                                     }}
-                                    className="h-full w-3 sm:w-4 cursor-pointer"
+                                    className="h-full w-3 sm:w-4 flex items-center justify-center cursor-pointer hover:bg-sub-gary/30 rounded transition-colors"
+                                    title="닫기"
                                 >
-                                    <span className="text-white text-[11px] sm:text-xs">
-                                        X
-                                    </span>
+                                    <svg
+                                        width="10"
+                                        height="10"
+                                        className="sm:w-3 sm:h-3"
+                                        viewBox="0 0 16 16"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            d="M12 4L4 12M4 4L12 12"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                        />
+                                    </svg>
                                 </button>
                             </li>
                         );

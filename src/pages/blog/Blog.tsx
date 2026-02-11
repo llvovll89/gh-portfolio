@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
-import { CommonPageHeader } from "../common/innerHeader/CommonPageHeader";
 import { loadPosts } from "../../utils/loadPosts";
 import { BlogCard } from "./contents/BlogCard";
 import { BlogFilterBar } from "./components/BlogFilterBar";
@@ -94,8 +93,6 @@ export const Blog = () => {
             <Header />
             <Aside />
             <Contents>
-                <CommonPageHeader />
-
                 <div className="flex flex-col h-[calc(100vh-8rem)] sm:py-4 py-1 md:px-0 px-2">
                     {/* 고정 헤더 및 필터바 */}
                     <div className="flex-none mb-6">

@@ -64,6 +64,12 @@ export type MultiStateHandler = (
     setIsVisibleKeyboardInfo: React.Dispatch<React.SetStateAction<boolean>>,
 ) => void;
 
+export type TerminalStateHandler = (
+    event: KeyboardEvent,
+    setLayoutState: React.Dispatch<React.SetStateAction<LayoutState>>,
+    setIsTerminalVisible: React.Dispatch<React.SetStateAction<boolean>>,
+) => void;
+
 /**
  * 키보드 설정 저장 타입
  */

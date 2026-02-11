@@ -17,7 +17,7 @@ export const MainContents = () => {
     }, []);
 
     const baseButton =
-        "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl px-6 py-3.5 text-sm md:text-base font-bold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2";
+        "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl sm:px-6 px-4 sm:py-3.5 py-2 text-sm md:text-base font-bold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2";
 
     const primaryButton =
         `${baseButton} bg-linear-to-r from-primary via-blue-500 to-cyan-400 text-white shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:scale-105 active:scale-95`;
@@ -33,7 +33,7 @@ export const MainContents = () => {
     ];
 
     return (
-        <article className="relative z-10 w-full h-full lg:p-8 md:p-6 p-2 overflow-x-hidden overflow-y-auto scrolls">
+        <article className="relative z-10 w-full h-full sm:px-0 px-1">
             {/* 배경 그라디언트 효과 - 마우스 따라 움직임 */}
             <div
                 aria-hidden="true"
@@ -78,7 +78,7 @@ export const MainContents = () => {
                                 </span>
                             </div>
                             <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-md px-4 py-2 text-sm font-semibold text-white/90 shadow-lg">
-                                Frontend Developer
+                                Web Developer
                             </span>
                         </div>
 
@@ -101,38 +101,38 @@ export const MainContents = () => {
                             </h1>
                         </div>
 
-                        <p className="text-[clamp(1rem,1.4vw,1.3rem)] text-white/80 leading-relaxed max-w-2xl font-medium animate-[fadeIn_1s_ease-out_0.3s] opacity-0 [animation-fill-mode:forwards]">
+                        <p className="text-[clamp(0.9rem,1.4vw,1.3rem)] text-white/80 leading-relaxed max-w-2xl font-medium animate-[fadeIn_1s_ease-out_0.3s] opacity-0 [animation-fill-mode:forwards]">
                             사용자가 <span className="text-primary font-bold">"편하게"</span> 느끼는 경험을 목표로,
                             <br />
-                            빠르고 일관된 UI를 만들고 유지보수 가능한 프론트엔드를 지향합니다.
+                            빠르고 일관된 UI를 만들고 유지보수 가능한 웹 개발자를 지향합니다.
                         </p>
                     </div>
 
-                    <div className="space-y-2 text-[clamp(0.9rem,1.1vw,1.05rem)] text-white/70 leading-relaxed max-w-xl animate-[fadeIn_1.2s_ease-out_0.5s] opacity-0 [animation-fill-mode:forwards]">
+                    <div className="space-y-2 text-[clamp(0.8rem,1.1vw,1rem)] text-white/70 leading-relaxed max-w-xl animate-[fadeIn_1.2s_ease-out_0.5s] opacity-0 [animation-fill-mode:forwards]">
                         <p className="flex items-start gap-2">
-                            <span className="text-primary mt-1">▹</span>
+                            <span className="text-primary sm:mt-1 mt-0">▹</span>
                             <span>저의 웹 사이트에 오신 것을 환영합니다.</span>
                         </p>
                         <p className="flex items-start gap-2">
-                            <span className="text-primary mt-1">▹</span>
+                            <span className="text-primary sm:mt-1 mt-0">▹</span>
                             <span>이곳은 제가 개발한 프로젝트와 기술 블로그를 공유하는 공간입니다.</span>
                         </p>
                         <p className="flex items-start gap-2">
-                            <span className="text-primary mt-1">▹</span>
+                            <span className="text-primary sm:mt-1 mt-0">▹</span>
                             <span>다양한 기술 스택과 개발 경험을 바탕으로 유용한 정보를 제공하고자 합니다.</span>
                         </p>
                         <p className="flex items-start gap-2 text-white/85 font-medium">
-                            <span className="text-cyan-400 mt-1">✦</span>
+                            <span className="text-cyan-400 sm:mt-1 mt-0">✦</span>
                             <span>편안하게 둘러보시고 궁금한 점이 있으면 언제든지 연락 주세요!</span>
                         </p>
                     </div>
 
-                    <div className="flex flex-wrap gap-3 animate-[fadeIn_1.4s_ease-out_0.7s] opacity-0 [animation-fill-mode:forwards]">
+                    <div className="flex flex-wrap sm:gap-3 gap-2 animate-[fadeIn_1.4s_ease-out_0.7s] opacity-0 [animation-fill-mode:forwards]">
                         {skills.map((skill) => (
                             <div
                                 key={skill.text}
                                 style={{ animationDelay: skill.delay }}
-                                className="group relative overflow-hidden rounded-xl border border-white/15 bg-white/5 backdrop-blur-sm px-4 py-2 text-sm font-semibold text-white/80 transition-all duration-300 hover:bg-white/10 hover:border-primary/50 hover:scale-110 hover:text-white cursor-default"
+                                className="group relative overflow-hidden rounded-xl border border-white/15 bg-white/5 backdrop-blur-sm px-4 py-2 text-[clamp(0.8rem,1.1vw,1rem)] font-semibold text-white/80 transition-all duration-300 hover:bg-white/10 hover:border-primary/50 hover:scale-110 hover:text-white cursor-default"
                             >
                                 <div className="absolute inset-0 bg-linear-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 <span className="relative flex items-center gap-2">
@@ -143,13 +143,13 @@ export const MainContents = () => {
                         ))}
                     </div>
 
-                    <div className="flex flex-wrap gap-4 pt-4 animate-[fadeIn_1.6s_ease-out_0.9s] opacity-0 [animation-fill-mode:forwards]">
+                    <div className="flex flex-wrap sm:gap-4 gap-3 sm:pt-4 pt-2 animate-[fadeIn_1.6s_ease-out_0.9s] opacity-0 [animation-fill-mode:forwards]">
                         <button
                             onClick={() => handlePushPath(PROJECTS)}
                             className={primaryButton}
                             aria-label="Go to Projects"
                         >
-                            <span className="relative z-10 flex items-center gap-2">
+                            <span className="relative z-10 flex items-center gap-2 text-[clamp(0.8rem,1.1vw,1rem)]">
                                 View Projects
                                 <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -163,7 +163,7 @@ export const MainContents = () => {
                             className={secondaryButton}
                             aria-label="Go to Contact"
                         >
-                            <span className="relative z-10 flex items-center gap-2">
+                            <span className="relative z-10 flex items-center gap-2 text-[clamp(0.8rem,1.1vw,1rem)]">
                                 Get in Touch
                                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />

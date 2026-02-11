@@ -38,10 +38,13 @@ export const Aside = () => {
         }
     };
 
+    const NAVBAR_WIDTH = 40;
+    const CONTENT_WIDTH = 210;
+
     useEffect(() => {
         setLayoutState((prev) => ({
             ...prev,
-            resizeSidebarWidth: selectedNav ? 250 : 40,
+            resizeSidebarWidth: selectedNav ? NAVBAR_WIDTH + CONTENT_WIDTH : NAVBAR_WIDTH,
         }));
     }, [selectedNav]);
 
@@ -52,15 +55,19 @@ export const Aside = () => {
                 width: layoutState.resizeSidebarWidth,
                 ...backgroundStyle,
             }}
-            className={`translate-x-0 absolute left-0 top-0 h-screen transition-transform ease-in-out ${backgroundClass} border-r border-sub-gary/30 flex z-20`}
+            className={`translate-x-0 absolute left-0 top-0 h-dvh transition-transform ease-in-out ${backgroundClass} flex z-20`}
         >
             <Navbar selectedNav={selectedNav} onClickNav={handleClickNav} />
 
-            {selectedNav === NavType.FOLDER && <Folder />}
-            {selectedNav === NavType.GIT_CONTROL && <GitControl />}
-            {selectedNav === NavType.SEARCH && <Search />}
-            {selectedNav === NavType.BOOKMARKS && <Bookmarks />}
-            {selectedNav === NavType.SETTINGS && <Settings />}
+            {selectedNav && (
+                <div className="flex-1 overflow-hidden">
+                    {selectedNav === NavType.FOLDER && <Folder />}
+                    {selectedNav === NavType.GIT_CONTROL && <GitControl />}
+                    {selectedNav === NavType.SEARCH && <Search />}
+                    {selectedNav === NavType.BOOKMARKS && <Bookmarks />}
+                    {selectedNav === NavType.SETTINGS && <Settings />}
+                </div>
+            )}
 
             {selectedNav && (
                 <div

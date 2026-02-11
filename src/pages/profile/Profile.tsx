@@ -1,7 +1,6 @@
 import {Aside} from "../../components/aside/Aside";
 import {Contents} from "../../components/contents/Contents";
 import {Header} from "../../components/header/Header";
-import {CommonPageHeader} from "../common/innerHeader/CommonPageHeader";
 import {Skills} from "./contents/Skills";
 import {Education} from "./contents/Education";
 import {PersonalHistory} from "./contents/PersonalHistory";
@@ -12,7 +11,6 @@ export const Profile = () => {
             <Header />
             <Aside />
             <Contents className="select-none">
-                <CommonPageHeader />
                 <section className="w-full h-full md:pt-8 md:pb-8 pt-4 pb-6 md:px-4 px-1 flex md:flex-row flex-col gap-6 overflow-auto scrolls">
                     {/* 왼쪽: 프로필 카드 */}
                     <section className="md:w-[40%] w-full h-full flex gap-4 items-start justify-center">

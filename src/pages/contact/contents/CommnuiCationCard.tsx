@@ -137,19 +137,19 @@ export const CommunicationCard = () => {
             <div className="grid gap-3">
                 <a
                     href={`mailto:${EMAIL}`}
-                    className="group rounded-xl border border-white/10 bg-linear-to-r from-black/30 to-black/10 p-4 hover:border-primary/30 hover:bg-primary/5 transition-all active:scale-[0.99]"
+                    className="group rounded-xl border border-white/10 bg-linear-to-r from-black/30 to-black/10 sm:p-4 p-2 hover:border-primary/30 hover:bg-primary/5 transition-all active:scale-[0.99]"
                 >
                     <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors shrink-0">
                             <HiMail className="w-5 h-5 text-primary" />
                         </div>
                         <div className="min-w-0 flex-1">
                             <p className="text-xs text-white/50 font-medium">Email</p>
-                            <p className="mt-0.5 font-semibold text-white break-all truncate">
+                            <p className="mt-0.5 font-semibold text-white text-xs sm:text-sm truncate">
                                 {EMAIL}
                             </p>
                         </div>
-                        <span className="text-xs text-white/60 group-hover:text-primary transition-colors shrink-0">
+                        <span className="hidden sm:inline text-xs text-white/60 group-hover:text-primary transition-colors shrink-0">
                             {t("pages.contact.communicationCard.sendAction")}
                         </span>
                     </div>
@@ -159,19 +159,19 @@ export const CommunicationCard = () => {
                     href={GITHUB}
                     target="_blank"
                     rel="noreferrer"
-                    className="group rounded-xl border border-white/10 bg-gradient-to-r from-black/30 to-black/10 p-4 hover:border-primary/30 hover:bg-primary/5 transition-all active:scale-[0.99]"
+                    className="group rounded-xl border border-white/10 bg-gradient-to-r from-black/30 to-black/10 sm:p-4 p-2 hover:border-primary/30 hover:bg-primary/5 transition-all active:scale-[0.99]"
                 >
                     <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors shrink-0">
                             <FaGithub className="w-5 h-5 text-primary" />
                         </div>
                         <div className="min-w-0 flex-1">
                             <p className="text-xs text-white/50 font-medium">GitHub</p>
-                            <p className="mt-0.5 font-semibold text-white break-all truncate">
+                            <p className="mt-0.5 font-semibold text-white text-xs sm:text-sm truncate">
                                 {GITHUB}
                             </p>
                         </div>
-                        <span className="text-xs text-white/60 group-hover:text-primary transition-colors shrink-0">
+                        <span className="hidden sm:inline text-xs text-white/60 group-hover:text-primary transition-colors shrink-0">
                             {t("pages.contact.communicationCard.openAction")}
                         </span>
                     </div>
@@ -179,7 +179,7 @@ export const CommunicationCard = () => {
             </div>
 
             {/* 관심/태그 */}
-            <div className="rounded-xl border border-white/10 bg-gradient-to-br from-black/30 to-black/10 p-4 space-y-3">
+            <div className="rounded-xl border border-white/10 bg-gradient-to-br from-black/30 to-black/10 sm:p-4 p-3 space-y-3">
                 <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                     <p className="text-sm text-white/70">

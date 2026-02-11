@@ -1,20 +1,30 @@
 import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
-import { CommonPageHeader } from "../common/innerHeader/CommonPageHeader";
 import { HiDocumentDownload } from "react-icons/hi";
 import { FaFilePdf } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 export const Resume = () => {
-    const handleDownloadResume = () => {
-        // 실제 이력서 PDF 파일 경로로 수정하세요
-        const resumeUrl = "/assets/resume/김건호_이력서.pdf";
-        const link = document.createElement("a");
-        link.href = resumeUrl;
-        link.download = "김건호_이력서.pdf";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+    const { t } = useTranslation();
+
+    const handleDownloadResume = async () => {
+        try {
+            const resumeUrl = "/assets/resume/김건호_이력서.pdf";
+            const response = await fetch(resumeUrl);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "김건호_이력서.pdf";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("이력서 다운로드 실패:", error);
+            alert("이력서 다운로드에 실패했습니다.");
+        }
     };
 
     const sections = [
@@ -32,15 +42,15 @@ export const Resume = () => {
             icon: "💼",
             content: [
                 { label: "기간", value: "2023.07 ~ 현재" },
-                { label: "직책", value: "Frontend Developer" },
+                { label: "직책", value: "FullStack Developer" },
             ],
         },
         {
             title: "학력",
             icon: "🎓",
             content: [
-                { label: "고등학교", value: "졸업 (2013.02)" },
-                { label: "대학교", value: "졸업 (2020.02)" },
+                { label: "고등학교", value: "청구고등학교 졸업 (2013.02)" },
+                { label: "대학교", value: "대구대학교 졸업 (2020.02)" },
             ],
         },
         {
@@ -58,8 +68,7 @@ export const Resume = () => {
             <Header />
             <Aside />
             <Contents className="select-none">
-                <CommonPageHeader />
-                <section className="relative w-full max-w-5xl mx-auto overflow-auto scrolls px-2 md:px-6 py-4 md:py-8">
+                <section className="relative w-full max-w-6xl mx-auto overflow-auto scrolls px-2 md:px-6 py-4 md:py-8">
                     {/* 헤더 */}
                     <div className="relative mb-8 md:mb-12">
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -69,11 +78,11 @@ export const Resume = () => {
                                         <FaFilePdf className="w-6 h-6 text-primary" />
                                     </div>
                                     <h1 className="text-[clamp(1.8rem,3vw,2.5rem)] font-extrabold tracking-tight text-white/90">
-                                        이력서
+                                        {t("pages.resume.title")}
                                     </h1>
                                 </div>
                                 <p className="text-sm md:text-base text-white/70 max-w-2xl leading-relaxed">
-                                    제 경력과 기술 스택을 확인하실 수 있습니다.
+                                    {t("pages.resume.description")}
                                 </p>
                             </div>
 
@@ -141,10 +150,6 @@ export const Resume = () => {
                             참고사항
                         </h3>
                         <ul className="space-y-2 text-xs md:text-sm text-white/70">
-                            <li className="flex items-start gap-2">
-                                <span className="text-primary mt-0.5">▹</span>
-                                <span>더 상세한 정보는 Profile 페이지에서 확인하실 수 있습니다.</span>
-                            </li>
                             <li className="flex items-start gap-2">
                                 <span className="text-primary mt-0.5">▹</span>
                                 <span>프로젝트 포트폴리오는 Projects 페이지에서 확인하실 수 있습니다.</span>
