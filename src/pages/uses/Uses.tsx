@@ -5,10 +5,8 @@ import { FaReact, FaGithub, FaFigma } from "react-icons/fa";
 import { TbBrandTypescript, TbBrandVscode } from "react-icons/tb";
 import { SiPostman, SiSlack, SiTailwindcss, SiPostgresql, SiOracle, SiJira } from "react-icons/si";
 import { BiLogoSpringBoot } from "react-icons/bi";
-import { useTranslation } from "react-i18next";
 
 export const Uses = () => {
-    const { t } = useTranslation();
     const toolCategories = [
         {
             title: "개발 도구",
