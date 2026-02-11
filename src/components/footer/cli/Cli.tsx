@@ -41,7 +41,12 @@ export const Cli = () => {
                         event.stopPropagation();
 
                         const raw = (event.currentTarget.value ?? "").trim();
-                        const output = runCliCommand(raw);
+
+                        // 빈 입력은 무시
+                        if (!raw) {
+                            event.currentTarget.value = "";
+                            return;
+                        }
 
                         // clear는 출력 비우기
                         if (raw.toLowerCase() === "clear") {
@@ -53,26 +58,29 @@ export const Cli = () => {
                             return;
                         }
 
+                        const output = runCliCommand(raw);
                         const now = new Date().toLocaleTimeString("ko-KR");
                         const composed = [
                             `[${now}] $ ${raw}`,
                             output ? output : "(no output)",
                         ].join("\n");
 
-                        setSubmitCliCommand({
-                            value: composed,
-                            isVisibleCommandUi: true,
+                        console.log("CLI Command executed:", { raw, output, composed });
+
+                        setSubmitCliCommand((prev) => {
+                            const newValue = prev.value
+                                ? `${prev.value}\n\n${composed}`
+                                : composed;
+                            console.log("Updating CLI output:", { prev: prev.value, new: newValue });
+                            return {
+                                value: newValue,
+                                isVisibleCommandUi: true,
+                            };
                         });
 
                         // 다음 입력을 위해 비우기
                         event.currentTarget.value = "";
                     }}
-                    onChange={(event) =>
-                        setSubmitCliCommand((prev) => ({
-                            ...prev,
-                            value: event.target.value,
-                        }))
-                    }
                 ></textarea>
             </div>
         </section>

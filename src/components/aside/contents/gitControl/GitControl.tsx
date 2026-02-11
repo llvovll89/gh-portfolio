@@ -256,14 +256,14 @@ export const GitControl = () => {
     };
 
     return (
-        <section className={`w-[calc(100%-40px)] flex flex-col ${backgroundClass} overflow-y-auto text-white`} style={backgroundStyle}>
+        <section className={`w-full flex flex-col ${backgroundClass} overflow-y-auto text-white`} style={backgroundStyle}>
             <header className="h-10 flex items-center px-3 border-b border-sub-gary/30 text-xs">
                 {t("gitControl.title")}
             </header>
 
             <div className="w-full">
                 {repos.map((repo) => (
-                    <section key={repo} className="border-b border-sub-gary/20">
+                    <section key={repo} className="w-full border-b border-sub-gary/20">
                         {/* 레포지토리 헤더 + 통계 */}
                         <div
                             onClick={() => handleRepoClick(repo)}
@@ -271,7 +271,7 @@ export const GitControl = () => {
                         >
                             <div className="flex items-center justify-between gap-2">
                                 <span className="text-xs font-semibold truncate">{repo}</span>
-                                <span className="text-[10px] text-white/50 flex-shrink-0">
+                                <span className="text-[10px] text-white/50 shrink-0">
                                     {selectedRepo === repo ? "▼" : "▶"}
                                 </span>
                             </div>
@@ -525,9 +525,9 @@ export const GitControl = () => {
                                                             ) : (
                                                                 <div className="w-6 h-6 rounded-full bg-sub-gary/30" />
                                                             )}
-                                                            <div className="flex-1 min-w-0">
-                                                                <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                                                    <span className={`text-[10px] px-2 py-0.5 rounded flex-shrink-0 ${
+                                                            <div className="flex-1">
+                                                                <div className="flex items-center gap-2 mb-1">
+                                                                    <span className={`text-[10px] px-2 py-0.5 rounded ${
                                                                         pr.state === "open"
                                                                             ? "bg-green-500/20 text-green-400"
                                                                             : pr.state === "closed"
@@ -537,15 +537,15 @@ export const GitControl = () => {
                                                                         {pr.state}
                                                                     </span>
                                                                     {pr.draft && (
-                                                                        <span className="text-[10px] px-2 py-0.5 rounded bg-gray-500/20 text-gray-400 flex-shrink-0">
+                                                                        <span className="text-[10px] px-2 py-0.5 rounded bg-gray-500/20 text-gray-400">
                                                                             draft
                                                                         </span>
                                                                     )}
-                                                                    <span className="text-[10px] text-white/50 flex-shrink-0">
+                                                                    <span className="text-[10px] text-white/50">
                                                                         #{pr.number}
                                                                     </span>
                                                                 </div>
-                                                                <p className="text-xs font-medium mb-1 line-clamp-2">{pr.title}</p>
+                                                                <p className="text-xs font-medium mb-1">{pr.title}</p>
                                                                 <p className="text-[10px] text-white/50">
                                                                     {new Date(pr.created_at).toLocaleDateString()}
                                                                 </p>
