@@ -15,7 +15,7 @@ interface NavbarProps {
 export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
     const { toggleKeyboardInfo, isVisibleKeyboardInfo } =
         useContext(KeyboardContext);
-    const { isTerminalVisible, setIsTerminalVisible, layoutState, setLayoutState } = useContext(GlobalStateContext);
+    const { isTerminalVisible, setIsTerminalVisible, setLayoutState } = useContext(GlobalStateContext);
 
     const COLLAPSED_HEIGHT = 32; // 터미널 헤더 바 높이
     const OPEN_HEIGHT = 220; // 터미널 열렸을 때 최소 높이
