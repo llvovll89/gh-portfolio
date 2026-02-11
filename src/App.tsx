@@ -14,7 +14,7 @@ function AppContent() {
     const {isTerminalVisible} = useContext(GlobalStateContext);
 
     return (
-        <section className="w-full min-h-screen flex flex-col relative overflow-hidden">
+        <section className="w-full min-h-dvh flex flex-col relative overflow-x-hidden overflow-y-auto">
             <AppChildContainer />
 
             <Routes>

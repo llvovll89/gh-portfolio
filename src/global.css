@@ -17,12 +17,30 @@
     --user-select-none: none;
 }
 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 * {
     font-family: "Pretendard", sans-serif;
 }
 
-html {
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
     -webkit-text-size-adjust: 100%;
+}
+
+#root {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
 }
 
 .scrolls::-webkit-scrollbar {

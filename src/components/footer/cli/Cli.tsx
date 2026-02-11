@@ -65,13 +65,10 @@ export const Cli = () => {
                             output ? output : "(no output)",
                         ].join("\n");
 
-                        console.log("CLI Command executed:", { raw, output, composed });
-
                         setSubmitCliCommand((prev) => {
                             const newValue = prev.value
                                 ? `${prev.value}\n\n${composed}`
                                 : composed;
-                            console.log("Updating CLI output:", { prev: prev.value, new: newValue });
                             return {
                                 value: newValue,
                                 isVisibleCommandUi: true,

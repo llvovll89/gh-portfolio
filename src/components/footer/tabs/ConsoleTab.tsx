@@ -26,13 +26,9 @@ const renderWithLinks = (line: string) => {
 export const ConsoleTab = () => {
     const { submitCliCommand } = useContext(KeyboardContext);
 
-    console.log("ConsoleTab render:", submitCliCommand);
-
     const lines = useMemo(() => {
         const v = submitCliCommand.value ?? "";
-        const result = v.split("\n");
-        console.log("ConsoleTab lines calculated:", { value: v, lines: result });
-        return result;
+        return v.split("\n");
     }, [submitCliCommand.value]);
 
     const copy = async () => {

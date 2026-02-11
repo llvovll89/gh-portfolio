@@ -54,9 +54,7 @@ export const Bottom = () => {
 
     // CLI 명령 실행 시 자동으로 Console 탭으로 전환
     useEffect(() => {
-        console.log("Footer useEffect triggered:", submitCliCommand);
         if (submitCliCommand.value && submitCliCommand.value.trim() !== "") {
-            console.log("Switching to console tab");
             setActiveTab("console");
             openFooter();
         }
