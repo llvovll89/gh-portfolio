@@ -33,7 +33,7 @@ export const MainContents = () => {
     ];
 
     return (
-        <article className="relative z-10 w-full h-full lg:p-8 md:p-6 p-4">
+        <article className="relative z-10 w-full h-full lg:p-8 md:p-6 p-2 overflow-x-hidden overflow-y-auto scrolls">
             {/* 배경 그라디언트 효과 - 마우스 따라 움직임 */}
             <div
                 aria-hidden="true"

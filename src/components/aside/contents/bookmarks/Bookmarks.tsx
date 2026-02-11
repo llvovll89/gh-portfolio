@@ -40,6 +40,8 @@ export const Bookmarks = () => {
 
     const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [customPath, setCustomPath] = useState("");
+    const [customName, setCustomName] = useState("");
 
     const availablePages = routesPath.filter(
         (r) =>
@@ -76,6 +78,8 @@ export const Bookmarks = () => {
 
         saveBookmarks([...bookmarks, bookmark]);
         setShowAddForm(false);
+        setCustomPath("");
+        setCustomName("");
     };
 
     const handleRemoveBookmark = (id: string) => {
@@ -105,10 +109,43 @@ export const Bookmarks = () => {
 
             <div className="w-full h-[calc(100%-40px)] overflow-y-auto">
                 {showAddForm && (
-                    <div className="p-3 border-b border-sub-gary/30">
+                    <div className="p-3 border-b border-sub-gary/30 space-y-3">
                         <p className="text-[10px] text-white/70 mb-2">
                             {t("bookmarks.selectPage")}
                         </p>
+
+                        {/* 커스텀 북마크 추가 */}
+                        <div className="space-y-2 pb-2 border-b border-sub-gary/20">
+                            <input
+                                type="text"
+                                placeholder="북마크 이름 (예: React 블로그)"
+                                value={customName}
+                                onChange={(e) => setCustomName(e.target.value)}
+                                className="w-full px-2 py-1.5 text-xs bg-sub-gary/20 text-white rounded border border-white/10 focus:border-primary/50 focus:outline-none placeholder:text-white/40"
+                            />
+                            <input
+                                type="text"
+                                placeholder="경로 (예: /blog/react-hooks)"
+                                value={customPath}
+                                onChange={(e) => setCustomPath(e.target.value)}
+                                className="w-full px-2 py-1.5 text-xs bg-sub-gary/20 text-white rounded border border-white/10 focus:border-primary/50 focus:outline-none placeholder:text-white/40"
+                            />
+                            <button
+                                onClick={() => {
+                                    if (customName.trim() && customPath.trim()) {
+                                        handleAddBookmark(customPath.trim(), customName.trim());
+                                    } else {
+                                        alert("이름과 경로를 모두 입력해주세요.");
+                                    }
+                                }}
+                                className="w-full px-2 py-1.5 text-xs bg-primary/80 text-white rounded hover:bg-primary transition-colors"
+                            >
+                                커스텀 북마크 추가
+                            </button>
+                        </div>
+
+                        {/* 기존 페이지 목록 */}
+                        <p className="text-[10px] text-white/70">또는 페이지에서 선택:</p>
                         <ul className="space-y-1">
                             {availablePages.map((page) => (
                                 <li key={page.path}>
@@ -124,7 +161,11 @@ export const Bookmarks = () => {
                             ))}
                         </ul>
                         <button
-                            onClick={() => setShowAddForm(false)}
+                            onClick={() => {
+                                setShowAddForm(false);
+                                setCustomPath("");
+                                setCustomName("");
+                            }}
                             className="w-full mt-2 px-2 py-1 text-xs bg-sub-gary/20 text-white rounded hover:bg-sub-gary/30 transition-colors"
                         >
                             {t("common.cancel")}

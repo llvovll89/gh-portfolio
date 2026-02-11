@@ -190,7 +190,7 @@ export const Header = () => {
                     {/* 앞으로 가기 버튼 - 모바일에서 숨김 */}
                     <button
                         onClick={() => navigate(1)}
-                        className="hidden sm:flex h-full px-1.5 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
+                        className="hidden sm:flex h-full px-1.5 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
                         title="앞으로 가기"
                     >
                         <svg
@@ -238,7 +238,7 @@ export const Header = () => {
                     {/* 풀스크린 토글 버튼 - 모바일에서 숨김 */}
                     <button
                         onClick={toggleFullscreen}
-                        className="hidden md:flex h-full px-1.5 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
+                        className="hidden md:flex h-full items-center justify-center px-1.5 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
                         title={isFullscreen ? "전체 화면 종료 (F11)" : "전체 화면 (F11)"}
                     >
                         {isFullscreen ? (
