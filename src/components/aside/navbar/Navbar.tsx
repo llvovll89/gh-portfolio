@@ -39,7 +39,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
     };
 
     return (
-        <nav className="relative w-10 flex flex-col items-center h-screen z-10 border-r border-sub-gary/30 text-white select-none">
+        <nav className="relative w-10 flex flex-col items-center h-full z-10 border-r border-sub-gary/30 text-white select-none">
             {/* Main navigation items */}
             <div className="flex-1 flex flex-col w-full">
                 {NAV_ITEMS.map((item) => (
