@@ -1,4 +1,5 @@
 import {Route, Routes, useLocation} from "react-router-dom";
+import {Suspense} from "react";
 import {GlobalStateProvider, GlobalStateContext} from "./context/GlobalState.context";
 import {KeyboardProvider} from "./context/KeyboardState.context";
 import {routesPath} from "./routes/route";
@@ -19,15 +20,17 @@ function AppContent() {
             <SkipLinks />
             <AppChildContainer />
 
-            <Routes>
-                {routesPath.map((r) => (
-                    <Route
-                        key={r.path}
-                        path={r.path}
-                        element={<r.component />}
-                    />
-                ))}
-            </Routes>
+            <Suspense fallback={<div />}> 
+                <Routes>
+                    {routesPath.map((r) => (
+                        <Route
+                            key={r.path}
+                            path={r.path}
+                            element={<r.component />}
+                        />
+                    ))}
+                </Routes>
+            </Suspense>
 
             {!isMobile && !isBlogDetailPage && isTerminalVisible && <Bottom />}
         </section>

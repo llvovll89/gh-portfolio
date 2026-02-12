@@ -177,6 +177,10 @@
     "uses": {
       "title": "사용 도구",
       "description": "제가 일상적으로 사용하는 개발 도구, 기술 스택, 협업 도구들을 소개합니다."
+    },
+    "guestbook": {
+      "title": "방명록",
+      "description": "방명록에 메시지를 남기고 소통해봐요!"
     }
   },
   "routes": {

@@ -44,6 +44,7 @@
 | Frontend   | React, TypeScript |
 | Build Tool | Vite              |
 | Styling    | Tailwind CSS      |
+| Backend    | Java, SpringBoot, PostgreSQL, Oracle, Firebase |
 | Routing    | React Router      |
 | Deploy     | Vercel            |
 

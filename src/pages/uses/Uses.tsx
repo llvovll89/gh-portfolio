@@ -3,7 +3,7 @@ import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
 import { FaReact, FaGithub, FaFigma } from "react-icons/fa";
 import { TbBrandTypescript, TbBrandVscode } from "react-icons/tb";
-import { SiPostman, SiSlack, SiTailwindcss, SiPostgresql, SiOracle, SiJira } from "react-icons/si";
+import { SiPostman, SiSlack, SiTailwindcss, SiPostgresql, SiOracle, SiJira, SiFirebase } from "react-icons/si";
 import { BiLogoSpringBoot } from "react-icons/bi";
 
 export const Uses = () => {
@@ -79,6 +79,12 @@ export const Uses = () => {
                     icon: SiOracle,
                     description: "엔터프라이즈 데이터베이스",
                     link: "https://www.oracle.com/database/",
+                },
+                {
+                    name: "Firebase",
+                    icon: SiFirebase,
+                    description: "Auth, Firestore 등 BaaS 서비스",
+                    link: "https://firebase.google.com/",
                 },
             ],
         },

@@ -15,6 +15,8 @@ export const Img = ({src, alt, className}: ImgProps) => {
             src={src}
             alt={alt}
             className={className}
+            loading="lazy"
+            decoding="async"
         />
     );
 };

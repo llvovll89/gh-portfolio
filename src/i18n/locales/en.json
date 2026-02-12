@@ -177,6 +177,10 @@
     "uses": {
       "title": "Uses",
       "description": "Here are the development tools, tech stacks, and collaboration tools I use daily."
+    },
+    "guestbook": {
+      "title": "Guestbook",
+      "description": "Leave a message in the guestbook and let's connect!"
     }
   },
   "routes": {

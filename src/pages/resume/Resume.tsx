@@ -53,14 +53,14 @@ export const Resume = () => {
                 { label: "대학교", value: "대구대학교 졸업 (2020.02)" },
             ],
         },
-        {
-            title: "기술 스택",
-            icon: "⚡",
-            content: [
-                { label: "Frontend", value: "React, TypeScript, Redux, TailwindCSS" },
-                { label: "Backend", value: "Java, SpringBoot, PostgreSQL/Oracle" },
-            ],
-        },
+                {
+                    title: "기술 스택",
+                    icon: "⚡",
+                    content: [
+                        { label: "Frontend", value: "React, TypeScript, Redux, TailwindCSS" },
+                        { label: "Backend", value: "Java, SpringBoot, PostgreSQL/Oracle, Firebase" },
+                    ],
+                },
     ];
 
     return (
