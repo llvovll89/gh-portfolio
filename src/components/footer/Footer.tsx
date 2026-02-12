@@ -96,8 +96,28 @@ export const Bottom = () => {
             {/* 콘텐츠 영역 */}
             {isOpen && (
                 <div className="flex-1 overflow-hidden">
-                    {activeTab === "terminal" && <Cli />}
-                    {activeTab === "console" && <ConsoleTab />}
+                    {activeTab === "terminal" && (
+                        <div
+                            id="footer-tabpanel-terminal"
+                            role="tabpanel"
+                            aria-labelledby="footer-tab-terminal"
+                            tabIndex={0}
+                            className="h-full"
+                        >
+                            <Cli />
+                        </div>
+                    )}
+                    {activeTab === "console" && (
+                        <div
+                            id="footer-tabpanel-console"
+                            role="tabpanel"
+                            aria-labelledby="footer-tab-console"
+                            tabIndex={0}
+                            className="h-full"
+                        >
+                            <ConsoleTab />
+                        </div>
+                    )}
                 </div>
             )}
 

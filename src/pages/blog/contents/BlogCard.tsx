@@ -23,6 +23,11 @@ export const BlogCard = ({ p }: BlogCardProps) => {
                     <time className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide">
                         {p.date || "No Date"}
                     </time>
+                    {p.readingTime && (
+                        <span className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500">
+                            {p.readingTime}
+                        </span>
+                    )}
                     {p.tags?.length ? (
                         <div className="flex flex-wrap gap-1">
                             {p.tags.slice(0, 2).map((t) => (

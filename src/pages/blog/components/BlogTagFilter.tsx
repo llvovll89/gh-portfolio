@@ -46,6 +46,11 @@ export const BlogTagFilter = ({
                 onClick={toggleDropdown}
                 aria-haspopup="menu"
                 aria-expanded={isOpen}
+                aria-controls="tag-filter-menu"
+                aria-label={selectedTags.length > 0
+                    ? t("pages.blog.filter.selectedTags", { count: selectedTags.length })
+                    : t("pages.blog.filter.allTags")
+                }
                 className={[
                     "flex items-center gap-2 sm:h-11 h-9 px-4",
                     "rounded-2xl border",
@@ -75,6 +80,7 @@ export const BlogTagFilter = ({
 
             {isOpen && (
                 <div
+                    id="tag-filter-menu"
                     role="menu"
                     aria-label={t("pages.blog.filter.tagFilter")}
                     className={[

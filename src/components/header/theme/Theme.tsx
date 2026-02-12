@@ -74,6 +74,8 @@ export const Theme = () => {
                 onClick={toggle}
                 aria-haspopup="menu"
                 aria-expanded={open}
+                aria-controls="theme-menu"
+                aria-label={`테마 선택 (현재: ${currentThemeLabel})`}
                 className={[
                     "group relative grid place-items-center",
                     "h-10 w-10 rounded-xl",
@@ -97,6 +99,7 @@ export const Theme = () => {
 
             {open && (
                 <div
+                    id="theme-menu"
                     role="menu"
                     aria-label="테마 선택"
                     className={[

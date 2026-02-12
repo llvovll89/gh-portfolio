@@ -6,6 +6,7 @@ import {AppChildContainer} from "./components/appChildContainer/AppChildContaine
 import {Bottom} from "./components/footer/Footer";
 import {useCheckedMobile} from "./hooks/useCheckedMobile";
 import {useContext} from "react";
+import {SkipLinks} from "./components/skipLinks/SkipLinks";
 
 function AppContent() {
     const isMobile = useCheckedMobile();
@@ -15,6 +16,7 @@ function AppContent() {
 
     return (
         <section className="w-full min-h-dvh flex flex-col relative overflow-x-hidden overflow-y-auto">
+            <SkipLinks />
             <AppChildContainer />
 
             <Routes>

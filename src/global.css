@@ -127,3 +127,35 @@ span {
         transform: translate(-50%, -50%) translateY(-10px);
     }
 }
+
+/* Skip Links - Accessibility */
+.skip-links {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+}
+
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    padding: 0.75rem 1.5rem;
+    background: var(--color-primary);
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 0 0 0.375rem 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.skip-link:focus {
+    left: 0;
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.skip-link:hover {
+    background: #0088dd;
+}

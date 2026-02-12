@@ -8,7 +8,11 @@ interface FooterTabsProps {
 
 export const FooterTabs = ({ activeTab, onTabChange }: FooterTabsProps) => {
     return (
-        <div className="flex items-center gap-0.5 border-b border-white/10">
+        <div
+            role="tablist"
+            aria-label="Footer tabs"
+            className="flex items-center gap-0.5 border-b border-white/10"
+        >
             {FOOTER_TABS.map((tab) => (
                 <TabButton
                     key={tab.id}

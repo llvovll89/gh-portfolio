@@ -121,21 +121,40 @@ export const Header = () => {
                     ...backgroundStyle,
                 }}
             >
-                <ul className={`flex items-center h-full flex-1 overflow-x-auto`}>
+                <ul
+                    id="header-tabs"
+                    tabIndex={-1}
+                    role="tablist"
+                    aria-label="File tabs"
+                    className={`flex items-center h-full flex-1 overflow-x-auto`}
+                >
                     {selectedPathState.list.map((path) => {
                         const route = routesPath.find((r) => r.path === path);
                         if (!route) return null;
                         return (
                             <li
+                                role="tab"
+                                aria-selected={selectedPathState.state === route.path}
+                                aria-controls={`tabpanel-${route.name}`}
+                                tabIndex={selectedPathState.state === route.path ? 0 : -1}
                                 onClick={() =>
                                     setSelectedPathState((prev) => ({
                                         ...prev,
                                         state: route.path,
                                     }))
                                 }
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        setSelectedPathState((prev) => ({
+                                            ...prev,
+                                            state: route.path,
+                                        }));
+                                    }
+                                }}
                                 key={route.path}
                                 className={`${selectedStyle(route.path).bgColor
-                                    } min-w-20 sm:min-w-24 md:min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[11px] sm:text-[12px] md:text-[13px] flex items-center cursor-pointer user-select-none gap-0.5 sm:gap-1 justify-center px-1.5 sm:px-2`}
+                                    } min-w-20 sm:min-w-24 md:min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[11px] sm:text-[12px] md:text-[13px] flex items-center cursor-pointer user-select-none gap-0.5 sm:gap-1 justify-center px-1.5 sm:px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-inset`}
                             >
                                 <span className="text-xs sm:text-sm">📍</span>
                                 <Link to={route.path} className="h-full">
@@ -150,6 +169,7 @@ export const Header = () => {
                                         e.stopPropagation();
                                         handleClosePAth(route.path);
                                     }}
+                                    aria-label={`Close ${route.name} tab`}
                                     className="h-full w-3 sm:w-4 flex items-center justify-center cursor-pointer hover:bg-sub-gary/30 rounded transition-colors"
                                     title="닫기"
                                 >

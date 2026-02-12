@@ -1,4 +1,5 @@
 import {parseFrontmatter} from "./parseFrontmatter";
+import {calculateReadingTime} from "./readingTime";
 
 export type BlogPost = {
     slug: string;
@@ -7,6 +8,7 @@ export type BlogPost = {
     summary?: string;
     tags?: string[];
     body: string;
+    readingTime: string;
 };
 
 function toSlugFromPath(path: string) {
@@ -34,7 +36,7 @@ export function loadPosts(): BlogPost[] {
             ? (frontmatter.tags as string[])
             : undefined;
 
-        return {slug, title, date, summary, tags, body};
+        return {slug, title, date, summary, tags, body, readingTime: calculateReadingTime(body)};
     });
 
     posts.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));

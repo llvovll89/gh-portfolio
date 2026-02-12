@@ -50,6 +50,10 @@ export const Aside = () => {
 
     return (
         <aside
+            id="main-navigation"
+            role="navigation"
+            aria-label="Main navigation"
+            tabIndex={-1}
             ref={asideRef}
             style={{
                 width: layoutState.resizeSidebarWidth,
