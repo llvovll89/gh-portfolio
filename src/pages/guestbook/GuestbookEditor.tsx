@@ -16,6 +16,7 @@ type EditorProps = {
     onSubmit?: () => void
     autoFocus?: boolean
     focusTarget?: 'name' | 'password' | 'message'
+    error?: string
 }
 
 const GuestbookEditor: React.FC<EditorProps> = ({
@@ -31,6 +32,7 @@ const GuestbookEditor: React.FC<EditorProps> = ({
     onSubmit,
     autoFocus = false,
     focusTarget = 'name',
+    error,
 }) => {
     const nameRef = React.useRef<HTMLInputElement | null>(null)
     const passwordRef = React.useRef<HTMLInputElement | null>(null)
@@ -96,6 +98,12 @@ const GuestbookEditor: React.FC<EditorProps> = ({
                     placeholder="소중한 메시지를 남겨주세요..."
                 />
             </div>
+
+            {error && (
+                <div className="mt-2 text-sm text-rose-400" role="alert" aria-live="polite">
+                    {error}
+                </div>
+            )}
 
             <div className="mt-4 flex justify-end gap-2">
                 <button type="button" onClick={onCancel} className="px-4 py-2 bg-white/95 text-black rounded-lg min-w-25 flex items-center justify-center cursor-pointer">

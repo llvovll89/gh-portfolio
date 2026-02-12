@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FiMessageSquare } from 'react-icons/fi'
 import { db } from '@/firebase/config'
 import {
@@ -167,9 +167,12 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
                                         submitting={false}
                                         onChangeName={() => {}}
                                         onChangeMessage={(v) => setEditMessage(v)}
-                                        onChangePassword={(v) => setEditPassword(v)}
+                                        onChangePassword={(v) => { setEditPassword(v); setEditError('') }}
                                         onCancel={closeEditModal}
                                         onSubmit={() => handleEditSubmit()}
+                                        autoFocus={true}
+                                        focusTarget="password"
+                                        error={editError}
                                     />
                                 </div>
                             </div>

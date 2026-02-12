@@ -5,14 +5,13 @@ import hashPassword from "@/utils/hashPassword"
 import GuestbookEditor from './GuestbookEditor'
 
 type Props = {
-    className?: string
     onSubmitted?: (msg?: string) => void
     autoFocus?: boolean
     focusTarget?: 'name' | 'password' | 'message'
     handleToggleForm?: () => void
 }
 
-const GuestbookForm = ({ className = "", onSubmitted, autoFocus, focusTarget, handleToggleForm }: Props) => {
+const GuestbookForm = ({ onSubmitted, autoFocus, focusTarget, handleToggleForm }: Props) => {
     const [name, setName] = useState("")
     const [password, setPassword] = useState("")
     const [message, setMessage] = useState("")
