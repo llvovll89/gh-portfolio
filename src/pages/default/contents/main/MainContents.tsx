@@ -67,7 +67,7 @@ export const MainContents = () => {
             </div>
 
             <div className="relative flex flex-col lg:flex-row items-center gap-12 lg:gap-16 h-full">
-                <section className="w-full flex-1 space-y-8 animate-[fadeIn_0.8s_ease-out]">
+                <section className="w-full flex-1 space-y-8 animate-[fadeIn_0.8s_ease-out] px-0.5">
                     <div className="flex flex-wrap items-center justify-between gap-4">
                         <div className="group flex items-center gap-3">
                             <div className="relative">

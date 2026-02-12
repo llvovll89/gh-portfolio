@@ -15,6 +15,7 @@ import hashPassword from '@/utils/hashPassword'
 import { FaEdit, FaUser } from 'react-icons/fa'
 import { FaDeleteLeft } from 'react-icons/fa6'
 import { MdDescription } from 'react-icons/md'
+import { useCheckedMobileSize } from '@/hooks/useCheckedMobileSize'
 
 type GuestbookEntry = {
     id: string
@@ -25,7 +26,8 @@ type GuestbookEntry = {
 }
 
 const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () => void; onSuccess?: (msg: string) => void }) => {
-    const [entries, setEntries] = useState<GuestbookEntry[]>([])
+    const [entries, setEntries] = useState<GuestbookEntry[]>([]);
+    const isMobileSize = useCheckedMobileSize();
 
     // edit modal state
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
@@ -34,7 +36,7 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
     const [editMessage, setEditMessage] = useState('')
     const [editError, setEditError] = useState('')
 
-    
+
 
     useEffect(() => {
         const q = query(collection(db, 'guestbook'), orderBy('createdAt', 'desc'))
@@ -103,6 +105,25 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
         if (onSuccess) onSuccess('메시지가 삭제되었습니다.')
     }
 
+    const ActionButtons: React.FC<{ entry: GuestbookEntry }> = ({ entry }) => (
+        <div className={`flex items-center gap-2 mt-3 ${isMobileSize && "justify-end"} w-full`}>
+            <button
+                className="text-sm cursor-pointer text-primary flex items-center gap-2 bg-primary/10 px-3 py-1 rounded-md"
+                onClick={() => verifyAndUpdate(entry)}
+            >
+                <FaEdit className="w-5 h-5" />
+                수정
+            </button>
+            <button
+                className="text-sm cursor-pointer text-rose-400 flex items-center gap-2 bg-rose-400/10 px-3 py-1 rounded-md"
+                onClick={() => verifyAndDelete(entry)}
+            >
+                <FaDeleteLeft className="w-5 h-5" />
+                삭제
+            </button>
+        </div>
+    )
+
     return (
         <div className="space-y-4 w-full h-full flex flex-col gap-1">
             {entries.length === 0 ? (
@@ -122,30 +143,20 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
                     {entries.map((entry) => (
                         <li key={entry.id} className="p-4 bg-white/3 border border-white/6 rounded-xl backdrop-blur-sm">
                             <div className="flex justify-between items-start gap-4">
-                                <div className="flex-1 min-w-0">
-                                    <div className="text-sm text-white/70 font-semibold flex items-center gap-2"><FaUser className="w-5 h-5" /> {entry.name}</div>
+                                <div className="flex-1 min-w-0 flex flex-col gap-1">
+                                    <div className="w-full flex items-center justify-between">
+                                        <div className="text-sm text-white/70 font-semibold flex items-center gap-2"><FaUser className="w-5 h-5" /> {entry.name}</div>
+                                        {!isMobileSize && <ActionButtons entry={entry} />}
+                                    </div>
+
                                     <div className="mt-3 text-white/85 whitespace-pre-wrap break-all flex items-start gap-2">
-                                        <MdDescription className="w-5 h-5 shrink-0" /> 
+                                        <MdDescription className="w-5 h-5 shrink-0" />
                                         <div className="break-all">{entry.message}</div>
                                     </div>
-                                    <div className="mt-3 text-[11px] text-white/50">{entry.createdAt?.toDate ? entry.createdAt.toDate().toLocaleString() : ''}</div>
-                                </div>
 
-                                <div className="flex items-center gap-2">
-                                    <button
-                                        className="text-sm cursor-pointer text-primary flex items-center gap-2"
-                                        onClick={() => verifyAndUpdate(entry)}
-                                    >
-                                        <FaEdit className="w-5 h-5" />
-                                        수정
-                                    </button>
-                                    <button
-                                        className="text-sm cursor-pointer text-rose-400 flex items-center gap-2"
-                                        onClick={() => verifyAndDelete(entry)}
-                                    >
-                                        <FaDeleteLeft className="w-5 h-5" />
-                                        삭제
-                                    </button>
+                                    {isMobileSize && <ActionButtons entry={entry} />}
+
+                                    <div className="mt-3 text-[11px] text-white/50">{entry.createdAt?.toDate ? entry.createdAt.toDate().toLocaleString() : ''}</div>
                                 </div>
                             </div>
                         </li>
@@ -160,20 +171,22 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
                         <div className="mx-auto w-full max-w-md p-4">
                             <div className="md:mx-0 md:my-0">
                                 <div className="fixed left-0 right-0 bottom-0 z-50 md:relative">
-                                    <GuestbookEditor
-                                        mode="edit"
-                                        name={editingEntry?.name || ''}
-                                        message={editMessage}
-                                        submitting={false}
-                                        onChangeName={() => {}}
-                                        onChangeMessage={(v) => setEditMessage(v)}
-                                        onChangePassword={(v) => { setEditPassword(v); setEditError('') }}
-                                        onCancel={closeEditModal}
-                                        onSubmit={() => handleEditSubmit()}
-                                        autoFocus={true}
-                                        focusTarget="password"
-                                        error={editError}
-                                    />
+                                    <div className="max-h-[80vh] overflow-y-auto p-2 animate-in slide-in-from-bottom">
+                                        <GuestbookEditor
+                                            mode="edit"
+                                            name={editingEntry?.name || ''}
+                                            message={editMessage}
+                                            submitting={false}
+                                            onChangeName={() => { }}
+                                            onChangeMessage={(v) => setEditMessage(v)}
+                                            onChangePassword={(v) => { setEditPassword(v); setEditError('') }}
+                                            onCancel={closeEditModal}
+                                            onSubmit={() => handleEditSubmit()}
+                                            autoFocus={true}
+                                            focusTarget="password"
+                                            error={editError}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>
