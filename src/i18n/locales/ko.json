@@ -163,7 +163,8 @@
       "view": {
         "label": "보기 방식 선택",
         "list": "리스트",
-        "grouped": "그룹화"
+        "grouped": "그룹화",
+        "grid": "그리드"
       },
       "count": {
         "total": "{{count}}개의 포스트",

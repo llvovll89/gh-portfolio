@@ -41,9 +41,9 @@ export const Blog = () => {
         const saved = localStorage.getItem(STORAGE_KEYS.SORT_ORDER);
         return saved === "asc" || saved === "desc" ? saved : "desc";
     });
-    const [viewMode, setViewMode] = useState<"list" | "grouped">(() => {
+    const [viewMode, setViewMode] = useState<"list" | "grouped" | "grid">(() => {
         const saved = localStorage.getItem(STORAGE_KEYS.VIEW_MODE);
-        return saved === "list" || saved === "grouped" ? saved : "list";
+        return saved === "list" || saved === "grouped" || saved === "grid" ? saved : "list";
     });
 
     // localStorage 동기화
@@ -137,6 +137,12 @@ export const Blog = () => {
                             </div>
                         ) : viewMode === "list" ? (
                             <ul className="flex flex-col gap-3 pb-4">
+                                {sortedPosts.map((p) => (
+                                    <BlogCard key={p.slug} p={p} />
+                                ))}
+                            </ul>
+                        ) : viewMode === "grid" ? (
+                            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
                                 {sortedPosts.map((p) => (
                                     <BlogCard key={p.slug} p={p} />
                                 ))}

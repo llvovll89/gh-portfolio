@@ -13,8 +13,8 @@ interface BlogFilterBarProps {
     onTagsChange: (tags: string[]) => void;
     sortOrder: "asc" | "desc";
     onSortChange: (order: "asc" | "desc") => void;
-    viewMode: "list" | "grouped";
-    onViewModeChange: (mode: "list" | "grouped") => void;
+    viewMode: "list" | "grouped" | "grid";
+    onViewModeChange: (mode: "list" | "grouped" | "grid") => void;
     availableTags: string[];
     tagCounts: Record<string, number>;
     totalPosts: number;

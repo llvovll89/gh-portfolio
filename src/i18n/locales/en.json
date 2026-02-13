@@ -164,6 +164,7 @@
         "label": "View mode",
         "list": "List",
         "grouped": "Grouped"
+        ,"grid": "Grid"
       },
       "count": {
         "total": "{{count}} posts",
