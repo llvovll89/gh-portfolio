@@ -13,8 +13,7 @@ import {
 import GuestbookEditor from './GuestbookEditor'
 import hashPassword from '@/utils/hashPassword'
 import { FaEdit, FaUser } from 'react-icons/fa'
-import { FaDeleteLeft } from 'react-icons/fa6'
-import { MdDescription } from 'react-icons/md'
+import { MdDelete, MdDescription } from 'react-icons/md'
 import { useCheckedMobileSize } from '@/hooks/useCheckedMobileSize'
 
 type GuestbookEntry = {
@@ -36,8 +35,6 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
     const [editMessage, setEditMessage] = useState('')
     const [editError, setEditError] = useState('')
 
-
-
     useEffect(() => {
         const q = query(collection(db, 'guestbook'), orderBy('createdAt', 'desc'))
         const unsub = onSnapshot(q, (snapshot) => {
@@ -57,7 +54,7 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
         return () => unsub()
     }, [])
 
-    const verifyAndUpdate = async (entry: GuestbookEntry) => {
+    const verifyAndUpdate = (entry: GuestbookEntry) => {
         setEditingEntry(entry)
         setEditMessage(entry.message)
         setEditPassword('')
@@ -92,6 +89,7 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
     }
 
     const verifyAndDelete = async (entry: GuestbookEntry) => {
+        console.log('verifyAndDelete clicked', entry.id)
         const pw = window.prompt('삭제하려면 비밀번호를 입력하세요')
         if (!pw) return
         const pwHash = await hashPassword(pw)
@@ -104,25 +102,6 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
         await deleteDoc(doc(db, 'guestbook', entry.id))
         if (onSuccess) onSuccess('메시지가 삭제되었습니다.')
     }
-
-    const ActionButtons: React.FC<{ entry: GuestbookEntry }> = ({ entry }) => (
-        <div className={`flex items-center gap-2 mt-3 ${isMobileSize && "justify-end"} w-full`}>
-            <button
-                className="text-sm cursor-pointer text-primary flex items-center gap-2 bg-primary/10 px-3 py-1 rounded-md"
-                onClick={() => verifyAndUpdate(entry)}
-            >
-                <FaEdit className="w-5 h-5" />
-                수정
-            </button>
-            <button
-                className="text-sm cursor-pointer text-rose-400 flex items-center gap-2 bg-rose-400/10 px-3 py-1 rounded-md"
-                onClick={() => verifyAndDelete(entry)}
-            >
-                <FaDeleteLeft className="w-5 h-5" />
-                삭제
-            </button>
-        </div>
-    )
 
     return (
         <div className="space-y-4 w-full h-full flex flex-col gap-1">
@@ -146,15 +125,28 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
                                 <div className="flex-1 min-w-0 flex flex-col gap-1">
                                     <div className="w-full flex items-center justify-between">
                                         <div className="text-sm text-white/70 font-semibold flex items-center gap-2"><FaUser className="w-5 h-5" /> {entry.name}</div>
-                                        {!isMobileSize && <ActionButtons entry={entry} />}
+                                        <div className={`flex items-center gap-2 justify-end w-full relative z-10`}>
+                                            <button
+                                                type="button"
+                                                className="text-sm cursor-pointer text-primary flex items-center justify-center w-6 h-6"
+                                                onClick={() => verifyAndUpdate(entry)}
+                                            >
+                                                <FaEdit className="w-5 h-5" />
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="text-sm cursor-pointer text-rose-400 flex items-center justify-center w-6 h-6"
+                                                onClick={() => verifyAndDelete(entry)}
+                                            >
+                                                <MdDelete className="w-6 h-6" />
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <div className="mt-3 text-white/85 whitespace-pre-wrap break-all flex items-start gap-2">
                                         <MdDescription className="w-5 h-5 shrink-0" />
-                                        <div className="break-all">{entry.message}</div>
+                                        <div className={`${isMobileSize && "max-h-25 overflow-hidden scrolls overflow-y-auto"} break-all text-[clamp(0.75rem,1.5vw,1rem)]`}>{entry.message}</div>
                                     </div>
-
-                                    {isMobileSize && <ActionButtons entry={entry} />}
 
                                     <div className="mt-3 text-[11px] text-white/50">{entry.createdAt?.toDate ? entry.createdAt.toDate().toLocaleString() : ''}</div>
                                 </div>
