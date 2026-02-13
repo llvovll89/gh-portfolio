@@ -1,6 +1,7 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { GlobalStateContext } from "../../../../context/GlobalState.context";
 import { githubGetRequestParams, octokit } from "../../../../http/api";
+import GhActivityDashboard from "../../../ghActivity/GhActivityDashboard";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ThemeMode } from "../../../../context/constatns/Theme.type";
@@ -99,6 +100,9 @@ export const GitControl = () => {
     const [selected, setSelected] = useState<{ repo: RepoName; branch: string } | null>(null);
     const [activeTab, setActiveTab] = useState<TabType>("branches");
     const [selectedRepo, setSelectedRepo] = useState<RepoName | null>(null);
+    const [showActivity, setShowActivity] = useState(false);
+
+    const githubUsername = import.meta.env.VITE_GITHUB_USERNAME || "llvovll89";
 
     const { selectedTheme } = useContext(GlobalStateContext);
 
@@ -257,11 +261,24 @@ export const GitControl = () => {
 
     return (
         <section className={`w-full flex flex-col ${backgroundClass} overflow-y-auto text-white`} style={backgroundStyle}>
-            <header className="h-10 flex items-center px-3 border-b border-sub-gary/30 text-xs">
-                {t("gitControl.title")}
+            <header className="h-10 flex items-center px-3 border-b border-sub-gary/30 text-xs justify-between">
+                <div>{t("gitControl.title")}</div>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setShowActivity((s) => !s)}
+                        className="text-[10px] px-3 py-2 rounded bg-white/10 hover:bg-white/10"
+                    >
+                        Activity
+                    </button>
+                </div>
             </header>
 
             <div className="w-full">
+                {showActivity && (
+                    <div className="px-3 py-2 border-b border-sub-gary/20">
+                        <GhActivityDashboard username={githubUsername} />
+                    </div>
+                )}
                 {repos.map((repo) => (
                     <section key={repo} className="w-full border-b border-sub-gary/20">
                         {/* 레포지토리 헤더 + 통계 */}
@@ -302,31 +319,28 @@ export const GitControl = () => {
                                 <div className="flex border-b border-sub-gary/20 bg-white/5">
                                     <button
                                         onClick={() => setActiveTab("branches")}
-                                        className={`flex-1 px-3 py-2 text-[11px] transition-colors ${
-                                            activeTab === "branches"
+                                        className={`flex-1 px-3 py-2 text-[11px] transition-colors ${activeTab === "branches"
                                                 ? "bg-white/10 text-white border-b-2 border-primary"
                                                 : "text-white/60 hover:text-white hover:bg-white/5"
-                                        }`}
+                                            }`}
                                     >
                                         Branches ({gitStates[repo].branches.length})
                                     </button>
                                     <button
                                         onClick={() => setActiveTab("issues")}
-                                        className={`flex-1 px-3 py-2 text-[11px] transition-colors ${
-                                            activeTab === "issues"
+                                        className={`flex-1 px-3 py-2 text-[11px] transition-colors ${activeTab === "issues"
                                                 ? "bg-white/10 text-white border-b-2 border-primary"
                                                 : "text-white/60 hover:text-white hover:bg-white/5"
-                                        }`}
+                                            }`}
                                     >
                                         Issues ({gitStates[repo].issues.length})
                                     </button>
                                     <button
                                         onClick={() => setActiveTab("pullRequests")}
-                                        className={`flex-1 px-3 py-2 text-[11px] transition-colors ${
-                                            activeTab === "pullRequests"
+                                        className={`flex-1 px-3 py-2 text-[11px] transition-colors ${activeTab === "pullRequests"
                                                 ? "bg-white/10 text-white border-b-2 border-primary"
                                                 : "text-white/60 hover:text-white hover:bg-white/5"
-                                        }`}
+                                            }`}
                                     >
                                         PRs ({gitStates[repo].pullRequests.length})
                                     </button>
@@ -461,11 +475,10 @@ export const GitControl = () => {
                                                             )}
                                                             <div className="flex-1 min-w-0">
                                                                 <div className="flex items-center gap-2 mb-1">
-                                                                    <span className={`text-[10px] px-2 py-0.5 rounded flex-shrink-0 ${
-                                                                        issue.state === "open"
+                                                                    <span className={`text-[10px] px-2 py-0.5 rounded flex-shrink-0 ${issue.state === "open"
                                                                             ? "bg-green-500/20 text-green-400"
                                                                             : "bg-purple-500/20 text-purple-400"
-                                                                    }`}>
+                                                                        }`}>
                                                                         {issue.state}
                                                                     </span>
                                                                     <span className="text-[10px] text-white/50 flex-shrink-0">
@@ -527,13 +540,12 @@ export const GitControl = () => {
                                                             )}
                                                             <div className="flex-1">
                                                                 <div className="flex items-center gap-2 mb-1">
-                                                                    <span className={`text-[10px] px-2 py-0.5 rounded ${
-                                                                        pr.state === "open"
+                                                                    <span className={`text-[10px] px-2 py-0.5 rounded ${pr.state === "open"
                                                                             ? "bg-green-500/20 text-green-400"
                                                                             : pr.state === "closed"
-                                                                            ? "bg-red-500/20 text-red-400"
-                                                                            : "bg-purple-500/20 text-purple-400"
-                                                                    }`}>
+                                                                                ? "bg-red-500/20 text-red-400"
+                                                                                : "bg-purple-500/20 text-purple-400"
+                                                                        }`}>
                                                                         {pr.state}
                                                                     </span>
                                                                     {pr.draft && (
