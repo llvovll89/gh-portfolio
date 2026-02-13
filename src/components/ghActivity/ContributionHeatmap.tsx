@@ -1,5 +1,3 @@
-import React from "react";
-
 type Day = {
   date: string;
   contributionCount: number;
