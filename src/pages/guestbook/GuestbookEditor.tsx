@@ -2,6 +2,7 @@ import React from 'react'
 import { FiMessageSquare } from 'react-icons/fi'
 import { TbLockPassword } from 'react-icons/tb'
 import { HiUser } from 'react-icons/hi'
+import { IoClose } from 'react-icons/io5'
 
 type EditorProps = {
     mode: 'create' | 'edit'
@@ -23,7 +24,6 @@ const GuestbookEditor: React.FC<EditorProps> = ({
     mode,
     name = '',
     message = '',
-    passwordPlaceholder = '비밀번호',
     submitting = false,
     onChangeName,
     onChangeMessage,
@@ -47,71 +47,102 @@ const GuestbookEditor: React.FC<EditorProps> = ({
         }, 120)
         return () => clearTimeout(t)
     }, [autoFocus, focusTarget])
+
     return (
-        <div className="rounded-t-2xl md:rounded-2xl border border-white/10 bg-black/90 backdrop-blur-xl p-4 md:p-6 shadow-[0_18px_60px_rgba(0,0,0,0.45)] w-full">
-            <div className="mb-3 flex items-center justify-between">
+        <div className="rounded-t-2xl md:rounded-2xl border border-white/10 bg-zinc-950/98 backdrop-blur-xl shadow-2xl w-full">
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-white/6">
                 <div>
-                    <h3 className="text-lg md:text-xl font-bold text-white">{mode === 'create' ? '메시지 남기기' : '메시지 수정'}</h3>
-                    <p className="text-sm text-white/70">{mode === 'create' ? '궁금한 점이나 의견을 자유롭게 적어주세요.' : '수정할 내용을 입력하고 저장하세요.'}</p>
+                    <h3 className="text-base font-bold text-white">
+                        {mode === 'create' ? '메시지 남기기' : '메시지 수정'}
+                    </h3>
+                    <p className="text-xs text-white/40 mt-0.5">
+                        {mode === 'create'
+                            ? '궁금한 점이나 의견을 자유롭게 적어주세요'
+                            : '수정할 내용을 입력하세요'}
+                    </p>
                 </div>
+                <button
+                    type="button"
+                    onClick={onCancel}
+                    className="p-1.5 rounded-lg text-white/35 hover:text-white/70 hover:bg-white/8 transition-all cursor-pointer"
+                >
+                    <IoClose className="w-5 h-5" />
+                </button>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 items-center">
-                <div className="relative flex-1">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-white/70">
-                        <HiUser className="w-5 h-5 text-primary" />
+            <div className="px-5 py-4 space-y-3">
+                {/* Name & Password */}
+                <div className="grid sm:grid-cols-2 grid-cols-1 gap-3">
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <HiUser className="w-4 h-4 text-primary" />
+                        </div>
+                        <input
+                            ref={nameRef}
+                            value={name}
+                            readOnly={mode === 'edit'}
+                            onChange={(e) => onChangeName && onChangeName(e.target.value)}
+                            className={`pl-9 pr-3 py-2.5 rounded-xl border text-sm transition-all placeholder:text-white/30 w-full outline-none ${
+                                mode === 'edit'
+                                    ? 'border-white/5 bg-white/3 text-white/35 cursor-not-allowed'
+                                    : 'border-white/10 bg-white/5 text-white focus:ring-2 focus:ring-primary/40 focus:border-primary/30'
+                            }`}
+                            placeholder="이름"
+                        />
                     </div>
-                    <input
-                        ref={nameRef}
-                        value={name}
-                        onChange={(e) => onChangeName && onChangeName(e.target.value)}
-                        className="pl-10 pr-3 rounded-xl border border-white/10 bg-linear-to-br from-black/30 to-black/10 py-3 outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-white/50 w-full"
-                        placeholder="이름"
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <TbLockPassword className="w-4 h-4 text-primary" />
+                        </div>
+                        <input
+                            ref={passwordRef}
+                            onChange={(e) => onChangePassword && onChangePassword(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && onSubmit?.()}
+                            className="pl-9 pr-3 py-2.5 rounded-xl border border-white/10 bg-white/5 outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/30 text-sm transition-all placeholder:text-white/30 text-white w-full"
+                            placeholder={mode === 'create' ? '비밀번호' : '비밀번호 확인'}
+                            type="password"
+                        />
+                    </div>
+                </div>
+
+                {/* Message */}
+                <div className="relative">
+                    <div className="absolute top-3 left-3 pointer-events-none">
+                        <FiMessageSquare className="w-4 h-4 text-primary" />
+                    </div>
+                    <textarea
+                        ref={messageRef}
+                        value={message}
+                        onChange={(e) => onChangeMessage && onChangeMessage(e.target.value)}
+                        className="w-full pl-9 pr-4 py-3 rounded-xl border border-white/10 bg-white/5 outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/30 text-sm transition-all placeholder:text-white/30 resize-none text-white"
+                        rows={4}
+                        placeholder="소중한 메시지를 남겨주세요..."
                     />
                 </div>
 
-                <div className="relative flex-1">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-white/70">
-                        <TbLockPassword className="w-5 h-5 text-primary" />
-                    </div>
-                    <input
-                        ref={passwordRef}
-                        onChange={(e) => onChangePassword && onChangePassword(e.target.value)}
-                        className="pl-10 pr-3 rounded-xl border border-white/10 bg-linear-to-br from-black/30 to-black/10 py-3 outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-white/50 w-full"
-                        placeholder={passwordPlaceholder}
-                        type="password"
-                    />
-                </div>
-            </div>
+                {error && (
+                    <p className="text-xs text-rose-400" role="alert" aria-live="polite">{error}</p>
+                )}
 
-            <div className="mt-3">
-                <div className="pointer-events-none text-white/70 flex items-center gap-2 mb-2">
-                    <FiMessageSquare className="w-5 h-5 text-primary" />
-                    <span className="text-sm font-medium">메시지</span>
+                {/* Actions */}
+                <div className="flex gap-2 pt-1">
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        className="flex-1 px-4 py-2.5 bg-white/6 hover:bg-white/10 text-white/55 hover:text-white/75 rounded-xl transition-all cursor-pointer font-medium text-sm"
+                    >
+                        취소
+                    </button>
+                    <button
+                        type="button"
+                        onClick={onSubmit}
+                        className="flex-1 px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-xl transition-all cursor-pointer font-semibold text-sm disabled:opacity-50 shadow-lg shadow-primary/20"
+                        disabled={submitting}
+                    >
+                        {submitting ? '처리 중...' : mode === 'create' ? '등록하기' : '저장하기'}
+                    </button>
                 </div>
-                <textarea
-                    ref={messageRef}
-                    value={message}
-                    onChange={(e) => onChangeMessage && onChangeMessage(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-linear-to-br from-black/30 to-black/10 px-4 py-3 outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-white/50 resize-none"
-                    rows={5}
-                    placeholder="소중한 메시지를 남겨주세요..."
-                />
-            </div>
-
-            {error && (
-                <div className="mt-2 text-sm text-rose-400" role="alert" aria-live="polite">
-                    {error}
-                </div>
-            )}
-
-            <div className="mt-4 flex justify-end gap-2">
-                <button type="button" onClick={onCancel} className="px-4 py-2 bg-white/95 text-black rounded-lg min-w-25 flex items-center justify-center cursor-pointer">
-                    취소
-                </button>
-                <button type="button" onClick={onSubmit} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg min-w-25 justify-center cursor-pointer shadow-md disabled:opacity-60" disabled={submitting}>
-                    {submitting ? '처리중...' : mode === 'create' ? '등록하기' : '저장'}
-                </button>
             </div>
         </div>
     )

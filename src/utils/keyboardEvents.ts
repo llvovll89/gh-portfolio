@@ -124,6 +124,9 @@ export const handleCliEnterEvent: CliCommandHandler = (
         event.preventDefault();
         const target = event.target as HTMLTextAreaElement;
 
+        // textarea 가 아닌 요소(value가 undefined)면 무시 — undefined 세팅으로 콘솔 출력이 지워지는 버그 방지
+        if (typeof target.value !== "string") return;
+
         setSubmitCliCommand((prev) => ({
             ...prev,
             isVisibleCommandUi: true,

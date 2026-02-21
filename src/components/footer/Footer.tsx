@@ -52,7 +52,7 @@ export const Bottom = () => {
         () => (localStorage.getItem("footerActiveTab") as FooterTabType) || "terminal"
     );
 
-    // CLI 명령 실행 시 자동으로 Console 탭으로 전환
+    // CLI 명령 실행 시 콘솔 탭으로 자동 전환 + 패널 열기
     useEffect(() => {
         if (submitCliCommand.value && submitCliCommand.value.trim() !== "") {
             setActiveTab("console");
