@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ThemeMode } from "../../../../context/constatns/Theme.type";
 
-type RepoName = "gh-portfolio" | "modart" | "blacktie" | "MealLog";
+type RepoName = "gh-portfolio" | "modart" | "blacktie" | "MealLog" | "wedding-plan";
 
 type RepoStats = {
     stars: number;
@@ -87,7 +87,7 @@ type RepoState = {
 type TabType = "branches" | "issues" | "pullRequests";
 
 export const GitControl = () => {
-    const repos = useMemo(() => ["gh-portfolio", "modart", "blacktie", "MealLog"] as const, []);
+    const repos = useMemo(() => ["gh-portfolio", "modart", "blacktie", "MealLog", "wedding-plan"] as const, []);
     const { t } = useTranslation();
 
     const [gitStates, setGitStates] = useState<Record<RepoName, RepoState>>({
@@ -95,6 +95,7 @@ export const GitControl = () => {
         modart: { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
         blacktie: { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
         MealLog: { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
+        "wedding-plan": { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
     });
 
     const [selected, setSelected] = useState<{ repo: RepoName; branch: string } | null>(null);
