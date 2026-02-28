@@ -362,7 +362,7 @@ export const Search = () => {
 
     return (
         <section
-            className={`w-[calc(100%-40px)] flex flex-col ${backgroundClass} overflow-hidden`}
+            className={`w-full flex flex-col ${backgroundClass} overflow-hidden`}
             style={backgroundStyle}
         >
             <header className="w-full h-10 px-3 flex items-center text-xs text-white overflow-hidden tracking-[1px]">

@@ -261,7 +261,7 @@ export const GitControl = () => {
     };
 
     return (
-        <section className={`w-full flex flex-col ${backgroundClass} overflow-y-auto text-white`} style={backgroundStyle}>
+        <section className={`w-full h-full flex flex-col ${backgroundClass} overflow-y-auto scrolls text-white`} style={backgroundStyle}>
             <header className="h-10 flex items-center px-3 border-b border-sub-gary/30 text-xs justify-between">
                 <div>{t("gitControl.title")}</div>
                 <div className="flex items-center gap-2">
