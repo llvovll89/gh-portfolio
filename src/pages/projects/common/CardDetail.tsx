@@ -37,7 +37,7 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
         >
             <div
                 className={[
-                    "relative w-full max-w-4xl max-h-[90vh] overflow-y-auto scrolls",
+                    "relative w-full max-w-4xl max-h-[95dvh] sm:max-h-[90vh] overflow-y-auto scrolls",
                     "rounded-2xl border border-[#3e3e42]",
                     "bg-[#000000] text-slate-100",
                     "shadow-[0_30px_90px_rgba(0,0,0,0.5)]",
@@ -49,7 +49,7 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* 프로젝트 이미지 헤더 */}
-                <div className="relative h-64 w-full overflow-hidden bg-[#252526]">
+                <div className="relative h-40 sm:h-56 md:h-64 w-full overflow-hidden bg-[#252526]">
                     <img
                         src={selected.image}
                         alt={selected.title}
@@ -93,11 +93,11 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                     </div>
                 </div>
 
-                <div className="relative p-6 md:p-8">
+                <div className="relative p-4 sm:p-6 md:p-8">
                     {/* 타이틀과 배지 */}
                     <div className="mb-6">
                         <div className="flex flex-wrap items-center gap-3 mb-3">
-                            <h3 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-100">
+                            <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-100">
                                 {selected.title}
                             </h3>
                             <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
@@ -119,7 +119,7 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                     <CardDescAndSkills project={selected} />
 
                     {/* 액션 버튼 */}
-                    <div className="mt-8 flex flex-wrap items-center justify-end gap-3 pt-6 border-t border-[#3e3e42]">
+                    <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-end gap-3 pt-4 sm:pt-6 border-t border-[#3e3e42]">
                         {selected.link.projectUrl ? (
                             <a
                                 href={selected.link.projectUrl}

@@ -88,14 +88,13 @@ export const projects = [
         image: "/assets/images/projects/weddingPlan.png",
         link: {
             repositoryUrl: "https://github.com/llvovll89/wedding-plan",
-            projectUrl: "",
+            projectUrl: "https://wedding-plan-gh.vercel.app/",
         },
         description:
             "결혼식 준비를 돕는 웨딩 플랜 웹 애플리케이션입니다.",
         detailedDescription:
-            "결혼식 준비를 체계적으로 관리할 수 있도록 돕는 웨딩 플랜 웹 애플리케이션입니다. 현재 개발이 진행 중이며, 웨딩 일정 관리, 예산 계획, 체크리스트 등 다양한 기능을 제공할 예정입니다.",
-        skills: ["React", "TypeScript", "Vite", "Tailwind CSS"],
+            "결혼식 준비를 체계적으로 관리할 수 있도록 돕는 웨딩 플랜 웹 애플리케이션입니다. 웨딩 일정 관리, 예산 계획, 체크리스트 등 다양한 기능을 제공하며, Firebase를 활용한 실시간 데이터 동기화와 인증 기능을 지원합니다.",
+        skills: ["React", "TypeScript", "Vite", "Tailwind CSS", "Firebase", "Vercel"],
         projectMembers: ["김건호"],
-        status: "incomplete",
     },
 ] as Project[];

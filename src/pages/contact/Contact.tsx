@@ -14,7 +14,7 @@ export const Contact = () => {
             <Header />
             <Aside />
             <Contents className="select-none">
-                <section className="relative w-full max-w-6xl mx-auto overflow-scroll scrolls px-2 md:px-6">
+                <section className="relative w-full max-w-6xl mx-auto overflow-auto scrolls px-2 md:px-6">
                     <div className="relative mb-6 sm:mb-10">
                         <div className="flex items-center gap-3 sm:mb-3 mb-1.5">
                             <div className="p-2 bg-primary/10 rounded-lg">

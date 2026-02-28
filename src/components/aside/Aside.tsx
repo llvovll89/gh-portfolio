@@ -9,6 +9,7 @@ import { GitControl } from "./contents/gitControl/GitControl";
 import { Bookmarks } from "./contents/bookmarks/Bookmarks";
 import { Settings } from "./contents/settings/Settings";
 import { ThemeMode } from "../../context/constatns/Theme.type";
+import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
 
 export const Aside = () => {
     const {
@@ -20,6 +21,7 @@ export const Aside = () => {
     } = useContext(GlobalStateContext);
     const asideRef = useRef<HTMLDivElement>(null);
     const handleMouseDown = useDragging({ targetRef: asideRef, type: "sidebar" });
+    const isMobileSize = useCheckedMobileSize();
 
     // 커스텀 테마 적용
     const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
@@ -49,6 +51,15 @@ export const Aside = () => {
     }, [selectedNav]);
 
     return (
+        <>
+        {/* 모바일: 사이드바 열렸을 때 backdrop (누르면 닫힘) */}
+        {isMobileSize && selectedNav && (
+            <div
+                aria-hidden="true"
+                className="fixed inset-0 bg-black/50 z-10"
+                onClick={() => setSelectedNav(null)}
+            />
+        )}
         <aside
             id="main-navigation"
             role="navigation"
@@ -110,5 +121,6 @@ export const Aside = () => {
                 </div>
             )}
         </aside>
+        </>
     );
 };

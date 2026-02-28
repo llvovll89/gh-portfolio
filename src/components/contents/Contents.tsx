@@ -45,7 +45,7 @@ export const Contents = ({ children, className }: ContentsProps) => {
             tabIndex={-1}
             className={`absolute top-10 right-0 flex flex-col sm:pb-10 pb-2 transition-width transition-transform ease-in-out overflow-x-hidden overflow-y-auto gap-4 scrolls min-h-[calc(100dvh-40px)]
                 max-h-[calc(100dvh-40px)]
-                py-2 sm:py-4 md:py-6 ${isMobileSize ? "pl-1 pr-1" : "px-3 sm:px-4 md:px-6"} ${isFullscreen ? "justify-center" : ""} ${className} ${backgroundClass} ${textColor}`}
+                py-2 sm:py-4 md:py-6 ${isMobileSize ? "px-2" : "px-3 sm:px-4 md:px-6"} ${isFullscreen ? "justify-center" : ""} ${className} ${backgroundClass} ${textColor}`}
             style={{
                 width: `calc(100% - ${isMobileSize ? LAYOUT_CONSTANTS.MOBILE_SIDEBAR_WIDTH : layoutState.resizeSidebarWidth}px)`,
                 ...backgroundStyle,
