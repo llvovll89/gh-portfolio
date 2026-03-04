@@ -46,7 +46,7 @@ export const Guestbook = () => {
 					</div>
 
 					{/* List */}
-					<div className="sm:p-4 p-2 m-auto overflow-y-auto scrolls w-full h-full max-w-5xl">
+					<div className="sm:p-4 p-2 m-auto w-full h-full max-w-5xl overflow-hidden">
 						<GuestbookList handleToggleForm={() => setShowForm(true)} onSuccess={(m) => showToast(m)} />
 					</div>
 

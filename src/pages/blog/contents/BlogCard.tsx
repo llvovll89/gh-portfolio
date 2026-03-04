@@ -1,11 +1,20 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { FiEye } from "react-icons/fi";
 import type { BlogPost } from "../../../utils/loadPosts";
+import { getViewCount } from "../../../utils/blogViews";
 
 interface BlogCardProps {
     p: BlogPost;
 }
 
 export const BlogCard = ({ p }: BlogCardProps) => {
+    const [viewCount, setViewCount] = useState<number | null>(null);
+
+    useEffect(() => {
+        getViewCount(p.slug).then(setViewCount).catch(() => {});
+    }, [p.slug]);
+
     return (
         <li className="list-none">
             <Link
@@ -26,6 +35,12 @@ export const BlogCard = ({ p }: BlogCardProps) => {
                     {p.readingTime && (
                         <span className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500">
                             {p.readingTime}
+                        </span>
+                    )}
+                    {viewCount !== null && viewCount > 0 && (
+                        <span className="flex items-center gap-1 text-[10px] font-medium text-zinc-400 dark:text-zinc-500">
+                            <FiEye className="w-3 h-3" />
+                            {viewCount.toLocaleString()}
                         </span>
                     )}
                     {p.tags?.length ? (

@@ -88,7 +88,7 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
     const [deleteError, setDeleteError] = useState('')
     const [deleting, setDeleting] = useState(false)
 
-    // 상세보기 모달
+    // 분할 뷰용 선택된 항목
     const [detailEntry, setDetailEntry] = useState<GuestbookEntry | null>(null)
 
     useEffect(() => {
@@ -114,13 +114,24 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
         return () => unsub()
     }, [])
 
-    const verifyAndUpdate = (e: React.MouseEvent, entry: GuestbookEntry) => {
-        e.stopPropagation()
+    // 삭제 후 선택 항목 해제
+    useEffect(() => {
+        if (detailEntry && !entries.find(e => e.id === detailEntry.id)) {
+            setDetailEntry(null)
+        }
+    }, [entries, detailEntry])
+
+    const openEditModal = (entry: GuestbookEntry) => {
         setEditingEntry(entry)
         setEditMessage(entry.message)
         setEditPassword('')
         setEditError('')
         setIsEditModalOpen(true)
+    }
+
+    const verifyAndUpdate = (e: React.MouseEvent, entry: GuestbookEntry) => {
+        e.stopPropagation()
+        openEditModal(entry)
     }
 
     const handleEditSubmit = async (e?: React.FormEvent) => {
@@ -137,6 +148,13 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
 
     const openDeleteModal = (e: React.MouseEvent, entry: GuestbookEntry) => {
         e.stopPropagation()
+        setDeletingEntry(entry)
+        setDeletePassword('')
+        setDeleteError('')
+        setIsDeleteModalOpen(true)
+    }
+
+    const openDeleteModalDirect = (entry: GuestbookEntry) => {
         setDeletingEntry(entry)
         setDeletePassword('')
         setDeleteError('')
@@ -168,97 +186,166 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
     const closeDeleteModal = () => { setIsDeleteModalOpen(false); setDeletingEntry(null); setDeleteError('') }
 
     return (
-        <div className="w-full h-full flex flex-col">
-            {loading ? (
-                <ul className="grid grid-cols-1 gap-3">
-                    <SkeletonCard /><SkeletonCard /><SkeletonCard />
-                </ul>
-            ) : entries.length === 0 ? (
-                <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center gap-5">
-                    <div className="p-5 rounded-2xl bg-white/5 border border-white/10">
-                        <FiMessageSquare className="w-10 h-10 text-white/30" />
+        <div className="w-full h-full flex gap-4">
+            {/* 왼쪽: 목록 */}
+            <div className="overflow-y-auto scrolls w-full md:w-1/2 md:max-w-[50%] shrink-0">
+                {loading ? (
+                    <ul className="grid grid-cols-1 gap-3">
+                        <SkeletonCard /><SkeletonCard /><SkeletonCard />
+                    </ul>
+                ) : entries.length === 0 ? (
+                    <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center gap-5">
+                        <div className="p-5 rounded-2xl bg-white/5 border border-white/10">
+                            <FiMessageSquare className="w-10 h-10 text-white/30" />
+                        </div>
+                        <div>
+                            <div className="text-lg font-bold text-white/70 mb-1.5">아직 방명록이 없어요</div>
+                            <p className="text-sm text-white/40">첫 번째 메시지를 남겨보세요!</p>
+                        </div>
+                        <button
+                            onClick={handleToggleForm}
+                            className="inline-flex items-center gap-2 cursor-pointer bg-primary/80 hover:bg-primary transition-colors px-5 py-2.5 rounded-xl font-semibold text-white text-sm"
+                        >
+                            <FaPencil className="w-3.5 h-3.5" />
+                            방명록 남기기
+                        </button>
                     </div>
-                    <div>
-                        <div className="text-lg font-bold text-white/70 mb-1.5">아직 방명록이 없어요</div>
-                        <p className="text-sm text-white/40">첫 번째 메시지를 남겨보세요!</p>
-                    </div>
-                    <button
-                        onClick={handleToggleForm}
-                        className="inline-flex items-center gap-2 cursor-pointer bg-primary/80 hover:bg-primary transition-colors px-5 py-2.5 rounded-xl font-semibold text-white text-sm"
-                    >
-                        <FaPencil className="w-3.5 h-3.5" />
-                        방명록 남기기
-                    </button>
-                </div>
-            ) : (
-                <ul className="grid grid-cols-1 gap-3">
-                    {entries.map((entry) => {
-                        const gradient = getAvatarGradient(entry.name)
-                        const initial = entry.name[0]?.toUpperCase() || '?'
-                        const dateStr = entry.createdAt?.toDate ? getRelativeTime(entry.createdAt.toDate()) : ''
-                        const isLong = entry.message.length > 120 || entry.message.split('\n').length > 3
+                ) : (
+                    <ul className="grid grid-cols-1 gap-3">
+                        {entries.map((entry) => {
+                            const gradient = getAvatarGradient(entry.name)
+                            const initial = entry.name[0]?.toUpperCase() || '?'
+                            const dateStr = entry.createdAt?.toDate ? getRelativeTime(entry.createdAt.toDate()) : ''
+                            const isLong = entry.message.length > 120 || entry.message.split('\n').length > 3
+                            const isSelected = detailEntry?.id === entry.id
 
-                        return (
-                            <li
-                                key={entry.id}
-                                onClick={() => setDetailEntry(entry)}
-                                className="group p-5 bg-white/3 hover:bg-white/[0.05] border border-white/6 hover:border-white/10 rounded-2xl backdrop-blur-sm transition-all duration-200 cursor-pointer"
-                            >
-                                <div className="flex gap-3.5">
-                                    <div className={`shrink-0 w-10 h-10 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-base shadow-lg`}>
-                                        {initial}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center justify-between gap-2 mb-2">
-                                            <div className="flex items-center gap-2 min-w-0 flex-wrap">
-                                                <span className="font-semibold text-white/90 text-sm">{entry.name}</span>
-                                                {dateStr && (
-                                                    <span className="text-[11px] text-white/35 shrink-0">{dateStr}</span>
-                                                )}
-                                            </div>
-                                            {/* 모바일: 항상 보임 / 데스크탑: hover 시 보임 */}
-                                            <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity shrink-0">
-                                                <button
-                                                    type="button"
-                                                    onClick={(e) => verifyAndUpdate(e, entry)}
-                                                    className="p-1.5 rounded-lg text-white/40 hover:text-primary hover:bg-primary/10 active:bg-primary/20 transition-all cursor-pointer"
-                                                    title="수정"
-                                                >
-                                                    <FaEdit className="w-3.5 h-3.5" />
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    onClick={(e) => openDeleteModal(e, entry)}
-                                                    className="p-1.5 rounded-lg text-white/40 hover:text-rose-400 hover:bg-rose-400/10 active:bg-rose-400/20 transition-all cursor-pointer"
-                                                    title="삭제"
-                                                >
-                                                    <MdDelete className="w-4 h-4" />
-                                                </button>
-                                            </div>
+                            return (
+                                <li
+                                    key={entry.id}
+                                    onClick={() => setDetailEntry(isSelected ? null : entry)}
+                                    className={`group p-5 border rounded-2xl backdrop-blur-sm transition-all duration-200 cursor-pointer ${
+                                        isSelected
+                                            ? 'border-primary/40 bg-primary/[0.07]'
+                                            : 'bg-white/3 hover:bg-white/[0.05] border-white/6 hover:border-white/10'
+                                    }`}
+                                >
+                                    <div className="flex gap-3.5">
+                                        <div className={`shrink-0 w-10 h-10 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-base shadow-lg`}>
+                                            {initial}
                                         </div>
-                                        <p className="text-white/70 text-sm whitespace-pre-wrap break-words leading-relaxed line-clamp-3">
-                                            {entry.message}
-                                        </p>
-                                        {isLong && (
-                                            <span className="text-[11px] text-primary/70 mt-1.5 inline-block">
-                                                더 보기 →
-                                            </span>
-                                        )}
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center justify-between gap-2 mb-2">
+                                                <div className="flex items-center gap-2 min-w-0 flex-wrap">
+                                                    <span className="font-semibold text-white/90 text-sm">{entry.name}</span>
+                                                    {dateStr && (
+                                                        <span className="text-[11px] text-white/35 shrink-0">{dateStr}</span>
+                                                    )}
+                                                </div>
+                                                {/* 모바일: 항상 보임 / 데스크탑: hover 시 보임 */}
+                                                <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity shrink-0">
+                                                    <button
+                                                        type="button"
+                                                        onClick={(e) => verifyAndUpdate(e, entry)}
+                                                        className="p-1.5 rounded-lg text-white/40 hover:text-primary hover:bg-primary/10 active:bg-primary/20 transition-all cursor-pointer"
+                                                        title="수정"
+                                                    >
+                                                        <FaEdit className="w-3.5 h-3.5" />
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={(e) => openDeleteModal(e, entry)}
+                                                        className="p-1.5 rounded-lg text-white/40 hover:text-rose-400 hover:bg-rose-400/10 active:bg-rose-400/20 transition-all cursor-pointer"
+                                                        title="삭제"
+                                                    >
+                                                        <MdDelete className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <p className="text-white/70 text-sm whitespace-pre-wrap break-words leading-relaxed line-clamp-3">
+                                                {entry.message}
+                                            </p>
+                                            {isLong && (
+                                                <span className="text-[11px] text-primary/70 mt-1.5 inline-block">
+                                                    더 보기 →
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
-                        )
-                    })}
-                </ul>
-            )}
+                                </li>
+                            )
+                        })}
+                    </ul>
+                )}
+            </div>
 
-            {/* 상세보기 모달 */}
+            {/* 오른쪽: 분할 상세 패널 (md+ 전용) */}
+            <div className={`hidden md:flex flex-1 flex-col rounded-2xl border transition-all duration-300 overflow-hidden ${
+                detailEntry ? 'border-white/10 bg-white/[0.03]' : 'border-white/6 border-dashed'
+            }`}>
+                {detailEntry ? (
+                    <>
+                        {/* 헤더 */}
+                        <div className="flex items-center gap-3 px-5 pt-5 pb-4 border-b border-white/6 shrink-0">
+                            <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${getAvatarGradient(detailEntry.name)} flex items-center justify-center text-white font-bold text-base shadow-lg shrink-0`}>
+                                {detailEntry.name[0]?.toUpperCase() || '?'}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <div className="font-semibold text-white/90 text-sm">{detailEntry.name}</div>
+                                {detailEntry.createdAt?.toDate && (
+                                    <div className="text-[11px] text-white/40 mt-0.5">
+                                        {detailEntry.createdAt.toDate().toLocaleString('ko-KR')}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex items-center gap-1 shrink-0">
+                                <button
+                                    type="button"
+                                    onClick={() => openEditModal(detailEntry)}
+                                    className="p-1.5 rounded-lg text-white/40 hover:text-primary hover:bg-primary/10 transition-all cursor-pointer"
+                                    title="수정"
+                                >
+                                    <FaEdit className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => openDeleteModalDirect(detailEntry)}
+                                    className="p-1.5 rounded-lg text-white/40 hover:text-rose-400 hover:bg-rose-400/10 transition-all cursor-pointer"
+                                    title="삭제"
+                                >
+                                    <MdDelete className="w-4 h-4" />
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setDetailEntry(null)}
+                                    className="p-1.5 rounded-lg text-white/35 hover:text-white/70 hover:bg-white/8 transition-all cursor-pointer"
+                                    title="닫기"
+                                >
+                                    <IoClose className="w-5 h-5" />
+                                </button>
+                            </div>
+                        </div>
+                        {/* 메시지 */}
+                        <div className="flex-1 overflow-y-auto scrolls px-5 py-4">
+                            <p className="text-white/80 text-sm whitespace-pre-wrap break-words leading-relaxed">
+                                {detailEntry.message}
+                            </p>
+                        </div>
+                    </>
+                ) : (
+                    <div className="flex-1 flex flex-col items-center justify-center gap-3 p-8">
+                        <FiMessageSquare className="w-10 h-10 text-white/10" />
+                        <p className="text-white/20 text-sm text-center">목록에서 항목을 선택하세요</p>
+                    </div>
+                )}
+            </div>
+
+            {/* 모바일 상세 모달 */}
             {detailEntry && (
                 <>
-                    <div className="fixed inset-0 bg-black/55 z-40 backdrop-blur-sm" onClick={() => setDetailEntry(null)} />
-                    <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center md:p-4">
-                        <div className="w-full md:max-w-lg animate-in slide-in-from-bottom md:zoom-in-95 duration-200">
-                            <div className="rounded-t-2xl md:rounded-2xl border border-white/10 bg-zinc-950/98 backdrop-blur-xl shadow-2xl max-h-[85dvh] md:max-h-[70vh] flex flex-col">
+                    <div className="md:hidden fixed inset-0 bg-black/55 z-40 backdrop-blur-sm" onClick={() => setDetailEntry(null)} />
+                    <div className="md:hidden fixed inset-0 z-50 flex items-end justify-center">
+                        <div className="w-full animate-in slide-in-from-bottom duration-200">
+                            <div className="rounded-t-2xl border border-white/10 bg-zinc-950/98 backdrop-blur-xl shadow-2xl max-h-[85dvh] flex flex-col">
                                 {/* 헤더 */}
                                 <div className="flex items-center gap-3 px-5 pt-5 pb-4 border-b border-white/6 shrink-0">
                                     <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${getAvatarGradient(detailEntry.name)} flex items-center justify-center text-white font-bold text-base shadow-lg shrink-0`}>
