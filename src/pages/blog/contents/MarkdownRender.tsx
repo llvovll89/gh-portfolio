@@ -1,5 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { slugifyHeading } from "../../../utils/parseToc";
+import { DETAIL_SCROLL_ID } from "./Detail";
 
 type Props = {
     content: string;
@@ -19,32 +21,78 @@ export const MarkdownRenderer = ({ content }: Props) => {
                             {...props}
                         />
                     ),
-                    h2: (props) => (
-                        <h2
-                            className={`mt-6 mb-3 text-2xl font-bold ${overflowXStyle} text-[clamp(1.25rem,2vw,2rem)]`}
-                            {...props}
-                        />
-                    ),
-                    h3: (props) => (
-                        <h3
-                            className={`mt-5 mb-2 text-xl font-semibold ${overflowXStyle} text-[clamp(1.1rem,1.5vw,1.5rem)]`}
-                            {...props}
-                        />
-                    ),
+                    h2: (props) => {
+                        const text = Array.isArray(props.children)
+                            ? (props.children as unknown[]).map((c) => (typeof c === "string" ? c : "")).join("")
+                            : typeof props.children === "string"
+                            ? props.children
+                            : "";
+                        return (
+                            <h2
+                                id={slugifyHeading(text) || undefined}
+                                className={`mt-6 mb-3 text-2xl font-bold ${overflowXStyle} text-[clamp(1.25rem,2vw,2rem)]`}
+                                {...props}
+                            />
+                        );
+                    },
+                    h3: (props) => {
+                        const text = Array.isArray(props.children)
+                            ? (props.children as unknown[]).map((c) => (typeof c === "string" ? c : "")).join("")
+                            : typeof props.children === "string"
+                            ? props.children
+                            : "";
+                        return (
+                            <h3
+                                id={slugifyHeading(text) || undefined}
+                                className={`mt-5 mb-2 text-xl font-semibold ${overflowXStyle} text-[clamp(1.1rem,1.5vw,1.5rem)]`}
+                                {...props}
+                            />
+                        );
+                    },
                     p: (props) => (
                         <p
                             className="my-3 leading-7 text-zinc-800 text-[clamp(0.95rem,1.5vw,1.1rem)]"
                             {...props}
                         />
                     ),
-                    a: (props) => (
-                        <a
-                            className="text-blue-600 dark:text-blue-400 underline underline-offset-4 text-[clamp(0.95rem,1.5vw,1.1rem)]"
-                            target="_blank"
-                            rel="noreferrer"
-                            {...props}
-                        />
-                    ),
+                    a: ({ href, children, ...props }) => {
+                        const isAnchor = href?.startsWith("#");
+                        if (isAnchor) {
+                            return (
+                                <a
+                                    href={href}
+                                    className="text-blue-600 dark:text-blue-400 underline underline-offset-4 text-[clamp(0.95rem,1.5vw,1.1rem)]"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        const id = href!.slice(1);
+                                        const el = document.getElementById(id);
+                                        const container = document.getElementById(DETAIL_SCROLL_ID);
+                                        if (!el || !container) return;
+                                        const offset =
+                                            el.getBoundingClientRect().top -
+                                            container.getBoundingClientRect().top +
+                                            container.scrollTop -
+                                            80;
+                                        container.scrollTo({ top: Math.max(0, offset), behavior: "smooth" });
+                                    }}
+                                    {...props}
+                                >
+                                    {children}
+                                </a>
+                            );
+                        }
+                        return (
+                            <a
+                                href={href}
+                                className="text-blue-600 dark:text-blue-400 underline underline-offset-4 text-[clamp(0.95rem,1.5vw,1.1rem)]"
+                                target="_blank"
+                                rel="noreferrer"
+                                {...props}
+                            >
+                                {children}
+                            </a>
+                        );
+                    },
                     ul: (props) => (
                         <ul className="my-3 list-disc pl-6" {...props} />
                     ),
