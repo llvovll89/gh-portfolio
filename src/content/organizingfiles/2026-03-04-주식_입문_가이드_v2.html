@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>주식 입문 가이드</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0e17;
+      --surface: #111827;
+      --surface2: #1a2235;
+      --accent: #00d4aa;
+      --accent2: #f59e0b;
+      --accent3: #ef4444;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --border: #1e3a5f;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Noto Serif KR', serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,170,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,170,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 64px;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 4px 14px;
+      border-radius: 2px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 48px 0;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .divider span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 2px;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 48px;
+      animation: fadeUp 0.6s ease both;
+    }
+    .section:nth-child(2) { animation-delay: 0.1s; }
+    .section:nth-child(3) { animation-delay: 0.2s; }
+    .section:nth-child(4) { animation-delay: 0.3s; }
+    .section:nth-child(5) { animation-delay: 0.4s; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .section-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      background: rgba(0,212,170,0.08);
+      border: 1px solid rgba(0,212,170,0.2);
+      padding: 3px 10px;
+      border-radius: 2px;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Key Point Box */
+    .key-box {
+      background: linear-gradient(135deg, rgba(0,212,170,0.08), rgba(0,212,170,0.02));
+      border: 1px solid rgba(0,212,170,0.3);
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 24px 28px;
+      margin-bottom: 32px;
+    }
+
+    .key-box .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--accent);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .key-box p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    /* Card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .card:hover {
+      border-color: rgba(0,212,170,0.3);
+      transform: translateY(-2px);
+    }
+
+    .card-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--accent2);
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 0.93rem;
+      line-height: 1.85;
+      color: #94a3b8;
+    }
+
+    .card .formula {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 8px 14px;
+      margin: 10px 0;
+      font-size: 0.82rem;
+      color: var(--accent);
+    }
+
+    .card .highlight {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    /* Compare Table */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 0.88rem;
+    }
+
+    .compare-table th {
+      background: var(--surface2);
+      padding: 12px 16px;
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 1px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .compare-table th:nth-child(2) { color: var(--accent2); }
+    .compare-table th:nth-child(3) { color: var(--accent); }
+
+    .compare-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(30,58,95,0.5);
+      color: #94a3b8;
+      vertical-align: top;
+    }
+
+    .compare-table td:first-child {
+      color: var(--text);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:hover td { background: rgba(0,212,170,0.03); }
+
+    /* Tax Table */
+    .tax-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .tax-block-header {
+      background: var(--surface2);
+      padding: 14px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      color: var(--accent);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tax-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(30,58,95,0.4);
+      font-size: 0.9rem;
+    }
+
+    .tax-row:last-child { border-bottom: none; }
+
+    .tax-label {
+      min-width: 120px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .tax-value {
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .tag-free {
+      display: inline-block;
+      background: rgba(0,212,170,0.12);
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 2px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    .tag-warn {
+      display: inline-block;
+      background: rgba(239,68,68,0.1);
+      color: var(--accent3);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 2px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* ETF List */
+    .etf-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .etf-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: border-color 0.2s;
+    }
+
+    .etf-item:hover { border-color: rgba(0,212,170,0.3); }
+
+    .etf-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--accent);
+      min-width: 160px;
+    }
+
+    .etf-desc {
+      font-size: 0.88rem;
+      color: #94a3b8;
+    }
+
+    /* Tip Box */
+    .tip-box {
+      background: rgba(245,158,11,0.06);
+      border: 1px solid rgba(245,158,11,0.2);
+      border-left: 3px solid var(--accent2);
+      border-radius: 6px;
+      padding: 18px 22px;
+      margin-top: 24px;
+    }
+
+    .tip-box .tip-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--accent2);
+      margin-bottom: 8px;
+    }
+
+    .tip-box p {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: #94a3b8;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 64px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Ticker tape */
+    .ticker {
+      background: var(--surface2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0;
+      overflow: hidden;
+      margin-bottom: 48px;
+    }
+
+    .ticker-inner {
+      display: flex;
+      gap: 48px;
+      animation: scroll 20s linear infinite;
+      white-space: nowrap;
+    }
+
+    .ticker-item {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ticker-item .up { color: var(--accent); }
+    .ticker-item .down { color: var(--accent3); }
+
+    @keyframes scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* TOC Nav */
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 48px;
+    }
+    .toc-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 8px;
+    }
+    .toc-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      text-decoration: none;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .toc-item:hover { background: var(--surface2); color: var(--accent); }
+    .toc-item .toc-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      min-width: 24px;
+    }
+
+    /* Step List */
+    .step-list { display: flex; flex-direction: column; gap: 12px; }
+    .step-item {
+      display: flex;
+      gap: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 20px;
+      transition: border-color 0.2s;
+    }
+    .step-item:hover { border-color: rgba(0,212,170,0.3); }
+    .step-icon {
+      font-size: 1.3rem;
+      min-width: 32px;
+      text-align: center;
+      margin-top: 2px;
+    }
+    .step-content {}
+    .step-title {
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+    .step-desc {
+      font-size: 0.87rem;
+      color: #94a3b8;
+      line-height: 1.75;
+    }
+
+    /* Warning box */
+    .warn-box {
+      background: rgba(239,68,68,0.06);
+      border: 1px solid rgba(239,68,68,0.2);
+      border-left: 3px solid var(--accent3);
+      border-radius: 6px;
+      padding: 18px 22px;
+      margin-top: 16px;
+    }
+    .warn-box .warn-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--accent3);
+      margin-bottom: 8px;
+    }
+    .warn-box p { font-size: 0.9rem; line-height: 1.8; color: #94a3b8; }
+
+    /* Order type grid */
+    .order-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+    }
+    .order-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .order-card:hover { border-color: rgba(0,212,170,0.3); transform: translateY(-2px); }
+    .order-card-icon { font-size: 1.5rem; margin-bottom: 10px; }
+    .order-card-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--accent2);
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    .order-card-desc { font-size: 0.85rem; color: #94a3b8; line-height: 1.7; }
+
+    /* Mindset checklist */
+    .checklist { display: flex; flex-direction: column; gap: 10px; }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+    }
+    .check-icon { font-size: 1.1rem; min-width: 24px; }
+    .check-text { font-size: 0.9rem; color: #94a3b8; line-height: 1.7; }
+    .check-text strong { color: var(--text); }
+
+    /* Chart-like visual */
+    .bar-chart { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+    .bar-row { display: flex; align-items: center; gap: 12px; }
+    .bar-label { font-size: 0.82rem; color: var(--muted); min-width: 90px; text-align: right; }
+    .bar-track {
+      flex: 1;
+      background: var(--surface2);
+      border-radius: 4px;
+      height: 10px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: var(--accent);
+      transition: width 1s ease;
+    }
+    .bar-fill.danger { background: var(--accent3); }
+    .bar-fill.warn { background: var(--accent2); }
+    .bar-val { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--accent); min-width: 36px; }
+
+    /* ISA / IRP */
+    .account-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 14px;
+    }
+    .account-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .account-card:hover { border-color: rgba(0,212,170,0.3); }
+    .account-card-header {
+      background: var(--surface2);
+      padding: 12px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 2px;
+      color: var(--accent);
+      border-bottom: 1px solid var(--border);
+    }
+    .account-card-body { padding: 16px 18px; }
+    .account-card-body p { font-size: 0.87rem; color: #94a3b8; line-height: 1.8; }
+    .account-card-body .benefit {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: rgba(0,212,170,0.07);
+      border-radius: 4px;
+      font-size: 0.82rem;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <div class="badge">Beginner's Guide</div>
+    <h1>주식 입문 가이드</h1>
+    <p class="subtitle">토스증권 · 50만원 시작 · 2026</p>
+  </header>
+
+  <!-- Ticker -->
+  <div class="ticker">
+    <div class="ticker-inner">
+      <span class="ticker-item">삼성전자 <span class="up">▲ 1.2%</span></span>
+      <span class="ticker-item">KODEX 200 <span class="up">▲ 0.8%</span></span>
+      <span class="ticker-item">TIGER S&P500 <span class="down">▼ 0.3%</span></span>
+      <span class="ticker-item">카카오 <span class="up">▲ 2.1%</span></span>
+      <span class="ticker-item">NAVER <span class="down">▼ 0.9%</span></span>
+      <span class="ticker-item">현대차 <span class="up">▲ 0.5%</span></span>
+      <span class="ticker-item">삼성전자 <span class="up">▲ 1.2%</span></span>
+      <span class="ticker-item">KODEX 200 <span class="up">▲ 0.8%</span></span>
+      <span class="ticker-item">TIGER S&P500 <span class="down">▼ 0.3%</span></span>
+      <span class="ticker-item">카카오 <span class="up">▲ 2.1%</span></span>
+      <span class="ticker-item">NAVER <span class="down">▼ 0.9%</span></span>
+      <span class="ticker-item">현대차 <span class="up">▲ 0.5%</span></span>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <nav class="toc">
+    <div class="toc-title">📋 TABLE OF CONTENTS</div>
+    <div class="toc-grid">
+      <a href="#sec-mindset" class="toc-item"><span class="toc-num">01</span> 핵심 원칙</a>
+      <a href="#sec-start" class="toc-item"><span class="toc-num">02</span> 주식 시작하는 법</a>
+      <a href="#sec-terms" class="toc-item"><span class="toc-num">03</span> 기본 용어 & 지표</a>
+      <a href="#sec-etf" class="toc-item"><span class="toc-num">04</span> 개별주 vs ETF</a>
+      <a href="#sec-tax" class="toc-item"><span class="toc-num">05</span> 세금 & 수수료</a>
+      <a href="#sec-order" class="toc-item"><span class="toc-num">06</span> 주문 방법</a>
+      <a href="#sec-chart" class="toc-item"><span class="toc-num">07</span> 차트 보는 법</a>
+      <a href="#sec-risk" class="toc-item"><span class="toc-num">08</span> 리스크 관리</a>
+      <a href="#sec-account" class="toc-item"><span class="toc-num">09</span> ISA / IRP 절세계좌</a>
+      <a href="#sec-mistake" class="toc-item"><span class="toc-num">10</span> 초보자 흔한 실수</a>
+    </div>
+  </nav>
+
+  <!-- 핵심 원칙 -->
+  <div class="section" id="sec-mindset">
+    <div class="key-box">
+      <div class="label">🔑 가장 중요한 한 가지</div>
+      <p><span style="color:#fff; font-weight:700;">"잃지 않는 것"이 먼저입니다.</span><br/>
+      수익을 내는 것보다 원금을 지키는 마인드가 우선이에요. 처음부터 크게 벌려고 하면 대부분 크게 잃습니다.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>SECTION 02</span></div>
+
+  <!-- 주식 시작하는 법 -->
+  <div class="section" id="sec-start">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">주식 시작하는 법 — 단계별 가이드</h2>
+    </div>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-icon">📱</div>
+        <div class="step-content">
+          <div class="step-title">STEP 1 — 증권 계좌 개설</div>
+          <div class="step-desc">토스증권 앱에서 비대면 개설 완료 ✅<br/>국내 주식 수수료 무료라 입문에 최적입니다.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-icon">💰</div>
+        <div class="step-content">
+          <div class="step-title">STEP 2 — 투자금 입금</div>
+          <div class="step-desc">50만원으로 시작. 반드시 <strong style="color:var(--text)">잃어도 되는 돈</strong>으로만 투자하세요. 계좌 이체 → 증권 계좌로 입금.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-icon">🔍</div>
+        <div class="step-content">
+          <div class="step-title">STEP 3 — 종목/ETF 공부</div>
+          <div class="step-desc">사기 전에 최소 1주일 이상 해당 종목을 지켜보세요. 뉴스, 실적, PER/PBR 등을 확인하는 습관을 들이세요.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-icon">🛒</div>
+        <div class="step-content">
+          <div class="step-title">STEP 4 — 소액으로 첫 매수</div>
+          <div class="step-desc">처음엔 10만원 이하로 시작. 실제로 사고팔아봐야 감이 생깁니다. ETF 1주부터 시작해도 충분해요.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-icon">📝</div>
+        <div class="step-content">
+          <div class="step-title">STEP 5 — 매매 일지 기록</div>
+          <div class="step-desc">매수 이유, 목표가, 손절가를 노션이나 엑셀에 기록하세요. 6개월 후 본인의 패턴을 분석할 수 있어요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"><span>SECTION 03</span></div>
+
+  <!-- 기본 용어 -->
+  <div class="section" id="sec-terms">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">기본 용어 &amp; 지표</h2>
+    </div>
+
+    <div class="card">
+      <div class="card-title">PER — 주가수익비율</div>
+      <div class="formula">PER = 주가 ÷ 주당순이익(EPS)</div>
+      <p>이 회사 이익 대비 주가가 얼마나 비싼가를 나타내요.<br/>
+      <span class="highlight">PER 10</span> = 지금 이익 속도로 10년이면 투자금 회수.<br/>
+      낮을수록 저평가, 높을수록 고평가 <span style="color:var(--muted)">(단, 업종마다 기준이 다름)</span><br/>
+      예: 삼성전자 PER 15 vs 카카오 PER 80 → 카카오가 훨씬 비싸게 평가받는 중</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">PBR — 주가순자산비율</div>
+      <div class="formula">PBR = 주가 ÷ 주당순자산</div>
+      <p>회사 청산해도 내 돈 건질 수 있나?를 나타내요.<br/>
+      <span class="highlight">PBR 1 미만</span> = 장부가보다 싸게 거래 중 → 저평가 신호일 수 있음</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">시가총액</div>
+      <div class="formula">시가총액 = 주가 × 총 발행주식수</div>
+      <p>회사의 시장 크기를 나타내요.<br/>
+      대형주(5조↑) / 중형주 / 소형주로 나뉘며,<br/>
+      <span class="highlight">소형주일수록</span> 변동성이 크고 위험합니다.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">배당수익률</div>
+      <div class="formula">배당수익률 = 배당금 ÷ 주가 × 100</div>
+      <p>주가 대비 배당금 비율이에요.<br/>
+      예: 주가 10만원, 배당금 3천원 → <span class="highlight">배당수익률 3%</span><br/>
+      은행 이자보다 높은 배당주도 존재합니다 (KT&amp;G, 맥쿼리인프라 등)</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>SECTION 04</span></div>
+
+  <!-- 개별주 vs ETF -->
+  <div class="section" id="sec-etf">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title">개별주 vs ETF</h2>
+    </div>
+
+    <div class="card" style="padding:0; overflow:hidden;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th>개별주</th>
+            <th>ETF</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>수익 가능성</td>
+            <td>높음</td>
+            <td>중간</td>
+          </tr>
+          <tr>
+            <td>리스크</td>
+            <td>높음 (한 종목 집중)</td>
+            <td>낮음 (분산 투자)</td>
+          </tr>
+          <tr>
+            <td>공부량</td>
+            <td>많이 필요</td>
+            <td>적게 필요</td>
+          </tr>
+          <tr>
+            <td>추천 대상</td>
+            <td>공부할 시간 있는 분</td>
+            <td>입문자, 바쁜 직장인</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:20px; margin-bottom:12px; font-family:'JetBrains Mono',monospace; font-size:0.8rem; letter-spacing:2px; color:var(--muted);">
+      입문용 ETF 추천
+    </div>
+
+    <div class="etf-list">
+      <div class="etf-item">
+        <span class="etf-name">KODEX 200</span>
+        <span class="etf-desc">코스피 상위 200개 기업에 한 번에 투자</span>
+      </div>
+      <div class="etf-item">
+        <span class="etf-name">TIGER 미국S&P500</span>
+        <span class="etf-desc">애플, MS, 엔비디아 등 미국 500대 기업</span>
+      </div>
+      <div class="etf-item">
+        <span class="etf-name">KODEX 나스닥100</span>
+        <span class="etf-desc">미국 기술주 집중 투자</span>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <div class="tip-label">💡 TIP</div>
+      <p>50만원이면 ETF 1~2개로 시작하는 게 가장 현명해요. 개별주는 감이 생긴 후에 도전하세요.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>SECTION 05</span></div>
+
+  <!-- 세금 & 수수료 -->
+  <div class="section" id="sec-tax">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2 class="section-title">세금 &amp; 수수료</h2>
+    </div>
+
+    <div class="tax-block">
+      <div class="tax-block-header">🇰🇷 국내 주식</div>
+      <div class="tax-row">
+        <span class="tax-label">증권거래세</span>
+        <span class="tax-value">매도 시 0.18% 자동 부과</span>
+      </div>
+      <div class="tax-row">
+        <span class="tax-label">양도소득세</span>
+        <span class="tax-value">대주주(10억↑) 아니면 없음 <span class="tag-free">FREE</span></span>
+      </div>
+      <div class="tax-row">
+        <span class="tax-label">배당소득세</span>
+        <span class="tax-value">배당금의 15.4% 원천징수</span>
+      </div>
+      <div class="tax-row">
+        <span class="tax-label">수수료</span>
+        <span class="tax-value">토스증권 국내 주식 무료 <span class="tag-free">FREE</span></span>
+      </div>
+    </div>
+
+    <div class="tax-block">
+      <div class="tax-block-header">🇺🇸 해외 주식 (미국)</div>
+      <div class="tax-row">
+        <span class="tax-label">양도소득세</span>
+        <span class="tax-value">
+          연간 수익 <strong>250만원 초과분</strong>에 22% <span class="tag-warn">CAUTION</span><br/>
+          <span style="font-size:0.82rem; color:var(--muted);">예: 수익 350만원 → (350-250) × 22% = 22만원</span>
+        </span>
+      </div>
+      <div class="tax-row">
+        <span class="tax-label">배당소득세</span>
+        <span class="tax-value">15% 원천징수 (미국 기준)</span>
+      </div>
+      <div class="tax-row">
+        <span class="tax-label">수수료</span>
+        <span class="tax-value">토스증권 미국 주식 0.1%</span>
+      </div>
+      <div class="tax-row">
+        <span class="tax-label">신고 시기</span>
+        <span class="tax-value">매년 5월 종합소득세 신고 때 직접 신고 <span class="tag-warn">직접신고</span></span>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <div class="tip-label">💡 핵심 요약</div>
+      <p>
+        • 국내 주식은 세금 신경 거의 안 써도 됨<br/>
+        • 해외 주식은 연 250만원 이하 수익이면 세금 0원<br/>
+        • 50만원 투자 규모에선 세금보다 수수료가 더 현실적인 고려사항
+      </p>
+    </div>
+  </div>
+
+  <!-- 시작하는 법 - 핵심 원칙 바로 뒤에 넣기 위해 footer 앞에 모아서 추가 -->
+
+  <div class="divider"><span>SECTION 06</span></div>
+
+  <!-- 주문 방법 -->
+  <div class="section" id="sec-order">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2 class="section-title">주문 방법 — 지정가 vs 시장가</h2>
+    </div>
+
+    <div class="order-grid">
+      <div class="order-card">
+        <div class="order-card-icon">🎯</div>
+        <div class="order-card-title">지정가 주문</div>
+        <div class="order-card-desc">
+          내가 원하는 가격을 직접 지정해서 주문.<br/>
+          <strong style="color:var(--text)">장점</strong>: 원하는 가격에 살 수 있음<br/>
+          <strong style="color:var(--text)">단점</strong>: 가격이 안 맞으면 체결 안 됨<br/><br/>
+          <span style="color:var(--accent); font-size:0.8rem;">✓ 입문자에게 추천</span>
+        </div>
+      </div>
+      <div class="order-card">
+        <div class="order-card-icon">⚡</div>
+        <div class="order-card-title">시장가 주문</div>
+        <div class="order-card-desc">
+          현재 시장 가격으로 즉시 체결.<br/>
+          <strong style="color:var(--text)">장점</strong>: 무조건 바로 체결됨<br/>
+          <strong style="color:var(--text)">단점</strong>: 예상보다 비싸게 살 수 있음 (슬리피지)<br/><br/>
+          <span style="color:var(--accent2); font-size:0.8rem;">⚠ 급등/급락 시 주의</span>
+        </div>
+      </div>
+      <div class="order-card">
+        <div class="order-card-icon">🔁</div>
+        <div class="order-card-title">예약 주문</div>
+        <div class="order-card-desc">
+          장 마감 후 다음날 시가로 미리 주문 접수.<br/>
+          <strong style="color:var(--text)">장점</strong>: 직장인도 장 시작 전 설정 가능<br/>
+          <strong style="color:var(--text)">단점</strong>: 시가 기준이라 가격 예측 어려움
+        </div>
+      </div>
+      <div class="order-card">
+        <div class="order-card-icon">🛑</div>
+        <div class="order-card-title">손절 주문 (Stop Loss)</div>
+        <div class="order-card-desc">
+          일정 가격 이하로 내려가면 자동 매도.<br/>
+          <strong style="color:var(--text)">장점</strong>: 감정 없이 손실 제한<br/>
+          <strong style="color:var(--text)">단점</strong>: 일시적 하락에도 팔릴 수 있음<br/><br/>
+          <span style="color:var(--accent); font-size:0.8rem;">✓ 리스크 관리의 핵심</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-box" style="margin-top:20px;">
+      <div class="tip-label">💡 거래 시간</div>
+      <p>
+        <strong style="color:var(--text)">정규장</strong>: 오전 9:00 ~ 오후 3:30 (국내)<br/>
+        <strong style="color:var(--text)">미국장</strong>: 한국 기준 오후 10:30 ~ 오전 5:00 (서머타임 시 1시간 앞당겨짐)<br/>
+        <strong style="color:var(--text)">동시호가</strong>: 장 시작(8:30~9:00), 장 마감(3:20~3:30) — 이 시간에 넣은 주문이 한꺼번에 처리됨
+      </p>
+    </div>
+  </div>
+
+  <div class="divider"><span>SECTION 07</span></div>
+
+  <!-- 차트 보는 법 -->
+  <div class="section" id="sec-chart">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2 class="section-title">차트 보는 법 — 기초</h2>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🕯️ 캔들(봉) 차트</div>
+      <p>
+        주식 차트의 기본 단위. 하나의 봉이 하루의 가격 흐름을 나타내요.<br/><br/>
+        <span class="highlight">빨간 봉(양봉)</span> = 종가 &gt; 시가 → 오늘 올랐음 📈<br/>
+        <span class="highlight">파란 봉(음봉)</span> = 종가 &lt; 시가 → 오늘 내렸음 📉<br/><br/>
+        봉의 위아래로 뻗은 선 = <strong style="color:var(--accent2)">꼬리(윗꼬리/아랫꼬리)</strong><br/>
+        윗꼬리 길면 고점에서 매도 압력 강함 / 아랫꼬리 길면 저점에서 매수 유입 신호
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 이동평균선 (MA)</div>
+      <div class="formula">5일선 / 20일선 / 60일선 / 120일선</div>
+      <p>
+        일정 기간의 평균 주가를 연결한 선. 추세를 파악하는 데 사용.<br/><br/>
+        <span class="highlight">골든크로스</span>: 단기선이 장기선을 아래→위로 돌파 → 매수 신호 📈<br/>
+        <span class="highlight">데드크로스</span>: 단기선이 장기선을 위→아래로 돌파 → 매도 신호 📉<br/><br/>
+        주가가 이동평균선 위 = 강세 / 아래 = 약세로 해석
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📉 거래량</div>
+      <p>
+        차트 하단의 막대그래프. 하루에 얼마나 많이 사고팔았는지를 나타내요.<br/><br/>
+        <span class="highlight">주가 상승 + 거래량 증가</span> = 강한 상승 신호 (믿을 수 있는 상승)<br/>
+        <span class="highlight">주가 상승 + 거래량 감소</span> = 힘없는 상승 (곧 꺾일 수 있음)<br/><br/>
+        거래량 없이 급등한 종목은 조심해야 해요!
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚙️ RSI — 과매수/과매도 지표</div>
+      <div class="formula">RSI = 상승 평균 ÷ (상승 평균 + 하락 평균) × 100</div>
+      <p>
+        0~100 사이 값으로 현재 주가가 과열인지 침체인지 판단.<br/><br/>
+        <span class="highlight">RSI 70 이상</span> = 과매수 구간 → 조정 가능성 높음 ⚠️<br/>
+        <span class="highlight">RSI 30 이하</span> = 과매도 구간 → 반등 가능성 높음 ✅<br/>
+        <span class="highlight">RSI 50 기준</span>으로 위면 강세, 아래면 약세 추세
+      </p>
+    </div>
+
+    <div class="warn-box">
+      <div class="warn-label">⚠️ 주의</div>
+      <p>차트는 과거 데이터로, 미래를 <strong style="color:#fff">보장하지 않습니다.</strong> 차트 분석은 참고 지표일 뿐, 단독으로 매수/매도 결정하지 마세요.</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>SECTION 08</span></div>
+
+  <!-- 리스크 관리 -->
+  <div class="section" id="sec-risk">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2 class="section-title">리스크 관리 — 돈을 지키는 법</h2>
+    </div>
+
+    <div style="margin-bottom:24px;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--muted); letter-spacing:2px; margin-bottom:16px;">포트폴리오 분산 예시 (50만원 기준)</div>
+      <div class="bar-chart">
+        <div class="bar-row">
+          <span class="bar-label">ETF</span>
+          <div class="bar-track"><div class="bar-fill" style="width:60%"></div></div>
+          <span class="bar-val">60%</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">개별주</span>
+          <div class="bar-track"><div class="bar-fill warn" style="width:30%"></div></div>
+          <span class="bar-val" style="color:var(--accent2)">30%</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">현금 비중</span>
+          <div class="bar-track"><div class="bar-fill danger" style="width:10%"></div></div>
+          <span class="bar-val" style="color:var(--accent3)">10%</span>
+        </div>
+      </div>
+      <p style="font-size:0.82rem; color:var(--muted); margin-top:10px;">현금 비중은 급락 시 저가 매수 기회를 위해 남겨두는 것을 권장합니다.</p>
+    </div>
+
+    <div class="step-list">
+      <div class="step-item">
+        <div class="step-icon">🧩</div>
+        <div class="step-content">
+          <div class="step-title">분산 투자</div>
+          <div class="step-desc">한 종목에 몰빵하지 마세요. 3~5개 종목이나 ETF에 나눠서 투자하면 한 종목이 폭락해도 전체 손실이 줄어들어요.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-icon">✂️</div>
+        <div class="step-content">
+          <div class="step-title">손절선 미리 정하기</div>
+          <div class="step-desc">매수 전 "이 가격 이하로 떨어지면 판다"를 미리 결정하세요. 통상적으로 <strong style="color:var(--text)">-7~10%</strong>를 손절선으로 많이 씁니다.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-icon">📅</div>
+        <div class="step-content">
+          <div class="step-title">적립식 투자 (DCA)</div>
+          <div class="step-desc">매달 정해진 금액을 꾸준히 투자하는 방법. 고점/저점을 평균화해서 타이밍 리스크를 줄여줍니다. 직장인에게 가장 현실적인 전략이에요.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-icon">🧠</div>
+        <div class="step-content">
+          <div class="step-title">감정 배제</div>
+          <div class="step-desc">공포에 팔고 탐욕에 사는 게 가장 흔한 실수예요. <strong style="color:var(--text)">"다들 팔 때 사고, 다들 살 때 판다"</strong>는 워런 버핏의 원칙을 기억하세요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"><span>SECTION 09</span></div>
+
+  <!-- ISA / IRP -->
+  <div class="section" id="sec-account">
+    <div class="section-header">
+      <span class="section-num">09</span>
+      <h2 class="section-title">ISA / IRP — 절세 계좌 필수 상식</h2>
+    </div>
+
+    <div class="key-box" style="margin-bottom:20px;">
+      <div class="label">💡 왜 중요한가?</div>
+      <p>일반 계좌에서 수익이 나면 세금을 내야 하지만, <strong style="color:#fff">절세 계좌를 활용하면 세금을 줄이거나 없앨 수 있어요.</strong> 장기 투자할수록 효과가 커집니다.</p>
+    </div>
+
+    <div class="account-grid">
+      <div class="account-card">
+        <div class="account-card-header">ISA — 개인종합자산관리계좌</div>
+        <div class="account-card-body">
+          <p>
+            국내 ETF, 펀드, 예금 등을 한 계좌에서 관리.<br/>
+            연 2,000만원 납입 한도.<br/>
+            <strong style="color:var(--text)">3년 의무 유지</strong> 후 해지 시 비과세 혜택.<br/><br/>
+            일반형: 200만원까지 비과세<br/>
+            서민·농어촌형: 400만원까지 비과세
+          </p>
+          <div class="benefit">✓ 입문자도 쉽게 개설 가능</div>
+        </div>
+      </div>
+      <div class="account-card">
+        <div class="account-card-header">IRP — 개인형 퇴직연금</div>
+        <div class="account-card-body">
+          <p>
+            연금 목적 장기 투자 계좌.<br/>
+            연간 최대 <strong style="color:var(--text)">900만원 세액공제</strong> 가능.<br/>
+            (연금저축 포함 합산 한도)<br/><br/>
+            55세 이후 연금 수령 시 저율과세(3.3~5.5%)<br/>
+            중도해지 시 세제 혜택 반납 + 16.5% 과세
+          </p>
+          <div class="benefit">✓ 직장인 절세의 핵심 수단</div>
+        </div>
+      </div>
+      <div class="account-card">
+        <div class="account-card-header">연금저축펀드</div>
+        <div class="account-card-body">
+          <p>
+            IRP보다 자유롭게 운용 가능.<br/>
+            연간 600만원 한도 세액공제.<br/>
+            ETF, 펀드에 직접 투자 가능.<br/><br/>
+            <strong style="color:var(--text)">IRP + 연금저축</strong> 합산 최대 900만원 공제<br/>
+            중도 인출 일부 가능 (IRP보다 유연)
+          </p>
+          <div class="benefit">✓ IRP와 병행 시 효과 극대화</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-box" style="margin-top:16px;">
+      <div class="tip-label">💡 추천 순서</div>
+      <p>① ISA 계좌 개설 → ETF 투자 시작<br/>
+      ② 여유 생기면 연금저축펀드 + IRP 추가<br/>
+      ③ 세액공제 받은 금액은 다시 투자 — 복리 효과 극대화</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>SECTION 10</span></div>
+
+  <!-- 흔한 실수 -->
+  <div class="section" id="sec-mistake">
+    <div class="section-header">
+      <span class="section-num">10</span>
+      <h2 class="section-title">초보자가 가장 많이 하는 실수 TOP 7</h2>
+    </div>
+
+    <div class="checklist">
+      <div class="check-item">
+        <div class="check-icon">❌</div>
+        <div class="check-text"><strong>몰빵 투자</strong> — 한 종목에 전 재산을 넣는 것. 설령 확신이 있어도 전체의 20% 이상은 넣지 마세요.</div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">❌</div>
+        <div class="check-text"><strong>뇌동매매 (충동 매수)</strong> — 커뮤니티, 유튜브, 지인 추천에 흔들려 이유 없이 사는 것. 반드시 내가 이해한 종목만 사세요.</div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">❌</div>
+        <div class="check-text"><strong>물타기 남용</strong> — 손실 중인 종목을 하락할수록 계속 추가 매수. 잘못된 종목이면 손실만 키워요. 철저한 분석 없이는 금물.</div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">❌</div>
+        <div class="check-text"><strong>손절 못 하기</strong> — "언젠가 오르겠지"라며 손절을 미루는 것. 10% 손실을 원금 회복하려면 11.1% 수익이 필요하고, 50% 손실은 100% 수익이 필요합니다.</div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">❌</div>
+        <div class="check-text"><strong>단타에 집착</strong> — 매일 사고팔면 수수료와 세금으로 수익이 깎이고, 감정 소모도 큽니다. 초보일수록 장기 보유가 유리해요.</div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">❌</div>
+        <div class="check-text"><strong>레버리지 ETF 입문 사용</strong> — 2배, 3배 레버리지 ETF는 방향이 맞아도 변동성 손실이 발생할 수 있어요. 입문자는 절대 금물.</div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon">❌</div>
+        <div class="check-text"><strong>모니터링 중독</strong> — 매일 주가만 쳐다보면 감정적으로 흔들려요. 장기 투자자라면 주 1회 확인으로 충분합니다.</div>
+      </div>
+    </div>
+
+    <div class="key-box" style="margin-top:24px;">
+      <div class="label">🏆 입문자 황금 원칙</div>
+      <p>
+        <strong style="color:#fff">1. 이해한 것만 산다</strong> — 설명 못 하면 사지 마라<br/>
+        <strong style="color:#fff">2. 잃어도 되는 돈으로만</strong> — 생활비, 비상금은 절대 NO<br/>
+        <strong style="color:#fff">3. 분산 + 장기</strong> — 타이밍보다 시간이 수익을 만든다<br/>
+        <strong style="color:#fff">4. 기록한다</strong> — 매수/매도 이유를 반드시 메모
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    <p>주식 입문 가이드 · 2026 · 본 문서는 정보 제공 목적이며 투자 권유가 아닙니다.</p>
+    <p style="margin-top:8px;">투자 판단은 본인 책임 하에 신중하게 결정하세요.</p>
+  </footer>
+
+</div>
+</body>
+</html>

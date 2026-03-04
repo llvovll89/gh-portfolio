@@ -9,6 +9,7 @@ export type BlogPost = {
     tags?: string[];
     body: string;
     readingTime: string;
+    type?: "md" | "html";
 };
 
 function toSlugFromPath(path: string) {

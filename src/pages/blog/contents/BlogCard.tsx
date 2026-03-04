@@ -43,6 +43,11 @@ export const BlogCard = ({ p }: BlogCardProps) => {
                             {viewCount.toLocaleString()}
                         </span>
                     )}
+                    {p.type === "html" && (
+                        <span className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 px-1.5 py-0.5 rounded">
+                            HTML
+                        </span>
+                    )}
                     {p.tags?.length ? (
                         <div className="flex flex-wrap gap-1">
                             {p.tags.slice(0, 2).map((t) => (
@@ -63,7 +68,7 @@ export const BlogCard = ({ p }: BlogCardProps) => {
                         {p.title}
                     </h3>
 
-                    {(p.summary || p.body) && (
+                    {(p.summary || (p.type !== "html" && p.body)) && (
                         <p className="line-clamp-2 text-[clamp(0.75rem,1vw,0.875rem)] leading-relaxed text-zinc-600 dark:text-zinc-400">
                             {p.summary ?? p.body}
                         </p>

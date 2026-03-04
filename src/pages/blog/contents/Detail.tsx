@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { loadPosts } from "../../../utils/loadPosts";
+import { loadAllPosts } from "../../../utils/loadAllPosts";
 import { MarkdownRenderer } from "./MarkdownRender";
 import { parseToc } from "../../../utils/parseToc";
 import { TableOfContents } from "./TableOfContents";
@@ -20,7 +20,7 @@ export const Detail = () => {
     const [viewCount, setViewCount] = useState<number | null>(null);
 
     const post = useMemo(() => {
-        const posts = loadPosts();
+        const posts = loadAllPosts();
         return posts.find((p) => p.slug === slug);
     }, [slug]);
 
@@ -150,19 +150,30 @@ export const Detail = () => {
                     </div>
 
                     {post.summary ? (
-                        <p className="mt-2 text-zinc-800 leading-7">{post.summary}</p>
+                        <p className={`mt-2 text-zinc-800 ${post.type === "html" ? "leading-tight" : "leading-7"}`}>{post.summary}</p>
                     ) : null}
                 </header>
 
                 {/* 본문 + TOC 사이드바 */}
-                <div className="flex gap-10 items-start">
-                    <div className="flex-1 min-w-0">
-                        <MarkdownRenderer content={post.body} />
-                    </div>
-                    {tocItems.length > 0 && <TableOfContents items={tocItems} />}
-                </div>
-
-                <Minimap content={post.body} scrollContainerId={DETAIL_SCROLL_ID} />
+                {post.type === "html" ? (
+                    <iframe
+                        srcDoc={post.body}
+                        className="w-full rounded-lg border border-zinc-200 dark:border-zinc-700"
+                        style={{ height: "80vh" }}
+                        title={post.title}
+                        sandbox="allow-scripts allow-same-origin"
+                    />
+                ) : (
+                    <>
+                        <div className="flex gap-10 items-start">
+                            <div className="flex-1 min-w-0">
+                                <MarkdownRenderer content={post.body} />
+                            </div>
+                            {tocItems.length > 0 && <TableOfContents items={tocItems} />}
+                        </div>
+                        <Minimap content={post.body} scrollContainerId={DETAIL_SCROLL_ID} />
+                    </>
+                )}
 
                 {/* 플로팅 버튼 */}
                 {showScrollButtons && (

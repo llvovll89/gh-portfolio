@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
-import { loadPosts } from "../../utils/loadPosts";
+import { loadAllPosts } from "../../utils/loadAllPosts";
 import { BlogCard } from "./contents/BlogCard";
 import { BlogFilterBar } from "./components/BlogFilterBar";
 import { BlogGroupedView } from "./components/BlogGroupedView";
@@ -24,7 +24,7 @@ const STORAGE_KEYS = {
 export const Blog = () => {
     const { t } = useTranslation();
     // 전체 포스트 로드
-    const allPosts = useMemo(() => loadPosts(), []);
+    const allPosts = useMemo(() => loadAllPosts(), []);
 
     // 필터/검색 상태
     const [searchQuery, setSearchQuery] = useState("");

@@ -3,7 +3,8 @@
     "allow": [
       "Bash(git:*)",
       "Bash(npx tsc:*)",
-      "Bash(xargs ls:*)"
+      "Bash(xargs ls:*)",
+      "Bash(mv:*)"
     ]
   }
 }
