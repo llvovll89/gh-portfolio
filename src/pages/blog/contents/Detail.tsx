@@ -4,6 +4,7 @@ import { loadPosts } from "../../../utils/loadPosts";
 import { MarkdownRenderer } from "./MarkdownRender";
 import { parseToc } from "../../../utils/parseToc";
 import { TableOfContents } from "./TableOfContents";
+import { Minimap } from "./Minimap";
 import { incrementViewCount, subscribeViewCount } from "../../../utils/blogViews";
 import { FiEye } from "react-icons/fi";
 
@@ -160,6 +161,8 @@ export const Detail = () => {
                     </div>
                     {tocItems.length > 0 && <TableOfContents items={tocItems} />}
                 </div>
+
+                <Minimap content={post.body} scrollContainerId={DETAIL_SCROLL_ID} />
 
                 {/* 플로팅 버튼 */}
                 {showScrollButtons && (

@@ -2,11 +2,14 @@ import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { NOT_FOUND, routesPath } from "../../../../routes/route";
 import { GlobalStateContext } from "../../../../context/GlobalState.context";
 import { FcOpenedFolder } from "react-icons/fc";
+import { FiFileText } from "react-icons/fi";
 import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
 import { CiSquareRemove } from "react-icons/ci";
 import { MdHistory, MdClearAll } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 import { ThemeMode } from "../../../../context/constatns/Theme.type";
+import { loadPosts } from "../../../../utils/loadPosts";
+import type { BlogPost } from "../../../../utils/loadPosts";
 
 const RECENT_STORAGE_KEY = "gh-portfolio:search-recent-paths";
 const FREQUENCY_STORAGE_KEY = "gh-portfolio:search-frequency";
@@ -63,6 +66,35 @@ function scoreRoute(
     // 빈도수 보너스 (자주 방문한 페이지 우선)
     const frequency = frequencyMap[routePath] || 0;
     score += Math.min(frequency * 5, 100); // 최대 100점까지 보너스
+
+    return score;
+}
+
+function scoreBlogPost(
+    post: BlogPost,
+    keywords: string[],
+    fullQueryLower: string,
+): number {
+    if (!keywords.length) return 0;
+
+    const titleLower = post.title.toLowerCase();
+    const tagsStr = (post.tags ?? []).join(" ").toLowerCase();
+    const summaryStr = (post.summary ?? "").toLowerCase();
+
+    let score = 0;
+    if (titleLower === fullQueryLower) score += 160;
+    if (titleLower.startsWith(fullQueryLower)) score += 90;
+
+    for (const k of keywords) {
+        if (titleLower.includes(k)) {
+            score += 35;
+            if (titleLower.startsWith(k)) score += 10;
+        }
+        if (tagsStr.includes(k)) score += 25;
+        if (summaryStr.includes(k)) score += 10;
+    }
+
+    if (keywords.every((k) => titleLower.includes(k))) score += 30;
 
     return score;
 }
@@ -255,6 +287,8 @@ export const Search = () => {
         [],
     );
 
+    const allPosts = useMemo(() => loadPosts(), []);
+
     const results: RouteItem[] = useMemo(() => {
         if (!keywords.length) return [];
 
@@ -271,6 +305,20 @@ export const Search = () => {
         return scored.slice(0, MAX_RESULTS).map((x) => x.route);
     }, [debouncedQuery, keywords, searchableRoutes, frequencyMap]);
 
+    const blogResults: BlogPost[] = useMemo(() => {
+        if (!keywords.length) return [];
+        const fullQueryLower = debouncedQuery.toLowerCase();
+        return allPosts
+            .map((post) => ({
+                post,
+                score: scoreBlogPost(post, keywords, fullQueryLower),
+            }))
+            .filter((x) => x.score > 0)
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 6)
+            .map((x) => x.post);
+    }, [allPosts, debouncedQuery, keywords]);
+
     const listboxId = "search-results-listbox";
 
     const openRoute = (path: string) => {
@@ -280,6 +328,11 @@ export const Search = () => {
             addSearchHistory(debouncedQuery);
         }
         handlePushPath(path);
+    };
+
+    const openBlogPost = (slug: string) => {
+        if (debouncedQuery.trim()) addSearchHistory(debouncedQuery);
+        handlePushPath(`/blog/${slug}`);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -341,6 +394,7 @@ export const Search = () => {
     };
 
     const showResults = keywords.length > 0;
+    const hasAnyResults = results.length > 0 || blogResults.length > 0;
     const showRecents = !showResults && !showSearchHistory && recentPaths.length > 0;
     const shouldShowSearchHistory =
         showSearchHistory &&
@@ -483,48 +537,88 @@ export const Search = () => {
             {/* 검색 결과 */}
             {showResults && (
                 <div className="w-full h-[calc(100%-80px)] p-2 text-white overflow-y-auto">
-                    {results.length === 0 ? (
+                    {!hasAnyResults ? (
                         <div className="px-3 py-2 text-sm text-white/70">
                             {t("search.noResults")}
                         </div>
                     ) : (
-                        <ul
-                            id={listboxId}
-                            role="listbox"
-                            aria-label={t("search.searchResults")}
-                            className="flex flex-col gap-1"
-                        >
-                            {results.map((r, idx) => {
-                                const isActive = idx === activeIndex;
-                                const isSelected =
-                                    selectedPathState.state === r.path;
-
-                                return (
-                                    <li
-                                        id={`search-option-${idx}`}
-                                        role="option"
-                                        aria-selected={isActive}
-                                        onMouseEnter={() => setActiveIndex(idx)}
-                                        onClick={() => openRoute(r.path)}
-                                        key={r.path}
-                                        className={[
-                                            "w-full h-8 flex items-center px-3 text-white text-sm cursor-pointer gap-1 rounded-sm",
-                                            "hover:bg-primary/20",
-                                            isSelected ? "bg-sub-gary/20" : "",
-                                            isActive ? "ring-1 ring-primary/40" : "",
-                                        ].join(" ")}
+                        <>
+                            {/* 페이지 결과 */}
+                            {results.length > 0 && (
+                                <>
+                                    <div className="px-2 py-1 mb-1 text-[10px] text-white/40 uppercase tracking-widest flex items-center gap-1">
+                                        <FcOpenedFolder className="w-3 h-3" />
+                                        Pages
+                                    </div>
+                                    <ul
+                                        id={listboxId}
+                                        role="listbox"
+                                        aria-label={t("search.searchResults")}
+                                        className="flex flex-col gap-1"
                                     >
-                                        <FcOpenedFolder className="w-5 h-5" />
-                                        <span className="truncate">
-                                            <HighlightedText
-                                                text={r.name}
-                                                keywords={keywords}
-                                            />
-                                        </span>
-                                    </li>
-                                );
-                            })}
-                        </ul>
+                                        {results.map((r, idx) => {
+                                            const isActive = idx === activeIndex;
+                                            const isSelected = selectedPathState.state === r.path;
+                                            return (
+                                                <li
+                                                    id={`search-option-${idx}`}
+                                                    role="option"
+                                                    aria-selected={isActive}
+                                                    onMouseEnter={() => setActiveIndex(idx)}
+                                                    onClick={() => openRoute(r.path)}
+                                                    key={r.path}
+                                                    className={[
+                                                        "w-full h-8 flex items-center px-3 text-white text-sm cursor-pointer gap-1 rounded-sm",
+                                                        "hover:bg-primary/20",
+                                                        isSelected ? "bg-sub-gary/20" : "",
+                                                        isActive ? "ring-1 ring-primary/40" : "",
+                                                    ].join(" ")}
+                                                >
+                                                    <FcOpenedFolder className="w-5 h-5" />
+                                                    <span className="truncate">
+                                                        <HighlightedText text={r.name} keywords={keywords} />
+                                                    </span>
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                </>
+                            )}
+
+                            {/* 블로그 포스트 결과 */}
+                            {blogResults.length > 0 && (
+                                <div className={results.length > 0 ? "mt-3" : ""}>
+                                    <div className="px-2 py-1 mb-1 text-[10px] text-white/40 uppercase tracking-widest flex items-center gap-1">
+                                        <FiFileText className="w-3 h-3" />
+                                        Blog Posts
+                                    </div>
+                                    <ul className="flex flex-col gap-1">
+                                        {blogResults.map((post) => (
+                                            <li
+                                                key={post.slug}
+                                                onClick={() => openBlogPost(post.slug)}
+                                                className="w-full flex flex-col px-3 py-2 text-white text-sm cursor-pointer hover:bg-primary/20 rounded-sm"
+                                            >
+                                                <div className="flex items-center gap-1.5 min-w-0">
+                                                    <FiFileText className="w-4 h-4 shrink-0 text-blue-400/60" />
+                                                    <span className="truncate text-xs">
+                                                        <HighlightedText text={post.title} keywords={keywords} />
+                                                    </span>
+                                                </div>
+                                                {(post.date || (post.tags?.length ?? 0) > 0) && (
+                                                    <div className="flex items-center gap-2 pl-5 mt-0.5 text-[10px] text-white/35">
+                                                        {post.date && <span>{post.date}</span>}
+                                                        {post.tags?.slice(0, 2).map((tag) => (
+                                                            <span key={tag} className="text-primary/50">#{tag}</span>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
             )}
