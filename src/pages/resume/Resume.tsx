@@ -9,21 +9,25 @@ export const Resume = () => {
     const { t } = useTranslation();
 
     const handleDownloadResume = async () => {
+        let objectUrl: string | null = null;
+        let link: HTMLAnchorElement | null = null;
         try {
             const resumeUrl = "/assets/resume/김건호_이력서.pdf";
             const response = await fetch(resumeUrl);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
+            objectUrl = window.URL.createObjectURL(blob);
+            link = document.createElement("a");
+            link.href = objectUrl;
             link.download = "김건호_이력서.pdf";
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
         } catch (error) {
             console.error("이력서 다운로드 실패:", error);
             alert("이력서 다운로드에 실패했습니다.");
+        } finally {
+            if (link && document.body.contains(link)) document.body.removeChild(link);
+            if (objectUrl) window.URL.revokeObjectURL(objectUrl);
         }
     };
 
