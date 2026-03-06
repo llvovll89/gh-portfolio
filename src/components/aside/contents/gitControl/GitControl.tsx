@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { GlobalStateContext } from "../../../../context/GlobalState.context";
-import { githubGetRequestParams, octokit } from "../../../../http/api";
+import { GITHUB_OWNER, githubFetch } from "../../../../http/api";
 import GhActivityDashboard from "../../../ghActivity/GhActivityDashboard";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -103,7 +103,8 @@ export const GitControl = () => {
     const [selectedRepo, setSelectedRepo] = useState<RepoName | null>(null);
     const [showActivity, setShowActivity] = useState(false);
 
-    const githubUsername = import.meta.env.VITE_GITHUB_USERNAME || "llvovll89";
+    const githubUsername = (import.meta.env.VITE_GITHUB_USERNAME as string) || "llvovll89";
+    const owner = GITHUB_OWNER || githubUsername;
 
     const { selectedTheme } = useContext(GlobalStateContext);
 
@@ -117,76 +118,51 @@ export const GitControl = () => {
         : selectedTheme.mode;
 
     const getBranchesByRepo = async (repo: RepoName) => {
-        const response = await octokit.request(
-            "GET /repos/{owner}/{repo}/branches",
-            githubGetRequestParams(repo),
-        );
-        return response.data.map((b: Branch) => b.name);
+        const data = await githubFetch(`/repos/${owner}/${repo}/branches`) as Branch[];
+        return data.map((b) => b.name);
     };
 
     const getCommitsByRepoBranch = async (repo: RepoName, branch: string): Promise<Commit[]> => {
-        const response = await octokit.request(
-            "GET /repos/{owner}/{repo}/commits",
-            {
-                ...githubGetRequestParams(repo),
-                sha: branch,
-            },
-        );
-        return response.data as Commit[];
+        const data = await githubFetch(`/repos/${owner}/${repo}/commits`, { sha: branch });
+        return data as Commit[];
     };
 
     const getRepoStats = async (repo: RepoName): Promise<RepoStats> => {
-        const response = await octokit.request(
-            "GET /repos/{owner}/{repo}",
-            githubGetRequestParams(repo),
-        );
+        const data = await githubFetch(`/repos/${owner}/${repo}`) as {
+            stargazers_count: number;
+            forks_count: number;
+            watchers_count: number;
+            open_issues_count: number;
+        };
         return {
-            stars: response.data.stargazers_count,
-            forks: response.data.forks_count,
-            watchers: response.data.watchers_count,
-            openIssues: response.data.open_issues_count,
+            stars: data.stargazers_count,
+            forks: data.forks_count,
+            watchers: data.watchers_count,
+            openIssues: data.open_issues_count,
         };
     };
 
     const getIssuesByRepo = async (repo: RepoName): Promise<Issue[]> => {
-        const response = await octokit.request(
-            "GET /repos/{owner}/{repo}/issues",
-            {
-                ...githubGetRequestParams(repo),
-                state: "all",
-                per_page: 20,
-            },
-        );
+        const data = await githubFetch(`/repos/${owner}/${repo}/issues`, { state: "all", per_page: "20" }) as GitHubIssueResponse[];
         // PR은 제외 (GitHub API에서 issue에 PR도 포함됨)
-        return response.data
-            .filter((issue: GitHubIssueResponse) => !issue.pull_request)
-            .map((issue: GitHubIssueResponse) => ({
+        return data
+            .filter((issue) => !issue.pull_request)
+            .map((issue) => ({
                 ...issue,
                 labels: issue.labels
-                    .filter((label: unknown) => typeof label === 'object' && label !== null && 'name' in label && 'color' in label)
-                    .map((label: unknown) => {
-                        const labelObj = label as { name?: string; color?: string };
-                        return {
-                            name: labelObj.name || '',
-                            color: labelObj.color || '000000',
-                        };
-                    }),
+                    .filter((label): label is { name: string; color: string } =>
+                        typeof label === 'object' && label !== null && 'name' in label && 'color' in label
+                    )
+                    .map((label) => ({
+                        name: (label as { name?: string }).name || '',
+                        color: (label as { color?: string }).color || '000000',
+                    })),
             }));
     };
 
     const getPullRequestsByRepo = async (repo: RepoName): Promise<PullRequest[]> => {
-        const response = await octokit.request(
-            "GET /repos/{owner}/{repo}/pulls",
-            {
-                ...githubGetRequestParams(repo),
-                state: "all",
-                per_page: 20,
-            },
-        );
-        return response.data.map((pr: any) => ({
-            ...pr,
-            draft: pr.draft ?? false,
-        }));
+        const data = await githubFetch(`/repos/${owner}/${repo}/pulls`, { state: "all", per_page: "20" }) as PullRequest[];
+        return data.map((pr) => ({ ...pr, draft: pr.draft ?? false }));
     };
 
     useEffect(() => {

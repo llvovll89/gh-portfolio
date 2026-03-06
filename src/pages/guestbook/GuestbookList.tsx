@@ -1,47 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FiMessageSquare } from 'react-icons/fi'
 import { db } from '@/firebase/config'
-import {
-    collection,
-    onSnapshot,
-    query,
-    orderBy,
-    doc,
-    updateDoc,
-    deleteDoc,
-} from 'firebase/firestore'
-import GuestbookEditor from './GuestbookEditor'
-import hashPassword from '@/utils/hashPassword'
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
 import { FaEdit } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
 import { FaPencil } from 'react-icons/fa6'
-import { TbLockPassword } from 'react-icons/tb'
-import { IoClose } from 'react-icons/io5'
-
-type GuestbookEntry = {
-    id: string
-    name: string
-    message: string
-    pwHash: string
-    createdAt?: any
-}
-
-const AVATAR_GRADIENTS = [
-    'from-blue-500 to-indigo-600',
-    'from-violet-500 to-purple-600',
-    'from-pink-500 to-rose-600',
-    'from-green-500 to-emerald-600',
-    'from-orange-500 to-amber-600',
-    'from-cyan-500 to-teal-600',
-    'from-red-500 to-orange-600',
-    'from-sky-500 to-blue-600',
-]
-
-const getAvatarGradient = (name: string) => {
-    let hash = 0
-    for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash)
-    return AVATAR_GRADIENTS[Math.abs(hash) % AVATAR_GRADIENTS.length]
-}
+import GuestbookEditModal from './GuestbookEditModal'
+import GuestbookDeleteModal from './GuestbookDeleteModal'
+import GuestbookDetailPanel, { getAvatarGradient } from './GuestbookDetailPanel'
+import type { GuestbookEntry } from './types'
 
 const getRelativeTime = (date: Date): string => {
     const diff = Date.now() - date.getTime()
@@ -75,21 +42,10 @@ const SkeletonCard = () => (
 const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () => void; onSuccess?: (msg: string) => void }) => {
     const [entries, setEntries] = useState<GuestbookEntry[]>([])
     const [loading, setLoading] = useState(true)
-
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-    const [editingEntry, setEditingEntry] = useState<GuestbookEntry | null>(null)
-    const [editPassword, setEditPassword] = useState('')
-    const [editMessage, setEditMessage] = useState('')
-    const [editError, setEditError] = useState('')
-
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-    const [deletingEntry, setDeletingEntry] = useState<GuestbookEntry | null>(null)
-    const [deletePassword, setDeletePassword] = useState('')
-    const [deleteError, setDeleteError] = useState('')
-    const [deleting, setDeleting] = useState(false)
-
-    // 분할 뷰용 선택된 항목
+    const [readError, setReadError] = useState("")
     const [detailEntry, setDetailEntry] = useState<GuestbookEntry | null>(null)
+    const [editEntry, setEditEntry] = useState<GuestbookEntry | null>(null)
+    const [deleteEntry, setDeleteEntry] = useState<GuestbookEntry | null>(null)
 
     useEffect(() => {
         const q = query(collection(db, 'guestbook'), orderBy('createdAt', 'desc'))
@@ -106,9 +62,16 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
                 })
             })
             setEntries(list)
+            setReadError("")
             setLoading(false)
         }, (err) => {
             console.error('방명록 불러오기 실패:', err)
+            const msg = err instanceof Error ? err.message : String(err)
+            if (msg.includes('permission-denied') || msg.includes('PERMISSION_DENIED')) {
+                setReadError('Firebase 보안 규칙이 읽기를 차단하고 있습니다. Firebase Console → Firestore → Rules를 확인해주세요.')
+            } else {
+                setReadError(`불러오기 실패: ${msg}`)
+            }
             setLoading(false)
         })
         return () => unsub()
@@ -121,70 +84,6 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
         }
     }, [entries, detailEntry])
 
-    const openEditModal = (entry: GuestbookEntry) => {
-        setEditingEntry(entry)
-        setEditMessage(entry.message)
-        setEditPassword('')
-        setEditError('')
-        setIsEditModalOpen(true)
-    }
-
-    const verifyAndUpdate = (e: React.MouseEvent, entry: GuestbookEntry) => {
-        e.stopPropagation()
-        openEditModal(entry)
-    }
-
-    const handleEditSubmit = async (e?: React.FormEvent) => {
-        e?.preventDefault()
-        if (!editingEntry) return
-        if (!editPassword) { setEditError('비밀번호를 입력하세요'); return }
-        const pwHash = await hashPassword(editPassword)
-        if (pwHash !== editingEntry.pwHash) { setEditError('비밀번호가 일치하지 않습니다'); return }
-        await updateDoc(doc(db, 'guestbook', editingEntry.id), { message: editMessage })
-        setIsEditModalOpen(false)
-        setEditingEntry(null)
-        if (onSuccess) onSuccess('메시지가 수정되었습니다.')
-    }
-
-    const openDeleteModal = (e: React.MouseEvent, entry: GuestbookEntry) => {
-        e.stopPropagation()
-        setDeletingEntry(entry)
-        setDeletePassword('')
-        setDeleteError('')
-        setIsDeleteModalOpen(true)
-    }
-
-    const openDeleteModalDirect = (entry: GuestbookEntry) => {
-        setDeletingEntry(entry)
-        setDeletePassword('')
-        setDeleteError('')
-        setIsDeleteModalOpen(true)
-    }
-
-    const handleDeleteSubmit = async () => {
-        if (!deletingEntry) return
-        if (!deletePassword) { setDeleteError('비밀번호를 입력하세요'); return }
-        setDeleting(true)
-        try {
-            const pwHash = await hashPassword(deletePassword)
-            if (pwHash !== deletingEntry.pwHash) {
-                setDeleteError('비밀번호가 일치하지 않습니다')
-                return
-            }
-            await deleteDoc(doc(db, 'guestbook', deletingEntry.id))
-            setIsDeleteModalOpen(false)
-            setDeletingEntry(null)
-            if (onSuccess) onSuccess('메시지가 삭제되었습니다.')
-        } catch {
-            setDeleteError('삭제에 실패했습니다.')
-        } finally {
-            setDeleting(false)
-        }
-    }
-
-    const closeEditModal = () => { setIsEditModalOpen(false); setEditingEntry(null); setEditError('') }
-    const closeDeleteModal = () => { setIsDeleteModalOpen(false); setDeletingEntry(null); setDeleteError('') }
-
     return (
         <div className="w-full h-full flex gap-4">
             {/* 왼쪽: 목록 */}
@@ -193,6 +92,16 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
                     <ul className="grid grid-cols-1 gap-3">
                         <SkeletonCard /><SkeletonCard /><SkeletonCard />
                     </ul>
+                ) : readError ? (
+                    <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center gap-4">
+                        <div className="p-5 rounded-2xl bg-rose-500/10 border border-rose-500/20">
+                            <FiMessageSquare className="w-10 h-10 text-rose-400/60" />
+                        </div>
+                        <div>
+                            <div className="text-base font-bold text-rose-400 mb-1.5">불러오기 실패</div>
+                            <p className="text-xs text-white/50 max-w-xs break-words">{readError}</p>
+                        </div>
+                    </div>
                 ) : entries.length === 0 ? (
                     <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center gap-5">
                         <div className="p-5 rounded-2xl bg-white/5 border border-white/10">
@@ -241,11 +150,10 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
                                                         <span className="text-[11px] text-white/35 shrink-0">{dateStr}</span>
                                                     )}
                                                 </div>
-                                                {/* 모바일: 항상 보임 / 데스크탑: hover 시 보임 */}
                                                 <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity shrink-0">
                                                     <button
                                                         type="button"
-                                                        onClick={(e) => verifyAndUpdate(e, entry)}
+                                                        onClick={(e) => { e.stopPropagation(); setEditEntry(entry) }}
                                                         className="p-1.5 rounded-lg text-white/40 hover:text-primary hover:bg-primary/10 active:bg-primary/20 transition-all cursor-pointer"
                                                         title="수정"
                                                     >
@@ -253,7 +161,7 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
                                                     </button>
                                                     <button
                                                         type="button"
-                                                        onClick={(e) => openDeleteModal(e, entry)}
+                                                        onClick={(e) => { e.stopPropagation(); setDeleteEntry(entry) }}
                                                         className="p-1.5 rounded-lg text-white/40 hover:text-rose-400 hover:bg-rose-400/10 active:bg-rose-400/20 transition-all cursor-pointer"
                                                         title="삭제"
                                                     >
@@ -278,185 +186,29 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
                 )}
             </div>
 
-            {/* 오른쪽: 분할 상세 패널 (md+ 전용) */}
-            <div className={`hidden md:flex flex-1 flex-col rounded-2xl border transition-all duration-300 overflow-hidden ${
-                detailEntry ? 'border-white/10 bg-white/[0.03]' : 'border-white/6 border-dashed'
-            }`}>
-                {detailEntry ? (
-                    <>
-                        {/* 헤더 */}
-                        <div className="flex items-center gap-3 px-5 pt-5 pb-4 border-b border-white/6 shrink-0">
-                            <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${getAvatarGradient(detailEntry.name)} flex items-center justify-center text-white font-bold text-base shadow-lg shrink-0`}>
-                                {detailEntry.name[0]?.toUpperCase() || '?'}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <div className="font-semibold text-white/90 text-sm">{detailEntry.name}</div>
-                                {detailEntry.createdAt?.toDate && (
-                                    <div className="text-[11px] text-white/40 mt-0.5">
-                                        {detailEntry.createdAt.toDate().toLocaleString('ko-KR')}
-                                    </div>
-                                )}
-                            </div>
-                            <div className="flex items-center gap-1 shrink-0">
-                                <button
-                                    type="button"
-                                    onClick={() => openEditModal(detailEntry)}
-                                    className="p-1.5 rounded-lg text-white/40 hover:text-primary hover:bg-primary/10 transition-all cursor-pointer"
-                                    title="수정"
-                                >
-                                    <FaEdit className="w-3.5 h-3.5" />
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => openDeleteModalDirect(detailEntry)}
-                                    className="p-1.5 rounded-lg text-white/40 hover:text-rose-400 hover:bg-rose-400/10 transition-all cursor-pointer"
-                                    title="삭제"
-                                >
-                                    <MdDelete className="w-4 h-4" />
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setDetailEntry(null)}
-                                    className="p-1.5 rounded-lg text-white/35 hover:text-white/70 hover:bg-white/8 transition-all cursor-pointer"
-                                    title="닫기"
-                                >
-                                    <IoClose className="w-5 h-5" />
-                                </button>
-                            </div>
-                        </div>
-                        {/* 메시지 */}
-                        <div className="flex-1 overflow-y-auto scrolls px-5 py-4">
-                            <p className="text-white/80 text-sm whitespace-pre-wrap break-words leading-relaxed">
-                                {detailEntry.message}
-                            </p>
-                        </div>
-                    </>
-                ) : (
-                    <div className="flex-1 flex flex-col items-center justify-center gap-3 p-8">
-                        <FiMessageSquare className="w-10 h-10 text-white/10" />
-                        <p className="text-white/20 text-sm text-center">목록에서 항목을 선택하세요</p>
-                    </div>
-                )}
-            </div>
-
-            {/* 모바일 상세 모달 */}
-            {detailEntry && (
-                <>
-                    <div className="md:hidden fixed inset-0 bg-black/55 z-40 backdrop-blur-sm" onClick={() => setDetailEntry(null)} />
-                    <div className="md:hidden fixed inset-0 z-50 flex items-end justify-center">
-                        <div className="w-full animate-in slide-in-from-bottom duration-200">
-                            <div className="rounded-t-2xl border border-white/10 bg-zinc-950/98 backdrop-blur-xl shadow-2xl max-h-[85dvh] flex flex-col">
-                                {/* 헤더 */}
-                                <div className="flex items-center gap-3 px-5 pt-5 pb-4 border-b border-white/6 shrink-0">
-                                    <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${getAvatarGradient(detailEntry.name)} flex items-center justify-center text-white font-bold text-base shadow-lg shrink-0`}>
-                                        {detailEntry.name[0]?.toUpperCase() || '?'}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="font-semibold text-white/90 text-sm">{detailEntry.name}</div>
-                                        {detailEntry.createdAt?.toDate && (
-                                            <div className="text-[11px] text-white/40 mt-0.5">
-                                                {detailEntry.createdAt.toDate().toLocaleString('ko-KR')}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <button
-                                        type="button"
-                                        onClick={() => setDetailEntry(null)}
-                                        className="p-1.5 rounded-lg text-white/35 hover:text-white/70 hover:bg-white/8 transition-all cursor-pointer shrink-0"
-                                    >
-                                        <IoClose className="w-5 h-5" />
-                                    </button>
-                                </div>
-                                {/* 메시지 */}
-                                <div className="px-5 py-4 overflow-y-auto scrolls">
-                                    <p className="text-white/80 text-sm whitespace-pre-wrap break-words leading-relaxed">
-                                        {detailEntry.message}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </>
-            )}
+            {/* 오른쪽: 분할 상세 패널 + 모바일 모달 */}
+            <GuestbookDetailPanel
+                entry={detailEntry}
+                onClose={() => setDetailEntry(null)}
+                onEdit={(entry) => setEditEntry(entry)}
+                onDelete={(entry) => setDeleteEntry(entry)}
+            />
 
             {/* 수정 모달 */}
-            {isEditModalOpen && (
-                <>
-                    <div className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm" onClick={closeEditModal} />
-                    <div className="fixed left-0 right-0 bottom-0 z-50 md:inset-0 md:flex md:items-center md:justify-center md:p-4">
-                        <div className="w-full md:max-w-md animate-in slide-in-from-bottom md:zoom-in-95 duration-200">
-                            <GuestbookEditor
-                                mode="edit"
-                                name={editingEntry?.name || ''}
-                                message={editMessage}
-                                submitting={false}
-                                onChangeName={() => {}}
-                                onChangeMessage={(v) => setEditMessage(v)}
-                                onChangePassword={(v) => { setEditPassword(v); setEditError('') }}
-                                onCancel={closeEditModal}
-                                onSubmit={() => handleEditSubmit()}
-                                autoFocus={true}
-                                focusTarget="password"
-                                error={editError}
-                            />
-                        </div>
-                    </div>
-                </>
-            )}
+            <GuestbookEditModal
+                entry={editEntry}
+                isOpen={editEntry !== null}
+                onClose={() => setEditEntry(null)}
+                onSuccess={onSuccess}
+            />
 
             {/* 삭제 모달 */}
-            {isDeleteModalOpen && (
-                <>
-                    <div className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm" onClick={closeDeleteModal} />
-                    <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center md:p-4">
-                        <div className="w-full md:max-w-sm animate-in slide-in-from-bottom md:zoom-in-95 duration-200">
-                            <div className="rounded-t-2xl md:rounded-2xl border border-white/10 bg-zinc-950/98 backdrop-blur-xl p-6 shadow-2xl">
-                                <div className="mb-5">
-                                    <div className="w-11 h-11 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4">
-                                        <MdDelete className="w-5 h-5 text-rose-400" />
-                                    </div>
-                                    <h3 className="text-base font-bold text-white mb-1">메시지 삭제</h3>
-                                    <p className="text-sm text-white/45">삭제하려면 비밀번호를 입력하세요. 삭제된 메시지는 복구할 수 없어요.</p>
-                                </div>
-                                <div className="relative">
-                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <TbLockPassword className="w-4 h-4 text-primary" />
-                                    </div>
-                                    <input
-                                        type="password"
-                                        autoFocus
-                                        value={deletePassword}
-                                        onChange={(e) => { setDeletePassword(e.target.value); setDeleteError('') }}
-                                        onKeyDown={(e) => e.key === 'Enter' && handleDeleteSubmit()}
-                                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-white/10 bg-white/5 outline-none focus:ring-2 focus:ring-rose-500/40 focus:border-rose-500/30 text-white text-sm placeholder:text-white/30 transition-all"
-                                        placeholder="비밀번호"
-                                    />
-                                </div>
-                                {deleteError && (
-                                    <p className="text-xs text-rose-400 mt-2">{deleteError}</p>
-                                )}
-                                <div className="flex gap-2 mt-4">
-                                    <button
-                                        type="button"
-                                        onClick={closeDeleteModal}
-                                        className="flex-1 px-4 py-2.5 bg-white/6 hover:bg-white/10 text-white/60 hover:text-white/80 rounded-xl transition-all cursor-pointer font-medium text-sm"
-                                    >
-                                        취소
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={handleDeleteSubmit}
-                                        disabled={deleting}
-                                        className="flex-1 px-4 py-2.5 bg-rose-500 hover:bg-rose-600 disabled:opacity-50 text-white rounded-xl transition-all cursor-pointer font-semibold text-sm"
-                                    >
-                                        {deleting ? '삭제 중...' : '삭제하기'}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </>
-            )}
+            <GuestbookDeleteModal
+                entry={deleteEntry}
+                isOpen={deleteEntry !== null}
+                onClose={() => setDeleteEntry(null)}
+                onSuccess={onSuccess}
+            />
         </div>
     )
 }
