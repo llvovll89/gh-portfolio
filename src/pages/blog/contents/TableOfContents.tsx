@@ -15,24 +15,33 @@ export const TableOfContents = ({ items }: Props) => {
         const container = document.getElementById(DETAIL_SCROLL_ID);
         if (!container) return;
 
-        const handleScroll = () => {
-            const containerRect = container.getBoundingClientRect();
-            const threshold = containerRect.top + 80;
+        let rafId: number | null = null;
 
-            let currentId = items[0]?.id ?? "";
-            for (const item of items) {
-                const el = document.getElementById(item.id);
-                if (!el) continue;
-                if (el.getBoundingClientRect().top <= threshold) {
-                    currentId = item.id;
+        const handleScroll = () => {
+            if (rafId !== null) return;
+            rafId = requestAnimationFrame(() => {
+                rafId = null;
+                const containerRect = container.getBoundingClientRect();
+                const threshold = containerRect.top + 80;
+
+                let currentId = items[0]?.id ?? "";
+                for (const item of items) {
+                    const el = document.getElementById(item.id);
+                    if (!el) continue;
+                    if (el.getBoundingClientRect().top <= threshold) {
+                        currentId = item.id;
+                    }
                 }
-            }
-            setActiveId(currentId);
+                setActiveId(currentId);
+            });
         };
 
-        container.addEventListener("scroll", handleScroll);
+        container.addEventListener("scroll", handleScroll, { passive: true });
         handleScroll();
-        return () => container.removeEventListener("scroll", handleScroll);
+        return () => {
+            container.removeEventListener("scroll", handleScroll);
+            if (rafId !== null) cancelAnimationFrame(rafId);
+        };
     }, [items]);
 
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, type MouseEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, type MouseEvent } from "react";
 
 const MINIMAP_W = 80;
 const LINE_H = 2;
@@ -51,8 +51,8 @@ export const Minimap = ({ content, scrollContainerId }: MinimapProps) => {
     const scrollRatioRef = useRef(0);
     const viewportRatioRef = useRef(0.2);
 
-    const lines = content.split("\n");
-    const canvasHeight = Math.min(lines.length * LINE_H, 680);
+    const lines = useMemo(() => content.split("\n"), [content]);
+    const canvasHeight = useMemo(() => Math.min(lines.length * LINE_H, 680), [lines.length]);
 
     const draw = useCallback(() => {
         const canvas = canvasRef.current;
@@ -98,17 +98,26 @@ export const Minimap = ({ content, scrollContainerId }: MinimapProps) => {
         const container = document.getElementById(scrollContainerId);
         if (!container) return;
 
+        let rafId: number | null = null;
+
         const onScroll = () => {
-            const { scrollTop, scrollHeight, clientHeight } = container;
-            const max = scrollHeight - clientHeight;
-            scrollRatioRef.current = max > 0 ? scrollTop / max : 0;
-            viewportRatioRef.current = scrollHeight > 0 ? clientHeight / scrollHeight : 1;
-            draw();
+            if (rafId !== null) return;
+            rafId = requestAnimationFrame(() => {
+                rafId = null;
+                const { scrollTop, scrollHeight, clientHeight } = container;
+                const max = scrollHeight - clientHeight;
+                scrollRatioRef.current = max > 0 ? scrollTop / max : 0;
+                viewportRatioRef.current = scrollHeight > 0 ? clientHeight / scrollHeight : 1;
+                draw();
+            });
         };
 
         container.addEventListener("scroll", onScroll, { passive: true });
         onScroll();
-        return () => container.removeEventListener("scroll", onScroll);
+        return () => {
+            container.removeEventListener("scroll", onScroll);
+            if (rafId !== null) cancelAnimationFrame(rafId);
+        };
     }, [scrollContainerId, draw]);
 
     useEffect(() => {

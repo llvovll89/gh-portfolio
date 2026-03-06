@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GlobalStateContext } from "../../../../context/GlobalState.context";
 import { GITHUB_OWNER, githubFetch } from "../../../../http/api";
 import GhActivityDashboard from "../../../ghActivity/GhActivityDashboard";
@@ -165,11 +165,42 @@ export const GitControl = () => {
         return data.map((pr) => ({ ...pr, draft: pr.draft ?? false }));
     };
 
+const REPOS = ["gh-portfolio", "modart", "blacktie", "MealLog", "wedding-plan"] as const;
+
+export const GitControl = () => {
+    const { t } = useTranslation();
+
+    const [gitStates, setGitStates] = useState<Record<RepoName, RepoState>>({
+        "gh-portfolio": { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
+        modart: { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
+        blacktie: { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
+        MealLog: { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
+        "wedding-plan": { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
+    });
+
+    const [selected, setSelected] = useState<{ repo: RepoName; branch: string } | null>(null);
+    const [activeTab, setActiveTab] = useState<TabType>("branches");
+    const [selectedRepo, setSelectedRepo] = useState<RepoName | null>(null);
+    const [showActivity, setShowActivity] = useState(false);
+
+    const githubUsername = import.meta.env.VITE_GITHUB_USERNAME || "llvovll89";
+
+    const { selectedTheme } = useContext(GlobalStateContext);
+
+    // 커스텀 테마 적용
+    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
+        ? { backgroundColor: selectedTheme.customColor }
+        : {};
+
+    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
+        ? ""
+        : selectedTheme.mode;
+
     useEffect(() => {
         (async () => {
             try {
                 const results = await Promise.all(
-                    repos.map(async (repo) => {
+                    REPOS.map(async (repo) => {
                         const [branches, stats, issues, pullRequests] = await Promise.all([
                             getBranchesByRepo(repo),
                             getRepoStats(repo),
@@ -197,7 +228,6 @@ export const GitControl = () => {
                 console.error("Error fetching GitHub data:", error);
             }
         })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -221,7 +251,6 @@ export const GitControl = () => {
                 console.error("Error fetching commits:", error);
             }
         })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selected?.repo, selected?.branch]);
 
     const isSelected = (repo: RepoName, branch: string) =>
@@ -256,7 +285,7 @@ export const GitControl = () => {
                         <GhActivityDashboard username={githubUsername} />
                     </div>
                 )}
-                {repos.map((repo) => (
+                {REPOS.map((repo) => (
                     <section key={repo} className="w-full border-b border-sub-gary/20">
                         {/* 레포지토리 헤더 + 통계 */}
                         <div

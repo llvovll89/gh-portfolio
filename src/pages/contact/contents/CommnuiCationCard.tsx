@@ -44,10 +44,12 @@ export const CommunicationCard = () => {
         ta.style.left = "0";
         ta.style.opacity = "0";
         document.body.appendChild(ta);
-        ta.select();
-        const ok = document.execCommand("copy");
-        document.body.removeChild(ta);
-        return ok;
+        try {
+            ta.select();
+            return document.execCommand("copy");
+        } finally {
+            document.body.removeChild(ta);
+        }
     };
 
     const handleCopyEmail = async () => {

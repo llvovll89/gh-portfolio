@@ -4,7 +4,8 @@
       "Bash(git:*)",
       "Bash(npx tsc:*)",
       "Bash(xargs ls:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(xargs grep:*)"
     ]
   }
 }

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { routesPath } from "../../routes/route";
 import { useContext, useEffect, useState } from "react";
 import { GlobalStateContext } from "../../context/GlobalState.context";
@@ -7,6 +7,24 @@ import { useRedirectionPage } from "../../hooks/useRedirectionPage";
 import { ThemeMode } from "../../context/constatns/Theme.type";
 import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
 import { LAYOUT_CONSTANTS } from "../../constants/layout";
+
+const HeaderClock = () => {
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+        const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+        return () => clearInterval(timer);
+    }, []);
+
+    const hours = currentTime.getHours().toString().padStart(2, "0");
+    const minutes = currentTime.getMinutes().toString().padStart(2, "0");
+
+    return (
+        <div className="h-full px-2 sm:px-3 md:px-4 flex items-center text-white/90 font-bold text-xs sm:text-sm select-none border-l border-sub-gary/10 user-select-none">
+            {hours}:{minutes}
+        </div>
+    );
+};
 
 export const Header = () => {
     const {
@@ -17,8 +35,8 @@ export const Header = () => {
     } = useContext(GlobalStateContext);
 
     const navigate = useNavigate();
+    const location = useLocation();
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const [currentTime, setCurrentTime] = useState(new Date());
     const isMobileSize = useCheckedMobileSize();
 
     useRedirectionPage();
@@ -31,15 +49,6 @@ export const Header = () => {
     const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
         ? ""
         : selectedTheme.mode;
-
-    // 시계 업데이트
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentTime(new Date());
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, []);
 
     // 풀스크린 상태 감지
     useEffect(() => {
@@ -69,6 +78,16 @@ export const Header = () => {
             delete (window as any).toggleFullscreen;
         };
     }, []);
+
+    // 브라우저 앞/뒤로 가기 시 URL과 탭 선택 상태 동기화
+    useEffect(() => {
+        if (selectedPathState.list.includes(location.pathname)) {
+            setSelectedPathState((prev) => ({
+                ...prev,
+                state: location.pathname,
+            }));
+        }
+    }, [location.pathname]);
 
     const selectedStyle = (path: string) => {
         return {
@@ -104,12 +123,6 @@ export const Header = () => {
                 state: newState,
             };
         });
-    };
-
-    const formatTime = (date: Date) => {
-        const hours = date.getHours().toString().padStart(2, "0");
-        const minutes = date.getMinutes().toString().padStart(2, "0");
-        return `${hours}:${minutes}`;
     };
 
     return (
@@ -310,9 +323,7 @@ export const Header = () => {
                     </button>
 
                     {/* 시계 */}
-                    <div className="h-full px-2 sm:px-3 md:px-4 flex items-center text-white/90 font-bold text-xs sm:text-sm select-none border-l border-sub-gary/10 user-select-none">
-                        {formatTime(currentTime)}
-                    </div>
+                    <HeaderClock />
                 </div>
             </header>
 
