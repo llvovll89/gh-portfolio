@@ -108,7 +108,7 @@ export const MarkdownRenderer = ({ content }: Props) => {
                     ),
                     pre: (props) => (
                         <pre
-                            className="my-4 overflow-x-auto max-w-full text-[]clamp(0.9rem,1.5vw,1rem)]"
+                            className="my-4 overflow-x-auto max-w-full text-[clamp(0.9rem,1.5vw,1rem)]"
                             {...props}
                         />
                     ),

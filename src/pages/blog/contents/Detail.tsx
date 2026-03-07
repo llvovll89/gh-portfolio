@@ -161,7 +161,7 @@ export const Detail = () => {
                         className="w-full rounded-lg border border-zinc-200 dark:border-zinc-700"
                         style={{ height: "80vh" }}
                         title={post.title}
-                        sandbox="allow-scripts allow-same-origin"
+                        sandbox="allow-scripts"
                     />
                 ) : (
                     <>
