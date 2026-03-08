@@ -17,20 +17,19 @@ export interface Project {
 export const projects = [
     {
         id: 1,
-        title: "BlackTie",
+        title: "Hovie",
         scale: "개인 프로젝트",
-        image: "/assets/images/projects/blackTie.png",
+        image: "/assets/images/projects/hovie.png",
         link: {
-            repositoryUrl: "https://github.com/llvovll89/blacktie",
-            projectUrl: "https://llvovll89.github.io/blacktie/",
+            repositoryUrl: "https://github.com/llvovll89/hovie",
+            projectUrl: "https://hovie.vercel.app/",
         },
         description:
             "TMDB API를 활용하여 인기있는 영화와 드라마 정보를 제공하는 웹사이트입니다.",
         detailedDescription: `TMDB API를 활용하여 인기있는 영화와 드라마 정보를 제공하는 웹사이트입니다.
             사용자들은 장르별로 콘텐츠를 탐색하고, 상세 페이지에서 줄거리, 출연진, 예고편 등을 확인할 수 있습니다. 또한, 반응형 디자인을 적용하여 다양한 기기에서 최적의 사용자 경험을 제공합니다.`,
-        skills: ["React", "Redux", "TMDB API", "Styled-Components"],
+        skills: ["React", "Tailwind CSS", "TMDB API", "Firebase", "Vercel"],
         projectMembers: ["김건호"],
-        status: "updating",
     },
     {
         id: 2,
