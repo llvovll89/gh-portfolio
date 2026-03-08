@@ -1,6 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { KeyboardContext } from "@/context/KeyboardState.context";
-import { GlobalStateContext } from "@/context/GlobalState.context";
+import { LayoutContext } from "@/context/LayoutContext";
+import { NavigationContext } from "@/context/NavigationContext";
 import { NavType } from "@/components/aside/constants/Nav.type";
 import {
     DEFAULT_KEY_COMBINATIONS,
@@ -28,7 +29,8 @@ export const CommandPalette = () => {
         setIsVisibleCommandPalette,
         toggleKeyboardInfo,
     } = useContext(KeyboardContext);
-    const { setLayoutState, setSelectedNav } = useContext(GlobalStateContext);
+    const { setLayoutState } = useContext(LayoutContext);
+    const { setSelectedNav } = useContext(NavigationContext);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedIndex, setSelectedIndex] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);

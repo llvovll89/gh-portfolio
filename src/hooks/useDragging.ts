@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef } from "react";
-import { GlobalStateContext } from "../context/GlobalState.context";
+import { LayoutContext } from "../context/LayoutContext";
 
 interface UseDraggingProps {
     targetRef: React.RefObject<HTMLDivElement | null>;
@@ -9,7 +9,7 @@ interface UseDraggingProps {
 type InputKind = "pointer" | "mouse" | "touch" | null;
 
 export const useDragging = ({ targetRef, type }: UseDraggingProps) => {
-    const { setLayoutState } = useContext(GlobalStateContext);
+    const { setLayoutState } = useContext(LayoutContext);
 
     const isDragging = useRef(false);
     const activeInput = useRef<InputKind>(null);

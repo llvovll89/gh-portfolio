@@ -19,6 +19,7 @@ const GuestbookForm = ({ onSubmitted, autoFocus, focusTarget, handleToggleForm }
     const [error, setError] = useState("")
 
     const handleSubmit = async () => {
+        if (submitting) return
         if (!name.trim() || !password || !message.trim()) return
         setError("")
         setSubmitting(true)

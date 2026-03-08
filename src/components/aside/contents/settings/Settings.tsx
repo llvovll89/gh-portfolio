@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect } from "react";
-import { GlobalStateContext } from "../../../../context/GlobalState.context";
+import { useState, useEffect } from "react";
+import { useThemeStyle } from "../../../../hooks/useThemeStyle";
 import { VscSettingsGear, VscKey, VscRefresh } from "react-icons/vsc";
 import { useTranslation } from "react-i18next";
 import { useKeyboardShortcuts } from "../../../../hooks/useKeyboardShortcuts";
@@ -9,7 +9,6 @@ import {
     SHORTCUT_DESCRIPTIONS_KO,
     SHORTCUT_DESCRIPTIONS_EN,
 } from "../../../../constants/keyboardConstants";
-import { ThemeMode } from "../../../../context/constatns/Theme.type";
 
 interface GeneralSettings {
     language: string;
@@ -29,7 +28,7 @@ const SHORTCUT_IDS = [
 ];
 
 export const Settings = () => {
-    const { selectedTheme } = useContext(GlobalStateContext);
+    const { backgroundStyle, backgroundClass } = useThemeStyle();
     const { t, i18n } = useTranslation();
     const { shortcuts, resetShortcut, resetAllShortcuts, isCustomized } =
         useKeyboardShortcuts();
@@ -40,15 +39,6 @@ export const Settings = () => {
         language: "ko",
         animationSpeed: "normal",
     });
-
-    // 커스텀 테마 적용
-    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
-        ? { backgroundColor: selectedTheme.customColor }
-        : {};
-
-    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
-        ? ""
-        : selectedTheme.mode;
 
     useEffect(() => {
         const stored = localStorage.getItem("portfolio-settings");

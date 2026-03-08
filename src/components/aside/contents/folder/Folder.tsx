@@ -6,24 +6,16 @@ import {
     routesPath,
 } from "../../../../routes/route";
 import { useContext } from "react";
-import { GlobalStateContext } from "../../../../context/GlobalState.context";
+import { NavigationContext } from "../../../../context/NavigationContext";
+import { useThemeStyle } from "../../../../hooks/useThemeStyle";
 import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
 import { useTranslation } from "react-i18next";
-import { ThemeMode } from "../../../../context/constatns/Theme.type";
 
 export const Folder = () => {
-    const { selectedPathState, selectedTheme } = useContext(GlobalStateContext);
+    const { selectedPathState } = useContext(NavigationContext);
+    const { backgroundStyle, backgroundClass } = useThemeStyle();
     const handlePushPath = useHandlePushPath();
     const { t } = useTranslation();
-
-    // 커스텀 테마 적용
-    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
-        ? { backgroundColor: selectedTheme.customColor }
-        : {};
-
-    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
-        ? ""
-        : selectedTheme.mode;
 
     return (
         <section

@@ -13,6 +13,19 @@ type GitHubEvent = {
 
 const COLLAPSED_COUNT = 5;
 
+const ActivitySkeleton = () => (
+    <div className="flex flex-col gap-2">
+        {Array.from({ length: COLLAPSED_COUNT }).map((_, i) => (
+            <div key={i} className="border-b border-sub-gary/20 pb-2">
+                <div className="flex items-center justify-between gap-2">
+                    <div className="skeleton h-3 rounded w-3/4" />
+                    <div className="skeleton h-3 rounded w-12 flex-shrink-0" />
+                </div>
+            </div>
+        ))}
+    </div>
+);
+
 const RecentActivityList = ({ username }: { username: string }) => {
     const [events, setEvents] = useState<GitHubEvent[] | null>(null);
     const [loading, setLoading] = useState(false);
@@ -45,7 +58,7 @@ const RecentActivityList = ({ username }: { username: string }) => {
         };
     }, [username]);
 
-    if (loading) return <div className="text-[12px] text-white/50">Loading events...</div>;
+    if (loading) return <ActivitySkeleton />;
     if (!events || events.length === 0) return <div className="text-[12px] text-white/50">No recent activity</div>;
 
     const visibleEvents = isExpanded ? events : events.slice(0, COLLAPSED_COUNT);

@@ -1,9 +1,9 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { GlobalStateContext } from "../../context/GlobalState.context";
+import { LayoutContext } from "../../context/LayoutContext";
+import { useThemeStyle } from "../../hooks/useThemeStyle";
 import { useDragging } from "../../hooks/useDragging";
 import { Cli } from "./cli/Cli";
 import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
-import { ThemeMode } from "../../context/constatns/Theme.type";
 import { LAYOUT_CONSTANTS } from "../../constants/layout";
 import { FooterTabs } from "./tabs/FooterTabs";
 import { ConsoleTab } from "./tabs/ConsoleTab";
@@ -14,8 +14,8 @@ const COLLAPSED_HEIGHT = 32; // 헤더 바 높이(h-8)
 const OPEN_HEIGHT = 220; // 열렸을 때 최소 높이
 
 export const Bottom = () => {
-    const { layoutState, selectedTheme, setLayoutState } =
-        useContext(GlobalStateContext);
+    const { layoutState, setLayoutState } = useContext(LayoutContext);
+    const { backgroundStyle, backgroundClass } = useThemeStyle();
     const { submitCliCommand } = useContext(KeyboardContext);
 
     const footerRef = useRef<HTMLDivElement>(null);
@@ -23,15 +23,6 @@ export const Bottom = () => {
 
     const isOpen = layoutState.resizeFooterHeight > COLLAPSED_HEIGHT;
     const isMobileSize = useCheckedMobileSize();
-
-    // 커스텀 테마 적용
-    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
-        ? { backgroundColor: selectedTheme.customColor }
-        : {};
-
-    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
-        ? ""
-        : selectedTheme.mode;
 
     const closeFooter = () => {
         setLayoutState((prev) => ({

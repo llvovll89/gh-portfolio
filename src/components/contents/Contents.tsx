@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
-import { GlobalStateContext } from "../../context/GlobalState.context";
+import { LayoutContext } from "../../context/LayoutContext";
+import { useThemeStyle } from "../../hooks/useThemeStyle";
 import { convertThemeTextColor, getTextColorFromBg } from "../../utils/convertThemeTextColor";
 import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
 import { ThemeMode } from "../../context/constatns/Theme.type";
@@ -11,7 +12,8 @@ interface ContentsProps {
 }
 
 export const Contents = ({ children, className }: ContentsProps) => {
-    const { layoutState, selectedTheme } = useContext(GlobalStateContext);
+    const { layoutState } = useContext(LayoutContext);
+    const { backgroundStyle, backgroundClass, selectedTheme } = useThemeStyle();
     const isMobileSize = useCheckedMobileSize();
     const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -24,15 +26,6 @@ export const Contents = ({ children, className }: ContentsProps) => {
         document.addEventListener("fullscreenchange", handleFullscreenChange);
         return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
     }, []);
-
-    // 커스텀 테마 적용
-    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
-        ? { backgroundColor: selectedTheme.customColor }
-        : {};
-
-    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
-        ? ""
-        : selectedTheme.mode;
 
     const textColor = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
         ? getTextColorFromBg(selectedTheme.customColor)

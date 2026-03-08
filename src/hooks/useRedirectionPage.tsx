@@ -1,11 +1,11 @@
 import {useContext, useEffect} from "react";
-import {GlobalStateContext} from "../context/GlobalState.context";
+import {NavigationContext} from "../context/NavigationContext";
 import {useNavigate} from "react-router-dom";
 import {DEFAULT} from "../routes/route";
 
 export const useRedirectionPage = () => {
     const navigation = useNavigate();
-    const {selectedPathState,} = useContext(GlobalStateContext);
+    const {selectedPathState} = useContext(NavigationContext);
 
     useEffect(() => {
         if (selectedPathState.list.length === 0) {

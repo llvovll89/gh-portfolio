@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from "react";
-import { GlobalStateContext } from "../../../../context/GlobalState.context";
+import { NavigationContext } from "../../../../context/NavigationContext";
+import { useThemeStyle } from "../../../../hooks/useThemeStyle";
 import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
 import {
     routesPath,
@@ -7,7 +8,6 @@ import {
     NOT_FOUND,
     BLOG_DETAIL,
 } from "../../../../routes/route";
-import { ThemeMode } from "../../../../context/constatns/Theme.type";
 import {
     VscBookmark,
     VscTrash,
@@ -24,19 +24,10 @@ interface Bookmark {
 }
 
 export const Bookmarks = () => {
-    const { selectedTheme, selectedPathState } =
-        useContext(GlobalStateContext);
+    const { selectedPathState } = useContext(NavigationContext);
+    const { backgroundStyle, backgroundClass } = useThemeStyle();
     const handlePushPath = useHandlePushPath();
     const { t } = useTranslation();
-
-    // 커스텀 테마 적용
-    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
-        ? { backgroundColor: selectedTheme.customColor }
-        : {};
-
-    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
-        ? ""
-        : selectedTheme.mode;
 
     const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
     const [showAddForm, setShowAddForm] = useState(false);

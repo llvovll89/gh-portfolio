@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { NOT_FOUND, routesPath } from "../../../../routes/route";
-import { GlobalStateContext } from "../../../../context/GlobalState.context";
+import { NavigationContext } from "../../../../context/NavigationContext";
+import { useThemeStyle } from "../../../../hooks/useThemeStyle";
 import { FcOpenedFolder } from "react-icons/fc";
 import { FiFileText } from "react-icons/fi";
 import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
 import { CiSquareRemove } from "react-icons/ci";
 import { MdHistory, MdClearAll } from "react-icons/md";
 import { useTranslation } from "react-i18next";
-import { ThemeMode } from "../../../../context/constatns/Theme.type";
 import { loadPosts } from "../../../../utils/loadPosts";
 import type { BlogPost } from "../../../../utils/loadPosts";
 
@@ -193,18 +193,10 @@ function HighlightedText({
 }
 
 export const Search = () => {
-    const { selectedPathState, selectedTheme } = useContext(GlobalStateContext);
+    const { selectedPathState } = useContext(NavigationContext);
+    const { backgroundStyle, backgroundClass } = useThemeStyle();
     const handlePushPath = useHandlePushPath();
     const { t } = useTranslation();
-
-    // 커스텀 테마 적용
-    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
-        ? { backgroundColor: selectedTheme.customColor }
-        : {};
-
-    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
-        ? ""
-        : selectedTheme.mode;
 
     const [query, setQuery] = useState("");
     const [debouncedQuery, setDebouncedQuery] = useState("");

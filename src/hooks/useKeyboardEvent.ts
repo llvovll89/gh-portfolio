@@ -1,6 +1,8 @@
 import { useCallback, useContext, useEffect } from "react";
 import { KeyboardContext } from "@/context/KeyboardState.context";
-import { GlobalStateContext } from "@/context/GlobalState.context";
+import { LayoutContext } from "@/context/LayoutContext";
+import { NavigationContext } from "@/context/NavigationContext";
+import { TerminalContext } from "@/context/TerminalContext";
 
 import {
     handleActiveFolderUI,
@@ -25,7 +27,9 @@ export const useKeyboardEvent = () => {
         setSubmitCliCommand,
         setIsVisibleCommandPalette,
     } = useContext(KeyboardContext);
-    const { setLayoutState, setSelectedNav, setIsTerminalVisible } = useContext(GlobalStateContext);
+    const { setLayoutState } = useContext(LayoutContext);
+    const { setSelectedNav } = useContext(NavigationContext);
+    const { setIsTerminalVisible } = useContext(TerminalContext);
 
     /**
      * 키보드 이벤트 핸들러

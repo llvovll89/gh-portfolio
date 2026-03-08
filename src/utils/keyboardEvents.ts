@@ -275,9 +275,9 @@ export const handleToggleFullscreen = (event: KeyboardEvent) => {
     if (matchesKeyCombination(event, combo)) {
         event.preventDefault();
 
-        // window 객체에 있는 toggleFullscreen 함수 호출
-        if (typeof (window as any).toggleFullscreen === "function") {
-            (window as any).toggleFullscreen();
+        // window 객체에 있는 toggleFullscreen 함수 호출 (Header 컴포넌트에서 등록)
+        if (typeof window.toggleFullscreen === "function") {
+            window.toggleFullscreen();
         }
     }
 };

@@ -5,7 +5,10 @@
       "Bash(npx tsc:*)",
       "Bash(xargs ls:*)",
       "Bash(mv:*)",
-      "Bash(xargs grep:*)"
+      "Bash(xargs grep:*)",
+      "Bash(npm install:*)",
+      "Bash(node:*)",
+      "Bash(npm run:*)"
     ]
   }
 }

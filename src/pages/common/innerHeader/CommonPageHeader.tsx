@@ -3,8 +3,7 @@ import { SiVelog } from "react-icons/si";
 import { HiHome } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { Img } from "../../../components/Img";
-import { useContext } from "react";
-import { GlobalStateContext } from "../../../context/GlobalState.context";
+import { useThemeStyle } from "../../../hooks/useThemeStyle";
 import {
     convertThemeLogoColor,
     convertThemeTextColor,
@@ -18,16 +17,7 @@ interface CommonPageHeaderProps {
 }
 
 export const CommonPageHeader = ({ title }: CommonPageHeaderProps) => {
-    const { selectedTheme } = useContext(GlobalStateContext);
-
-    // 커스텀 테마 적용
-    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
-        ? { backgroundColor: selectedTheme.customColor }
-        : {};
-
-    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
-        ? ""
-        : selectedTheme.mode;
+    const { backgroundStyle, backgroundClass, selectedTheme } = useThemeStyle();
 
     const textColor = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
         ? getTextColorFromBg(selectedTheme.customColor)

@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { GlobalStateContext } from "../context/GlobalState.context";
+import { NavigationContext } from "../context/NavigationContext";
 import { useNavigate } from "react-router-dom";
 
 export const useHandlePushPath = () => {
-    const { setSelectedPathState } = useContext(GlobalStateContext);
+    const { setSelectedPathState } = useContext(NavigationContext);
     const navigate = useNavigate();
 
     const handlePushPath = (path: string) => {

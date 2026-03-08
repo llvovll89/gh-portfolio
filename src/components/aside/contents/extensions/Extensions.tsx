@@ -1,8 +1,7 @@
-import { useContext, useState, useEffect } from "react";
-import { GlobalStateContext } from "../../../../context/GlobalState.context";
+import { useState, useEffect } from "react";
+import { useThemeStyle } from "../../../../hooks/useThemeStyle";
 import { VscExtensions, VscTrash, VscAdd } from "react-icons/vsc";
 import { useTranslation } from "react-i18next";
-import { ThemeMode } from "../../../../context/constatns/Theme.type";
 
 interface Extension {
     id: string;
@@ -12,7 +11,7 @@ interface Extension {
 }
 
 export const Extensions = () => {
-    const { selectedTheme } = useContext(GlobalStateContext);
+    const { backgroundStyle, backgroundClass } = useThemeStyle();
     const { t } = useTranslation();
     const [extensions, setExtensions] = useState<Extension[]>([]);
     const [showAddForm, setShowAddForm] = useState(false);
@@ -20,15 +19,6 @@ export const Extensions = () => {
         name: "",
         description: "",
     });
-
-    // 커스텀 테마 적용
-    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
-        ? { backgroundColor: selectedTheme.customColor }
-        : {};
-
-    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
-        ? ""
-        : selectedTheme.mode;
 
     useEffect(() => {
         const stored = localStorage.getItem("portfolio-extensions");

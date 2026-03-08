@@ -11,6 +11,23 @@ type Week = {
 };
 
 const COLLAPSED_WEEKS = 10;
+const SKELETON_DAYS = 7;
+
+const HeatmapSkeleton = () => (
+  <div className="flex gap-1 items-start">
+    {Array.from({ length: COLLAPSED_WEEKS }).map((_, wi) => (
+      <div key={wi} className="flex flex-col">
+        {Array.from({ length: SKELETON_DAYS }).map((_, di) => (
+          <div
+            key={di}
+            className="skeleton rounded-sm"
+            style={{ width: 12, height: 12, margin: 2 }}
+          />
+        ))}
+      </div>
+    ))}
+  </div>
+);
 
 const Cell = ({ day, small = false }: { day: Day; small?: boolean }) => {
   const count = day.contributionCount ?? 0;
@@ -30,8 +47,10 @@ const Cell = ({ day, small = false }: { day: Day; small?: boolean }) => {
   );
 };
 
-const ContributionHeatmap = ({ weeks }: { weeks: Week[] }) => {
+const ContributionHeatmap = ({ weeks, loading = false }: { weeks: Week[]; loading?: boolean }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  if (loading) return <HeatmapSkeleton />;
 
   if (!weeks || weeks.length === 0) {
     return <div className="text-[12px] text-white/50">No contributions</div>;

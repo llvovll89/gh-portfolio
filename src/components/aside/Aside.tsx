@@ -1,5 +1,7 @@
 import { useContext, useEffect, useRef } from "react";
-import { GlobalStateContext } from "../../context/GlobalState.context";
+import { LayoutContext } from "../../context/LayoutContext";
+import { NavigationContext } from "../../context/NavigationContext";
+import { useThemeStyle } from "../../hooks/useThemeStyle";
 import { useDragging } from "../../hooks/useDragging";
 import { Navbar } from "./navbar/Navbar";
 import { Folder } from "./contents/folder/Folder";
@@ -8,29 +10,15 @@ import { Search } from "./contents/search/Search";
 import { GitControl } from "./contents/gitControl/GitControl";
 import { Bookmarks } from "./contents/bookmarks/Bookmarks";
 import { Settings } from "./contents/settings/Settings";
-import { ThemeMode } from "../../context/constatns/Theme.type";
 import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
 
 export const Aside = () => {
-    const {
-        layoutState,
-        setLayoutState,
-        selectedNav,
-        setSelectedNav,
-        selectedTheme,
-    } = useContext(GlobalStateContext);
+    const { layoutState, setLayoutState } = useContext(LayoutContext);
+    const { selectedNav, setSelectedNav } = useContext(NavigationContext);
+    const { backgroundStyle, backgroundClass } = useThemeStyle();
     const asideRef = useRef<HTMLDivElement>(null);
     const handleMouseDown = useDragging({ targetRef: asideRef, type: "sidebar" });
     const isMobileSize = useCheckedMobileSize();
-
-    // 커스텀 테마 적용
-    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
-        ? { backgroundColor: selectedTheme.customColor }
-        : {};
-
-    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
-        ? ""
-        : selectedTheme.mode;
 
     const handleClickNav = (nav: NavType) => {
         if (selectedNav === nav) {

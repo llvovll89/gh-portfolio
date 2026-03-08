@@ -19,7 +19,7 @@ type ContributionsResponse = {
 };
 
 const GhActivityDashboard = ({ username }: { username?: string }) => {
-    const user = username || (import.meta.env.VITE_GITHUB_USERNAME as string) || "llvovll89";
+    const user = username || (import.meta.env.VITE_GIT_HUB_APP_ADMIN as string);
     const [weeks, setWeeks] = useState<Week[]>([]);
     const [total, setTotal] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
@@ -63,11 +63,16 @@ const GhActivityDashboard = ({ username }: { username?: string }) => {
         <div className="w-full text-white">
             <div className="mb-2 flex items-center justify-between">
                 <div className="text-sm font-semibold">{user} activity</div>
-                <div className="text-[12px] text-white/60">{loading ? "Loading..." : `${total ?? 0} contributions`}</div>
+                <div className="text-[12px] text-white/60">
+                    {loading
+                        ? <span className="skeleton inline-block h-3 w-24 rounded align-middle" />
+                        : `${total ?? 0} contributions`
+                    }
+                </div>
             </div>
 
             <div className="mb-3">
-                <ContributionHeatmap weeks={weeks} />
+                <ContributionHeatmap weeks={weeks} loading={loading} />
             </div>
 
             <div>

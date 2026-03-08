@@ -1,133 +1,34 @@
-import {createContext, useState, useEffect} from "react";
-import {DEFAULT} from "../routes/route";
-import {NavType} from "../components/aside/constants/Nav.type";
-import {ThemeMode} from "./constatns/Theme.type";
+/**
+ * GlobalState.context.tsx
+ * 하위 4개 Context를 하나의 GlobalStateProvider로 합성해 App.tsx에서 사용.
+ * 각 컴포넌트는 개별 Context를 직접 import해 불필요한 리렌더링을 방지.
+ */
+import { ThemeProvider } from "./ThemeContext";
+import { LayoutProvider } from "./LayoutContext";
+import { NavigationProvider } from "./NavigationContext";
+import { TerminalProvider } from "./TerminalContext";
 
-export interface LayoutState {
-    resizeFooterHeight: number;
-    resizeSidebarWidth: number;
-}
+// 개별 Context 및 타입 재-export (편의용)
+export { ThemeContext, useThemeContext } from "./ThemeContext";
+export type { SelectedThemeState } from "./ThemeContext";
 
-export interface SelectedPathState {
-    list: string[];
-    state: string;
-}
+export { LayoutContext, useLayoutContext } from "./LayoutContext";
+export type { LayoutState } from "./LayoutContext";
 
-interface SelectedThemeState {
-    mode: ThemeMode;
-    isVisibleThemeDropdown: boolean;
-    customColor?: string;
-}
+export { NavigationContext, useNavigationContext } from "./NavigationContext";
+export type { SelectedPathState } from "./NavigationContext";
 
-const THEME_STORAGE_KEY = 'portfolio-theme-settings';
+export { TerminalContext, useTerminalContext } from "./TerminalContext";
 
-interface GlobalStateContextProps {
-    selectedPath: string;
-    setSelectedPath: React.Dispatch<React.SetStateAction<string>>;
-    layoutState: LayoutState;
-    setLayoutState: React.Dispatch<React.SetStateAction<LayoutState>>;
-    selectedPathState: SelectedPathState;
-    setSelectedPathState: React.Dispatch<
-        React.SetStateAction<SelectedPathState>
-    >;
-    selectedNav: NavType | null;
-    setSelectedNav: React.Dispatch<React.SetStateAction<NavType | null>>;
-    selectedTheme: SelectedThemeState;
-    setSelectedTheme: React.Dispatch<React.SetStateAction<SelectedThemeState>>;
-    isTerminalVisible: boolean;
-    setIsTerminalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export const GlobalStateContext = createContext<GlobalStateContextProps>({
-    selectedPath: "",
-    setSelectedPath: () => {},
-    layoutState: {
-        resizeFooterHeight: 0,
-        resizeSidebarWidth: 0,
-    },
-    setLayoutState: () => {},
-    selectedPathState: {list: [], state: ""},
-    setSelectedPathState: () => {},
-    selectedNav: null,
-    setSelectedNav: () => {},
-    selectedTheme: {
-        mode: ThemeMode.BASE_NAVY,
-        isVisibleThemeDropdown: false,
-    },
-    setSelectedTheme: () => {},
-    isTerminalVisible: false,
-    setIsTerminalVisible: () => {},
-});
-
-export const GlobalStateProvider = ({
-    children,
-}: {
-    children: React.ReactNode;
-}) => {
-    const [selectedPath, setSelectedPath] = useState<string>("");
-    const [layoutState, setLayoutState] = useState<LayoutState>({
-        resizeFooterHeight: 32,
-        resizeSidebarWidth: 300,
-    });
-    const [selectedPathState, setSelectedPathState] =
-        useState<SelectedPathState>({
-            list: [],
-            state: DEFAULT,
-        });
-    const [selectedTheme, setSelectedTheme] = useState<SelectedThemeState>(() => {
-        // 초기값을 localStorage에서 로드
-        try {
-            const stored = localStorage.getItem(THEME_STORAGE_KEY);
-            if (stored) {
-                const parsed = JSON.parse(stored);
-                return {
-                    mode: parsed.mode || ThemeMode.BASE_NAVY,
-                    isVisibleThemeDropdown: false,
-                    customColor: parsed.customColor,
-                };
-            }
-        } catch (error) {
-            console.error('Failed to load theme settings:', error);
-        }
-        return {
-            mode: ThemeMode.BASE_NAVY,
-            isVisibleThemeDropdown: false,
-        };
-    });
-
-    const [selectedNav, setSelectedNav] = useState<NavType | null>(null);
-    const [isTerminalVisible, setIsTerminalVisible] = useState<boolean>(false);
-
-    // 테마 변경 시 localStorage에 저장
-    useEffect(() => {
-        try {
-            localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify({
-                mode: selectedTheme.mode,
-                customColor: selectedTheme.customColor,
-            }));
-        } catch (error) {
-            console.error('Failed to save theme settings:', error);
-        }
-    }, [selectedTheme.mode, selectedTheme.customColor]);
-
-    return (
-        <GlobalStateContext.Provider
-            value={{
-                selectedPath,
-                setSelectedPath,
-                layoutState,
-                setLayoutState,
-                selectedPathState,
-                setSelectedPathState,
-                selectedNav,
-                setSelectedNav,
-                selectedTheme,
-                setSelectedTheme,
-                isTerminalVisible,
-                setIsTerminalVisible,
-            }}
-        >
-            {children}
-        </GlobalStateContext.Provider>
-    );
-};
+/** App.tsx 에서 사용하는 합성 Provider */
+export const GlobalStateProvider = ({ children }: { children: React.ReactNode }) => (
+    <ThemeProvider>
+        <LayoutProvider>
+            <NavigationProvider>
+                <TerminalProvider>
+                    {children}
+                </TerminalProvider>
+            </NavigationProvider>
+        </LayoutProvider>
+    </ThemeProvider>
+);

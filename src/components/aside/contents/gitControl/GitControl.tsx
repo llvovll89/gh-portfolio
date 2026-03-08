@@ -1,10 +1,9 @@
-import { useContext, useEffect, useState } from "react";
-import { GlobalStateContext } from "../../../../context/GlobalState.context";
+import { useEffect, useState } from "react";
+import { useThemeStyle } from "../../../../hooks/useThemeStyle";
 import { GITHUB_OWNER, githubFetch } from "../../../../http/api";
 import GhActivityDashboard from "../../../ghActivity/GhActivityDashboard";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ThemeMode } from "../../../../context/constatns/Theme.type";
 
 type RepoName = "gh-portfolio" | "modart" | "blacktie" | "MealLog" | "wedding-plan";
 
@@ -107,15 +106,7 @@ export const GitControl = () => {
     const githubUsername = (import.meta.env.VITE_GITHUB_USERNAME as string) || "llvovll89";
     const owner = GITHUB_OWNER || githubUsername;
 
-    const { selectedTheme } = useContext(GlobalStateContext);
-
-    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
-        ? { backgroundColor: selectedTheme.customColor }
-        : {};
-
-    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
-        ? ""
-        : selectedTheme.mode;
+    const { backgroundStyle, backgroundClass } = useThemeStyle();
 
     const getBranchesByRepo = async (repo: RepoName) => {
         const data = await githubFetch(`/repos/${owner}/${repo}/branches`) as Branch[];

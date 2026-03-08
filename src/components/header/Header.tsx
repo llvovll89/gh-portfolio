@@ -1,10 +1,11 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { routesPath } from "../../routes/route";
-import { useContext, useEffect, useState } from "react";
-import { GlobalStateContext } from "../../context/GlobalState.context";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { LayoutContext } from "../../context/LayoutContext";
+import { NavigationContext } from "../../context/NavigationContext";
+import { useThemeStyle } from "../../hooks/useThemeStyle";
 import { Theme } from "./theme/Theme";
 import { useRedirectionPage } from "../../hooks/useRedirectionPage";
-import { ThemeMode } from "../../context/constatns/Theme.type";
 import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
 import { LAYOUT_CONSTANTS } from "../../constants/layout";
 
@@ -27,12 +28,9 @@ const HeaderClock = () => {
 };
 
 export const Header = () => {
-    const {
-        layoutState,
-        selectedPathState,
-        setSelectedPathState,
-        selectedTheme,
-    } = useContext(GlobalStateContext);
+    const { layoutState } = useContext(LayoutContext);
+    const { selectedPathState, setSelectedPathState } = useContext(NavigationContext);
+    const { backgroundStyle, backgroundClass } = useThemeStyle();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -40,15 +38,6 @@ export const Header = () => {
     const isMobileSize = useCheckedMobileSize();
 
     useRedirectionPage();
-
-    // 커스텀 테마 적용
-    const backgroundStyle = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
-        ? { backgroundColor: selectedTheme.customColor }
-        : {};
-
-    const backgroundClass = selectedTheme.mode === ThemeMode.CUSTOM
-        ? ""
-        : selectedTheme.mode;
 
     // 풀스크린 상태 감지
     useEffect(() => {
@@ -61,7 +50,7 @@ export const Header = () => {
     }, []);
 
     // 풀스크린 토글 함수
-    const toggleFullscreen = () => {
+    const toggleFullscreen = useCallback(() => {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen().catch((err) => {
                 console.error(`풀스크린 전환 실패: ${err.message}`);
@@ -69,15 +58,15 @@ export const Header = () => {
         } else {
             document.exitFullscreen();
         }
-    };
-
-    // 전역에서 접근 가능하도록 window 객체에 저장
-    useEffect(() => {
-        (window as any).toggleFullscreen = toggleFullscreen;
-        return () => {
-            delete (window as any).toggleFullscreen;
-        };
     }, []);
+
+    // 전역에서 접근 가능하도록 window 객체에 저장 (F11 단축키 브릿지)
+    useEffect(() => {
+        window.toggleFullscreen = toggleFullscreen;
+        return () => {
+            delete window.toggleFullscreen;
+        };
+    }, [toggleFullscreen]);
 
     // 브라우저 앞/뒤로 가기 시 URL과 탭 선택 상태 동기화
     useEffect(() => {
@@ -259,7 +248,7 @@ export const Header = () => {
 
                     {/* 새로고침 버튼 */}
                     <button
-                        onClick={() => window.location.reload()}
+                        onClick={() => navigate(0)}
                         className="h-full px-1.5 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
                         title="새로고침"
                     >

@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { BlogListSkeleton } from "./components/BlogCardSkeleton";
 import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
@@ -15,6 +17,9 @@ import {
     getTagCounts,
 } from "../../utils/blogFilters";
 
+// 빌드 타임에 결정되는 정적 데이터 — 컴포넌트 외부에서 한 번만 실행
+const ALL_POSTS = loadAllPosts();
+
 const STORAGE_KEYS = {
     SORT_ORDER: "gh-portfolio:blog-sort-order",
     VIEW_MODE: "gh-portfolio:blog-view-mode",
@@ -23,44 +28,20 @@ const STORAGE_KEYS = {
 
 export const Blog = () => {
     const { t } = useTranslation();
-    // 전체 포스트 로드
-    const allPosts = useMemo(() => loadAllPosts(), []);
+    const allPosts = ALL_POSTS;
 
-    // 필터/검색 상태
+    // 첫 렌더 전까지 Skeleton 표시
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
+    useEffect(() => {
+        setIsInitialLoad(false);
+    }, []);
+
+    // 필터/검색 상태 (useLocalStorage로 자동 동기화)
     const [searchQuery, setSearchQuery] = useState("");
     const [debouncedQuery, setDebouncedQuery] = useState("");
-    const [selectedTags, setSelectedTags] = useState<string[]>(() => {
-        try {
-            const saved = localStorage.getItem(STORAGE_KEYS.SELECTED_TAGS);
-            return saved ? JSON.parse(saved) : [];
-        } catch {
-            return [];
-        }
-    });
-    const [sortOrder, setSortOrder] = useState<"asc" | "desc">(() => {
-        const saved = localStorage.getItem(STORAGE_KEYS.SORT_ORDER);
-        return saved === "asc" || saved === "desc" ? saved : "desc";
-    });
-    const [viewMode, setViewMode] = useState<"list" | "grouped" | "grid">(() => {
-        const saved = localStorage.getItem(STORAGE_KEYS.VIEW_MODE);
-        return saved === "list" || saved === "grouped" || saved === "grid" ? saved : "list";
-    });
-
-    // localStorage 동기화
-    useEffect(() => {
-        localStorage.setItem(STORAGE_KEYS.SORT_ORDER, sortOrder);
-    }, [sortOrder]);
-
-    useEffect(() => {
-        localStorage.setItem(STORAGE_KEYS.VIEW_MODE, viewMode);
-    }, [viewMode]);
-
-    useEffect(() => {
-        localStorage.setItem(
-            STORAGE_KEYS.SELECTED_TAGS,
-            JSON.stringify(selectedTags)
-        );
-    }, [selectedTags]);
+    const [selectedTags, setSelectedTags] = useLocalStorage<string[]>(STORAGE_KEYS.SELECTED_TAGS, []);
+    const [sortOrder, setSortOrder] = useLocalStorage<"asc" | "desc">(STORAGE_KEYS.SORT_ORDER, "desc");
+    const [viewMode, setViewMode] = useLocalStorage<"list" | "grouped" | "grid">(STORAGE_KEYS.VIEW_MODE, "list");
 
     // 필터링 및 정렬
     const availableTags = useMemo(
@@ -119,7 +100,9 @@ export const Blog = () => {
 
                     {/* 스크롤 가능한 포스트 리스트 영역 */}
                     <div className="flex-1 overflow-y-auto pr-2 scrolls">
-                        {allPosts.length === 0 ? (
+                        {isInitialLoad ? (
+                            <BlogListSkeleton />
+                        ) : allPosts.length === 0 ? (
                             <p className="text-zinc-700 dark:text-zinc-300">
                                 {t("pages.blog.noPosts")}{" "}
                                 {t("pages.blog.addPostsHint")}{" "}

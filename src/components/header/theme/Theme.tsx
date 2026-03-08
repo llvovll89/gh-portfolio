@@ -1,10 +1,10 @@
 import {useContext, useMemo, useRef} from "react";
-import {GlobalStateContext} from "../../../context/GlobalState.context";
+import {ThemeContext} from "../../../context/ThemeContext";
 import {ThemeMode, RECOMMENDED_COLORS} from "../../../context/constatns/Theme.type";
 import {useClosePopup} from "../../../hooks/useClosePopup";
 
 export const Theme = () => {
-    const {selectedTheme, setSelectedTheme} = useContext(GlobalStateContext);
+    const {selectedTheme, setSelectedTheme} = useContext(ThemeContext);
 
     const themeModeRef = useRef<HTMLDivElement>(null);
 

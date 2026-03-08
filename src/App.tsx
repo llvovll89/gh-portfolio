@@ -1,6 +1,7 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { Suspense } from "react";
-import { GlobalStateProvider, GlobalStateContext } from "./context/GlobalState.context";
+import { GlobalStateProvider } from "./context/GlobalState.context";
+import { TerminalContext } from "./context/TerminalContext";
 import { KeyboardProvider } from "./context/KeyboardState.context";
 import { routesPath } from "./routes/route";
 import { AppChildContainer } from "./components/appChildContainer/AppChildContainer";
@@ -9,12 +10,13 @@ import { useCheckedMobile } from "./hooks/useCheckedMobile";
 import { useContext } from "react";
 import { SkipLinks } from "./components/skipLinks/SkipLinks";
 import { RouteLoading } from "./components/loading/RouteLoading";
+import { PWAUpdateBanner } from "./components/pwa/PWAUpdateBanner";
 
 function AppContent() {
     const isMobile = useCheckedMobile();
     const location = useLocation();
     const isBlogDetailPage = location.pathname.startsWith("/blog/") && location.pathname !== "/blog/";
-    const { isTerminalVisible } = useContext(GlobalStateContext);
+    const { isTerminalVisible } = useContext(TerminalContext);
 
     return (
         <section className="w-full min-h-dvh flex flex-col relative overflow-x-hidden overflow-y-auto">
@@ -34,6 +36,7 @@ function AppContent() {
             </Suspense>
 
             {!isMobile && !isBlogDetailPage && isTerminalVisible && <Bottom />}
+            <PWAUpdateBanner />
         </section>
     );
 }

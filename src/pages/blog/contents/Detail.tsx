@@ -8,6 +8,9 @@ import { Minimap } from "./Minimap";
 import { incrementViewCount, subscribeViewCount } from "../../../utils/blogViews";
 import { FiEye } from "react-icons/fi";
 
+// 빌드 타임에 결정되는 정적 데이터 — slug가 바뀔 때마다 재호출 방지
+const ALL_POSTS = loadAllPosts();
+
 // Detail 페이지 전용 스크롤 컨테이너 ID
 export const DETAIL_SCROLL_ID = "detail-content";
 
@@ -20,8 +23,7 @@ export const Detail = () => {
     const [viewCount, setViewCount] = useState<number | null>(null);
 
     const post = useMemo(() => {
-        const posts = loadAllPosts();
-        return posts.find((p) => p.slug === slug);
+        return ALL_POSTS.find((p) => p.slug === slug);
     }, [slug]);
 
     const tocItems = useMemo(() => {
@@ -44,6 +46,14 @@ export const Detail = () => {
         container.addEventListener("scroll", handleScroll);
         return () => container.removeEventListener("scroll", handleScroll);
     }, []);
+
+    // 페이지 타이틀 업데이트
+    useEffect(() => {
+        if (post) {
+            document.title = `${post.title} | GH Portfolio`;
+            return () => { document.title = "Geon Ho Kim"; };
+        }
+    }, [post]);
 
     // 조회수 증가 + 실시간 구독
     useEffect(() => {
@@ -161,7 +171,7 @@ export const Detail = () => {
                         className="w-full rounded-lg border border-zinc-200 dark:border-zinc-700"
                         style={{ height: "80vh" }}
                         title={post.title}
-                        sandbox="allow-scripts"
+                        sandbox=""
                     />
                 ) : (
                     <>
