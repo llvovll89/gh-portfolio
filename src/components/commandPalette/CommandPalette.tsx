@@ -15,8 +15,22 @@ import { useFocusTrap } from "@/hooks/useKeyboardNavigation";
 interface Command {
     id: string;
     label: string;
+    description: string;
     shortcut: string;
     action: () => void;
+}
+
+function Highlight({ text, query }: { text: string; query: string }) {
+    if (!query) return <>{text}</>
+    const idx = text.toLowerCase().indexOf(query.toLowerCase())
+    if (idx === -1) return <>{text}</>
+    return (
+        <>
+            {text.slice(0, idx)}
+            <mark className="bg-yellow-400/30 text-inherit rounded-sm">{text.slice(idx, idx + query.length)}</mark>
+            {text.slice(idx + query.length)}
+        </>
+    )
 }
 
 /**
@@ -41,6 +55,7 @@ export const CommandPalette = () => {
         {
             id: KeyboardShortcutId.TOGGLE_KEYBOARD_INFO,
             label: SHORTCUT_DESCRIPTIONS_KO[KeyboardShortcutId.TOGGLE_KEYBOARD_INFO],
+            description: "사용 가능한 키보드 단축키 전체 목록을 확인합니다",
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_KEYBOARD_INFO],
             ),
@@ -49,6 +64,7 @@ export const CommandPalette = () => {
         {
             id: KeyboardShortcutId.TOGGLE_FOOTER,
             label: SHORTCUT_DESCRIPTIONS_KO[KeyboardShortcutId.TOGGLE_FOOTER],
+            description: "하단 터미널 패널을 열거나 닫습니다",
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_FOOTER],
             ),
@@ -68,6 +84,7 @@ export const CommandPalette = () => {
         {
             id: KeyboardShortcutId.TOGGLE_FOLDER,
             label: SHORTCUT_DESCRIPTIONS_KO[KeyboardShortcutId.TOGGLE_FOLDER],
+            description: "좌측 파일 탐색기 패널을 토글합니다",
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_FOLDER],
             ),
@@ -80,6 +97,7 @@ export const CommandPalette = () => {
         {
             id: KeyboardShortcutId.TOGGLE_SEARCH,
             label: SHORTCUT_DESCRIPTIONS_KO[KeyboardShortcutId.TOGGLE_SEARCH],
+            description: "파일 및 콘텐츠 검색 패널을 열거나 닫습니다",
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_SEARCH],
             ),
@@ -92,6 +110,7 @@ export const CommandPalette = () => {
         {
             id: KeyboardShortcutId.TOGGLE_SIDEBAR,
             label: SHORTCUT_DESCRIPTIONS_KO[KeyboardShortcutId.TOGGLE_SIDEBAR],
+            description: "사이드바 전체를 숨기거나 표시합니다",
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_SIDEBAR],
             ),
@@ -105,6 +124,7 @@ export const CommandPalette = () => {
         {
             id: KeyboardShortcutId.TOGGLE_PANEL,
             label: SHORTCUT_DESCRIPTIONS_KO[KeyboardShortcutId.TOGGLE_PANEL],
+            description: "하단 패널을 열거나 닫습니다",
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_PANEL],
             ),
@@ -123,10 +143,14 @@ export const CommandPalette = () => {
         },
     ];
 
-    // 검색 필터링
-    const filteredCommands = commands.filter((cmd) =>
-        cmd.label.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
+    // 검색 필터링 (label + description 모두 탐색)
+    const filteredCommands = commands.filter((cmd) => {
+        const q = searchQuery.toLowerCase()
+        return (
+            cmd.label.toLowerCase().includes(q) ||
+            cmd.description.toLowerCase().includes(q)
+        )
+    });
 
     // 팔레트가 열릴 때 입력창 포커스
     useEffect(() => {
@@ -219,15 +243,22 @@ export const CommandPalette = () => {
                                 id={`command-${index}`}
                                 onClick={() => executeCommand(command)}
                                 onMouseEnter={() => setSelectedIndex(index)}
-                                className={`flex w-full items-center justify-between px-4 py-3 text-left transition-colors ${index === selectedIndex
+                                className={`flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors ${index === selectedIndex
                                     ? "bg-[#094771] text-white"
                                     : "text-[#cccccc] hover:bg-[#2a2d2e]"
                                     }`}
                                 role="option"
                                 aria-selected={index === selectedIndex}
                             >
-                                <span>{command.label}</span>
-                                <span className="text-xs text-[#858585]">
+                                <span className="flex flex-col gap-0.5 min-w-0">
+                                    <span className="text-sm">
+                                        <Highlight text={command.label} query={searchQuery} />
+                                    </span>
+                                    <span className={`text-xs truncate ${index === selectedIndex ? "text-white/60" : "text-[#6e6e6e]"}`}>
+                                        <Highlight text={command.description} query={searchQuery} />
+                                    </span>
+                                </span>
+                                <span className="text-xs text-[#858585] shrink-0 ml-4">
                                     {command.shortcut}
                                 </span>
                             </button>

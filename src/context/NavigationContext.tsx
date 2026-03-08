@@ -1,4 +1,4 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import { DEFAULT } from "../routes/route";
 import { NavType } from "../components/aside/constants/Nav.type";
 
@@ -16,6 +16,21 @@ interface NavigationContextProps {
     setSelectedNav: React.Dispatch<React.SetStateAction<NavType | null>>;
 }
 
+const NAV_STORAGE_KEY = "portfolio-selected-nav";
+
+function loadSelectedNav(): NavType | null {
+    try {
+        const stored = localStorage.getItem(NAV_STORAGE_KEY);
+        if (stored === "null") return null;
+        if (stored && Object.values(NavType).includes(stored as NavType)) {
+            return stored as NavType;
+        }
+    } catch {
+        // ignore
+    }
+    return null;
+}
+
 export const NavigationContext = createContext<NavigationContextProps>({
     selectedPath: "",
     setSelectedPath: () => {},
@@ -31,7 +46,15 @@ export const NavigationProvider = ({ children }: { children: React.ReactNode }) 
         list: [],
         state: DEFAULT,
     });
-    const [selectedNav, setSelectedNav] = useState<NavType | null>(null);
+    const [selectedNav, setSelectedNav] = useState<NavType | null>(loadSelectedNav);
+
+    useEffect(() => {
+        try {
+            localStorage.setItem(NAV_STORAGE_KEY, selectedNav ?? "null");
+        } catch {
+            // ignore
+        }
+    }, [selectedNav]);
 
     return (
         <NavigationContext.Provider

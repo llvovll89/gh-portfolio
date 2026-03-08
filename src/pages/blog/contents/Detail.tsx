@@ -7,6 +7,7 @@ import { TableOfContents } from "./TableOfContents";
 import { Minimap } from "./Minimap";
 import { incrementViewCount, subscribeViewCount } from "../../../utils/blogViews";
 import { FiEye } from "react-icons/fi";
+import { BlogComments } from "../comments/BlogComments";
 
 // 빌드 타임에 결정되는 정적 데이터 — slug가 바뀔 때마다 재호출 방지
 const ALL_POSTS = loadAllPosts();
@@ -175,9 +176,10 @@ export const Detail = () => {
                     />
                 ) : (
                     <>
-                        <div className="flex gap-10 items-start">
+                        <div className="flex xl:gap-10 items-start">
                             <div className="flex-1 min-w-0">
                                 <MarkdownRenderer content={post.body} />
+                                <BlogComments slug={slug} />
                             </div>
                             {tocItems.length > 0 && <TableOfContents items={tocItems} />}
                         </div>

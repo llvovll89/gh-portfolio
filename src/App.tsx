@@ -11,6 +11,7 @@ import { useContext } from "react";
 import { SkipLinks } from "./components/skipLinks/SkipLinks";
 import { RouteLoading } from "./components/loading/RouteLoading";
 import { PWAUpdateBanner } from "./components/pwa/PWAUpdateBanner";
+import { PageErrorBoundary } from "./components/error/PageErrorBoundary";
 
 function AppContent() {
     const isMobile = useCheckedMobile();
@@ -29,7 +30,11 @@ function AppContent() {
                         <Route
                             key={r.path}
                             path={r.path}
-                            element={<r.component />}
+                            element={
+                                <PageErrorBoundary pageName={r.name}>
+                                    <r.component />
+                                </PageErrorBoundary>
+                            }
                         />
                     ))}
                 </Routes>

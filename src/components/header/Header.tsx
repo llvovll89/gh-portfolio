@@ -172,7 +172,7 @@ export const Header = () => {
                                         handleClosePAth(route.path);
                                     }}
                                     aria-label={`Close ${route.name} tab`}
-                                    className="h-full w-3 sm:w-4 flex items-center justify-center cursor-pointer hover:bg-sub-gary/30 rounded transition-colors"
+                                    className="h-full px-2 sm:px-1.5 flex items-center justify-center cursor-pointer hover:bg-sub-gary/30 rounded transition-colors"
                                     title="닫기"
                                 >
                                     <svg
@@ -201,7 +201,7 @@ export const Header = () => {
                     {/* 뒤로 가기 버튼 */}
                     <button
                         onClick={() => navigate(-1)}
-                        className="h-full px-1.5 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors"
+                        className="h-full px-3 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors"
                         title="뒤로 가기"
                     >
                         <svg
@@ -225,7 +225,7 @@ export const Header = () => {
                     {/* 앞으로 가기 버튼 - 모바일에서 숨김 */}
                     <button
                         onClick={() => navigate(1)}
-                        className="hidden sm:flex h-full px-1.5 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
+                        className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
                         title="앞으로 가기"
                     >
                         <svg
@@ -249,7 +249,7 @@ export const Header = () => {
                     {/* 새로고침 버튼 */}
                     <button
                         onClick={() => navigate(0)}
-                        className="h-full px-1.5 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
+                        className="h-full px-3 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
                         title="새로고침"
                     >
                         <svg

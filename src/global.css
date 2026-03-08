@@ -220,3 +220,16 @@ span {
 .skip-link:hover {
     background: #0088dd;
 }
+
+/* ── 터치 기기 최적화 ─────────────────────────────────────
+   hover: 유틸리티를 실제 hover 가능한 기기(마우스)에서만 동작시킴.
+   터치 탭 후 hover 상태가 잔류하는 현상 방지.
+────────────────────────────────────────────────────────── */
+@custom-variant hover (@media (hover: hover) { &:hover });
+
+/* 터치 기기 탭 하이라이트 전역 제거 */
+@media (hover: none) and (pointer: coarse) {
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
