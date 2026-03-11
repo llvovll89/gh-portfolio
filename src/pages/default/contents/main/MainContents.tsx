@@ -2,8 +2,10 @@ import { CONTACT, PROJECTS } from "../../../../routes/route";
 import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
 import { useCheckedMobileSize } from "../../../../hooks/useCheckedMobileSize";
 import { useEffect, useState } from "react";
+import { useTranslation, Trans } from "react-i18next";
 
 export const MainContents = () => {
+    const { t } = useTranslation();
     const handlePushPath = useHandlePushPath();
     const isMobileSize = useCheckedMobileSize();
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -78,7 +80,7 @@ export const MainContents = () => {
                                 </span>
                             </div>
                             <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-md px-4 py-2 text-sm font-semibold text-white/90 shadow-lg">
-                                Web Developer
+                                {t("pages.home.badge")}
                             </span>
                         </div>
 
@@ -102,28 +104,31 @@ export const MainContents = () => {
                         </div>
 
                         <p className="text-[clamp(0.9rem,1.4vw,1.3rem)] text-white/80 leading-relaxed max-w-2xl font-medium animate-[fadeIn_1s_ease-out_0.3s] opacity-0 [animation-fill-mode:forwards]">
-                            사용자가 <span className="text-primary font-bold">"편하게"</span> 느끼는 경험을 목표로,
+                            <Trans
+                                i18nKey="pages.home.tagline"
+                                components={[<span className="text-primary font-bold" />]}
+                            />
                             <br />
-                            빠르고 일관된 UI를 만들고 유지보수 가능한 웹 개발자를 지향합니다.
+                            {t("pages.home.taglineSub")}
                         </p>
                     </div>
 
                     <div className="space-y-2 text-[clamp(0.8rem,1.1vw,1rem)] text-white/70 leading-relaxed max-w-xl animate-[fadeIn_1.2s_ease-out_0.5s] opacity-0 [animation-fill-mode:forwards]">
                         <p className="flex items-start gap-2">
                             <span className="text-primary sm:mt-1 mt-0">▹</span>
-                            <span>저의 웹 사이트에 오신 것을 환영합니다.</span>
+                            <span>{t("pages.home.bullet1")}</span>
                         </p>
                         <p className="flex items-start gap-2">
                             <span className="text-primary sm:mt-1 mt-0">▹</span>
-                            <span>이곳은 제가 개발한 프로젝트와 기술 블로그를 공유하는 공간입니다.</span>
+                            <span>{t("pages.home.bullet2")}</span>
                         </p>
                         <p className="flex items-start gap-2">
                             <span className="text-primary sm:mt-1 mt-0">▹</span>
-                            <span>다양한 기술 스택과 개발 경험을 바탕으로 유용한 정보를 제공하고자 합니다.</span>
+                            <span>{t("pages.home.bullet3")}</span>
                         </p>
                         <p className="flex items-start gap-2 text-white/85 font-medium">
                             <span className="text-cyan-400 sm:mt-1 mt-0">✦</span>
-                            <span>편안하게 둘러보시고 궁금한 점이 있으면 언제든지 연락 주세요!</span>
+                            <span>{t("pages.home.cta")}</span>
                         </p>
                     </div>
 
@@ -150,7 +155,7 @@ export const MainContents = () => {
                             aria-label="Go to Projects"
                         >
                             <span className="relative z-10 flex items-center gap-2 text-[clamp(0.8rem,1.1vw,1rem)]">
-                                View Projects
+                                {t("pages.home.viewProjects")}
                                 <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                 </svg>
@@ -164,7 +169,7 @@ export const MainContents = () => {
                             aria-label="Go to Contact"
                         >
                             <span className="relative z-10 flex items-center gap-2 text-[clamp(0.8rem,1.1vw,1rem)]">
-                                Get in Touch
+                                {t("pages.home.getInTouch")}
                                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>

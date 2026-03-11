@@ -5,6 +5,7 @@ import { LayoutContext } from "../../context/LayoutContext";
 import { NavigationContext } from "../../context/NavigationContext";
 import { useThemeStyle } from "../../hooks/useThemeStyle";
 import { Theme } from "./theme/Theme";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useRedirectionPage } from "../../hooks/useRedirectionPage";
 import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
 import { LAYOUT_CONSTANTS } from "../../constants/layout";
@@ -325,6 +326,9 @@ export const Header = () => {
                             </svg>
                         )}
                     </button>
+
+                    {/* 언어 전환 */}
+                    <LanguageSwitcher />
 
                     {/* 시계 */}
                     <HeaderClock />

@@ -5,7 +5,7 @@ import { TbLockPassword } from 'react-icons/tb'
 import { FaEdit } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
 import { IoClose } from 'react-icons/io5'
-import hashPassword from '@/utils/hashPassword'
+import hashPassword, { verifyPassword } from '@/utils/hashPassword'
 import {
     subscribeBlogComments,
     addBlogComment,
@@ -164,8 +164,8 @@ function EditModal({
         if (!password) { setError('비밀번호를 입력하세요'); return }
         setSaving(true)
         try {
-            const pwHash = await hashPassword(password)
-            if (pwHash !== comment.pwHash) { setError('비밀번호가 일치하지 않습니다'); return }
+            const isMatch = await verifyPassword(password, comment.pwHash)
+            if (!isMatch) { setError('비밀번호가 일치하지 않습니다'); return }
             await updateBlogComment(slug, comment.id, message)
             onSuccess()
         } catch {
@@ -232,8 +232,8 @@ function DeleteModal({
         if (!password) { setError('비밀번호를 입력하세요'); return }
         setDeleting(true)
         try {
-            const pwHash = await hashPassword(password)
-            if (pwHash !== comment.pwHash) { setError('비밀번호가 일치하지 않습니다'); return }
+            const isMatch = await verifyPassword(password, comment.pwHash)
+            if (!isMatch) { setError('비밀번호가 일치하지 않습니다'); return }
             await deleteBlogComment(slug, comment.id)
             onSuccess()
         } catch {

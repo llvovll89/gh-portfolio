@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { db } from '@/firebase/config'
 import { doc, updateDoc } from 'firebase/firestore'
-import hashPassword from '@/utils/hashPassword'
+import { verifyPassword } from '@/utils/hashPassword'
 import GuestbookEditor from './GuestbookEditor'
 import type { GuestbookEntry } from './types'
 
@@ -32,8 +32,8 @@ const GuestbookEditModal = ({ entry, isOpen, onClose, onSuccess }: Props) => {
     const handleSubmit = async () => {
         if (!entry) return
         if (!editPassword) { setEditError('비밀번호를 입력하세요'); return }
-        const pwHash = await hashPassword(editPassword)
-        if (pwHash !== entry.pwHash) { setEditError('비밀번호가 일치하지 않습니다'); return }
+        const isMatch = await verifyPassword(editPassword, entry.pwHash)
+        if (!isMatch) { setEditError('비밀번호가 일치하지 않습니다'); return }
         await updateDoc(doc(db, 'guestbook', entry.id), { message: editMessage })
         handleClose()
         onSuccess?.('메시지가 수정되었습니다.')

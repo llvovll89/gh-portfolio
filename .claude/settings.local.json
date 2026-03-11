@@ -8,7 +8,14 @@
       "Bash(xargs grep:*)",
       "Bash(npm install:*)",
       "Bash(node:*)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(find /d/workspace/gh-portfolio/src/components -type f -name \"*.tsx\" -o -name \"*.ts\" | head -15 | xargs wc -l | tail -1)",
+      "Bash(ls /d/workspace/gh-portfolio/src/pages/*/)",
+      "Bash(find /d/workspace/gh-portfolio -name \".env*\" -type f 2>/dev/null | head -5)",
+      "Bash(find /d/workspace/gh-portfolio/src -type f \\\\\\( -name \"*.tsx\" -o -name \"*.ts\" \\\\\\) -exec wc -l {} + | sort -rn | head -20)",
+      "Bash(ls D:/workspace/gh-portfolio/*.rules D:/workspace/gh-portfolio/*.json 2>&1)",
+      "Bash(cd D:/workspace/gh-portfolio && npm list @sentry/react 2>&1)",
+      "Bash(cd D:/workspace/gh-portfolio && npm uninstall @sentry/react 2>&1 | tail -3)"
     ]
   }
 }

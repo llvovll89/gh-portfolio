@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { db } from '@/firebase/config'
 import { doc, deleteDoc } from 'firebase/firestore'
-import hashPassword from '@/utils/hashPassword'
+import { verifyPassword } from '@/utils/hashPassword'
 import { MdDelete } from 'react-icons/md'
 import { TbLockPassword } from 'react-icons/tb'
 import type { GuestbookEntry } from './types'
@@ -29,8 +29,8 @@ const GuestbookDeleteModal = ({ entry, isOpen, onClose, onSuccess }: Props) => {
         if (!deletePassword) { setDeleteError('비밀번호를 입력하세요'); return }
         setDeleting(true)
         try {
-            const pwHash = await hashPassword(deletePassword)
-            if (pwHash !== entry.pwHash) {
+            const isMatch = await verifyPassword(deletePassword, entry.pwHash)
+            if (!isMatch) {
                 setDeleteError('비밀번호가 일치하지 않습니다')
                 return
             }

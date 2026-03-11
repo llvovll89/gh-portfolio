@@ -93,8 +93,8 @@ const GuestbookDetailPanel = ({ entry, onClose, onEdit, onDelete }: Props) => {
             {/* 모바일: 하단 모달 */}
             {entry && (
                 <>
-                    <div className="md:hidden fixed inset-0 bg-black/55 z-40 backdrop-blur-sm" onClick={onClose} />
-                    <div className="md:hidden fixed inset-0 z-50 flex items-end justify-center">
+                    <div className="md:hidden fixed inset-0 bg-black/55 z-[110] backdrop-blur-sm" onClick={onClose} />
+                    <div className="md:hidden fixed inset-0 z-[120] flex items-end justify-center">
                         <div className="w-full animate-in slide-in-from-bottom duration-200">
                             <div className="rounded-t-2xl border border-white/10 bg-zinc-950/98 backdrop-blur-xl shadow-2xl max-h-[85dvh] flex flex-col">
                                 <div className="flex items-center gap-3 px-5 pt-5 pb-4 border-b border-white/6 shrink-0">

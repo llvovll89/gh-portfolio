@@ -8,6 +8,7 @@ import { Minimap } from "./Minimap";
 import { incrementViewCount, subscribeViewCount } from "../../../utils/blogViews";
 import { FiEye } from "react-icons/fi";
 import { BlogComments } from "../comments/BlogComments";
+import { useSeoMeta } from "../../../hooks/useSeoMeta";
 
 // 빌드 타임에 결정되는 정적 데이터 — slug가 바뀔 때마다 재호출 방지
 const ALL_POSTS = loadAllPosts();
@@ -48,13 +49,13 @@ export const Detail = () => {
         return () => container.removeEventListener("scroll", handleScroll);
     }, []);
 
-    // 페이지 타이틀 업데이트
-    useEffect(() => {
-        if (post) {
-            document.title = `${post.title} | GH Portfolio`;
-            return () => { document.title = "Geon Ho Kim"; };
-        }
-    }, [post]);
+    // SEO 메타태그 업데이트 (title, og:title, og:description 등)
+    useSeoMeta({
+        title: post?.title,
+        description: post?.summary ?? (post ? `${post.title} — 김건호 블로그` : undefined),
+        url: slug ? `/blog/${slug}` : undefined,
+        type: 'article',
+    });
 
     // 조회수 증가 + 실시간 구독
     useEffect(() => {

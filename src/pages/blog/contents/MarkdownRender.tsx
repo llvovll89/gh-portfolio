@@ -1,7 +1,46 @@
+import { useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { slugifyHeading } from "../../../utils/parseToc";
 import { DETAIL_SCROLL_ID } from "./Detail";
+
+function CodeBlock({ children, ...props }: React.HTMLAttributes<HTMLPreElement>) {
+    const preRef = useRef<HTMLPreElement>(null);
+    const [copied, setCopied] = useState(false);
+
+    const handleCopy = () => {
+        const text = preRef.current?.textContent ?? "";
+        navigator.clipboard.writeText(text).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        });
+    };
+
+    return (
+        <div className="relative group my-4">
+            <pre
+                ref={preRef}
+                className="overflow-x-auto max-w-full text-[clamp(0.9rem,1.5vw,1rem)]"
+                {...props}
+            >
+                {children}
+            </pre>
+            <button
+                type="button"
+                onClick={handleCopy}
+                className="absolute top-2 right-2 px-2 py-1 rounded text-xs font-mono transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
+                style={{
+                    background: copied ? "rgba(34,197,94,0.2)" : "rgba(255,255,255,0.1)",
+                    color: copied ? "#86efac" : "rgba(255,255,255,0.6)",
+                    border: `1px solid ${copied ? "rgba(34,197,94,0.4)" : "rgba(255,255,255,0.15)"}`,
+                }}
+                aria-label="코드 복사"
+            >
+                {copied ? "복사됨!" : "복사"}
+            </button>
+        </div>
+    );
+}
 
 type Props = {
     content: string;
@@ -106,12 +145,7 @@ export const MarkdownRenderer = ({ content }: Props) => {
                             {...props}
                         />
                     ),
-                    pre: (props) => (
-                        <pre
-                            className="my-4 overflow-x-auto max-w-full text-[clamp(0.9rem,1.5vw,1rem)]"
-                            {...props}
-                        />
-                    ),
+                    pre: (props) => <CodeBlock {...props} />,
                     code: ({ className, children, ...props }) => {
                         const isBlock = Boolean(className); // ```ts 같은 경우 className에 language-xxx 들어옴
                         if (isBlock) {

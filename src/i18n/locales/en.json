@@ -182,6 +182,17 @@
     "guestbook": {
       "title": "Guestbook",
       "description": "Leave a message in the guestbook and let's connect!"
+    },
+    "home": {
+      "badge": "Web Developer",
+      "tagline": "Focused on creating experiences that feel <0>\"effortless\"</0> to users,",
+      "taglineSub": "I aim to build fast, consistent UIs as a maintainable web developer.",
+      "bullet1": "Welcome to my website.",
+      "bullet2": "This is a space where I share projects I've developed and my tech blog.",
+      "bullet3": "I aim to provide useful insights based on various tech stacks and development experience.",
+      "cta": "Feel free to look around — reach out anytime if you have questions!",
+      "viewProjects": "View Projects",
+      "getInTouch": "Get in Touch"
     }
   },
   "routes": {

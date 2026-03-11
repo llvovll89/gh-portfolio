@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useSeoMeta } from "../../hooks/useSeoMeta";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { BlogListSkeleton } from "./components/BlogCardSkeleton";
 import { Aside } from "../../components/aside/Aside";
@@ -17,56 +19,71 @@ import {
     getTagCounts,
 } from "../../utils/blogFilters";
 
-// 빌드 타임에 결정되는 정적 데이터 — 컴포넌트 외부에서 한 번만 실행
 const ALL_POSTS = loadAllPosts();
 
 const STORAGE_KEYS = {
     SORT_ORDER: "gh-portfolio:blog-sort-order",
-    VIEW_MODE: "gh-portfolio:blog-view-mode",
-    SELECTED_TAGS: "gh-portfolio:blog-selected-tags",
+    VIEW_MODE:  "gh-portfolio:blog-view-mode",
 } as const;
 
 export const Blog = () => {
     const { t } = useTranslation();
     const allPosts = ALL_POSTS;
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    // 첫 렌더 전까지 Skeleton 표시
+    useSeoMeta({
+        title: '블로그',
+        description: `웹 개발자 김건호의 기술 블로그 — 총 ${allPosts.length}개의 포스트`,
+        url: '/blog',
+    });
+
     const [isInitialLoad, setIsInitialLoad] = useState(true);
-    useEffect(() => {
-        setIsInitialLoad(false);
-    }, []);
+    useEffect(() => { setIsInitialLoad(false); }, []);
 
-    // 필터/검색 상태 (useLocalStorage로 자동 동기화)
-    const [searchQuery, setSearchQuery] = useState("");
-    const [debouncedQuery, setDebouncedQuery] = useState("");
-    const [selectedTags, setSelectedTags] = useLocalStorage<string[]>(STORAGE_KEYS.SELECTED_TAGS, []);
+    // ── URL ↔ 필터 상태 동기화 ──────────────────────────────
+    // 검색어: URL ?q= 에서 초기화
+    const [searchQuery, setSearchQuery] = useState(() => searchParams.get("q") ?? "");
+    const [debouncedQuery, setDebouncedQuery] = useState(() => searchParams.get("q") ?? "");
+
+    // 태그: URL ?tags= 에서 초기화
+    const [selectedTags, setSelectedTags] = useState<string[]>(() => {
+        const raw = searchParams.get("tags");
+        return raw ? raw.split(",").filter(Boolean) : [];
+    });
+
+    // 뷰 설정은 URL 불필요 — localStorage 유지
     const [sortOrder, setSortOrder] = useLocalStorage<"asc" | "desc">(STORAGE_KEYS.SORT_ORDER, "desc");
     const [viewMode, setViewMode] = useLocalStorage<"list" | "grouped" | "grid">(STORAGE_KEYS.VIEW_MODE, "list");
 
-    // 필터링 및 정렬
-    const availableTags = useMemo(
-        () => extractAllTags(allPosts),
-        [allPosts]
-    );
+    // 상태 변경 → URL 동기화 (replace: history stack 오염 방지)
+    useEffect(() => {
+        setSearchParams((prev) => {
+            const next = new URLSearchParams(prev);
+            if (debouncedQuery) next.set("q", debouncedQuery);
+            else next.delete("q");
+            if (selectedTags.length > 0) next.set("tags", selectedTags.join(","));
+            else next.delete("tags");
+            return next;
+        }, { replace: true });
+    }, [debouncedQuery, selectedTags]);
 
+    // ── 필터링 / 정렬 ────────────────────────────────────────
+    const availableTags = useMemo(() => extractAllTags(allPosts), [allPosts]);
     const tagCounts = useMemo(() => getTagCounts(allPosts), [allPosts]);
 
     const filteredPosts = useMemo(
         () => filterPosts(allPosts, debouncedQuery, selectedTags),
-        [allPosts, debouncedQuery, selectedTags]
+        [allPosts, debouncedQuery, selectedTags],
     );
 
     const sortedPosts = useMemo(() => {
-        // 검색어가 있을 때는 이미 filterPosts에서 점수 순으로 정렬했으므로 날짜 정렬 건너뜀
-        if (debouncedQuery.trim()) {
-            return filteredPosts;
-        }
+        if (debouncedQuery.trim()) return filteredPosts;
         return sortPosts(filteredPosts, sortOrder);
     }, [filteredPosts, sortOrder, debouncedQuery]);
 
     const groupedPosts = useMemo(
         () => (viewMode === "grouped" ? groupPostsByTag(sortedPosts) : {}),
-        [sortedPosts, viewMode]
+        [sortedPosts, viewMode],
     );
 
     return (
@@ -75,7 +92,6 @@ export const Blog = () => {
             <Aside />
             <Contents>
                 <div className="flex flex-col h-[calc(100vh-8rem)] sm:py-4 py-1 md:px-0 px-2">
-                    {/* 고정 헤더 및 필터바 */}
                     <div className="flex-none mb-6">
                         <h2 className="text-[clamp(0.85rem,1.5vw,1.25rem)] font-bold text-zinc-900 dark:text-zinc-100 mb-4">
                             {t("pages.blog.posts")}
@@ -98,7 +114,6 @@ export const Blog = () => {
                         />
                     </div>
 
-                    {/* 스크롤 가능한 포스트 리스트 영역 */}
                     <div className="flex-1 overflow-y-auto pr-2 scrolls">
                         {isInitialLoad ? (
                             <BlogListSkeleton />
@@ -120,15 +135,11 @@ export const Blog = () => {
                             </div>
                         ) : viewMode === "list" ? (
                             <ul className="flex flex-col gap-3 pb-4">
-                                {sortedPosts.map((p) => (
-                                    <BlogCard key={p.slug} p={p} />
-                                ))}
+                                {sortedPosts.map((p) => <BlogCard key={p.slug} p={p} />)}
                             </ul>
                         ) : viewMode === "grid" ? (
                             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
-                                {sortedPosts.map((p) => (
-                                    <BlogCard key={p.slug} p={p} />
-                                ))}
+                                {sortedPosts.map((p) => <BlogCard key={p.slug} p={p} />)}
                             </ul>
                         ) : (
                             <div className="pb-4">

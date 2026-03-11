@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import { FiMessageSquare } from 'react-icons/fi'
 import { db } from '@/firebase/config'
-import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
+import {
+    collection, onSnapshot, query, orderBy, limit,
+    getDocs, startAfter, type DocumentSnapshot,
+} from 'firebase/firestore'
 import { FaEdit } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
 import { FaPencil } from 'react-icons/fa6'
@@ -9,6 +12,9 @@ import GuestbookEditModal from './GuestbookEditModal'
 import GuestbookDeleteModal from './GuestbookDeleteModal'
 import GuestbookDetailPanel, { getAvatarGradient } from './GuestbookDetailPanel'
 import type { GuestbookEntry } from './types'
+import { logger } from '@/utils/logger'
+
+const PAGE_SIZE = 15
 
 const getRelativeTime = (date: Date): string => {
     const diff = Date.now() - date.getTime()
@@ -39,50 +45,100 @@ const SkeletonCard = () => (
     </li>
 )
 
-const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () => void; onSuccess?: (msg: string) => void }) => {
-    const [entries, setEntries] = useState<GuestbookEntry[]>([])
+function parseEntry(docSnap: { id: string; data: () => Record<string, unknown> }): GuestbookEntry {
+    const data = docSnap.data()
+    return {
+        id: docSnap.id,
+        name: (data.name as string) || '익명',
+        message: (data.message as string) || '',
+        pwHash: (data.pwHash as string) || '',
+        createdAt: data.createdAt as GuestbookEntry['createdAt'],
+    }
+}
+
+const GuestbookList = ({
+    handleToggleForm,
+    onSuccess,
+}: {
+    handleToggleForm: () => void
+    onSuccess?: (msg: string) => void
+}) => {
+    // 최신 PAGE_SIZE개 — 실시간
+    const [latestEntries, setLatestEntries] = useState<GuestbookEntry[]>([])
+    // 더 보기로 불러온 오래된 항목들 — 정적
+    const [olderEntries, setOlderEntries] = useState<GuestbookEntry[]>([])
+
     const [loading, setLoading] = useState(true)
-    const [readError, setReadError] = useState("")
+    const [loadingMore, setLoadingMore] = useState(false)
+    const [hasMore, setHasMore] = useState(false)
+    const [lastDoc, setLastDoc] = useState<DocumentSnapshot | null>(null)
+
+    const [readError, setReadError] = useState('')
     const [detailEntry, setDetailEntry] = useState<GuestbookEntry | null>(null)
     const [editEntry, setEditEntry] = useState<GuestbookEntry | null>(null)
     const [deleteEntry, setDeleteEntry] = useState<GuestbookEntry | null>(null)
 
+    // 최신 PAGE_SIZE개 실시간 구독
     useEffect(() => {
-        const q = query(collection(db, 'guestbook'), orderBy('createdAt', 'desc'))
-        const unsub = onSnapshot(q, (snapshot) => {
-            const list: GuestbookEntry[] = []
-            snapshot.forEach((docSnap) => {
-                const data = docSnap.data()
-                list.push({
-                    id: docSnap.id,
-                    name: data.name || '익명',
-                    message: data.message || '',
-                    pwHash: data.pwHash || '',
-                    createdAt: data.createdAt,
-                })
-            })
-            setEntries(list)
-            setReadError("")
-            setLoading(false)
-        }, (err) => {
-            console.error('방명록 불러오기 실패:', err)
-            const msg = err instanceof Error ? err.message : String(err)
-            if (msg.includes('permission-denied') || msg.includes('PERMISSION_DENIED')) {
-                setReadError('Firebase 보안 규칙이 읽기를 차단하고 있습니다. Firebase Console → Firestore → Rules를 확인해주세요.')
-            } else {
-                setReadError(`불러오기 실패: ${msg}`)
-            }
-            setLoading(false)
-        })
+        const q = query(
+            collection(db, 'guestbook'),
+            orderBy('createdAt', 'desc'),
+            limit(PAGE_SIZE),
+        )
+        const unsub = onSnapshot(
+            q,
+            (snapshot) => {
+                const list = snapshot.docs.map(parseEntry)
+                setLatestEntries(list)
+                setHasMore(snapshot.docs.length === PAGE_SIZE)
+                setLastDoc(snapshot.docs[snapshot.docs.length - 1] ?? null)
+                setReadError('')
+                setLoading(false)
+            },
+            (err) => {
+                logger.error('방명록 불러오기 실패', err)
+                const msg = err instanceof Error ? err.message : String(err)
+                if (msg.includes('permission-denied') || msg.includes('PERMISSION_DENIED')) {
+                    setReadError('Firebase 보안 규칙이 읽기를 차단하고 있습니다. Firebase Console → Firestore → Rules를 확인해주세요.')
+                } else {
+                    setReadError(`불러오기 실패: ${msg}`)
+                }
+                setLoading(false)
+            },
+        )
         return () => unsub()
     }, [])
 
+    // 더 보기 — 오래된 항목 cursor 기반 로드
+    const loadMore = async () => {
+        if (!lastDoc || loadingMore) return
+        setLoadingMore(true)
+        try {
+            const q = query(
+                collection(db, 'guestbook'),
+                orderBy('createdAt', 'desc'),
+                startAfter(lastDoc),
+                limit(PAGE_SIZE),
+            )
+            const snapshot = await getDocs(q)
+            const list = snapshot.docs.map(parseEntry)
+            setOlderEntries((prev) => [...prev, ...list])
+            setHasMore(snapshot.docs.length === PAGE_SIZE)
+            setLastDoc(snapshot.docs[snapshot.docs.length - 1] ?? lastDoc)
+        } catch (err) {
+            logger.error('방명록 추가 로드 실패', err)
+        } finally {
+            setLoadingMore(false)
+        }
+    }
+
     // 삭제 후 선택 항목 해제
+    const allEntries = [...latestEntries, ...olderEntries]
     useEffect(() => {
-        if (detailEntry && !entries.find(e => e.id === detailEntry.id)) {
+        if (detailEntry && !allEntries.find((e) => e.id === detailEntry.id)) {
             setDetailEntry(null)
         }
-    }, [entries, detailEntry])
+    }, [latestEntries, olderEntries])
 
     return (
         <div className="w-full h-full flex gap-4">
@@ -102,7 +158,7 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
                             <p className="text-xs text-white/50 max-w-xs break-words">{readError}</p>
                         </div>
                     </div>
-                ) : entries.length === 0 ? (
+                ) : allEntries.length === 0 ? (
                     <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center gap-5">
                         <div className="p-5 rounded-2xl bg-white/5 border border-white/10">
                             <FiMessageSquare className="w-10 h-10 text-white/30" />
@@ -120,73 +176,95 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
                         </button>
                     </div>
                 ) : (
-                    <ul className="grid grid-cols-1 gap-3">
-                        {entries.map((entry) => {
-                            const gradient = getAvatarGradient(entry.name)
-                            const initial = entry.name[0]?.toUpperCase() || '?'
-                            const dateStr = entry.createdAt?.toDate ? getRelativeTime(entry.createdAt.toDate()) : ''
-                            const isLong = entry.message.length > 120 || entry.message.split('\n').length > 3
-                            const isSelected = detailEntry?.id === entry.id
+                    <>
+                        <ul className="grid grid-cols-1 gap-3">
+                            {allEntries.map((entry) => {
+                                const gradient = getAvatarGradient(entry.name)
+                                const initial = entry.name[0]?.toUpperCase() || '?'
+                                const dateStr = entry.createdAt?.toDate ? getRelativeTime(entry.createdAt.toDate()) : ''
+                                const isLong = entry.message.length > 120 || entry.message.split('\n').length > 3
+                                const isSelected = detailEntry?.id === entry.id
 
-                            return (
-                                <li
-                                    key={entry.id}
-                                    onClick={() => setDetailEntry(isSelected ? null : entry)}
-                                    className={`group p-5 border rounded-2xl backdrop-blur-sm transition-all duration-200 cursor-pointer ${
-                                        isSelected
-                                            ? 'border-primary/40 bg-primary/[0.07]'
-                                            : 'bg-white/3 hover:bg-white/[0.05] border-white/6 hover:border-white/10'
-                                    }`}
-                                >
-                                    <div className="flex gap-3.5">
-                                        <div className={`shrink-0 w-10 h-10 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-base shadow-lg`}>
-                                            {initial}
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex items-center justify-between gap-2 mb-2">
-                                                <div className="flex items-center gap-2 min-w-0 flex-wrap">
-                                                    <span className="font-semibold text-white/90 text-sm">{entry.name}</span>
-                                                    {dateStr && (
-                                                        <span className="text-[11px] text-white/35 shrink-0">{dateStr}</span>
-                                                    )}
-                                                </div>
-                                                <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity shrink-0">
-                                                    <button
-                                                        type="button"
-                                                        onClick={(e) => { e.stopPropagation(); setEditEntry(entry) }}
-                                                        className="p-1.5 rounded-lg text-white/40 hover:text-primary hover:bg-primary/10 active:bg-primary/20 transition-all cursor-pointer"
-                                                        title="수정"
-                                                    >
-                                                        <FaEdit className="w-3.5 h-3.5" />
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        onClick={(e) => { e.stopPropagation(); setDeleteEntry(entry) }}
-                                                        className="p-1.5 rounded-lg text-white/40 hover:text-rose-400 hover:bg-rose-400/10 active:bg-rose-400/20 transition-all cursor-pointer"
-                                                        title="삭제"
-                                                    >
-                                                        <MdDelete className="w-4 h-4" />
-                                                    </button>
-                                                </div>
+                                return (
+                                    <li
+                                        key={entry.id}
+                                        onClick={() => setDetailEntry(isSelected ? null : entry)}
+                                        className={`group p-5 border rounded-2xl backdrop-blur-sm transition-all duration-200 cursor-pointer ${
+                                            isSelected
+                                                ? 'border-primary/40 bg-primary/[0.07]'
+                                                : 'bg-white/3 hover:bg-white/[0.05] border-white/6 hover:border-white/10'
+                                        }`}
+                                    >
+                                        <div className="flex gap-3.5">
+                                            <div className={`shrink-0 w-10 h-10 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-base shadow-lg`}>
+                                                {initial}
                                             </div>
-                                            <p className="text-white/70 text-sm whitespace-pre-wrap break-words leading-relaxed line-clamp-3">
-                                                {entry.message}
-                                            </p>
-                                            {isLong && (
-                                                <span className="text-[11px] text-primary/70 mt-1.5 inline-block">
-                                                    더 보기 →
-                                                </span>
-                                            )}
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center justify-between gap-2 mb-2">
+                                                    <div className="flex items-center gap-2 min-w-0 flex-wrap">
+                                                        <span className="font-semibold text-white/90 text-sm">{entry.name}</span>
+                                                        {dateStr && (
+                                                            <span className="text-[11px] text-white/35 shrink-0">{dateStr}</span>
+                                                        )}
+                                                    </div>
+                                                    <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity shrink-0">
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => { e.stopPropagation(); setEditEntry(entry) }}
+                                                            className="p-1.5 rounded-lg text-white/40 hover:text-primary hover:bg-primary/10 active:bg-primary/20 transition-all cursor-pointer"
+                                                            title="수정"
+                                                        >
+                                                            <FaEdit className="w-3.5 h-3.5" />
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => { e.stopPropagation(); setDeleteEntry(entry) }}
+                                                            className="p-1.5 rounded-lg text-white/40 hover:text-rose-400 hover:bg-rose-400/10 active:bg-rose-400/20 transition-all cursor-pointer"
+                                                            title="삭제"
+                                                        >
+                                                            <MdDelete className="w-4 h-4" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <p className="text-white/70 text-sm whitespace-pre-wrap break-words leading-relaxed line-clamp-3">
+                                                    {entry.message}
+                                                </p>
+                                                {isLong && (
+                                                    <span className="text-[11px] text-primary/70 mt-1.5 inline-block">
+                                                        더 보기 →
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                </li>
-                            )
-                        })}
-                    </ul>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+
+                        {/* 더 보기 버튼 */}
+                        {hasMore && (
+                            <div className="flex justify-center mt-4 pb-2">
+                                <button
+                                    onClick={loadMore}
+                                    disabled={loadingMore}
+                                    className="px-6 py-2.5 text-sm font-medium text-white/60 hover:text-white border border-white/10 hover:border-white/20 rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                                >
+                                    {loadingMore ? (
+                                        <span className="flex items-center gap-2">
+                                            <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white/70 rounded-full animate-spin" />
+                                            불러오는 중…
+                                        </span>
+                                    ) : (
+                                        '더 보기'
+                                    )}
+                                </button>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
 
-            {/* 오른쪽: 분할 상세 패널 + 모바일 모달 */}
+            {/* 오른쪽: 상세 패널 */}
             <GuestbookDetailPanel
                 entry={detailEntry}
                 onClose={() => setDetailEntry(null)}
@@ -194,7 +272,6 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
                 onDelete={(entry) => setDeleteEntry(entry)}
             />
 
-            {/* 수정 모달 */}
             <GuestbookEditModal
                 entry={editEntry}
                 isOpen={editEntry !== null}
@@ -202,7 +279,6 @@ const GuestbookList = ({ handleToggleForm, onSuccess }: { handleToggleForm: () =
                 onSuccess={onSuccess}
             />
 
-            {/* 삭제 모달 */}
             <GuestbookDeleteModal
                 entry={deleteEntry}
                 isOpen={deleteEntry !== null}
