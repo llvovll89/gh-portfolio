@@ -5,6 +5,7 @@ import { useThemeStyle } from "../../hooks/useThemeStyle";
 import { useDragging } from "../../hooks/useDragging";
 import { Navbar } from "./navbar/Navbar";
 import { Folder } from "./contents/folder/Folder";
+import { MobileFolderNav } from "./contents/folder/MobileFolderNav";
 import { NavType } from "./constants/Nav.type";
 import { Search } from "./contents/search/Search";
 import { GitControl } from "./contents/gitControl/GitControl";
@@ -31,23 +32,31 @@ export const Aside = () => {
     const NAVBAR_WIDTH = 40;
     const CONTENT_WIDTH = 210;
 
+    const isMobileFolderNav = isMobileSize && selectedNav === NavType.FOLDER;
+
     useEffect(() => {
         setLayoutState((prev) => ({
             ...prev,
-            resizeSidebarWidth: selectedNav ? NAVBAR_WIDTH + CONTENT_WIDTH : NAVBAR_WIDTH,
+            resizeSidebarWidth:
+                selectedNav && !isMobileFolderNav
+                    ? NAVBAR_WIDTH + CONTENT_WIDTH
+                    : NAVBAR_WIDTH,
         }));
-    }, [selectedNav]);
+    }, [selectedNav, isMobileSize]);
 
     return (
         <>
-        {/* 모바일: 사이드바 열렸을 때 backdrop (누르면 닫힘) */}
-        {isMobileSize && selectedNav && (
+        {/* 모바일: 사이드바 열렸을 때 backdrop - FOLDER는 하단 탭으로 대체하므로 제외 */}
+        {isMobileSize && selectedNav && !isMobileFolderNav && (
             <div
                 aria-hidden="true"
                 className="fixed inset-0 bg-black/50 z-10"
                 onClick={() => setSelectedNav(null)}
             />
         )}
+
+        {/* 모바일 FOLDER: 하단 고정 탭 네비 */}
+        {isMobileFolderNav && <MobileFolderNav />}
         <aside
             id="main-navigation"
             role="navigation"
@@ -62,7 +71,7 @@ export const Aside = () => {
         >
             <Navbar selectedNav={selectedNav} onClickNav={handleClickNav} />
 
-            {selectedNav && (
+            {selectedNav && !isMobileFolderNav && (
                 <div className="flex-1 overflow-hidden">
                     {selectedNav === NavType.FOLDER && <Folder />}
                     {selectedNav === NavType.GIT_CONTROL && <GitControl />}
@@ -72,7 +81,7 @@ export const Aside = () => {
                 </div>
             )}
 
-            {selectedNav && (
+            {selectedNav && !isMobileFolderNav && (
                 <div
                     role="separator"
                     aria-label="사이드바 너비 조절"
