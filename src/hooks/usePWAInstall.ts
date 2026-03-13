@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 
 /**
- * idle       - 표시 조건 미충족 (이미 설치됨 / 닫음 / 데스크탑)
- * android    - Chrome/Edge/Samsung Internet: 네이티브 설치 프롬프트 가능
+ * idle           - 표시 조건 미충족 (이미 설치됨 / 닫음 / 데스크탑)
+ * android        - Chrome/Edge/Samsung Internet: 네이티브 설치 프롬프트 가능
  * android-manual - Firefox 등 beforeinstallprompt 미지원 Android 브라우저
- * ios-safari - iOS Safari: 공유 → 홈 화면에 추가 가이드
- * ios-other  - iOS Chrome/Firefox 등: Safari에서 열도록 안내
- * installed  - 이미 설치됨
+ * ios-safari     - iOS Safari: 공유 → 홈 화면에 추가 가이드
+ * ios-chrome     - iOS Chrome: 공유 버튼 → 홈 화면에 추가 가이드
+ * ios-other      - iOS Firefox 등: Safari에서 열도록 안내
+ * installed      - 이미 설치됨
  */
 export type InstallState =
     | { status: "idle" }
     | { status: "android"; prompt: () => void }
     | { status: "android-manual" }
     | { status: "ios-safari" }
+    | { status: "ios-chrome" }
     | { status: "ios-other" }
     | { status: "installed" };
 
@@ -26,6 +28,10 @@ function isIos() {
 function isIosSafari() {
     const ua = navigator.userAgent;
     return isIos() && /safari/i.test(ua) && !/crios|fxios|opios|chrome|edgios/i.test(ua);
+}
+
+function isIosChrome() {
+    return isIos() && /crios/i.test(navigator.userAgent);
 }
 
 function isInStandaloneMode() {
@@ -57,7 +63,9 @@ export function usePWAInstall() {
 
         // iOS 계열
         if (isIos()) {
-            setState({ status: isIosSafari() ? "ios-safari" : "ios-other" });
+            if (isIosSafari()) setState({ status: "ios-safari" });
+            else if (isIosChrome()) setState({ status: "ios-chrome" });
+            else setState({ status: "ios-other" });
             return;
         }
 

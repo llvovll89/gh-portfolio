@@ -6,7 +6,8 @@ import { useCheckedMobile } from "../../hooks/useCheckedMobile";
  * - android       : Chrome/Edge/Samsung Internet → 네이티브 설치 버튼
  * - android-manual: Firefox 등 → 브라우저 메뉴 통해 설치 안내
  * - ios-safari    : iOS Safari → 공유 → 홈 화면에 추가 가이드
- * - ios-other     : iOS Chrome/Firefox 등 → Safari에서 열도록 안내
+ * - ios-chrome    : iOS Chrome → 공유 버튼으로 홈 화면 추가 안내
+ * - ios-other     : iOS Firefox 등 → Safari에서 열도록 안내
  */
 export const PWAInstallBanner = () => {
     const isMobile = useCheckedMobile();
@@ -126,7 +127,41 @@ export const PWAInstallBanner = () => {
                     </>
                 )}
 
-                {/* ── iOS Chrome/Firefox 등: Safari로 유도 ── */}
+                {/* ── iOS Chrome: 공유 버튼 → 홈 화면에 추가 ── */}
+                {state.status === "ios-chrome" && (
+                    <>
+                        <p className="text-white/60 text-xs mb-3">
+                            홈 화면에 추가하면 앱처럼 사용할 수 있어요.
+                        </p>
+                        <ol className="space-y-2 text-white/70 text-xs">
+                            <li className="flex items-start gap-2">
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center font-bold text-[10px]">1</span>
+                                <span>
+                                    하단 공유 버튼{" "}
+                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-white/10 align-middle text-[11px]">⎋</span>
+                                    {" "}을 탭하세요
+                                </span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center font-bold text-[10px]">2</span>
+                                <span>스크롤해서 <strong className="text-white/90">홈 화면에 추가</strong>를 선택하세요</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center font-bold text-[10px]">3</span>
+                                <span>오른쪽 상단 <strong className="text-white/90">추가</strong>를 탭하세요</span>
+                            </li>
+                        </ol>
+                        <button
+                            onClick={dismiss}
+                            className="mt-3 w-full py-2 rounded-xl border border-white/10 text-white/50
+                                       hover:text-white/70 hover:border-white/20 transition-all text-xs"
+                        >
+                            닫기
+                        </button>
+                    </>
+                )}
+
+                {/* ── iOS Firefox 등: Safari로 유도 ── */}
                 {state.status === "ios-other" && (
                     <>
                         <p className="text-white/60 text-xs mb-3">
