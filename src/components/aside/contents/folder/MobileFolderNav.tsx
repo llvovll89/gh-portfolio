@@ -34,7 +34,7 @@ export const MobileFolderNav = () => {
         >
             {/* 상단 인디케이터 바 */}
             <div className="flex items-center justify-between px-4 pt-2 pb-1">
-                <span className="text-[10px] text-white/30 tracking-widest uppercase">Explorer</span>
+                <span className="text-[10px] text-white/30 tracking-widest uppercase">{t("nav.explorer")}</span>
                 <button
                     onClick={() => setSelectedNav(null)}
                     className="text-white/30 hover:text-white/60 transition-colors text-xs px-1"
@@ -65,7 +65,7 @@ export const MobileFolderNav = () => {
                                         : "text-white/40 hover:text-white/70 hover:bg-white/5"
                                     }
                                 `}
-                                aria-label={t(r.name)}
+                                aria-label={t(`routes.${r.name}`)}
                                 aria-current={isActive ? "page" : undefined}
                             >
                                 {/* 활성 표시 dot */}
@@ -74,7 +74,7 @@ export const MobileFolderNav = () => {
                                 )}
                                 {Icon && <Icon className="w-[18px] h-[18px] flex-shrink-0" />}
                                 <span className="text-[9px] font-medium truncate max-w-full leading-none">
-                                    {t(r.name)}
+                                    {t(`routes.${r.name}`)}
                                 </span>
                             </button>
                         </li>

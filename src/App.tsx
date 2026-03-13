@@ -11,6 +11,7 @@ import { useContext } from "react";
 import { SkipLinks } from "./components/skipLinks/SkipLinks";
 import { RouteLoading } from "./components/loading/RouteLoading";
 import { PWAUpdateBanner } from "./components/pwa/PWAUpdateBanner";
+import { PWAInstallBanner } from "./components/pwa/PWAInstallBanner";
 import { PageErrorBoundary } from "./components/error/PageErrorBoundary";
 
 function AppContent() {
@@ -41,6 +42,7 @@ function AppContent() {
             </Suspense>
 
             {!isMobile && !isBlogDetailPage && isTerminalVisible && <Bottom />}
+            <PWAInstallBanner />
             <PWAUpdateBanner />
         </section>
     );

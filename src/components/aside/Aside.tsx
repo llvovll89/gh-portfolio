@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { LayoutContext } from "../../context/LayoutContext";
 import { NavigationContext } from "../../context/NavigationContext";
 import { useThemeStyle } from "../../hooks/useThemeStyle";
@@ -20,6 +21,7 @@ export const Aside = () => {
     const asideRef = useRef<HTMLDivElement>(null);
     const handleMouseDown = useDragging({ targetRef: asideRef, type: "sidebar" });
     const isMobileSize = useCheckedMobileSize();
+    const { t } = useTranslation();
     const sheetRef = useRef<HTMLDivElement>(null);
     const dragState = useRef({ startY: 0, currentY: 0, dragging: false });
 
@@ -160,11 +162,11 @@ export const Aside = () => {
                                     ? "text-primary"
                                     : "text-white/60 hover:text-white",
                             ].join(" ")}
-                            aria-label={item.label}
+                            aria-label={t(item.labelKey)}
                             aria-pressed={selectedNav === item.type}
                         >
                             <item.icon className="w-5 h-5" />
-                            <span className="text-[10px] leading-none">{item.label}</span>
+                            <span className="text-[10px] leading-none">{t(item.labelKey)}</span>
                         </button>
                     ))}
                 </nav>
