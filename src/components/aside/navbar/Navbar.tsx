@@ -7,6 +7,7 @@ import { KeyboardContext } from "../../../context/KeyboardState.context";
 import { LayoutContext } from "../../../context/LayoutContext";
 import { TerminalContext } from "../../../context/TerminalContext";
 import { KeyboardInfo } from "../../keyboardInfo/KeyboardInfo";
+import { useCheckedMobileSize } from "../../../hooks/useCheckedMobileSize";
 
 interface NavbarProps {
     selectedNav: NavType | null;
@@ -18,6 +19,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
         useContext(KeyboardContext);
     const { setLayoutState } = useContext(LayoutContext);
     const { isTerminalVisible, setIsTerminalVisible } = useContext(TerminalContext);
+    const isMobileSize = useCheckedMobileSize();
 
     const COLLAPSED_HEIGHT = 32; // 터미널 헤더 바 높이
     const OPEN_HEIGHT = 220; // 터미널 열렸을 때 최소 높이
@@ -62,7 +64,8 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
 
             {/* Bottom section with social links and utilities */}
             <div className="flex flex-col w-full">
-                {/* Terminal toggle button */}
+                {/* Terminal toggle button - desktop only */}
+                {!isMobileSize && (
                 <button
                     onClick={toggleTerminal}
                     className="cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center text-white hover:bg-sub-gary/10 transition-colors"
@@ -71,6 +74,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                 >
                     <VscTerminal className="w-5 h-5" />
                 </button>
+                )}
 
                 {/* GitHub link */}
                 <a

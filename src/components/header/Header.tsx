@@ -123,6 +123,21 @@ export const Header = () => {
                     ...backgroundStyle,
                 }}
             >
+                {/* 모바일 로고 */}
+                {isMobileSize && (
+                    <Link
+                        to="/"
+                        className="flex items-center h-full px-3 shrink-0 border-r border-sub-gary/20"
+                        aria-label="홈으로"
+                    >
+                        <img
+                            src="/assets/logo/GH_logo_small_white.png"
+                            alt="logo"
+                            className="h-5 w-auto object-contain"
+                        />
+                    </Link>
+                )}
+
                 <ul
                     id="header-tabs"
                     tabIndex={-1}

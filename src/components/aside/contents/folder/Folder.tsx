@@ -12,7 +12,7 @@ import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
 import { useTranslation } from "react-i18next";
 
 export const Folder = () => {
-    const { selectedPathState } = useContext(NavigationContext);
+    const { selectedPathState, setSelectedNav } = useContext(NavigationContext);
     const { backgroundStyle, backgroundClass } = useThemeStyle();
     const handlePushPath = useHandlePushPath();
     const { t } = useTranslation();
@@ -36,7 +36,7 @@ export const Folder = () => {
                     )
                     .map((r) => (
                         <li
-                            onClick={() => handlePushPath(r.path)}
+                            onClick={() => { handlePushPath(r.path); setSelectedNav(null); }}
                             key={r.path}
                             className={`${selectedPathState.state === r.path
                                     ? "bg-sub-gary/20"
