@@ -2,9 +2,11 @@ import {useContext, useMemo, useRef} from "react";
 import {ThemeContext} from "../../../context/ThemeContext";
 import {ThemeMode, RECOMMENDED_COLORS} from "../../../context/constatns/Theme.type";
 import {useClosePopup} from "../../../hooks/useClosePopup";
+import {useCheckedMobileSize} from "../../../hooks/useCheckedMobileSize";
 
 export const Theme = () => {
     const {selectedTheme, setSelectedTheme} = useContext(ThemeContext);
+    const isMobileSize = useCheckedMobileSize();
 
     const themeModeRef = useRef<HTMLDivElement>(null);
 
@@ -63,7 +65,7 @@ export const Theme = () => {
     return (
         <div
             ref={themeModeRef}
-            className="fixed right-3 bottom-3 z-100 select-none"
+            className={`fixed right-3 z-100 select-none ${isMobileSize ? "bottom-[60px]" : "bottom-3"}`}
             style={{
                 paddingBottom: "env(safe-area-inset-bottom)",
                 paddingRight: "env(safe-area-inset-right)",
