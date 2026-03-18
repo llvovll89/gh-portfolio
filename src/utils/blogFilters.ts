@@ -1,4 +1,5 @@
 import type { BlogPost } from "./loadPosts";
+import { fuseSearch } from "./fuseSearch";
 
 /**
  * 모든 포스트에서 사용된 태그를 추출하고 알파벳 순으로 정렬
@@ -115,24 +116,9 @@ export function filterPosts(
         });
     }
 
-    // 검색어 필터 적용
+    // 전문 검색 — Fuse.js (제목 · 태그 · 요약 · 본문 모두 포함)
     if (searchQuery.trim()) {
-        const fullQueryLower = searchQuery.toLowerCase().trim();
-        const keywords = fullQueryLower
-            .split(/\s+/)
-            .filter((k) => k.length > 0);
-
-        // 점수 기반 필터링 및 정렬
-        const scored = filtered.map((post) => ({
-            post,
-            score: scorePost(post, keywords, fullQueryLower),
-        }));
-
-        // 점수가 0보다 큰 것만 필터링
-        filtered = scored
-            .filter(({ score }) => score > 0)
-            .sort((a, b) => b.score - a.score) // 점수 내림차순
-            .map(({ post }) => post);
+        filtered = fuseSearch(filtered, searchQuery);
     }
 
     return filtered;

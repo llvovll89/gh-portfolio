@@ -135,11 +135,11 @@ export const Blog = () => {
                             </div>
                         ) : viewMode === "list" ? (
                             <ul className="flex flex-col gap-3 pb-4">
-                                {sortedPosts.map((p) => <BlogCard key={p.slug} p={p} />)}
+                                {sortedPosts.map((p) => <BlogCard key={p.slug} p={p} searchQuery={debouncedQuery} />)}
                             </ul>
                         ) : viewMode === "grid" ? (
                             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
-                                {sortedPosts.map((p) => <BlogCard key={p.slug} p={p} />)}
+                                {sortedPosts.map((p) => <BlogCard key={p.slug} p={p} searchQuery={debouncedQuery} />)}
                             </ul>
                         ) : (
                             <div className="pb-4">

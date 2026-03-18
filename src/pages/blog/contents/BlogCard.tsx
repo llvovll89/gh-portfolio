@@ -1,19 +1,28 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { FiEye } from "react-icons/fi";
 import type { BlogPost } from "../../../utils/loadPosts";
 import { getViewCount } from "../../../utils/blogViews";
+import { getBodySnippet } from "../../../utils/fuseSearch";
 
 interface BlogCardProps {
     p: BlogPost;
+    searchQuery?: string;
 }
 
-export const BlogCard = ({ p }: BlogCardProps) => {
+export const BlogCard = ({ p, searchQuery = "" }: BlogCardProps) => {
     const [viewCount, setViewCount] = useState<number | null>(null);
 
     useEffect(() => {
         getViewCount(p.slug).then(setViewCount).catch(() => {});
     }, [p.slug]);
+
+    // 본문 스니펫: 검색어가 제목·요약에 없고 본문에만 있을 때 표시
+    const bodySnippet = useMemo(() => {
+        if (!searchQuery.trim()) return null;
+        const keywords = searchQuery.trim().toLowerCase().split(/\s+/).filter(k => k.length >= 2);
+        return getBodySnippet(p, keywords);
+    }, [p, searchQuery]);
 
     return (
         <li className="list-none">
@@ -71,6 +80,12 @@ export const BlogCard = ({ p }: BlogCardProps) => {
                     {(p.summary || (p.type !== "html" && p.body)) && (
                         <p className="line-clamp-2 text-[clamp(0.75rem,1vw,0.875rem)] leading-relaxed text-zinc-600 dark:text-zinc-400">
                             {p.summary ?? p.body}
+                        </p>
+                    )}
+
+                    {bodySnippet && (
+                        <p className="mt-1.5 line-clamp-2 text-[clamp(0.7rem,1vw,0.8rem)] leading-relaxed text-zinc-500 dark:text-zinc-500 italic border-l-2 border-blue-400/50 pl-2">
+                            {bodySnippet}
                         </p>
                     )}
                 </div>

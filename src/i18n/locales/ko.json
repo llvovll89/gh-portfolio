@@ -143,7 +143,7 @@
       "noResultsHint": "다른 검색어나 필터를 시도해보세요",
       "search": {
         "label": "블로그 포스트 검색",
-        "placeholder": "제목, 요약, 태그로 검색...",
+        "placeholder": "제목, 요약, 태그, 본문으로 검색...",
         "clear": "검색어 지우기"
       },
       "filter": {
