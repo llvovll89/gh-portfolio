@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GH-Portfolio 프로젝트 감사 리포트</title>
+  <style>
+    :root {
+      --bg: #0c0b10;
+      --bg2: #1c1b1b;
+      --bg3: #1f1e25;
+      --border: #2e2d35;
+      --text: #d4d4d4;
+      --text-dim: #888;
+      --primary: #09f;
+      --red: #f87171;
+      --orange: #fb923c;
+      --yellow: #fbbf24;
+      --green: #4ade80;
+      --teal: #2dd4bf;
+      --purple: #a78bfa;
+      --pink: #f472b6;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ─── HEADER ─── */
+    .site-header {
+      background: linear-gradient(135deg, #13121a 0%, #1a1925 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 40px 48px 36px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .site-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.3px;
+    }
+    .site-header h1 span { color: var(--primary); }
+    .meta-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .meta-row .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+    .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    .dot-red { background: var(--red); }
+    .dot-orange { background: var(--orange); }
+    .dot-yellow { background: var(--yellow); }
+    .dot-green { background: var(--green); }
+
+    /* ─── LAYOUT ─── */
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: calc(100vh - 113px);
+    }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      background: #13121a;
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      position: sticky;
+      top: 113px;
+      height: calc(100vh - 113px);
+      overflow-y: auto;
+    }
+    .sidebar-section { margin-bottom: 8px; }
+    .sidebar-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      padding: 0 20px 6px;
+    }
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 20px;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 12.5px;
+      transition: all 0.15s;
+      border-left: 2px solid transparent;
+    }
+    .sidebar a:hover { color: var(--text); background: var(--bg3); border-left-color: var(--border); }
+    .sidebar a.active { color: var(--primary); background: rgba(0,153,255,0.06); border-left-color: var(--primary); }
+    .sidebar .count {
+      margin-left: auto;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1px 7px;
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+    .count.red { background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.3); color: var(--red); }
+    .count.orange { background: rgba(251,146,60,0.1); border-color: rgba(251,146,60,0.3); color: var(--orange); }
+    .count.yellow { background: rgba(251,191,36,0.1); border-color: rgba(251,191,36,0.3); color: var(--yellow); }
+    .count.green { background: rgba(74,222,128,0.1); border-color: rgba(74,222,128,0.3); color: var(--green); }
+
+    /* ─── MAIN ─── */
+    main { padding: 40px 48px; max-width: 960px; }
+
+    /* ─── SECTION ─── */
+    .section { margin-bottom: 56px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-icon {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .section-header h2 { font-size: 17px; font-weight: 600; color: #fff; }
+    .section-header p { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+
+    /* ─── STAT CARDS ─── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .stat-card.red::before { background: var(--red); }
+    .stat-card.orange::before { background: var(--orange); }
+    .stat-card.yellow::before { background: var(--yellow); }
+    .stat-card.green::before { background: var(--green); }
+    .stat-num {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-card.red .stat-num { color: var(--red); }
+    .stat-card.orange .stat-num { color: var(--orange); }
+    .stat-card.yellow .stat-num { color: var(--yellow); }
+    .stat-card.green .stat-num { color: var(--green); }
+    .stat-label { font-size: 11px; color: var(--text-dim); font-weight: 500; }
+
+    /* ─── ISSUE CARDS ─── */
+    .issue-list { display: flex; flex-direction: column; gap: 10px; }
+    .issue-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 14px;
+      align-items: start;
+      transition: border-color 0.2s;
+    }
+    .issue-card:hover { border-color: #3e3d48; }
+    .issue-sev {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .sev-critical { background: rgba(248,113,113,0.15); color: var(--red); }
+    .sev-high { background: rgba(251,146,60,0.15); color: var(--orange); }
+    .sev-medium { background: rgba(251,191,36,0.15); color: var(--yellow); }
+    .sev-low { background: rgba(74,222,128,0.15); color: var(--green); }
+    .issue-body {}
+    .issue-title { font-size: 13.5px; font-weight: 600; color: #e5e5e5; margin-bottom: 4px; }
+    .issue-desc { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+    .issue-file {
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: 10.5px;
+      color: var(--primary);
+      background: rgba(0,153,255,0.08);
+      border: 1px solid rgba(0,153,255,0.15);
+      border-radius: 4px;
+      padding: 2px 7px;
+      margin-top: 6px;
+      display: inline-block;
+    }
+    .issue-tag {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      white-space: nowrap;
+      align-self: flex-start;
+    }
+    .tag-security { background: rgba(248,113,113,0.1); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+    .tag-bug { background: rgba(251,146,60,0.1); color: var(--orange); border: 1px solid rgba(251,146,60,0.2); }
+    .tag-a11y { background: rgba(167,139,250,0.1); color: var(--purple); border: 1px solid rgba(167,139,250,0.2); }
+    .tag-perf { background: rgba(45,212,191,0.1); color: var(--teal); border: 1px solid rgba(45,212,191,0.2); }
+    .tag-ux { background: rgba(244,114,182,0.1); color: var(--pink); border: 1px solid rgba(244,114,182,0.2); }
+    .tag-feature { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+    .tag-code { background: rgba(251,191,36,0.1); color: var(--yellow); border: 1px solid rgba(251,191,36,0.2); }
+    .tag-seo { background: rgba(0,153,255,0.1); color: var(--primary); border: 1px solid rgba(0,153,255,0.2); }
+
+    /* ─── CODE BLOCK ─── */
+    pre {
+      background: #0d0d14;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 8px;
+      color: #a9b1d6;
+    }
+    pre .bad { color: var(--red); }
+    pre .good { color: var(--green); }
+    pre .comment { color: #565f89; }
+    pre .key { color: #7aa2f7; }
+    pre .str { color: #9ece6a; }
+
+    /* ─── FEATURE CARDS ─── */
+    .feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .feature-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+    .feature-card:hover { border-color: rgba(0,153,255,0.3); transform: translateY(-1px); }
+    .feature-card .fc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .feature-card .fc-icon { font-size: 20px; }
+    .feature-card .fc-title { font-size: 13.5px; font-weight: 600; color: #e5e5e5; }
+    .feature-card .fc-priority {
+      margin-left: auto;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .pri-high { background: rgba(251,146,60,0.1); color: var(--orange); border: 1px solid rgba(251,146,60,0.2); }
+    .pri-med { background: rgba(251,191,36,0.1); color: var(--yellow); border: 1px solid rgba(251,191,36,0.2); }
+    .pri-low { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+    .feature-card .fc-desc { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+    .feature-card .fc-tags { margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap; }
+    .fc-tag {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+    }
+
+    /* ─── TABLE ─── */
+    .tbl-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr { background: var(--bg3); }
+    thead th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-dim); }
+    tbody tr { border-top: 1px solid var(--border); }
+    tbody tr:hover { background: rgba(255,255,255,0.02); }
+    tbody td { padding: 10px 14px; font-size: 12.5px; vertical-align: top; }
+    .td-good { color: var(--green); }
+    .td-bad { color: var(--red); }
+    .td-warn { color: var(--yellow); }
+
+    /* ─── SUMMARY BOX ─── */
+    .summary-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .summary-box h3 { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 12px; }
+    .summary-row { display: flex; flex-direction: column; gap: 8px; }
+    .summary-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12.5px;
+      color: var(--text-dim);
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .summary-item:last-child { border-bottom: none; }
+    .summary-item .label { color: var(--text); font-weight: 500; min-width: 140px; }
+    .pill {
+      font-size: 10.5px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .pill-good { background: rgba(74,222,128,0.12); color: var(--green); border: 1px solid rgba(74,222,128,0.25); }
+    .pill-bad { background: rgba(248,113,113,0.12); color: var(--red); border: 1px solid rgba(248,113,113,0.25); }
+    .pill-warn { background: rgba(251,191,36,0.12); color: var(--yellow); border: 1px solid rgba(251,191,36,0.25); }
+
+    /* ─── ALERT BOX ─── */
+    .alert {
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 12px;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .alert-red { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); color: #fca5a5; }
+    .alert-orange { background: rgba(251,146,60,0.08); border: 1px solid rgba(251,146,60,0.2); color: #fdba74; }
+    .alert-blue { background: rgba(0,153,255,0.08); border: 1px solid rgba(0,153,255,0.2); color: #7dd3fc; }
+
+    /* ─── FOOTER ─── */
+    .report-footer {
+      background: #13121a;
+      border-top: 1px solid var(--border);
+      padding: 24px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #4e4d58; }
+  </style>
+</head>
+<body>
+
+<!-- ───────────────── HEADER ───────────────── -->
+<header class="site-header">
+  <h1>🔍 <span>GH-Portfolio</span> 프로젝트 감사 리포트</h1>
+  <div class="meta-row">
+    <span class="badge">📅 2026-03-18</span>
+    <span class="badge">⚙️ React 19 · TypeScript · Vite · Tailwind v4 · Firebase</span>
+    <span class="badge">🌐 kimgeonho.vercel.app</span>
+    <span class="badge"><span class="dot dot-red"></span> 크리티컬 3개</span>
+    <span class="badge"><span class="dot dot-orange"></span> 높음 6개</span>
+    <span class="badge"><span class="dot dot-yellow"></span> 중간 9개</span>
+    <span class="badge"><span class="dot dot-green"></span> 추가 기능 14개</span>
+  </div>
+</header>
+
+<!-- ───────────────── LAYOUT ───────────────── -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">개요</div>
+      <a href="#overview" class="active">📊 프로젝트 현황</a>
+      <a href="#stack">🧱 기술 스택</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">이슈</div>
+      <a href="#security">🔴 보안 (Critical) <span class="count red">3</span></a>
+      <a href="#bugs">🟠 버그 <span class="count orange">6</span></a>
+      <a href="#improvements">🟡 개선 사항 <span class="count yellow">9</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">기능</div>
+      <a href="#features">✨ 추가 기능 제안 <span class="count green">14</span></a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">평가</div>
+      <a href="#scores">📈 항목별 점수</a>
+      <a href="#priority">🗓 우선순위 로드맵</a>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- ═══ OVERVIEW ═══ -->
+    <section class="section" id="overview">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(0,153,255,0.1)">📊</div>
+        <div>
+          <h2>프로젝트 현황</h2>
+          <p>전체 코드베이스 분석 결과 요약</p>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card red">
+          <div class="stat-num">3</div>
+          <div class="stat-label">🔴 크리티컬 이슈</div>
+        </div>
+        <div class="stat-card orange">
+          <div class="stat-num">6</div>
+          <div class="stat-label">🟠 높음 이슈</div>
+        </div>
+        <div class="stat-card yellow">
+          <div class="stat-num">9</div>
+          <div class="stat-label">🟡 개선 사항</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-num">14</div>
+          <div class="stat-label">✨ 추가 기능 제안</div>
+        </div>
+      </div>
+
+      <div class="summary-box">
+        <h3>프로젝트 개요</h3>
+        <div class="summary-row">
+          <div class="summary-item"><span class="label">배포 URL</span> kimgeonho.vercel.app</div>
+          <div class="summary-item"><span class="label">프레임워크</span> React 19.2.0 + Vite 7.2.4</div>
+          <div class="summary-item"><span class="label">언어</span> TypeScript 5.9.3 (strict mode)</div>
+          <div class="summary-item"><span class="label">스타일링</span> Tailwind CSS v4</div>
+          <div class="summary-item"><span class="label">백엔드</span> Firebase Firestore (방명록, 댓글, 조회수)</div>
+          <div class="summary-item"><span class="label">총 컴포넌트 수</span> 약 131개 (TSX 파일 43개)</div>
+          <div class="summary-item"><span class="label">커스텀 훅 수</span> 25개</div>
+          <div class="summary-item"><span class="label">블로그 포스트</span> 마크다운 + HTML 총 30개+</div>
+          <div class="summary-item"><span class="label">다국어 지원</span> 한국어 / 영어 (i18next)</div>
+          <div class="summary-item"><span class="label">PWA 지원</span> <span class="pill pill-good">✓ 지원</span></div>
+          <div class="summary-item"><span class="label">Firestore 보안 규칙</span> <span class="pill pill-bad">✗ 미설정</span></div>
+          <div class="summary-item"><span class="label">.env 보안</span> <span class="pill pill-bad">✗ 토큰 노출됨</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ TECH STACK ═══ -->
+    <section class="section" id="stack">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(167,139,250,0.1)">🧱</div>
+        <div>
+          <h2>기술 스택 현황</h2>
+          <p>사용 중인 라이브러리 및 도구 점검</p>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>패키지</th>
+              <th>버전</th>
+              <th>상태</th>
+              <th>비고</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>react</td><td>19.2.0</td><td class="td-good">✓ 최신</td><td>React 19 신기능 (use API, 자동 배칭)</td></tr>
+            <tr><td>react-router-dom</td><td>7.10.1</td><td class="td-good">✓ 최신</td><td>v7 Data API 적극 활용 권장</td></tr>
+            <tr><td>vite</td><td>7.2.4</td><td class="td-good">✓ 최신</td><td>—</td></tr>
+            <tr><td>typescript</td><td>5.9.3</td><td class="td-good">✓ 최신</td><td>strict mode 활성화</td></tr>
+            <tr><td>tailwindcss</td><td>4.1.18</td><td class="td-good">✓ 최신</td><td>v4 새 문법 (@import "tailwindcss")</td></tr>
+            <tr><td>firebase</td><td>12.9.0</td><td class="td-good">✓ 최신</td><td>Firestore 보안 규칙 미설정</td></tr>
+            <tr><td>i18next</td><td>25.8.4</td><td class="td-good">✓ 최신</td><td>—</td></tr>
+            <tr><td>react-markdown</td><td>10.1.0</td><td class="td-good">✓ 최신</td><td>XSS sanitize 옵션 확인 필요</td></tr>
+            <tr><td>vite-plugin-pwa</td><td>1.2.0</td><td class="td-good">✓ 최신</td><td>—</td></tr>
+            <tr><td>react-icons</td><td>5.5.0</td><td class="td-good">✓ 최신</td><td>tree-shaking 적용 여부 확인</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══ SECURITY ═══ -->
+    <section class="section" id="security">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(248,113,113,0.1)">🔴</div>
+        <div>
+          <h2>크리티컬 보안 이슈</h2>
+          <p>즉시 조치가 필요한 보안 취약점</p>
+        </div>
+      </div>
+
+      <div class="alert alert-red">
+        <span class="alert-icon">🚨</span>
+        <div>아래 이슈들은 현재 프로덕션 서비스에 영향을 줄 수 있는 심각한 보안 문제입니다. <strong>즉시 조치</strong>가 필요합니다.</div>
+      </div>
+
+      <div class="issue-list">
+
+        <div class="issue-card">
+          <div class="issue-sev sev-critical">🔑</div>
+          <div class="issue-body">
+            <div class="issue-title">GitHub Personal Access Token 노출</div>
+            <div class="issue-desc">
+              .env 파일에 GitHub PAT가 평문으로 저장되어 있으며, 해당 파일이 버전 관리에 포함될 경우 퍼블릭 레포에 토큰이 그대로 노출됩니다.
+              만료일 2026-12-18 전까지 악용될 수 있습니다. <strong>즉시 GitHub에서 해당 토큰을 Revoke하고 새로 발급</strong>해야 합니다.
+            </div>
+            <span class="issue-file">.env → VITE_GIT_HUB_TOKEN=github_pat_11ATITZQI0...</span>
+            <pre><span class="comment"># ❌ 현재 (절대 커밋 금지)</span>
+VITE_GIT_HUB_TOKEN=github_pat_11ATITZQI0X3jb6FG...
+
+<span class="comment"># ✅ 조치 방법</span>
+<span class="comment"># 1. GitHub Settings → Developer settings → Personal access tokens → Revoke</span>
+<span class="comment"># 2. 새 토큰 발급 (필요한 scope만 최소한으로)</span>
+<span class="comment"># 3. .gitignore에 .env 추가</span>
+<span class="comment"># echo ".env" >> .gitignore</span>
+<span class="comment"># 4. Vercel 환경 변수에서 관리</span></pre>
+          </div>
+          <span class="issue-tag tag-security">SECURITY</span>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-sev sev-critical">🔥</div>
+          <div class="issue-body">
+            <div class="issue-title">Firestore 보안 규칙 완전 미설정</div>
+            <div class="issue-desc">
+              <code>firestore.rules</code> 파일이 비어 있습니다. Firestore 기본 설정이 "테스트 모드"일 경우 누구나 모든 데이터를 읽고 쓰고 삭제할 수 있습니다.
+              방명록, 댓글, 조회수 데이터가 완전히 무방비 상태입니다.
+            </div>
+            <span class="issue-file">firestore.rules (빈 파일)</span>
+            <pre><span class="comment">// ✅ 최소한 이 정도 규칙은 적용해야 합니다</span>
+<span class="key">rules_version</span> = <span class="str">'2'</span>;
+<span class="key">service</span> cloud.firestore {
+  match /databases/{database}/documents {
+
+    <span class="comment">// 방명록: 읽기는 누구나, 쓰기는 인증 불필요하지만 필드 검증 강제</span>
+    match /guestbook/{docId} {
+      allow read: if true;
+      allow create: if request.resource.data.keys()
+        .hasAll([<span class="str">'name'</span>, <span class="str">'message'</span>, <span class="str">'createdAt'</span>])
+        && request.resource.data.message.size() <= 500;
+      allow update, delete: if false; <span class="comment">// 서버사이드 비밀번호 검증 필요</span>
+    }
+
+    <span class="comment">// 댓글: 읽기는 누구나, 생성 시 필드 검증</span>
+    match /comments/{docId} {
+      allow read: if true;
+      allow create: if request.resource.data.keys()
+        .hasAll([<span class="str">'slug'</span>, <span class="str">'name'</span>, <span class="str">'message'</span>])
+        && request.resource.data.message.size() <= 1000;
+      allow update, delete: if false;
+    }
+
+    <span class="comment">// 조회수: 읽기만 허용, 쓰기는 서버에서만</span>
+    match /views/{docId} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}</pre>
+          </div>
+          <span class="issue-tag tag-security">SECURITY</span>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-sev sev-critical">🌐</div>
+          <div class="issue-body">
+            <div class="issue-title">Firebase API Key 도메인 제한 미설정</div>
+            <div class="issue-desc">
+              Firebase API Key는 클라이언트에 노출되는 것이 설계상 의도된 것이지만, Google Cloud Console에서 해당 키를 <strong>특정 도메인에서만 사용 가능하도록 제한</strong>하지 않으면
+              다른 도메인에서 해당 키를 무단 사용할 수 있습니다.
+            </div>
+            <span class="issue-file">src/firebase/config.ts</span>
+            <pre><span class="comment">// 조치 방법:</span>
+<span class="comment">// 1. Google Cloud Console → API & Services → Credentials</span>
+<span class="comment">// 2. Firebase API Key 선택 → 애플리케이션 제한사항</span>
+<span class="comment">// 3. HTTP 리퍼러 제한 → kimgeonho.vercel.app/* 만 허용</span>
+<span class="comment">// 4. API 제한 → Firebase 관련 API만 활성화</span></pre>
+          </div>
+          <span class="issue-tag tag-security">SECURITY</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══ BUGS ═══ -->
+    <section class="section" id="bugs">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(251,146,60,0.1)">🟠</div>
+        <div>
+          <h2>버그 및 잠재적 오류</h2>
+          <p>런타임 오류 및 예상치 못한 동작을 유발할 수 있는 코드</p>
+        </div>
+      </div>
+
+      <div class="issue-list">
+
+        <div class="issue-card">
+          <div class="issue-sev sev-high">💥</div>
+          <div class="issue-body">
+            <div class="issue-title">Firestore Timestamp 타입 불일치</div>
+            <div class="issue-desc">
+              <code>createdAt</code> 필드의 타입을 커스텀 인터페이스로 정의하고 있어 Firestore SDK의 실제 <code>Timestamp</code> 타입과 불일치합니다.
+              <code>toDate()</code> 메서드 호출 시 런타임 에러가 발생할 수 있습니다.
+            </div>
+            <span class="issue-file">src/utils/blogComments.ts:12</span>
+            <pre><span class="comment">// ❌ 현재</span>
+<span class="key">createdAt</span>: { toDate: () => Date } | null
+
+<span class="comment">// ✅ 수정</span>
+<span class="key">import</span> { Timestamp } from <span class="str">'firebase/firestore'</span>;
+<span class="key">createdAt</span>: Timestamp | null
+
+<span class="comment">// 사용 시 옵셔널 체이닝 적용</span>
+<span class="key">const</span> date = comment.createdAt<span class="good">?.</span>toDate<span class="good">()</span> ?? <span class="key">new</span> Date();</pre>
+          </div>
+          <span class="issue-tag tag-bug">BUG</span>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-sev sev-high">⚠️</div>
+          <div class="issue-body">
+            <div class="issue-title">Firestore snap.data() null 체크 누락</div>
+            <div class="issue-desc">
+              <code>snap.data()</code>는 문서가 존재하지 않을 경우 <code>undefined</code>를 반환합니다.
+              <code>.count</code> 프로퍼티에 직접 접근 시 런타임 TypeError가 발생합니다.
+            </div>
+            <span class="issue-file">src/utils/blogViews.ts:40, 49</span>
+            <pre><span class="comment">// ❌ 현재 (TypeError 위험)</span>
+(snap.data().<span class="bad">count</span> as number) ?? 0
+
+<span class="comment">// ✅ 수정</span>
+(snap.data()<span class="good">?.</span>count as number | undefined) ?? 0</pre>
+          </div>
+          <span class="issue-tag tag-bug">BUG</span>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-sev sev-high">🎭</div>
+          <div class="issue-body">
+            <div class="issue-title">aria-modal 속성값 오류</div>
+            <div class="issue-desc">
+              PWA 설치 배너의 <code>role="dialog"</code> 요소에 <code>aria-modal="false"</code>가 설정되어 있습니다.
+              <code>false</code>는 모달이 아님을 의미하므로, 스크린 리더 사용자가 모달 뒤의 콘텐츠에도 접근하게 됩니다.
+              <code>true</code>로 변경해야 합니다.
+            </div>
+            <span class="issue-file">src/components/pwa/PWAInstallBanner.tsx:21</span>
+            <pre><span class="comment">// ❌ 현재</span>
+aria-modal=<span class="bad">"false"</span>
+
+<span class="comment">// ✅ 수정</span>
+aria-modal=<span class="good">"true"</span></pre>
+          </div>
+          <span class="issue-tag tag-a11y">A11Y</span>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-sev sev-high">🔒</div>
+          <div class="issue-body">
+            <div class="issue-title">비밀번호 해싱에 SHA-256 사용</div>
+            <div class="issue-desc">
+              방명록/댓글 수정·삭제용 비밀번호를 SHA-256으로 해싱하고 있습니다. SHA-256은 매우 빠르기 때문에 브루트포스 공격에 취약합니다.
+              bcrypt, scrypt, 또는 Argon2를 사용하는 것이 보안 표준입니다. (단, 브라우저 환경 제약으로 Web Crypto API 기반 PBKDF2를 대안으로 사용 가능)
+            </div>
+            <span class="issue-file">src/utils/hashPassword.ts</span>
+            <pre><span class="comment">// ✅ Web Crypto API (브라우저 호환) 기반 PBKDF2 대안</span>
+<span class="key">async function</span> hashPassword(password: string, salt: string): Promise&lt;string&gt; {
+  const encoder = <span class="key">new</span> TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey(
+    <span class="str">"raw"</span>, encoder.encode(password), <span class="str">"PBKDF2"</span>, false, [<span class="str">"deriveBits"</span>]
+  );
+  const bits = await crypto.subtle.deriveBits(
+    { name: <span class="str">"PBKDF2"</span>, salt: encoder.encode(salt), iterations: 310000, hash: <span class="str">"SHA-256"</span> },
+    keyMaterial, 256
+  );
+  return btoa(String.fromCharCode(...new Uint8Array(bits)));
+}</pre>
+          </div>
+          <span class="issue-tag tag-security">SECURITY</span>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-sev sev-high">🖼️</div>
+          <div class="issue-body">
+            <div class="issue-title">Img 컴포넌트 alt 속성 미필수화</div>
+            <div class="issue-desc">
+              공통 <code>Img</code> 컴포넌트에서 <code>alt</code>가 optional 타입으로 정의되어 있습니다.
+              alt 없는 이미지는 스크린 리더 사용자에게 의미를 전달하지 못하며, WCAG 2.1 기준 위반입니다.
+              장식용 이미지는 <code>alt=""</code>를 명시적으로 전달하도록 타입을 강제해야 합니다.
+            </div>
+            <span class="issue-file">src/components/Img.tsx:4</span>
+            <pre><span class="comment">// ❌ 현재</span>
+interface ImgProps {
+  alt<span class="bad">?</span>: string  <span class="comment">// optional</span>
+}
+
+<span class="comment">// ✅ 수정 (빈 문자열도 허용해서 장식용 이미지 지원)</span>
+interface ImgProps {
+  alt<span class="good">:</span> string  <span class="comment">// required (장식용이면 "" 전달)</span>
+}</pre>
+          </div>
+          <span class="issue-tag tag-a11y">A11Y</span>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-sev sev-high">📱</div>
+          <div class="issue-body">
+            <div class="issue-title">user-scalable=no 사용 — 모바일 접근성 위반</div>
+            <div class="issue-desc">
+              index.html의 viewport 메타 태그에 <code>user-scalable=no</code>가 설정되어 있습니다.
+              저시력 사용자가 브라우저 핀치줌을 사용할 수 없게 되며, WCAG 1.4.4 기준 위반입니다.
+              iOS Safari는 이 설정을 무시하지만 Android Chrome은 그렇지 않습니다.
+            </div>
+            <span class="issue-file">index.html (viewport meta)</span>
+            <pre><span class="comment">&lt;!-- ❌ 현재 --&gt;</span>
+&lt;meta name="viewport" content="width=device-width, initial-scale=1.0, <span class="bad">user-scalable=no</span>"&gt;
+
+<span class="comment">&lt;!-- ✅ 수정 --&gt;</span>
+&lt;meta name="viewport" content="<span class="good">width=device-width, initial-scale=1.0</span>"&gt;</pre>
+          </div>
+          <span class="issue-tag tag-a11y">A11Y</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══ IMPROVEMENTS ═══ -->
+    <section class="section" id="improvements">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(251,191,36,0.1)">🟡</div>
+        <div>
+          <h2>개선 사항</h2>
+          <p>당장 버그는 아니지만 성능·SEO·UX·코드 품질을 높이는 작업들</p>
+        </div>
+      </div>
+
+      <div class="issue-list">
+
+        <div class="issue-card">
+          <div class="issue-sev sev-medium">🗺️</div>
+          <div class="issue-body">
+            <div class="issue-title">sitemap.xml / robots.txt 부재</div>
+            <div class="issue-desc">
+              현재 빌드 결과에 <code>sitemap.xml</code>과 <code>robots.txt</code>가 없습니다.
+              Google Search Console에 사이트를 등록하고 인덱싱 효율을 높이려면 필수입니다.
+              <code>vite-plugin-sitemap</code>을 사용하면 빌드 시 자동 생성할 수 있습니다.
+            </div>
+            <pre><span class="comment">// vite.config.ts</span>
+<span class="key">import</span> sitemap <span class="key">from</span> <span class="str">'vite-plugin-sitemap'</span>;
+
+sitemap({
+  hostname: <span class="str">'https://kimgeonho.vercel.app'</span>,
+  dynamicRoutes: posts.map(p => <span class="str">`/blog/${p.slug}`</span>),
+  changefreq: <span class="str">'weekly'</span>,
+})</pre>
+          </div>
+          <span class="issue-tag tag-seo">SEO</span>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-sev sev-medium">🖼️</div>
+          <div class="issue-body">
+            <div class="issue-title">블로그 포스트별 OG 이미지 동적 생성 미비</div>
+            <div class="issue-desc">
+              현재 모든 블로그 포스트가 동일한 <code>og/thumbnail.webp</code>를 공유합니다.
+              카카오/슬랙 등에 링크를 공유할 때 포스트 제목이 반영된 이미지가 표시되지 않습니다.
+              빌드 타임에 Satori + sharp를 사용해 포스트별 OG 이미지를 자동 생성할 수 있습니다.
+            </div>
+            <span class="issue-file">vite.config.ts — blog-og-generator 플러그인</span>
+          </div>
+          <span class="issue-tag tag-seo">SEO</span>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-sev sev-medium">📦</div>
+          <div class="issue-body">
+            <div class="issue-title">react-icons 번들 크기 최적화 필요</div>
+            <div class="issue-desc">
+              <code>react-icons</code>는 모든 아이콘 라이브러리를 포함하므로 번들 크기에 영향을 줍니다.
+              named export 방식으로 개별 import를 사용하고 있다면 tree-shaking이 적용되지만,
+              번들 분석 도구로 실제 포함 크기를 확인하는 것을 권장합니다.
+            </div>
+            <pre><span class="comment">// 번들 분석 실행</span>
+<span class="comment">// npm i -D rollup-plugin-visualizer</span>
+<span class="comment">// vite.config.ts에 visualizer() 플러그인 추가 후 npm run build</span></pre>
+          </div>
+          <span class="issue-tag tag-perf">PERF</span>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-sev sev-medium">🔤</div>
+          <div class="issue-body">
+            <div class="issue-title">웹폰트 font-display: swap 미설정</div>
+            <div class="issue-desc">
+              <code>src/styles/font.css</code>에서 <code>@font-face</code>를 정의하고 있지만
+              <code>font-display: swap</code>이 설정되지 않으면 폰트 로드 전 텍스트가 보이지 않는 FOIT(Flash of Invisible Text)가 발생합니다.
+            </div>
+            <pre><span class="comment">/* src/styles/font.css */</span>
+@font-face {
+  font-family: <span class="str">'Pretendard'</span>;
+  src: url(<span class="str">'/assets/font/Pretendard-Regular.woff2'</span>) format(<span class="str">'woff2'</span>);
+  <span class="good">font-display: swap;</span>  <span class="comment">/* 추가 */</span>
+}</pre>
+          </div>
+          <span class="issue-tag tag-perf">PERF</span>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-sev sev-medium">🛡️</div>
+          <div class="issue-body">
+            <div class="issue-title">react-markdown XSS sanitize 옵션 확인 필요</div>
+            <div class="issue-desc">
+              <code>react-markdown</code>은 기본적으로 HTML을 허용하지 않지만, <code>rehype-raw</code> 플러그인 사용 시 raw HTML이 렌더링됩니다.
+              블로그 포스트에 HTML이 포함되어 있으므로 <code>rehype-sanitize</code>를 함께 적용해야 합니다.
+            </div>
+            <span class="issue-file">src/pages/blog/contents/MarkdownRender.tsx</span>
+            <pre><span class="comment">// ✅ rehype-sanitize 추가</span>
+<span class="key">import</span> rehypeSanitize from <span class="str">'rehype-sanitize'</span>;
+
+&lt;ReactMarkdown
+  rehypePlugins={[rehypeRaw, <span class="good">rehypeSanitize</span>]}
+&gt;</pre>
+          </div>
+          <span class="issue-tag tag-security">SECURITY</span>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-sev sev-medium">📊</div>
+          <div class="issue-body">
+            <div class="issue-title">에러 모니터링 (Sentry) 미구현</div>
+            <div class="issue-desc">
+              <code>src/utils/logger.ts</code>에 Sentry 통합 TODO 주석이 있지만 구현되지 않았습니다.
+              프로덕션에서 발생하는 에러를 실시간으로 감지하고 추적하려면 Sentry 또는 유사 도구 연동이 필요합니다.
+            </div>
+            <span class="issue-file">src/utils/logger.ts (TODO 주석)</span>
+          </div>
+          <span class="issue-tag tag-code">CODE</span>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-sev sev-medium">⚡</div>
+          <div class="issue-body">
+            <div class="issue-title">블로그 포스트 검색 디바운싱 최적화</div>
+            <div class="issue-desc">
+              검색어 입력마다 즉시 필터링이 실행되고 URL 파라미터가 업데이트되면 불필요한 재렌더링이 발생합니다.
+              React 19의 <code>useTransition</code> 또는 <code>useDeferredValue</code>를 활용해 검색 UX를 개선할 수 있습니다.
+            </div>
+            <pre><span class="comment">// ✅ React 19 useDeferredValue 활용</span>
+<span class="key">const</span> [query, setQuery] = useState(<span class="str">""</span>);
+<span class="key">const</span> deferredQuery = useDeferredValue(query); <span class="comment">// 렌더링 우선순위 낮춤</span>
+<span class="key">const</span> filtered = useMemo(() =>
+  posts.filter(p => p.title.includes(deferredQuery))
+, [deferredQuery]);</pre>
+          </div>
+          <span class="issue-tag tag-perf">PERF</span>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-sev sev-medium">🌍</div>
+          <div class="issue-body">
+            <div class="issue-title">다국어 번역 누락 항목 점검</div>
+            <div class="issue-desc">
+              <code>src/i18n/locales/ko.json</code>과 <code>en.json</code>의 키 집합이 일치하지 않을 수 있습니다.
+              영어로 전환 시 일부 UI가 한국어로 남아 있을 가능성이 있습니다. i18next-parser를 사용해 누락된 번역 키를 자동 탐지하는 것을 권장합니다.
+            </div>
+            <span class="issue-file">src/i18n/locales/ko.json, en.json</span>
+          </div>
+          <span class="issue-tag tag-ux">UX</span>
+        </div>
+
+        <div class="issue-card">
+          <div class="issue-sev sev-medium">🔗</div>
+          <div class="issue-body">
+            <div class="issue-title">블로그 포스트 slug 충돌 방어 로직 부재</div>
+            <div class="issue-desc">
+              <code>src/utils/loadAllPosts.ts</code>에서 마크다운과 HTML 파일의 slug를 파일명에서 자동 생성하므로,
+              동일한 날짜+제목 패턴의 파일이 두 폴더에 존재하면 slug가 충돌합니다. 빌드 시 중복 slug 감지 로직이 필요합니다.
+            </div>
+            <span class="issue-file">src/utils/loadAllPosts.ts</span>
+          </div>
+          <span class="issue-tag tag-bug">BUG</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══ FEATURES ═══ -->
+    <section class="section" id="features">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(74,222,128,0.1)">✨</div>
+        <div>
+          <h2>추가 기능 제안</h2>
+          <p>포트폴리오 완성도와 개발자 경험을 높일 수 있는 기능들</p>
+        </div>
+      </div>
+
+      <div class="feature-grid">
+
+        <div class="feature-card">
+          <div class="fc-header">
+            <span class="fc-icon">🔍</span>
+            <span class="fc-title">전문 검색 (Full-text Search)</span>
+            <span class="fc-priority pri-high">높음</span>
+          </div>
+          <div class="fc-desc">현재 블로그 검색은 제목만 대상으로 합니다. 포스트 본문 전체를 검색할 수 있도록 Fuse.js 기반 클라이언트 사이드 전문 검색을 추가하면 블로그 활용도가 크게 올라갑니다.</div>
+          <div class="fc-tags"><span class="fc-tag">Fuse.js</span><span class="fc-tag">블로그</span><span class="fc-tag">검색</span></div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-header">
+            <span class="fc-icon">🌙</span>
+            <span class="fc-title">읽기 모드 (Reading Mode)</span>
+            <span class="fc-priority pri-high">높음</span>
+          </div>
+          <div class="fc-desc">블로그 상세 페이지에서 사이드바/헤더/터미널을 모두 숨기고 콘텐츠만 집중해서 읽는 모드를 추가합니다. 단축키(R 또는 F)로 토글 가능하게 구현하면 UX가 향상됩니다.</div>
+          <div class="fc-tags"><span class="fc-tag">블로그 UX</span><span class="fc-tag">집중 모드</span></div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-header">
+            <span class="fc-icon">🔗</span>
+            <span class="fc-title">포스트 공유 버튼</span>
+            <span class="fc-priority pri-high">높음</span>
+          </div>
+          <div class="fc-desc">블로그 포스트에 카카오톡/트위터/링크드인/링크 복사 공유 버튼을 추가합니다. Web Share API를 우선 사용하고 미지원 환경에서는 fallback URL 공유로 처리합니다.</div>
+          <div class="fc-tags"><span class="fc-tag">Web Share API</span><span class="fc-tag">SNS</span></div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-header">
+            <span class="fc-icon">📊</span>
+            <span class="fc-title">블로그 관련 포스트 추천</span>
+            <span class="fc-priority pri-med">중간</span>
+          </div>
+          <div class="fc-desc">포스트 하단에 동일 태그 또는 유사 제목의 관련 포스트를 최대 3개 추천해줍니다. 방문자의 체류 시간과 페이지뷰를 늘리는 데 효과적입니다.</div>
+          <div class="fc-tags"><span class="fc-tag">태그 매칭</span><span class="fc-tag">추천</span></div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-header">
+            <span class="fc-icon">📈</span>
+            <span class="fc-title">Web Vitals 모니터링</span>
+            <span class="fc-priority pri-med">중간</span>
+          </div>
+          <div class="fc-desc">web-vitals 라이브러리로 LCP, FID, CLS, TTFB를 측정하고 콘솔 또는 외부 서비스에 리포팅합니다. Vercel Analytics와 연동하면 실시간 성능 지표를 확인할 수 있습니다.</div>
+          <div class="fc-tags"><span class="fc-tag">web-vitals</span><span class="fc-tag">Vercel Analytics</span></div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-header">
+            <span class="fc-icon">⌨️</span>
+            <span class="fc-title">터미널 명령어 확장</span>
+            <span class="fc-priority pri-med">중간</span>
+          </div>
+          <div class="fc-desc">하단 터미널(CLI 에뮬레이터)에 <code>blog --search [키워드]</code>, <code>whoami</code>, <code>projects --list</code>, <code>open [url]</code> 같은 실용적인 명령어를 추가합니다.</div>
+          <div class="fc-tags"><span class="fc-tag">터미널</span><span class="fc-tag">인터랙션</span></div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-header">
+            <span class="fc-icon">🎨</span>
+            <span class="fc-title">코드 블록 테마 선택</span>
+            <span class="fc-priority pri-med">중간</span>
+          </div>
+          <div class="fc-desc">블로그 포스트의 코드 블록에 Dracula, One Dark, GitHub Light 등 여러 syntax highlight 테마를 선택할 수 있게 합니다. Shiki 또는 rehype-highlight 활용.</div>
+          <div class="fc-tags"><span class="fc-tag">Shiki</span><span class="fc-tag">코드 하이라이팅</span></div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-header">
+            <span class="fc-icon">🏷️</span>
+            <span class="fc-title">포스트 시리즈 (Series) 기능</span>
+            <span class="fc-priority pri-med">중간</span>
+          </div>
+          <div class="fc-desc">연관된 포스트를 시리즈로 묶어 이전/다음 포스트 네비게이션과 시리즈 목차를 표시합니다. Frontmatter에 <code>series</code> 필드를 추가하는 방식으로 구현 가능합니다.</div>
+          <div class="fc-tags"><span class="fc-tag">블로그</span><span class="fc-tag">시리즈</span><span class="fc-tag">Frontmatter</span></div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-header">
+            <span class="fc-icon">🔔</span>
+            <span class="fc-title">RSS 피드 생성</span>
+            <span class="fc-priority pri-low">낮음</span>
+          </div>
+          <div class="fc-desc">빌드 시 <code>/rss.xml</code>을 자동 생성합니다. RSS 구독자들이 새 포스트를 바로 받아볼 수 있으며, 개발자 커뮤니티에서 블로그 노출도를 높이는 데 효과적입니다.</div>
+          <div class="fc-tags"><span class="fc-tag">RSS</span><span class="fc-tag">빌드타임</span></div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-header">
+            <span class="fc-icon">🖨️</span>
+            <span class="fc-title">이력서 PDF 내보내기</span>
+            <span class="fc-priority pri-low">낮음</span>
+          </div>
+          <div class="fc-desc">Resume 페이지에서 <code>Ctrl+P</code> 또는 버튼으로 인쇄·PDF 저장이 잘 되도록 <code>@media print</code> 스타일을 최적화합니다. html2pdf.js로 커스텀 PDF 다운로드도 가능합니다.</div>
+          <div class="fc-tags"><span class="fc-tag">이력서</span><span class="fc-tag">PDF</span><span class="fc-tag">print CSS</span></div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-header">
+            <span class="fc-icon">🌐</span>
+            <span class="fc-title">lang 속성 동적 업데이트</span>
+            <span class="fc-priority pri-low">낮음</span>
+          </div>
+          <div class="fc-desc">언어 전환 시 <code>document.documentElement.lang</code>을 <code>ko</code> 또는 <code>en</code>으로 동적으로 업데이트합니다. 스크린 리더가 올바른 언어로 읽도록 하는 접근성 개선 사항입니다.</div>
+          <div class="fc-tags"><span class="fc-tag">i18n</span><span class="fc-tag">접근성</span></div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-header">
+            <span class="fc-icon">💬</span>
+            <span class="fc-title">댓글 좋아요 / 이모지 반응</span>
+            <span class="fc-priority pri-low">낮음</span>
+          </div>
+          <div class="fc-desc">블로그 포스트 또는 댓글에 이모지 반응(👍 ❤️ 🎉 등)을 추가할 수 있는 기능을 구현합니다. Firestore 트랜잭션으로 동시성 문제 없이 카운트를 관리합니다.</div>
+          <div class="fc-tags"><span class="fc-tag">Firestore</span><span class="fc-tag">인터랙션</span></div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-header">
+            <span class="fc-icon">📱</span>
+            <span class="fc-title">모바일 스와이프 네비게이션</span>
+            <span class="fc-priority pri-low">낮음</span>
+          </div>
+          <div class="fc-desc">모바일에서 좌우 스와이프로 페이지 간 이동이 가능하도록 터치 이벤트를 처리합니다. <code>useSwipe</code> 커스텀 훅을 만들어 react-router의 <code>navigate()</code>와 연동합니다.</div>
+          <div class="fc-tags"><span class="fc-tag">모바일</span><span class="fc-tag">터치</span><span class="fc-tag">UX</span></div>
+        </div>
+
+        <div class="feature-card">
+          <div class="fc-header">
+            <span class="fc-icon">🧪</span>
+            <span class="fc-title">유닛 테스트 / E2E 테스트 도입</span>
+            <span class="fc-priority pri-med">중간</span>
+          </div>
+          <div class="fc-desc">현재 테스트 코드가 없습니다. Vitest로 유틸 함수(parseFrontmatter, readingTime, hashPassword) 단위 테스트를, Playwright로 핵심 유저 플로우(블로그 검색, 방명록 작성) E2E 테스트를 추가합니다.</div>
+          <div class="fc-tags"><span class="fc-tag">Vitest</span><span class="fc-tag">Playwright</span><span class="fc-tag">CI</span></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══ SCORES ═══ -->
+    <section class="section" id="scores">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(0,153,255,0.1)">📈</div>
+        <div>
+          <h2>항목별 평가</h2>
+          <p>현재 상태 기준 점수 및 개선 전/후 예상</p>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>카테고리</th>
+              <th>현재</th>
+              <th>개선 후 예상</th>
+              <th>핵심 이슈</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>🔐 보안</td>
+              <td class="td-bad">35 / 100</td>
+              <td class="td-good">88 / 100</td>
+              <td>토큰 노출, Firestore 규칙 부재, SHA-256 해싱</td>
+            </tr>
+            <tr>
+              <td>♿ 접근성 (A11Y)</td>
+              <td class="td-warn">65 / 100</td>
+              <td class="td-good">90 / 100</td>
+              <td>aria-modal 오류, user-scalable=no, alt 미강제</td>
+            </tr>
+            <tr>
+              <td>⚡ 성능</td>
+              <td class="td-warn">75 / 100</td>
+              <td class="td-good">90 / 100</td>
+              <td>font-display 미설정, 번들 미분석, OG 이미지</td>
+            </tr>
+            <tr>
+              <td>🔍 SEO</td>
+              <td class="td-warn">70 / 100</td>
+              <td class="td-good">92 / 100</td>
+              <td>sitemap.xml 없음, robots.txt 없음, 동적 OG 미비</td>
+            </tr>
+            <tr>
+              <td>🧩 코드 품질</td>
+              <td class="td-good">82 / 100</td>
+              <td class="td-good">92 / 100</td>
+              <td>Firestore 타입 불일치, 테스트 코드 부재</td>
+            </tr>
+            <tr>
+              <td>🎨 UI / UX</td>
+              <td class="td-good">85 / 100</td>
+              <td class="td-good">93 / 100</td>
+              <td>모바일 스와이프, 읽기 모드, 번역 누락</td>
+            </tr>
+            <tr>
+              <td>📱 PWA</td>
+              <td class="td-good">85 / 100</td>
+              <td class="td-good">91 / 100</td>
+              <td>aria-modal 오류, 오프라인 페이지 개선 여지</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══ PRIORITY ═══ -->
+    <section class="section" id="priority">
+      <div class="section-header">
+        <div class="section-icon" style="background:rgba(167,139,250,0.1)">🗓</div>
+        <div>
+          <h2>우선순위 로드맵</h2>
+          <p>권장 작업 순서</p>
+        </div>
+      </div>
+
+      <div class="alert alert-red">
+        <span class="alert-icon">🔥</span>
+        <div><strong>즉시 (오늘):</strong> GitHub PAT 폐기 및 재발급 → .env .gitignore 추가 → Firebase 도메인 제한 설정</div>
+      </div>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>단계</th>
+              <th>작업</th>
+              <th>예상 난이도</th>
+              <th>효과</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:var(--red)">Phase 1</strong><br><span style="font-size:11px;color:var(--text-dim)">즉시</span></td>
+              <td>
+                ① GitHub PAT 폐기·재발급<br>
+                ② .env → .gitignore 추가<br>
+                ③ Firebase API Key 도메인 제한<br>
+                ④ Firestore 보안 규칙 작성
+              </td>
+              <td>⭐ 낮음</td>
+              <td class="td-bad">보안 사고 예방</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--orange)">Phase 2</strong><br><span style="font-size:11px;color:var(--text-dim)">1~2일</span></td>
+              <td>
+                ① aria-modal="true" 수정<br>
+                ② user-scalable=no 제거<br>
+                ③ Img alt 타입 필수화<br>
+                ④ Firestore Timestamp 타입 수정<br>
+                ⑤ snap.data()?.count null 체크
+              </td>
+              <td>⭐ 낮음</td>
+              <td class="td-warn">버그 수정 + 접근성</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--yellow)">Phase 3</strong><br><span style="font-size:11px;color:var(--text-dim)">1주일</span></td>
+              <td>
+                ① sitemap.xml + robots.txt 생성<br>
+                ② font-display: swap 추가<br>
+                ③ rehype-sanitize 적용<br>
+                ④ 전문 검색(Fuse.js) 추가<br>
+                ⑤ Web Vitals 측정 연동
+              </td>
+              <td>⭐⭐ 중간</td>
+              <td class="td-warn">SEO + 성능 향상</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--green)">Phase 4</strong><br><span style="font-size:11px;color:var(--text-dim)">2~4주</span></td>
+              <td>
+                ① 동적 OG 이미지 생성 (Satori)<br>
+                ② 포스트 공유 버튼<br>
+                ③ 읽기 모드 추가<br>
+                ④ Vitest + Playwright 테스트 도입<br>
+                ⑤ 관련 포스트 추천, RSS 피드
+              </td>
+              <td>⭐⭐⭐ 높음</td>
+              <td class="td-good">기능 + 완성도</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer class="report-footer">
+  <span>GH-Portfolio Project Audit Report · 2026-03-18</span>
+  <span>React 19 · TypeScript · Vite · Tailwind v4 · Firebase</span>
+</footer>
+
+<script>
+  // 사이드바 활성화
+  const links = document.querySelectorAll('.sidebar a');
+  const sections = document.querySelectorAll('.section');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.sidebar a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.2 });
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
