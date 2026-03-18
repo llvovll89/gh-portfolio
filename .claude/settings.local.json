@@ -16,7 +16,18 @@
       "Bash(ls D:/workspace/gh-portfolio/*.rules D:/workspace/gh-portfolio/*.json 2>&1)",
       "Bash(cd D:/workspace/gh-portfolio && npm list @sentry/react 2>&1)",
       "Bash(cd D:/workspace/gh-portfolio && npm uninstall @sentry/react 2>&1 | tail -3)",
-      "Bash(find \"/c/Users/svvvs/바탕 화면/kimgeonho/gh-portfolio/src\" -name \"route*\" -o -name \"Route*\" | grep -E \"\\\\.\\(tsx|ts\\)$\")"
+      "Bash(find \"/c/Users/svvvs/바탕 화면/kimgeonho/gh-portfolio/src\" -name \"route*\" -o -name \"Route*\" | grep -E \"\\\\.\\(tsx|ts\\)$\")",
+      "WebSearch",
+      "WebFetch(domain:www.anthropic.com)",
+      "WebFetch(domain:openai.com)",
+      "WebFetch(domain:martinfowler.com)",
+      "WebFetch(domain:aakashgupta.medium.com)",
+      "WebFetch(domain:www.philschmid.de)",
+      "WebFetch(domain:claude.com)",
+      "WebFetch(domain:www.salesforce.com)",
+      "WebFetch(domain:northflank.com)",
+      "Bash(xargs wc:*)",
+      "Bash(grep -r \"TODO\\\\|FIXME\\\\|BUG\\\\|HACK\\\\|XXX\" /d/workspace/gh-portfolio/src --include=*.ts --include=*.tsx -n)"
     ]
   }
 }
