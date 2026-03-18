@@ -9,6 +9,7 @@ import { incrementViewCount, subscribeViewCount } from "../../../utils/blogViews
 import { FiEye } from "react-icons/fi";
 import { BlogComments } from "../comments/BlogComments";
 import { useSeoMeta } from "../../../hooks/useSeoMeta";
+import { ShareButton } from "../../../components/ShareButton";
 
 // 빌드 타임에 결정되는 정적 데이터 — slug가 바뀔 때마다 재호출 방지
 const ALL_POSTS = loadAllPosts();
@@ -122,9 +123,18 @@ export const Detail = () => {
                 </div>
 
                 <header className="mb-6">
-                    <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">
-                        {post.title}
-                    </h1>
+                    <div className="flex items-start justify-between gap-4">
+                        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+                            {post.title}
+                        </h1>
+                        <div className="flex-shrink-0 pt-1">
+                            <ShareButton
+                                title={post.title}
+                                summary={post.summary}
+                                url={`/blog/${slug}`}
+                            />
+                        </div>
+                    </div>
 
                     <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm select-none">
                         <span className="text-[clamp(0.75rem,1.5vw,0.9rem)]">
