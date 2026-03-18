@@ -2,17 +2,18 @@ import { useContext, useMemo, useRef } from "react";
 import { ThemeContext } from "../../../context/ThemeContext";
 import { ThemeMode, RECOMMENDED_COLORS } from "../../../context/constatns/Theme.type";
 import { useClosePopup } from "../../../hooks/useClosePopup";
+import { useCheckedMobileSize } from "../../../hooks/useCheckedMobileSize";
 
 // 각 테마 모드의 실제 hex 색상값
 const THEME_HEX: Record<ThemeMode, string> = {
-    [ThemeMode.DARK]:       "#000000",
-    [ThemeMode.BASE_NAVY]:  "#0c0b10",
-    [ThemeMode.SUB_BLUE]:   "#1e52e3",
-    [ThemeMode.SUB_PINK]:   "#d46876",
-    [ThemeMode.SUB_GREEN]:  "#43b54e",
-    [ThemeMode.MAIN_TEAL]:  "#009d85",
-    [ThemeMode.SUB_TEAL]:   "#8bc783",
-    [ThemeMode.CUSTOM]:     "#09f",
+    [ThemeMode.DARK]: "#000000",
+    [ThemeMode.BASE_NAVY]: "#0c0b10",
+    [ThemeMode.SUB_BLUE]: "#1e52e3",
+    [ThemeMode.SUB_PINK]: "#d46876",
+    [ThemeMode.SUB_GREEN]: "#43b54e",
+    [ThemeMode.MAIN_TEAL]: "#009d85",
+    [ThemeMode.SUB_TEAL]: "#8bc783",
+    [ThemeMode.CUSTOM]: "#09f",
 };
 
 function hexToRgb(hex: string) {
@@ -31,17 +32,19 @@ function isLight(hex: string) {
 
 export const Theme = () => {
     const { selectedTheme, setSelectedTheme } = useContext(ThemeContext);
+    const isMobileSize = useCheckedMobileSize();
+
     const themeModeRef = useRef<HTMLDivElement>(null);
 
     const labelByMode = useMemo<Record<ThemeMode, string>>(() => ({
         [ThemeMode.SUB_GREEN]: "짙은 숲",
-        [ThemeMode.DARK]:      "검은배경",
-        [ThemeMode.SUB_PINK]:  "분홍빛",
+        [ThemeMode.DARK]: "검은배경",
+        [ThemeMode.SUB_PINK]: "분홍빛",
         [ThemeMode.BASE_NAVY]: "짙은 남색",
-        [ThemeMode.SUB_BLUE]:  "파란하늘",
+        [ThemeMode.SUB_BLUE]: "파란하늘",
         [ThemeMode.MAIN_TEAL]: "푸른숲",
-        [ThemeMode.SUB_TEAL]:  "푸른 나무",
-        [ThemeMode.CUSTOM]:    "커스텀 색상",
+        [ThemeMode.SUB_TEAL]: "푸른 나무",
+        [ThemeMode.CUSTOM]: "커스텀 색상",
     }), []);
 
     const presetThemes = useMemo(
@@ -78,7 +81,7 @@ export const Theme = () => {
     return (
         <div
             ref={themeModeRef}
-            className="fixed right-3 bottom-16 sm:bottom-3 z-100 select-none"
+            className={`fixed right-3 z-100 select-none ${isMobileSize ? "bottom-15" : "bottom-3"}`}
             style={{
                 paddingBottom: "env(safe-area-inset-bottom)",
                 paddingRight: "env(safe-area-inset-right)",

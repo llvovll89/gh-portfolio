@@ -15,7 +15,8 @@
       "Bash(find /d/workspace/gh-portfolio/src -type f \\\\\\( -name \"*.tsx\" -o -name \"*.ts\" \\\\\\) -exec wc -l {} + | sort -rn | head -20)",
       "Bash(ls D:/workspace/gh-portfolio/*.rules D:/workspace/gh-portfolio/*.json 2>&1)",
       "Bash(cd D:/workspace/gh-portfolio && npm list @sentry/react 2>&1)",
-      "Bash(cd D:/workspace/gh-portfolio && npm uninstall @sentry/react 2>&1 | tail -3)"
+      "Bash(cd D:/workspace/gh-portfolio && npm uninstall @sentry/react 2>&1 | tail -3)",
+      "Bash(find \"/c/Users/svvvs/바탕 화면/kimgeonho/gh-portfolio/src\" -name \"route*\" -o -name \"Route*\" | grep -E \"\\\\.\\(tsx|ts\\)$\")"
     ]
   }
 }
