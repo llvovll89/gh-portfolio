@@ -69,6 +69,20 @@ export const DEFAULT_KEY_COMBINATIONS: Record<
     [KeyboardShortcutId.TOGGLE_FULLSCREEN]: {
         key: "F11",
     },
+    [KeyboardShortcutId.TOGGLE_GIT_CONTROL]: {
+        key: "KeyG",
+        ctrl: true,
+        shift: true,
+    },
+    [KeyboardShortcutId.TOGGLE_BOOKMARKS]: {
+        key: "KeyM",
+        ctrl: true,
+        shift: true,
+    },
+    [KeyboardShortcutId.TOGGLE_SETTINGS]: {
+        key: "Comma",
+        ctrl: true,
+    },
 } as const;
 
 /**
@@ -85,6 +99,9 @@ export const SHORTCUT_DESCRIPTIONS_KO: Record<KeyboardShortcutId, string> = {
     [KeyboardShortcutId.TOGGLE_PANEL]: "하단 패널 토글",
     [KeyboardShortcutId.COMMAND_PALETTE]: "명령 팔레트 열기",
     [KeyboardShortcutId.TOGGLE_FULLSCREEN]: "전체 화면 토글",
+    [KeyboardShortcutId.TOGGLE_GIT_CONTROL]: "Git Control 패널 열기/닫기",
+    [KeyboardShortcutId.TOGGLE_BOOKMARKS]: "북마크 패널 열기/닫기",
+    [KeyboardShortcutId.TOGGLE_SETTINGS]: "설정 패널 열기/닫기",
 } as const;
 
 /**
@@ -101,6 +118,9 @@ export const SHORTCUT_DESCRIPTIONS_EN: Record<KeyboardShortcutId, string> = {
     [KeyboardShortcutId.TOGGLE_PANEL]: "Toggle Bottom Panel",
     [KeyboardShortcutId.COMMAND_PALETTE]: "Open Command Palette",
     [KeyboardShortcutId.TOGGLE_FULLSCREEN]: "Toggle Fullscreen",
+    [KeyboardShortcutId.TOGGLE_GIT_CONTROL]: "Toggle Git Control Panel",
+    [KeyboardShortcutId.TOGGLE_BOOKMARKS]: "Toggle Bookmarks Panel",
+    [KeyboardShortcutId.TOGGLE_SETTINGS]: "Toggle Settings Panel",
 } as const;
 
 /**
@@ -122,6 +142,8 @@ export const formatKeyCombo = (combo: KeyCombination): string => {
         keyName = "`";
     } else if (keyName === "Escape") {
         keyName = "ESC";
+    } else if (keyName === "Comma") {
+        keyName = ",";
     }
 
     parts.push(keyName);

@@ -7,6 +7,9 @@ import { TerminalContext } from "@/context/TerminalContext";
 import {
     handleActiveFolderUI,
     handleActiveSearchUI,
+    handleActiveGitControlUI,
+    handleActiveBookmarksUI,
+    handleActiveSettingsUI,
     handleAllClear,
     handleCliEnterEvent,
     handleCloseKeyboardInfoUI,
@@ -55,9 +58,12 @@ export const useKeyboardEvent = () => {
             handleToggleSidebarUI(event, setLayoutState);
             handleTogglePanelUI(event, setLayoutState, setIsTerminalVisible);
 
-            // 네비게이션 관련 핸들러
-            handleActiveFolderUI(event, setSelectedNav);
-            handleActiveSearchUI(event, setSelectedNav);
+            // 네비게이션 관련 핸들러 (매치되면 이후 체크 스킵)
+            handleActiveFolderUI(event, setSelectedNav) ||
+            handleActiveSearchUI(event, setSelectedNav) ||
+            handleActiveGitControlUI(event, setSelectedNav) ||
+            handleActiveBookmarksUI(event, setSelectedNav) ||
+            handleActiveSettingsUI(event, setSelectedNav);
 
             // 모달 관련 핸들러
             handleCloseKeyboardInfoUI(event, setIsVisibleKeyboardInfo);

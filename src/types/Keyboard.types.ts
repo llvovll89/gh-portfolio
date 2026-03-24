@@ -42,7 +42,7 @@ export type LayoutStateHandler = (
 export type NavStateHandler = (
     event: KeyboardEvent,
     setSelectedNav: React.Dispatch<React.SetStateAction<NavType | null>>,
-) => void;
+) => boolean;
 
 export type BooleanStateHandler = (
     event: KeyboardEvent,
@@ -92,4 +92,7 @@ export enum KeyboardShortcutId {
     TOGGLE_PANEL = "toggle_panel",
     COMMAND_PALETTE = "command_palette",
     TOGGLE_FULLSCREEN = "toggle_fullscreen",
+    TOGGLE_GIT_CONTROL = "toggle_git_control",
+    TOGGLE_BOOKMARKS = "toggle_bookmarks",
+    TOGGLE_SETTINGS = "toggle_settings",
 }

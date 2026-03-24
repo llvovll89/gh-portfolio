@@ -75,38 +75,27 @@ export const handleCloseKeyboardInfoUI: BooleanStateHandler = (
 };
 
 /**
- * 폴더 UI 활성화 핸들러
- * @param event 키보드 이벤트
- * @param setSelectedNav navbar에서 선택한 요소 전역 state
- * @description Ctrl + Y로 폴더 UI를 토글함
+ * Nav 패널 토글 핸들러 팩토리
+ * 매치 시 true, 미매치 시 false 반환 (호출부에서 short-circuit 가능)
  */
-export const handleActiveFolderUI: NavStateHandler = (event, setSelectedNav) => {
-    const combo = DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_FOLDER];
+const createNavToggleHandler = (
+    shortcutId: KeyboardShortcutId,
+    navType: NavType,
+): NavStateHandler =>
+    (event, setSelectedNav) => {
+        if (matchesKeyCombination(event, DEFAULT_KEY_COMBINATIONS[shortcutId])) {
+            event.preventDefault();
+            setSelectedNav((prev) => (prev === navType ? null : navType));
+            return true;
+        }
+        return false;
+    };
 
-    if (matchesKeyCombination(event, combo)) {
-        event.preventDefault();
-        setSelectedNav((prev) =>
-            prev === NavType.FOLDER ? null : NavType.FOLDER,
-        );
-    }
-};
-
-/**
- * 검색 UI 활성화 핸들러
- * @param event 키보드 이벤트
- * @param setSelectedNav navbar에서 선택한 요소 전역 state
- * @description Ctrl + F로 검색 UI를 토글함 (브라우저 기본 검색 방지)
- */
-export const handleActiveSearchUI: NavStateHandler = (event, setSelectedNav) => {
-    const combo = DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_SEARCH];
-
-    if (matchesKeyCombination(event, combo)) {
-        event.preventDefault(); // 브라우저 기본 찾기(Ctrl+F) 방지
-        setSelectedNav((prev) =>
-            prev === NavType.SEARCH ? null : NavType.SEARCH,
-        );
-    }
-};
+export const handleActiveFolderUI = createNavToggleHandler(KeyboardShortcutId.TOGGLE_FOLDER, NavType.FOLDER);
+export const handleActiveSearchUI = createNavToggleHandler(KeyboardShortcutId.TOGGLE_SEARCH, NavType.SEARCH);
+export const handleActiveGitControlUI = createNavToggleHandler(KeyboardShortcutId.TOGGLE_GIT_CONTROL, NavType.GIT_CONTROL);
+export const handleActiveBookmarksUI = createNavToggleHandler(KeyboardShortcutId.TOGGLE_BOOKMARKS, NavType.BOOKMARKS);
+export const handleActiveSettingsUI = createNavToggleHandler(KeyboardShortcutId.TOGGLE_SETTINGS, NavType.SETTINGS);
 
 /**
  * CLI 입력 이벤트 핸들러
