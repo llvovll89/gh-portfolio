@@ -27,7 +27,8 @@
       "WebFetch(domain:www.salesforce.com)",
       "WebFetch(domain:northflank.com)",
       "Bash(xargs wc:*)",
-      "Bash(grep -r \"TODO\\\\|FIXME\\\\|BUG\\\\|HACK\\\\|XXX\" /d/workspace/gh-portfolio/src --include=*.ts --include=*.tsx -n)"
+      "Bash(grep -r \"TODO\\\\|FIXME\\\\|BUG\\\\|HACK\\\\|XXX\" /d/workspace/gh-portfolio/src --include=*.ts --include=*.tsx -n)",
+      "Skill(update-config)"
     ]
   }
 }
