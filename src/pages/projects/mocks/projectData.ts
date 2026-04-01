@@ -96,4 +96,20 @@ export const projects = [
         skills: ["React", "TypeScript", "Vite", "Tailwind CSS", "Firebase", "Vercel"],
         projectMembers: ["김건호"],
     },
+    {
+        id: 6,
+        title: "잔고플랜",
+        scale: "개인 프로젝트",
+        image: "/assets/images/projects/잔고플랜.png",
+        link: {
+            repositoryUrl: "https://github.com/llvovll89/household_account_book",
+            projectUrl: "https://balance-plan.vercel.app/",
+        },
+        description:
+            "수입과 지출을 기록하고 월별 흐름을 확인할 수 있는 가계부 웹 애플리케이션입니다.",
+        detailedDescription:
+            "가계부 작성에 필요한 수입/지출 기록, 카테고리 관리, 월별 지출 흐름 확인 기능을 제공하는 프로젝트입니다. 일상적인 소비 패턴을 직관적으로 파악할 수 있도록 구성하여, 예산 관리와 지출 습관 개선에 도움을 줍니다.",
+        skills: ["React", "TypeScript", "Vite", "Tailwind CSS", "Firebase", "Vercel", "PWA"],
+        projectMembers: ["김건호"],
+    },
 ] as Project[];
