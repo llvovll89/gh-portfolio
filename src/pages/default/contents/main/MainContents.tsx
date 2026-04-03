@@ -1,7 +1,7 @@
 import { CONTACT, PROJECTS } from "../../../../routes/route";
 import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
 import { useCheckedMobileSize } from "../../../../hooks/useCheckedMobileSize";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation, Trans } from "react-i18next";
 
 export const MainContents = () => {
@@ -9,6 +9,18 @@ export const MainContents = () => {
     const handlePushPath = useHandlePushPath();
     const isMobileSize = useCheckedMobileSize();
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+    const particles = useMemo(
+        () =>
+            Array.from({ length: 20 }, (_, i) => ({
+                id: i,
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${2 + Math.random() * 3}s`,
+            })),
+        []
+    );
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
@@ -54,15 +66,15 @@ export const MainContents = () => {
 
             {/* 파티클 효과 */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                {[...Array(20)].map((_, i) => (
+                {particles.map((particle) => (
                     <div
-                        key={i}
+                        key={particle.id}
                         className="absolute w-1 h-1 bg-white/30 rounded-full animate-pulse"
                         style={{
-                            left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100}%`,
-                            animationDelay: `${Math.random() * 3}s`,
-                            animationDuration: `${2 + Math.random() * 3}s`,
+                            left: particle.left,
+                            top: particle.top,
+                            animationDelay: particle.animationDelay,
+                            animationDuration: particle.animationDuration,
                         }}
                     />
                 ))}
