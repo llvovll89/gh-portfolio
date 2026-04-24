@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { loadAllPosts } from "../../../utils/loadAllPosts";
 import { MarkdownRenderer } from "./MarkdownRender";
@@ -22,8 +22,8 @@ export const Detail = () => {
     const navigate = useNavigate();
 
     const [showScrollButtons, setShowScrollButtons] = useState(false);
-    const [readProgress, setReadProgress] = useState(0);
     const [viewCount, setViewCount] = useState<number | null>(null);
+    const progressBarRef = useRef<HTMLDivElement>(null);
 
     const post = useMemo(() => {
         return ALL_POSTS.find((p) => p.slug === slug);
@@ -39,15 +39,27 @@ export const Detail = () => {
         const container = document.getElementById(DETAIL_SCROLL_ID);
         if (!container) return;
 
+        let rafId: number | null = null;
+
         const handleScroll = () => {
-            const { scrollTop, scrollHeight, clientHeight } = container;
-            setShowScrollButtons(scrollTop > 300);
-            const total = scrollHeight - clientHeight;
-            setReadProgress(total > 0 ? Math.min(100, (scrollTop / total) * 100) : 0);
+            if (rafId !== null) return;
+            rafId = requestAnimationFrame(() => {
+                rafId = null;
+                const { scrollTop, scrollHeight, clientHeight } = container;
+                setShowScrollButtons(scrollTop > 300);
+                const total = scrollHeight - clientHeight;
+                const progress = total > 0 ? Math.min(100, (scrollTop / total) * 100) : 0;
+                if (progressBarRef.current) {
+                    progressBarRef.current.style.width = `${progress}%`;
+                }
+            });
         };
 
-        container.addEventListener("scroll", handleScroll);
-        return () => container.removeEventListener("scroll", handleScroll);
+        container.addEventListener("scroll", handleScroll, { passive: true });
+        return () => {
+            container.removeEventListener("scroll", handleScroll);
+            if (rafId !== null) cancelAnimationFrame(rafId);
+        };
     }, []);
 
     // SEO 메타태그 업데이트 (title, og:title, og:description 등)
@@ -99,8 +111,9 @@ export const Detail = () => {
             {/* 읽기 진행도 바 - Detail 페이지는 헤더 없으므로 top-0 */}
             <div className="fixed top-0 left-0 right-0 h-[3px] z-50 pointer-events-none">
                 <div
-                    className="h-full bg-primary transition-all duration-100 ease-linear"
-                    style={{ width: `${readProgress}%` }}
+                    ref={progressBarRef}
+                    className="h-full bg-primary"
+                    style={{ width: "0%" }}
                 />
             </div>
 
@@ -124,10 +137,10 @@ export const Detail = () => {
 
                 <header className="mb-6">
                     <div className="flex items-start justify-between gap-4">
-                        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+                        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">
                             {post.title}
                         </h1>
-                        <div className="flex-shrink-0 pt-1">
+                        <div className="shrink-0 pt-1">
                             <ShareButton
                                 title={post.title}
                                 summary={post.summary}

@@ -1,8 +1,18 @@
-import { useRef, useState } from "react";
+import { memo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { slugifyHeading } from "../../../utils/parseToc";
 import { DETAIL_SCROLL_ID } from "./Detail";
+
+function extractText(children: unknown): string {
+    if (typeof children === "string") return children;
+    if (typeof children === "number") return String(children);
+    if (Array.isArray(children)) return children.map(extractText).join("");
+    if (children && typeof children === "object" && "props" in children) {
+        return extractText((children as any).props.children);
+    }
+    return "";
+}
 
 function CodeBlock({ children, ...props }: React.HTMLAttributes<HTMLPreElement>) {
     const preRef = useRef<HTMLPreElement>(null);
@@ -46,8 +56,9 @@ type Props = {
     content: string;
 };
 
-export const MarkdownRenderer = ({ content }: Props) => {
+export const MarkdownRenderer = memo(({ content }: Props) => {
     const overflowXStyle = `max-w-full overflow-x-auto whitespace-nowrap`;
+    const idCounts = new Map<string, number>();
 
     return (
         <article className="w-full h-full flex flex-col bg-[#F5F7F8] md:p-4 p-3 rounded-[5px]">
@@ -61,28 +72,28 @@ export const MarkdownRenderer = ({ content }: Props) => {
                         />
                     ),
                     h2: (props) => {
-                        const text = Array.isArray(props.children)
-                            ? (props.children as unknown[]).map((c) => (typeof c === "string" ? c : "")).join("")
-                            : typeof props.children === "string"
-                            ? props.children
-                            : "";
+                        const text = extractText(props.children);
+                        const baseId = slugifyHeading(text);
+                        const count = (idCounts.get(baseId) ?? 0) + 1;
+                        idCounts.set(baseId, count);
+                        const id = count > 1 ? `${baseId}-${count}` : baseId;
                         return (
                             <h2
-                                id={slugifyHeading(text) || undefined}
+                                id={id || undefined}
                                 className={`mt-6 mb-3 text-2xl font-bold ${overflowXStyle} text-[clamp(1.25rem,2vw,2rem)]`}
                                 {...props}
                             />
                         );
                     },
                     h3: (props) => {
-                        const text = Array.isArray(props.children)
-                            ? (props.children as unknown[]).map((c) => (typeof c === "string" ? c : "")).join("")
-                            : typeof props.children === "string"
-                            ? props.children
-                            : "";
+                        const text = extractText(props.children);
+                        const baseId = slugifyHeading(text);
+                        const count = (idCounts.get(baseId) ?? 0) + 1;
+                        idCounts.set(baseId, count);
+                        const id = count > 1 ? `${baseId}-${count}` : baseId;
                         return (
                             <h3
-                                id={slugifyHeading(text) || undefined}
+                                id={id || undefined}
                                 className={`mt-5 mb-2 text-xl font-semibold ${overflowXStyle} text-[clamp(1.1rem,1.5vw,1.5rem)]`}
                                 {...props}
                             />
@@ -103,7 +114,7 @@ export const MarkdownRenderer = ({ content }: Props) => {
                                     className="text-blue-600 dark:text-blue-400 underline underline-offset-4 text-[clamp(0.95rem,1.5vw,1.1rem)]"
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        const id = href!.slice(1);
+                                        const id = decodeURIComponent(href!.slice(1));
                                         const el = document.getElementById(id);
                                         const container = document.getElementById(DETAIL_SCROLL_ID);
                                         if (!el || !container) return;
@@ -141,7 +152,7 @@ export const MarkdownRenderer = ({ content }: Props) => {
                     li: (props) => <li className="my-1" {...props} />,
                     blockquote: (props) => (
                         <blockquote
-                            className="my-4 border-l-4 border-zinc-300 dark:border-zinc-700 pl-4 text-zinc-700 dark:text-zinc-300 text-[clamp(0.95rem,1.5vw,1.1rem)] italic"
+                            className="my-4 border-l-4 border-zinc-300 dark:border-zinc-700 pl-4 text-zinc-700 text-[clamp(0.95rem,1.5vw,1.1rem)] italic"
                             {...props}
                         />
                     ),
@@ -185,4 +196,4 @@ export const MarkdownRenderer = ({ content }: Props) => {
             </ReactMarkdown>
         </article>
     );
-};
+});
