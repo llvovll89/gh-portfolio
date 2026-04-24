@@ -81,7 +81,7 @@ export const Theme = () => {
     return (
         <div
             ref={themeModeRef}
-            className={`fixed right-3 z-100 select-none ${isMobileSize ? "bottom-15" : "bottom-3"}`}
+            className={`fixed right-3 z-100 select-none ${isMobileSize ? "bottom-20" : "bottom-3"}`}
             style={{
                 paddingBottom: "env(safe-area-inset-bottom)",
                 paddingRight: "env(safe-area-inset-right)",
@@ -150,7 +150,7 @@ export const Theme = () => {
                                 className="w-3 h-3 rounded-full shrink-0 border border-white/20"
                                 style={{ background: themeColor }}
                             />
-                            <p className="text-sm font-semibold text-white/90 truncate">
+                            <p className="text-xs font-semibold text-white/90 truncate">
                                 {currentThemeLabel}
                             </p>
                         </div>
@@ -174,7 +174,7 @@ export const Theme = () => {
                                             isVisibleThemeDropdown: false,
                                         }));
                                     }}
-                                    className="w-full flex items-center gap-2.5 rounded-xl px-2.5 py-2 text-sm transition-all cursor-pointer"
+                                    className="w-full flex items-center gap-2.5 rounded-xl px-2.5 py-1.5 text-xs transition-all cursor-pointer"
                                     style={{
                                         background: active ? `${themeColor}25` : "transparent",
                                         color: active ? "#fff" : "rgba(255,255,255,0.6)",
@@ -212,7 +212,7 @@ export const Theme = () => {
                     >
                         <p className="text-[10px] text-white/40 uppercase tracking-widest mb-2">Custom</p>
 
-                        <div className="grid grid-cols-3 gap-1.5 mb-2">
+                        <div className="grid grid-cols-3 gap-1 mb-2">
                             {RECOMMENDED_COLORS.map((color) => {
                                 const isActive =
                                     selectedTheme.mode === ThemeMode.CUSTOM &&
@@ -245,7 +245,7 @@ export const Theme = () => {
                         />
                         <label
                             htmlFor="custom-color-picker"
-                            className="flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer transition-colors text-sm text-white/60 hover:text-white/90"
+                            className="flex items-center gap-2 px-3 py-2 rounded-xl cursor-pointer transition-colors text-xs text-white/60 hover:text-white/90"
                             style={{ background: "rgba(255,255,255,0.06)" }}
                         >
                             <span>🎨</span>

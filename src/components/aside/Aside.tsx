@@ -47,13 +47,30 @@ export const Aside = () => {
         if (!dragState.current.dragging) return;
         dragState.current.dragging = false;
         const delta = dragState.current.currentY;
-        // transition 복원
-        if (sheetRef.current) {
-            sheetRef.current.style.transition = "";
-            sheetRef.current.style.transform = "";
-        }
+
+        if (!sheetRef.current) return;
+
         if (delta > 80) {
-            setSelectedNav(null);
+            // 현재 위치에서 아래로 완전히 내려가며 닫기
+            sheetRef.current.style.transition = "transform 300ms ease-in-out";
+            sheetRef.current.style.transform = "translateY(100%)";
+            setTimeout(() => {
+                setSelectedNav(null);
+                if (sheetRef.current) {
+                    sheetRef.current.style.transition = "";
+                    sheetRef.current.style.transform = "";
+                }
+            }, 300);
+        } else {
+            // 스냅백
+            sheetRef.current.style.transition = "transform 300ms ease-in-out";
+            sheetRef.current.style.transform = "translateY(0)";
+            setTimeout(() => {
+                if (sheetRef.current) {
+                    sheetRef.current.style.transition = "";
+                    sheetRef.current.style.transform = "";
+                }
+            }, 300);
         }
     }, [setSelectedNav]);
 
@@ -106,28 +123,31 @@ export const Aside = () => {
                 <div
                     ref={sheetRef}
                     className={[
-                        "fixed left-0 right-0 bottom-12 z-50 flex flex-col",
+                        "fixed left-0 right-0 bottom-[4.5rem] z-50 flex flex-col",
                         "transition-transform duration-300 ease-in-out",
                         backgroundClass,
                         "border-t border-sub-gary/30",
                         "rounded-t-2xl",
-                        selectedNav ? "translate-y-0" : "translate-y-full",
+                        selectedNav ? "translate-y-0" : "translate-y-[200%]",
                     ].join(" ")}
                     style={{
                         maxHeight: "65dvh",
+                        minHeight: "30dvh",
                         ...backgroundStyle,
                     }}
                 >
-                    {/* 핸들 바 — 드래그로 닫기 */}
-                    <div
-                        className="flex justify-center pt-3 pb-2 shrink-0 cursor-grab active:cursor-grabbing touch-none select-none"
-                        onPointerDown={handleSheetDragStart}
-                        onPointerMove={handleSheetDragMove}
-                        onPointerUp={handleSheetDragEnd}
-                        onPointerCancel={handleSheetDragEnd}
-                    >
-                        <div className="w-10 h-1 rounded-full bg-sub-gary/50" />
-                    </div>
+                    {/* 핸들 바 — 열린 상태에서만 표시 */}
+                    {selectedNav && (
+                        <div
+                            className="flex justify-center pt-3 pb-2 shrink-0 cursor-grab active:cursor-grabbing touch-none select-none"
+                            onPointerDown={handleSheetDragStart}
+                            onPointerMove={handleSheetDragMove}
+                            onPointerUp={handleSheetDragEnd}
+                            onPointerCancel={handleSheetDragEnd}
+                        >
+                            <div className="w-10 h-1 rounded-full bg-sub-gary/50" />
+                        </div>
+                    )}
 
                     {/* 콘텐츠 */}
                     <div className="flex-1 overflow-y-auto overflow-x-hidden">
@@ -142,7 +162,7 @@ export const Aside = () => {
                 {/* 하단 네비게이션 바 */}
                 <nav
                     className={[
-                        "fixed bottom-0 left-0 right-0 h-12 z-50",
+                        "fixed bottom-4 left-0 right-0 h-14 z-50 w-[95%] mx-auto rounded-full flex items-center justify-around",
                         "flex items-center justify-around",
                         "border-t border-sub-gary/30",
                         backgroundClass,
@@ -156,7 +176,7 @@ export const Aside = () => {
                             onClick={() => handleClickNav(item.type)}
                             className={[
                                 "flex flex-col items-center justify-center",
-                                "h-full flex-1 gap-0.5",
+                                "h-full flex-1 gap-1",
                                 "transition-colors",
                                 selectedNav === item.type
                                     ? "text-primary"
@@ -166,7 +186,7 @@ export const Aside = () => {
                             aria-pressed={selectedNav === item.type}
                         >
                             <item.icon className="w-5 h-5" />
-                            <span className="text-[10px] leading-none">{t(item.labelKey)}</span>
+                            <span className="text-[11px] leading-none">{t(item.labelKey)}</span>
                         </button>
                     ))}
                 </nav>
