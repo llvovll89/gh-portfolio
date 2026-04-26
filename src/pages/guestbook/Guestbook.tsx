@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Header } from '@/components/header/Header'
 import { Aside } from '@/components/aside/Aside'
 import { Contents } from '@/components/contents/Contents'
@@ -12,6 +12,13 @@ export const Guestbook = () => {
 	const [showForm, setShowForm] = useState(false)
 	const [toast, setToast] = useState<{ msg: string; visible: boolean }>({ msg: '', visible: false })
 	const { t } = useTranslation()
+
+	useEffect(() => {
+		if (!showForm) return;
+		const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setShowForm(false); };
+		document.addEventListener('keydown', onKey);
+		return () => document.removeEventListener('keydown', onKey);
+	}, [showForm]);
 
 	const showToast = (msg: string) => {
 		setToast({ msg, visible: true })

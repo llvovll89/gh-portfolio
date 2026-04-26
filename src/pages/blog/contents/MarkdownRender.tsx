@@ -9,7 +9,8 @@ function extractText(children: unknown): string {
     if (typeof children === "number") return String(children);
     if (Array.isArray(children)) return children.map(extractText).join("");
     if (children && typeof children === "object" && "props" in children) {
-        return extractText((children as any).props.children);
+        const el = children as { props: { children: unknown } };
+        return extractText(el.props.children);
     }
     return "";
 }

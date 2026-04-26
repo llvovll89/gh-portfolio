@@ -37,7 +37,8 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
         } catch (error) {
             console.error("Failed to load theme settings:", error);
         }
-        return { mode: ThemeMode.BASE_NAVY, isVisibleThemeDropdown: false };
+        const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+        return { mode: prefersDark ? ThemeMode.DARK : ThemeMode.BASE_NAVY, isVisibleThemeDropdown: false };
     });
 
     useEffect(() => {

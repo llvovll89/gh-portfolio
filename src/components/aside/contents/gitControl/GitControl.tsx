@@ -1,229 +1,26 @@
-import { useEffect, useState } from "react";
 import { useThemeStyle } from "../../../../hooks/useThemeStyle";
-import { GITHUB_OWNER, githubFetch } from "../../../../http/api";
 import GhActivityDashboard from "../../../ghActivity/GhActivityDashboard";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-
-type RepoName = "gh-portfolio" | "modart" | "blacktie" | "MealLog" | "wedding-plan";
-
-type RepoStats = {
-    stars: number;
-    forks: number;
-    watchers: number;
-    openIssues: number;
-};
-
-type Issue = {
-    id: number;
-    number: number;
-    title: string;
-    state: string;
-    created_at: string;
-    html_url: string;
-    user: {
-        login: string;
-        avatar_url: string;
-        html_url: string;
-    } | null;
-    labels: { name: string; color: string }[];
-};
-
-type PullRequest = {
-    id: number;
-    number: number;
-    title: string;
-    state: string;
-    created_at: string;
-    html_url: string;
-    user: {
-        login: string;
-        avatar_url: string;
-        html_url: string;
-    } | null;
-    draft: boolean;
-};
-
-type Branch = {
-    name: string;
-};
-
-type Commit = {
-    sha: string;
-    commit: {
-        message: string;
-        author: {
-            name: string;
-            date: string;
-        };
-    };
-    author: {
-        login: string;
-        avatar_url: string;
-        html_url: string;
-    } | null;
-    committer: {
-        login: string;
-        avatar_url: string;
-        html_url: string;
-    } | null;
-    html_url: string;
-};
-
-type GitHubIssueResponse = {
-    pull_request?: unknown;
-    labels: Array<{ name: string; color: string } | unknown>;
-} & Omit<Issue, 'labels'>;
-
-type RepoState = {
-    branches: string[];
-    commits: Commit[];
-    stats: RepoStats | null;
-    issues: Issue[];
-    pullRequests: PullRequest[];
-};
-
-type TabType = "branches" | "issues" | "pullRequests";
-
-const REPOS = ["gh-portfolio", "modart", "blacktie", "MealLog", "wedding-plan"] as const;
+import { useGitControl } from "./useGitControl";
+import { REPOS } from "./gitControlTypes";
+import type { TabType } from "./gitControlTypes";
 
 export const GitControl = () => {
     const { t } = useTranslation();
-
-    const [gitStates, setGitStates] = useState<Record<RepoName, RepoState>>({
-        "gh-portfolio": { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
-        modart: { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
-        blacktie: { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
-        MealLog: { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
-        "wedding-plan": { branches: [], commits: [], stats: null, issues: [], pullRequests: [] },
-    });
-
-    const [selected, setSelected] = useState<{ repo: RepoName; branch: string } | null>(null);
-    const [activeTab, setActiveTab] = useState<TabType>("branches");
-    const [selectedRepo, setSelectedRepo] = useState<RepoName | null>(null);
-    const [showActivity, setShowActivity] = useState(false);
-
-    const githubUsername = (import.meta.env.VITE_GITHUB_USERNAME as string) || "llvovll89";
-    const owner = GITHUB_OWNER || githubUsername;
-
     const { backgroundStyle, backgroundClass } = useThemeStyle();
-
-    const getBranchesByRepo = async (repo: RepoName) => {
-        const data = await githubFetch(`/repos/${owner}/${repo}/branches`) as Branch[];
-        return data.map((b) => b.name);
-    };
-
-    const getCommitsByRepoBranch = async (repo: RepoName, branch: string): Promise<Commit[]> => {
-        const data = await githubFetch(`/repos/${owner}/${repo}/commits`, { sha: branch });
-        return data as Commit[];
-    };
-
-    const getRepoStats = async (repo: RepoName): Promise<RepoStats> => {
-        const data = await githubFetch(`/repos/${owner}/${repo}`) as {
-            stargazers_count: number;
-            forks_count: number;
-            watchers_count: number;
-            open_issues_count: number;
-        };
-        return {
-            stars: data.stargazers_count,
-            forks: data.forks_count,
-            watchers: data.watchers_count,
-            openIssues: data.open_issues_count,
-        };
-    };
-
-    const getIssuesByRepo = async (repo: RepoName): Promise<Issue[]> => {
-        const data = await githubFetch(`/repos/${owner}/${repo}/issues`, { state: "all", per_page: "20" }) as GitHubIssueResponse[];
-        return data
-            .filter((issue) => !issue.pull_request)
-            .map((issue) => ({
-                ...issue,
-                labels: issue.labels
-                    .filter((label): label is { name: string; color: string } =>
-                        typeof label === 'object' && label !== null && 'name' in label && 'color' in label
-                    )
-                    .map((label) => ({
-                        name: (label as { name?: string }).name || '',
-                        color: (label as { color?: string }).color || '000000',
-                    })),
-            }));
-    };
-
-    const getPullRequestsByRepo = async (repo: RepoName): Promise<PullRequest[]> => {
-        const data = await githubFetch(`/repos/${owner}/${repo}/pulls`, { state: "all", per_page: "20" }) as PullRequest[];
-        return data.map((pr) => ({ ...pr, draft: pr.draft ?? false }));
-    };
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const results = await Promise.all(
-                    REPOS.map(async (repo) => {
-                        const [branches, stats, issues, pullRequests] = await Promise.all([
-                            getBranchesByRepo(repo),
-                            getRepoStats(repo),
-                            getIssuesByRepo(repo),
-                            getPullRequestsByRepo(repo),
-                        ]);
-                        return { repo, branches, stats, issues, pullRequests };
-                    }),
-                );
-
-                setGitStates((prev) => {
-                    const next = { ...prev };
-                    for (const r of results) {
-                        next[r.repo] = {
-                            ...next[r.repo],
-                            branches: r.branches,
-                            stats: r.stats,
-                            issues: r.issues,
-                            pullRequests: r.pullRequests,
-                        };
-                    }
-                    return next;
-                });
-            } catch (error) {
-                console.error("Error fetching GitHub data:", error);
-            }
-        })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        if (!selected) return;
-
-        (async () => {
-            try {
-                setGitStates((prev) => ({
-                    ...prev,
-                    [selected.repo]: { ...prev[selected.repo], commits: [] },
-                }));
-
-                const commits = await getCommitsByRepoBranch(selected.repo, selected.branch);
-
-                setGitStates((prev) => ({
-                    ...prev,
-                    [selected.repo]: { ...prev[selected.repo], commits },
-                }));
-            } catch (error) {
-                console.error("Error fetching commits:", error);
-            }
-        })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selected?.repo, selected?.branch]);
-
-    const isSelected = (repo: RepoName, branch: string) =>
-        selected?.repo === repo && selected?.branch === branch;
-
-    const handleRepoClick = (repo: RepoName) => {
-        if (selectedRepo === repo) {
-            setSelectedRepo(null);
-        } else {
-            setSelectedRepo(repo);
-            setActiveTab("branches");
-        }
-    };
+    const {
+        githubUsername,
+        gitStates,
+        setSelected,
+        activeTab,
+        setActiveTab,
+        selectedRepo,
+        showActivity,
+        setShowActivity,
+        isSelected,
+        handleRepoClick,
+    } = useGitControl();
 
     return (
         <section className={`w-full h-full flex flex-col ${backgroundClass} overflow-y-auto scrolls text-white`} style={backgroundStyle}>

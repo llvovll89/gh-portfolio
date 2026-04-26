@@ -7,7 +7,7 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // ── Blog OG tag generator helpers ──────────────────────────────────────────
 
-function parseMdFrontmatter(raw: string): { title: string; summary?: string } {
+function parseMdFrontmatter(raw: string): { title: string; summary?: string; date?: string } {
     const trimmed = raw.replace(/^\uFEFF/, "");
     if (!trimmed.startsWith("---")) return { title: "" };
     const end = trimmed.indexOf("\n---", 3);
@@ -18,7 +18,7 @@ function parseMdFrontmatter(raw: string): { title: string; summary?: string } {
         if (idx === -1) continue;
         fm[line.slice(0, idx).trim()] = line.slice(idx + 1).trim().replace(/^["']|["']$/g, "");
     }
-    return { title: fm.title ?? "", summary: fm.summary };
+    return { title: fm.title ?? "", summary: fm.summary, date: fm.date };
 }
 
 function escHtml(s: string) {
@@ -279,6 +279,79 @@ export default defineConfig(({ mode }) => {
                             }));
                         }
                     }
+                },
+            },
+            // ── Blog RSS feed generator (build only) ────────────────────
+            {
+                name: "blog-rss-generator",
+                apply: "build",
+                writeBundle() {
+                    const outDir = path.resolve("dist");
+                    const baseUrl = "https://kimgeonho.vercel.app";
+
+                    interface RssItem { title: string; link: string; description: string; pubDate: string; }
+                    const items: RssItem[] = [];
+
+                    // .md posts
+                    const postsDir = path.resolve("src/content/posts");
+                    if (fs.existsSync(postsDir)) {
+                        for (const filename of fs.readdirSync(postsDir).filter((f: string) => f.endsWith(".md"))) {
+                            const slug = filename.replace(/\.md$/, "");
+                            const raw = fs.readFileSync(path.join(postsDir, filename), "utf-8");
+                            const { title, summary, date } = parseMdFrontmatter(raw);
+                            items.push({
+                                title: title || slug,
+                                link: `${baseUrl}/blog/${encodeURIComponent(slug)}`,
+                                description: summary ?? title ?? "",
+                                pubDate: date ? new Date(date).toUTCString() : new Date(0).toUTCString(),
+                            });
+                        }
+                    }
+
+                    // .html posts
+                    const htmlDir = path.resolve("src/content/organizingfiles");
+                    if (fs.existsSync(htmlDir)) {
+                        for (const filename of fs.readdirSync(htmlDir).filter((f: string) => f.endsWith(".html"))) {
+                            const base = filename.replace(/\.html$/, "");
+                            const dateMatch = base.match(/^(\d{4}-\d{2}-\d{2})-(.+)$/);
+                            const slug = dateMatch ? "html-" + dateMatch[2] : "html-" + base;
+                            const raw = fs.readFileSync(path.join(htmlDir, filename), "utf-8");
+                            const titleMatch = raw.match(/<title[^>]*>([^<]+)<\/title>/i);
+                            const title = titleMatch?.[1]?.trim() ?? slug;
+                            const descMatch =
+                                raw.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i) ??
+                                raw.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']description["']/i);
+                            const description = descMatch?.[1]?.trim() ?? title;
+                            const pubDate = dateMatch ? new Date(dateMatch[1]).toUTCString() : new Date(0).toUTCString();
+                            items.push({ title, link: `${baseUrl}/blog/${encodeURIComponent(slug)}`, description, pubDate });
+                        }
+                    }
+
+                    // 날짜 역순 정렬
+                    items.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+
+                    const rssItems = items.map((item) => `
+    <item>
+      <title>${escHtml(item.title)}</title>
+      <link>${escHtml(item.link)}</link>
+      <description>${escHtml(item.description)}</description>
+      <pubDate>${item.pubDate}</pubDate>
+      <guid>${escHtml(item.link)}</guid>
+    </item>`).join("");
+
+                    const rss = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>김건호 블로그</title>
+    <link>${baseUrl}/blog</link>
+    <description>웹 개발자 김건호의 기술 블로그</description>
+    <language>ko</language>
+    <atom:link href="${baseUrl}/rss.xml" rel="self" type="application/rss+xml"/>
+    ${rssItems}
+  </channel>
+</rss>`;
+
+                    fs.writeFileSync(path.join(outDir, "rss.xml"), rss, "utf-8");
                 },
             },
         ],

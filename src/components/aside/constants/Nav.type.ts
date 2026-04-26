@@ -1,5 +1,6 @@
 import { CiFileOn, CiSearch } from "react-icons/ci";
 import { VscSourceControl, VscBookmark, VscSettingsGear } from "react-icons/vsc";
+import type { IconType } from "react-icons";
 
 export enum NavType {
     FOLDER = "folder",
@@ -9,7 +10,7 @@ export enum NavType {
     SETTINGS = "settings",
 }
 
-export const NAV_ITEMS: { type: NavType; label: string; labelKey: string; icon: any }[] = [
+export const NAV_ITEMS: { type: NavType; label: string; labelKey: string; icon: IconType }[] = [
     {
         type: NavType.FOLDER,
         label: "Explorer",

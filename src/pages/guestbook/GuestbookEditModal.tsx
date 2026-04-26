@@ -22,6 +22,14 @@ const GuestbookEditModal = ({ entry, isOpen, onClose, onSuccess }: Props) => {
         if (entry) setEditMessage(entry.message)
     }, [entry?.id])
 
+    useEffect(() => {
+        if (!isOpen) return;
+        const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose(); };
+        document.addEventListener('keydown', onKey);
+        return () => document.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOpen]);
+
     const handleClose = () => {
         setEditPassword('')
         setEditMessage(entry?.message ?? '')

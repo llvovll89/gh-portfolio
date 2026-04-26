@@ -7,19 +7,61 @@ interface CardProps {
 }
 
 export const ProjectContentsCards = ({ className }: CardProps) => {
-    const [selectedProject, setSelectedProject] = useState<number | null>(null);
+    const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
+    const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
+
+    const allSkills = useMemo(
+        () => [...new Set(projects.flatMap((p) => p.skills))].sort(),
+        [],
+    );
+
+    const filteredProjects = useMemo(
+        () => (selectedSkill ? projects.filter((p) => p.skills.includes(selectedSkill)) : projects),
+        [selectedSkill],
+    );
 
     const selected = useMemo(
-        () => (selectedProject === null ? null : projects[selectedProject]),
-        [selectedProject],
+        () => (selectedProjectId === null ? null : projects.find((p) => p.id === selectedProjectId) ?? null),
+        [selectedProjectId],
     );
 
     return (
         <>
+            {/* 스킬 필터 */}
+            <div className="flex gap-1.5 flex-wrap mb-3">
+                <button
+                    type="button"
+                    onClick={() => { setSelectedSkill(null); setSelectedProjectId(null); }}
+                    className={[
+                        "px-3 py-1 rounded-full text-xs font-medium border transition-all cursor-pointer",
+                        selectedSkill === null
+                            ? "bg-primary border-primary text-white"
+                            : "bg-[#2a2a2d] border-[#3e3e42] text-slate-400 hover:border-primary/50 hover:text-slate-200",
+                    ].join(" ")}
+                >
+                    전체
+                </button>
+                {allSkills.map((skill) => (
+                    <button
+                        type="button"
+                        key={skill}
+                        onClick={() => { setSelectedSkill(skill); setSelectedProjectId(null); }}
+                        className={[
+                            "px-3 py-1 rounded-full text-xs font-medium border transition-all cursor-pointer",
+                            selectedSkill === skill
+                                ? "bg-primary border-primary text-white"
+                                : "bg-[#2a2a2d] border-[#3e3e42] text-slate-400 hover:border-primary/50 hover:text-slate-200",
+                        ].join(" ")}
+                    >
+                        {skill}
+                    </button>
+                ))}
+            </div>
+
             {/* 컴팩트 리스트 */}
             <div className={`flex flex-col gap-2 ${className ?? ""}`}>
-                {projects.map((project, index) => {
-                    const isSelected = selectedProject === index;
+                {filteredProjects.map((project) => {
+                    const isSelected = project.id === selectedProjectId;
 
                     const isUpdating = project.status === "updating";
                     const isIncomplete = project.status === "incomplete";
@@ -27,8 +69,8 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                     return (
                         <button
                             type="button"
-                            key={`${project.title}-${index}`}
-                            onClick={() => !isUpdating && setSelectedProject(index)}
+                            key={project.id}
+                            onClick={() => !isUpdating && setSelectedProjectId(project.id)}
                             disabled={isUpdating}
                             className={[
                                 "group relative flex sm:flex-row flex-col items-start sm:gap-4 gap-2 p-4 rounded-lg border text-left",
@@ -43,7 +85,7 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                         >
                             {/* 프로젝트 번호 */}
                             <div className="sm:static absolute z-1 shrink-0 flex items-center justify-center sm:w-8 sm:h-8 w-7 h-7 left-2 top-2 rounded-full sm:bg-[#2a2a2d] bg-[#121212] border sm:border-[#3e3e42] border-[#CECECE]/20 text-xs font-semibold text-slate-400">
-                                {index + 1}
+                                {project.id}
                             </div>
 
                             {/* 썸네일 이미지 */}
@@ -110,7 +152,12 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                                         .map((s: string) => (
                                             <span
                                                 key={s}
-                                                className="inline-flex items-center gap-1 rounded border border-[#3e3e42] bg-[#2a2a2d] px-2 py-0.5 text-[10px] font-medium text-slate-300 transition-colors group-hover:border-primary/30 group-hover:bg-primary/10"
+                                                className={[
+                                                    "inline-flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] font-medium transition-colors",
+                                                    s === selectedSkill
+                                                        ? "border-primary/60 bg-primary/20 text-primary"
+                                                        : "border-[#3e3e42] bg-[#2a2a2d] text-slate-300 group-hover:border-primary/30 group-hover:bg-primary/10",
+                                                ].join(" ")}
                                             >
                                                 <span className="h-1 w-1 rounded-full bg-primary" />
                                                 {s}
@@ -139,7 +186,7 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
             {selected && (
                 <CardDetail
                     selected={selected}
-                    setSelectedProject={setSelectedProject}
+                    setSelectedProject={(_) => setSelectedProjectId(null)}
                 />
             )}
         </>

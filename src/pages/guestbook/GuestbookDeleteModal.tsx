@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { db } from '@/firebase/config'
 import { doc, deleteDoc } from 'firebase/firestore'
 import { verifyPassword } from '@/utils/hashPassword'
@@ -17,6 +17,14 @@ const GuestbookDeleteModal = ({ entry, isOpen, onClose, onSuccess }: Props) => {
     const [deletePassword, setDeletePassword] = useState('')
     const [deleteError, setDeleteError] = useState('')
     const [deleting, setDeleting] = useState(false)
+
+    useEffect(() => {
+        if (!isOpen) return;
+        const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose(); };
+        document.addEventListener('keydown', onKey);
+        return () => document.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOpen]);
 
     const handleClose = () => {
         setDeletePassword('')

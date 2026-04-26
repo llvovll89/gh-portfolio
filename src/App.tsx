@@ -7,6 +7,7 @@ import { routesPath } from "./routes/route";
 import { AppChildContainer } from "./components/appChildContainer/AppChildContainer";
 import { Bottom } from "./components/footer/Footer";
 import { useCheckedMobile } from "./hooks/useCheckedMobile";
+import { usePageTracking } from "./hooks/usePageTracking";
 import { useContext } from "react";
 import { SkipLinks } from "./components/skipLinks/SkipLinks";
 import { RouteLoading } from "./components/loading/RouteLoading";
@@ -17,6 +18,7 @@ import { PageErrorBoundary } from "./components/error/PageErrorBoundary";
 function AppContent() {
     const isMobile = useCheckedMobile();
     const location = useLocation();
+    usePageTracking();
     const isBlogDetailPage = location.pathname.startsWith("/blog/") && location.pathname !== "/blog/";
     const { isTerminalVisible } = useContext(TerminalContext);
 
