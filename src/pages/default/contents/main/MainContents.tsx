@@ -1,30 +1,30 @@
-import { CONTACT, PROJECTS } from "../../../../routes/route";
-import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
-import { useCheckedMobileSize } from "../../../../hooks/useCheckedMobileSize";
-import { useEffect, useMemo, useState } from "react";
-import { useTranslation, Trans } from "react-i18next";
+import {CONTACT, PROJECTS} from "../../../../routes/route";
+import {useHandlePushPath} from "../../../../hooks/useHandlePushPath";
+import {useCheckedMobileSize} from "../../../../hooks/useCheckedMobileSize";
+import {useEffect, useMemo, useState} from "react";
+import {useTranslation, Trans} from "react-i18next";
 
 export const MainContents = () => {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const handlePushPath = useHandlePushPath();
     const isMobileSize = useCheckedMobileSize();
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const [mousePosition, setMousePosition] = useState({x: 0, y: 0});
 
     const particles = useMemo(
         () =>
-            Array.from({ length: 20 }, (_, i) => ({
+            Array.from({length: 20}, (_, i) => ({
                 id: i,
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
                 animationDelay: `${Math.random() * 3}s`,
                 animationDuration: `${2 + Math.random() * 3}s`,
             })),
-        []
+        [],
     );
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
-            setMousePosition({ x: e.clientX, y: e.clientY });
+            setMousePosition({x: e.clientX, y: e.clientY});
         };
         window.addEventListener("mousemove", handleMouseMove);
         return () => window.removeEventListener("mousemove", handleMouseMove);
@@ -33,21 +33,21 @@ export const MainContents = () => {
     const baseButton =
         "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl sm:px-6 px-4 sm:py-3.5 py-2 text-sm md:text-base font-bold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2";
 
-    const primaryButton =
-        `${baseButton} bg-linear-to-r from-primary via-blue-500 to-cyan-400 text-white shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:scale-105 active:scale-95`;
+    const primaryButton = `${baseButton} bg-linear-to-r from-primary via-blue-500 to-cyan-400 text-white shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:scale-105 active:scale-95`;
 
-    const secondaryButton =
-        `${baseButton} border-2 border-white/20 bg-white/5 text-white backdrop-blur-sm hover:bg-white/10 hover:border-white/30 hover:scale-105 active:scale-95`;
+    const secondaryButton = `${baseButton} border-2 border-white/20 bg-white/5 text-white backdrop-blur-sm hover:bg-white/10 hover:border-white/30 hover:scale-105 active:scale-95`;
 
     const skills = [
-        { text: "React", icon: "⚛️", delay: "0s" },
-        { text: "TypeScript", icon: "📘", delay: "0.2s" },
-        { text: "UI/UX", icon: "🎨", delay: "0.4s" },
-        { text: "Performance", icon: "⚡", delay: "0.6s" },
+        {text: "React", icon: "⚛️", delay: "0s"},
+        {text: "TypeScript", icon: "📘", delay: "0.2s"},
+        {text: "UI/UX", icon: "🎨", delay: "0.4s"},
+        {text: "Performance", icon: "⚡", delay: "0.6s"},
     ];
 
     return (
-        <article className="relative z-10 w-full h-full sm:px-0 px-1">
+        <article
+            className={`relative z-10 w-full h-full sm:px-0 px-1 ${isMobileSize ? "overflow-auto" : "overflow-hidden"}`}
+        >
             {/* 배경 그라디언트 효과 - 마우스 따라 움직임 */}
             <div
                 aria-hidden="true"
@@ -80,7 +80,7 @@ export const MainContents = () => {
                 ))}
             </div>
 
-            <div className="relative flex flex-col lg:flex-row items-center gap-12 lg:gap-16 h-full">
+            <div className="relative flex flex-col lg:flex-row items-center gap-12 lg:gap-16 h-full p-2">
                 <section className="w-full flex-1 space-y-8 animate-[fadeIn_0.8s_ease-out] px-0.5">
                     <div className="flex flex-wrap items-center justify-between gap-4">
                         <div className="group flex items-center gap-3">
@@ -118,14 +118,16 @@ export const MainContents = () => {
                         <p className="text-[clamp(0.9rem,1.4vw,1.3rem)] text-white/80 leading-relaxed max-w-2xl font-medium animate-[fadeIn_1s_ease-out_0.3s] opacity-0 [animation-fill-mode:forwards]">
                             <Trans
                                 i18nKey="pages.home.tagline"
-                                components={[<span className="text-primary font-bold" />]}
+                                components={[
+                                    <span className="text-primary font-bold" />,
+                                ]}
                             />
                             <br />
                             {t("pages.home.taglineSub")}
                         </p>
                     </div>
 
-                    <div className="space-y-2 text-[clamp(0.8rem,1.1vw,1rem)] text-white/70 leading-relaxed max-w-xl animate-[fadeIn_1.2s_ease-out_0.5s] opacity-0 [animation-fill-mode:forwards]">
+                    <div className="text-[clamp(0.8rem,1.1vw,0.9rem)] text-white/70 leading-relaxed max-w-xl animate-[fadeIn_1.2s_ease-out_0.5s] opacity-0 [animation-fill-mode:forwards]">
                         <p className="flex items-start gap-2">
                             <span className="text-primary sm:mt-1 mt-0">▹</span>
                             <span>{t("pages.home.bullet1")}</span>
@@ -139,7 +141,9 @@ export const MainContents = () => {
                             <span>{t("pages.home.bullet3")}</span>
                         </p>
                         <p className="flex items-start gap-2 text-white/85 font-medium">
-                            <span className="text-cyan-400 sm:mt-1 mt-0">✦</span>
+                            <span className="text-cyan-400 sm:mt-1 mt-0">
+                                ✦
+                            </span>
                             <span>{t("pages.home.cta")}</span>
                         </p>
                     </div>
@@ -148,28 +152,40 @@ export const MainContents = () => {
                         {skills.map((skill) => (
                             <div
                                 key={skill.text}
-                                style={{ animationDelay: skill.delay }}
-                                className="group relative overflow-hidden rounded-xl border border-white/15 bg-white/5 backdrop-blur-sm px-4 py-2 text-[clamp(0.8rem,1.1vw,1rem)] font-semibold text-white/80 transition-all duration-300 hover:bg-white/10 hover:border-primary/50 hover:scale-110 hover:text-white cursor-default"
+                                style={{animationDelay: skill.delay}}
+                                className="group relative overflow-hidden rounded-xl border border-white/15 bg-white/5 backdrop-blur-sm px-4 py-2 text-[clamp(0.75rem,1.1vw,0.85rem)] font-semibold text-white/80 transition-all duration-300 hover:bg-white/10 hover:border-primary/50 hover:scale-110 hover:text-white cursor-default"
                             >
                                 <div className="absolute inset-0 bg-linear-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 <span className="relative flex items-center gap-2">
-                                    <span className="text-base">{skill.icon}</span>
+                                    <span className="text-base">
+                                        {skill.icon}
+                                    </span>
                                     {skill.text}
                                 </span>
                             </div>
                         ))}
                     </div>
 
-                    <div className="flex flex-wrap sm:gap-4 gap-3 sm:pt-4 pt-2 animate-[fadeIn_1.6s_ease-out_0.9s] opacity-0 [animation-fill-mode:forwards]">
+                    <div className="flex flex-wrap sm:gap-4 gap-3 animate-[fadeIn_1.6s_ease-out_0.9s] opacity-0 [animation-fill-mode:forwards]">
                         <button
                             onClick={() => handlePushPath(PROJECTS)}
                             className={primaryButton}
                             aria-label="Go to Projects"
                         >
-                            <span className="relative z-10 flex items-center gap-2 text-[clamp(0.8rem,1.1vw,1rem)]">
+                            <span className="relative z-10 flex items-center gap-2 text-[clamp(0.8rem,1.1vw,0.9rem)]">
                                 {t("pages.home.viewProjects")}
-                                <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                <svg
+                                    className="w-5 h-5 transition-transform group-hover:translate-x-1"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2.5}
+                                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                    />
                                 </svg>
                             </span>
                             <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
@@ -180,10 +196,20 @@ export const MainContents = () => {
                             className={secondaryButton}
                             aria-label="Go to Contact"
                         >
-                            <span className="relative z-10 flex items-center gap-2 text-[clamp(0.8rem,1.1vw,1rem)]">
+                            <span className="relative z-10 flex items-center gap-2 text-[clamp(0.8rem,1.1vw,0.9rem)]">
                                 {t("pages.home.getInTouch")}
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                <svg
+                                    className="w-5 h-5"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                                    />
                                 </svg>
                             </span>
                         </button>
@@ -219,18 +245,49 @@ export const MainContents = () => {
                             {/* 중앙 글로우 */}
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <div className="w-64 h-64 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-                                <div className="absolute w-48 h-48 bg-cyan-400/15 rounded-full blur-2xl animate-pulse" style={{ animationDelay: "1s" }} />
-                                <div className="absolute w-32 h-32 bg-blue-500/20 rounded-full blur-xl animate-pulse" style={{ animationDelay: "2s" }} />
+                                <div
+                                    className="absolute w-48 h-48 bg-cyan-400/15 rounded-full blur-2xl animate-pulse"
+                                    style={{animationDelay: "1s"}}
+                                />
+                                <div
+                                    className="absolute w-32 h-32 bg-blue-500/20 rounded-full blur-xl animate-pulse"
+                                    style={{animationDelay: "2s"}}
+                                />
                             </div>
 
                             {/* 플로팅 코드 태그 */}
                             <div className="absolute inset-0">
                                 {[
-                                    { text: "<Developer />", x: "15%", y: "20%", delay: "0s" },
-                                    { text: "<VSCode />", x: "75%", y: "30%", delay: "0.5s" },
-                                    { text: "<UX Focus />", x: "60%", y: "70%", delay: "1s" },
-                                    { text: "<Clean Code />", x: "20%", y: "65%", delay: "1.5s" },
-                                    { text: "<Fast UI />", x: "80%", y: "80%", delay: "2s" },
+                                    {
+                                        text: "<Developer />",
+                                        x: "15%",
+                                        y: "20%",
+                                        delay: "0s",
+                                    },
+                                    {
+                                        text: "<VSCode />",
+                                        x: "75%",
+                                        y: "30%",
+                                        delay: "0.5s",
+                                    },
+                                    {
+                                        text: "<UX Focus />",
+                                        x: "60%",
+                                        y: "70%",
+                                        delay: "1s",
+                                    },
+                                    {
+                                        text: "<Clean Code />",
+                                        x: "20%",
+                                        y: "65%",
+                                        delay: "1.5s",
+                                    },
+                                    {
+                                        text: "<Fast UI />",
+                                        x: "80%",
+                                        y: "80%",
+                                        delay: "2s",
+                                    },
                                 ].map((tag, i) => (
                                     <div
                                         key={i}
