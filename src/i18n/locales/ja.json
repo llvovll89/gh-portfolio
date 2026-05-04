@@ -1,0 +1,215 @@
+{
+  "nav": {
+    "explorer": "エクスプローラー",
+    "search": "検索",
+    "gitControl": "Git Control",
+    "extensions": "拡張機能",
+    "bookmarks": "ブックマーク",
+    "settings": "設定"
+  },
+  "folder": {
+    "title": "エクスプローラー"
+  },
+  "search": {
+    "title": "検索",
+    "placeholder": "検索ワードを入力してください",
+    "noResults": "検索結果がありません。",
+    "searchResults": "検索結果",
+    "recentSearches": "最近の検索",
+    "recentVisits": "最近の訪問",
+    "clearAll": "すべてクリア"
+  },
+  "gitControl": {
+    "title": "Git Control",
+    "repository": "リポジトリ",
+    "commits": "コミット",
+    "noCommits": "コミットがありません",
+    "viewProfile": "GitHubプロフィールへ",
+    "viewCommit": "コミットを見る"
+  },
+  "extensions": {
+    "title": "拡張機能",
+    "noExtensions": "インストールされた拡張機能がありません",
+    "name": "拡張機能名",
+    "description": "説明（任意）",
+    "enabled": "有効",
+    "disabled": "無効",
+    "add": "追加",
+    "cancel": "キャンセル"
+  },
+  "bookmarks": {
+    "title": "ブックマーク",
+    "noBookmarks": "ブックマークがありません",
+    "addPrompt": "+ ボタンで追加してください",
+    "selectPage": "ブックマークするページを選択してください"
+  },
+  "settings": {
+    "title": "設定",
+    "shortcutsTab": "ショートカット",
+    "general": "一般",
+    "keyboardShortcuts": "利用可能なキーボードショートカット",
+    "language": "言語",
+    "animationSpeed": "アニメーション速度",
+    "slow": "遅い",
+    "normal": "普通",
+    "fast": "速い",
+    "storedInLocalStorage": "設定はローカルストレージに保存されます",
+    "shortcutsList": {
+      "toggleTerminal": "ターミナル切り替え",
+      "toggleKeyboardInfo": "ショートカット情報切り替え",
+      "toggleFolder": "フォルダーエクスプローラー切り替え",
+      "toggleSearch": "検索UI切り替え",
+      "executeCommand": "CLIコマンド実行",
+      "closeAll": "すべてのUI閉じる"
+    }
+  },
+  "footer": {
+    "terminal": "ターミナル"
+  },
+  "pages": {
+    "profile": {
+      "title": "Profile",
+      "skills": "Skills",
+      "description": {
+        "intro": "新しい技術を学ぶことが好きな開発者、キム・ゴンホです。",
+        "frontend": "主にフロントエンド開発を担当していますが、バックエンド開発にも興味があり、フルスタック開発者として成長しようと努力しています。",
+        "collaboration": "コラボレーションとコミュニケーションを重視し、チームメンバーと一緒に成長する開発者を目指しています。",
+        "ux": "ユーザー体験を最優先に考え、直感的で使いやすいインターフェースを作ることに情熱を持っています。"
+      },
+      "education": {
+        "title": "学歴",
+        "graduated": "卒業",
+        "highSchool": "大邱清丘高等学校",
+        "university": "大邱大学"
+      },
+      "personalHistory": {
+        "title": "職歴",
+        "company": "IGIS",
+        "description": "Webアプリケーション開発・保守",
+        "currentlyEmployed": "在職中"
+      }
+    },
+    "projects": {
+      "title": "Projects",
+      "viewDetails": "詳細を見る",
+      "close": "閉じる",
+      "viewProject": "プロジェクトを見る",
+      "viewRepository": "GitHubリポジトリ",
+      "projectIntro": "プロジェクト概要",
+      "techStack": "技術スタック",
+      "team": "チーム構成"
+    },
+    "contact": {
+      "title": "Contact",
+      "subtitle": "採用・コラボ・サイドプロジェクトのご相談、お気軽にどうぞ。メールが最も速いです。",
+      "communicationCard": {
+        "quickContact": "すぐに連絡する",
+        "contactPrompt": "以下のチャンネルからお気軽にご連絡ください。",
+        "copyEmail": "メールをコピー",
+        "emailCopied": "メールがコピーされました！",
+        "name": "名前",
+        "nameValue": "キム・ゴンホ",
+        "career": "経歴",
+        "careerYearsMonths": "{{years}}年{{months}}ヶ月",
+        "careerMonths": "{{months}}ヶ月",
+        "birthDate": "生年月日",
+        "residence": "居住地",
+        "residenceValue": "大邱広域市（韓国）",
+        "sendAction": "送る →",
+        "openAction": "開く →",
+        "interests": "興味分野",
+        "welcomeMessage": "コラボ・採用・サイドプロジェクトのご相談、大歓迎です。"
+      },
+      "messageForm": {
+        "title": "メッセージを残す",
+        "description": "入力後「メールアプリで送る」を押すと、デフォルトのメールアプリが開きます。",
+        "name": "お名前",
+        "namePlaceholder": "山田太郎",
+        "email": "返信用メール",
+        "emailPlaceholder": "name@example.com",
+        "message": "メッセージ",
+        "messagePlaceholder": "プロジェクト・コラボについてお問い合わせします...",
+        "reset": "リセット",
+        "send": "メールアプリで送る",
+        "infoNotice": "フォームの送信はサーバーに保存されず、メールアプリを通じて送信されます。"
+      }
+    },
+    "blog": {
+      "title": "Blog",
+      "posts": "投稿",
+      "noPosts": "まだ記事がありません。",
+      "addPostsHint": "に.mdファイルを追加してみてください。",
+      "noResults": "検索結果がありません",
+      "noResultsHint": "別のキーワードやフィルターをお試しください",
+      "search": {
+        "label": "ブログ投稿を検索",
+        "placeholder": "タイトル、要約、タグ、本文で検索...",
+        "clear": "検索をクリア"
+      },
+      "filter": {
+        "tagFilter": "タグフィルター",
+        "allTags": "すべてのタグ",
+        "selectedTags": "タグ（{{count}}）",
+        "clearAll": "すべて解除",
+        "noTags": "利用可能なタグがありません",
+        "removeTag": "{{tag}}タグを削除",
+        "resetFilters": "フィルターをリセット"
+      },
+      "sort": {
+        "label": "並び順: {{order}}",
+        "newest": "新しい順",
+        "oldest": "古い順"
+      },
+      "view": {
+        "label": "表示方法を選択",
+        "list": "リスト",
+        "grouped": "グループ",
+        "grid": "グリッド"
+      },
+      "count": {
+        "total": "{{count}}件の投稿",
+        "filtered": "{{filtered}} / {{total}}件表示"
+      }
+    },
+    "resume": {
+      "title": "履歴書",
+      "description": "私の経歴とスキルスタックをご確認いただけます。"
+    },
+    "uses": {
+      "title": "使用ツール",
+      "description": "日常的に使用している開発ツール、技術スタック、コラボツールを紹介します。"
+    },
+    "guestbook": {
+      "title": "ゲストブック",
+      "description": "ゲストブックにメッセージを残して交流しましょう！"
+    },
+    "home": {
+      "badge": "Web Developer",
+      "tagline": "ユーザーが<0>「快適」</0>に感じる体験を目指し、",
+      "taglineSub": "高速で一貫したUIを構築する、保守性の高いWeb開発者を目指しています。",
+      "bullet1": "私のウェブサイトへようこそ。",
+      "bullet2": "ここは私が開発したプロジェクトと技術ブログを共有するスペースです。",
+      "bullet3": "様々な技術スタックと開発経験を基に、有益な情報を提供することを目指しています。",
+      "cta": "ゆっくりご覧ください。ご質問があればいつでもご連絡ください！",
+      "viewProjects": "プロジェクトを見る",
+      "getInTouch": "お問い合わせ"
+    }
+  },
+  "routes": {
+    "default": "デフォルト",
+    "projects": "プロジェクト",
+    "blog": "ブログ",
+    "blogDetail": "ブログ詳細",
+    "resume": "履歴書",
+    "uses": "使用環境",
+    "contact": "連絡先",
+    "notFound": "ページなし"
+  },
+  "common": {
+    "add": "追加",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "delete": "削除",
+    "edit": "編集"
+  }
+}

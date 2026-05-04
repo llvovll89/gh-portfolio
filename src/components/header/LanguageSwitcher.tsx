@@ -1,29 +1,32 @@
 import { useTranslation } from 'react-i18next'
 
+const LANG_CYCLE: Record<string, string> = { ko: 'en', en: 'ja', ja: 'ko' }
+const LANG_LABEL: Record<string, string> = { ko: 'KO', en: 'EN', ja: 'JA' }
+
 /**
- * 헤더 우측 KO / EN 언어 전환 버튼
+ * 헤더 언어 전환 버튼 — KO → EN → JA → KO 순환
  * i18n.changeLanguage() 호출 + localStorage 'portfolio-settings' 에 저장
  */
 export const LanguageSwitcher = () => {
     const { i18n } = useTranslation()
-    const isKo = i18n.language.startsWith('ko')
+    const current = i18n.language.slice(0, 2)
 
     const toggle = () => {
-        const next = isKo ? 'en' : 'ko'
+        const next = LANG_CYCLE[current] ?? 'en'
         i18n.changeLanguage(next)
-        // i18n.ts 가 읽는 동일한 키에 merge 저장
         const existing = JSON.parse(localStorage.getItem('portfolio-settings') ?? '{}')
         localStorage.setItem('portfolio-settings', JSON.stringify({ ...existing, language: next }))
     }
+
+    const nextLabel = LANG_LABEL[LANG_CYCLE[current] ?? 'en']
 
     return (
         <button
             type="button"
             onClick={toggle}
-            title={isKo ? 'Switch to English' : '한국어로 변경'}
+            title={`Switch to ${nextLabel}`}
             className="h-full px-2.5 sm:px-3 cursor-pointer hover:bg-sub-gary/20 text-white/60 hover:text-white transition-colors border-l border-sub-gary/10 select-none flex items-center gap-1"
         >
-            {/* 지구본 아이콘 */}
             <svg
                 width="13"
                 height="13"
@@ -40,9 +43,8 @@ export const LanguageSwitcher = () => {
                     strokeLinecap="round"
                 />
             </svg>
-            {/* 현재 언어 표시 */}
             <span className="text-[11px] sm:text-xs font-bold font-mono tracking-wide">
-                {isKo ? 'KO' : 'EN'}
+                {LANG_LABEL[current] ?? 'KO'}
             </span>
         </button>
     )
