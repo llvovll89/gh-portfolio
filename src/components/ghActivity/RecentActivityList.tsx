@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { GITHUB_OWNER } from "../../http/api";
 
 type GitHubEvent = {
@@ -29,37 +29,52 @@ const ActivitySkeleton = () => (
 const RecentActivityList = ({ username }: { username: string }) => {
     const [events, setEvents] = useState<GitHubEvent[] | null>(null);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
 
-    useEffect(() => {
-        let mounted = true;
-        (async () => {
-            setLoading(true);
-            try {
-                const owner = username || GITHUB_OWNER;
-                const qs = new URLSearchParams({
-                    path: `/users/${owner}/events`,
-                    per_page: "30",
-                });
-                const res = await fetch(`/api/github?${qs}`);
-                if (!mounted) return;
-                if (!res.ok) throw new Error(`events fetch failed: ${res.status}`);
-                setEvents(await res.json());
-            } catch (error) {
-                console.error("Error fetching user events:", error);
-                if (mounted) setEvents([]);
-            } finally {
-                if (mounted) setLoading(false);
-            }
-        })();
-
-        return () => {
-            mounted = false;
-        };
+    const fetchEvents = useCallback(async () => {
+        setLoading(true);
+        setError(false);
+        try {
+            const owner = username || GITHUB_OWNER;
+            const qs = new URLSearchParams({
+                path: `/users/${owner}/events`,
+                per_page: "30",
+            });
+            const res = await fetch(`/api/github?${qs}`);
+            if (!res.ok) throw new Error(`events fetch failed: ${res.status}`);
+            setEvents(await res.json());
+        } catch {
+            setError(true);
+            setEvents([]);
+        } finally {
+            setLoading(false);
+        }
     }, [username]);
 
+    useEffect(() => {
+        fetchEvents();
+    }, [fetchEvents]);
+
     if (loading) return <ActivitySkeleton />;
-    if (!events || events.length === 0) return <div className="text-[12px] text-white/50">No recent activity</div>;
+
+    if (error) {
+        return (
+            <div className="flex items-center gap-2 text-[12px] text-white/40">
+                <span>activity 데이터를 불러오지 못했습니다.</span>
+                <button
+                    onClick={fetchEvents}
+                    className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
+                >
+                    재시도
+                </button>
+            </div>
+        );
+    }
+
+    if (!events || events.length === 0) {
+        return <div className="text-[12px] text-white/50">No recent activity</div>;
+    }
 
     const visibleEvents = isExpanded ? events : events.slice(0, COLLAPSED_COUNT);
     const hasMore = events.length > COLLAPSED_COUNT;
