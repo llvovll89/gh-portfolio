@@ -124,6 +124,25 @@ export const SHORTCUT_DESCRIPTIONS_EN: Record<KeyboardShortcutId, string> = {
 } as const;
 
 /**
+ * 키보드 단축키 설명 (일본어)
+ */
+export const SHORTCUT_DESCRIPTIONS_JA: Record<KeyboardShortcutId, string> = {
+    [KeyboardShortcutId.TOGGLE_FOOTER]: "フッターターミナルを開く/閉じる",
+    [KeyboardShortcutId.TOGGLE_KEYBOARD_INFO]: "キーボードショートカット情報",
+    [KeyboardShortcutId.TOGGLE_FOLDER]: "フォルダパネルを開く/閉じる",
+    [KeyboardShortcutId.TOGGLE_SEARCH]: "検索パネルを開く/閉じる",
+    [KeyboardShortcutId.CLI_ENTER]: "CLIコマンドを実行",
+    [KeyboardShortcutId.ALL_CLEAR]: "すべてのモーダルを閉じる（2回連続）",
+    [KeyboardShortcutId.TOGGLE_SIDEBAR]: "サイドバーの切替",
+    [KeyboardShortcutId.TOGGLE_PANEL]: "下部パネルの切替",
+    [KeyboardShortcutId.COMMAND_PALETTE]: "コマンドパレットを開く",
+    [KeyboardShortcutId.TOGGLE_FULLSCREEN]: "全画面の切替",
+    [KeyboardShortcutId.TOGGLE_GIT_CONTROL]: "Git Controlパネルを開く/閉じる",
+    [KeyboardShortcutId.TOGGLE_BOOKMARKS]: "ブックマークパネルを開く/閉じる",
+    [KeyboardShortcutId.TOGGLE_SETTINGS]: "設定パネルを開く/閉じる",
+} as const;
+
+/**
  * 키 조합을 사람이 읽을 수 있는 문자열로 변환
  */
 export const formatKeyCombo = (combo: KeyCombination): string => {

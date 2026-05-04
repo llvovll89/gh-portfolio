@@ -8,6 +8,7 @@ import {
     formatKeyCombo,
     SHORTCUT_DESCRIPTIONS_KO,
     SHORTCUT_DESCRIPTIONS_EN,
+    SHORTCUT_DESCRIPTIONS_JA,
 } from "../../../../constants/keyboardConstants";
 
 interface GeneralSettings {
@@ -66,9 +67,9 @@ export const Settings = () => {
 
     const getShortcutDescription = (id: KeyboardShortcutId): string => {
         const lang = i18n.language;
-        return lang === "ko"
-            ? SHORTCUT_DESCRIPTIONS_KO[id]
-            : SHORTCUT_DESCRIPTIONS_EN[id];
+        if (lang === "ko") return SHORTCUT_DESCRIPTIONS_KO[id];
+        if (lang === "ja") return SHORTCUT_DESCRIPTIONS_JA[id];
+        return SHORTCUT_DESCRIPTIONS_EN[id];
     };
 
     return (
@@ -170,6 +171,7 @@ export const Settings = () => {
                             >
                                 <option value="ko">한국어</option>
                                 <option value="en">English</option>
+                                <option value="ja">日本語</option>
                             </select>
                         </div>
 
