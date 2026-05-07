@@ -21,6 +21,15 @@
 *::before,
 *::after {
     box-sizing: border-box;
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-duration: 250ms;
+    transition-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        transition-duration: 0ms !important;
+    }
 }
 
 * {

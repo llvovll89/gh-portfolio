@@ -14,6 +14,7 @@ import { RouteLoading } from "./components/loading/RouteLoading";
 import { PWAUpdateBanner } from "./components/pwa/PWAUpdateBanner";
 import { PWAInstallBanner } from "./components/pwa/PWAInstallBanner";
 import { PageErrorBoundary } from "./components/error/PageErrorBoundary";
+import { Toast } from "./components/toast/Toast";
 
 function AppContent() {
     const isMobile = useCheckedMobile();
@@ -46,6 +47,7 @@ function AppContent() {
             {!isMobile && !isBlogDetailPage && isTerminalVisible && <Bottom />}
             <PWAInstallBanner />
             <PWAUpdateBanner />
+            <Toast />
         </section>
     );
 }

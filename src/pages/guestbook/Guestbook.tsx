@@ -7,11 +7,12 @@ import GuestbookList from './GuestbookList'
 import { FiMessageSquare } from 'react-icons/fi'
 import { useTranslation } from 'react-i18next'
 import { FaPencil } from 'react-icons/fa6'
+import { useToast } from '@/context/ToastContext'
 
 export const Guestbook = () => {
 	const [showForm, setShowForm] = useState(false)
-	const [toast, setToast] = useState<{ msg: string; visible: boolean }>({ msg: '', visible: false })
 	const { t } = useTranslation()
+	const { showToast } = useToast()
 
 	useEffect(() => {
 		if (!showForm) return;
@@ -19,11 +20,6 @@ export const Guestbook = () => {
 		document.addEventListener('keydown', onKey);
 		return () => document.removeEventListener('keydown', onKey);
 	}, [showForm]);
-
-	const showToast = (msg: string) => {
-		setToast({ msg, visible: true })
-		setTimeout(() => setToast((s) => ({ ...s, visible: false })), 3000)
-	}
 
 	return (
 		<>
@@ -72,14 +68,6 @@ export const Guestbook = () => {
 						</>
 					)}
 
-					{/* Toast */}
-					{toast.visible && (
-						<div className="fixed left-1/2 -translate-x-1/2 top-6 z-60">
-							<div className="px-5 py-2.5 bg-primary text-white rounded-xl shadow-xl text-sm font-medium animate-in slide-in-from-top duration-200">
-								{toast.msg}
-							</div>
-						</div>
-					)}
 				</article>
 			</Contents>
 		</>

@@ -7,6 +7,7 @@ import { ThemeProvider } from "./ThemeContext";
 import { LayoutProvider } from "./LayoutContext";
 import { NavigationProvider } from "./NavigationContext";
 import { TerminalProvider } from "./TerminalContext";
+import { ToastProvider } from "./ToastContext";
 
 // 개별 Context 및 타입 재-export (편의용)
 export { ThemeContext, useThemeContext } from "./ThemeContext";
@@ -20,13 +21,18 @@ export type { SelectedPathState } from "./NavigationContext";
 
 export { TerminalContext, useTerminalContext } from "./TerminalContext";
 
+export { useToast } from "./ToastContext";
+export type { ToastType } from "./ToastContext";
+
 /** App.tsx 에서 사용하는 합성 Provider */
 export const GlobalStateProvider = ({ children }: { children: React.ReactNode }) => (
     <ThemeProvider>
         <LayoutProvider>
             <NavigationProvider>
                 <TerminalProvider>
-                    {children}
+                    <ToastProvider>
+                        {children}
+                    </ToastProvider>
                 </TerminalProvider>
             </NavigationProvider>
         </LayoutProvider>

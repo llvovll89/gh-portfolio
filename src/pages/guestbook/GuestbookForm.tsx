@@ -17,10 +17,21 @@ const GuestbookForm = ({ onSubmitted, autoFocus, focusTarget, handleToggleForm }
     const [message, setMessage] = useState("")
     const [submitting, setSubmitting] = useState(false)
     const [error, setError] = useState("")
+    const [nameError, setNameError] = useState("")
+    const [passwordError, setPasswordError] = useState("")
+    const [messageError, setMessageError] = useState("")
+
+    const validate = () => {
+        let valid = true
+        if (!name.trim()) { setNameError("이름을 입력해주세요."); valid = false } else setNameError("")
+        if (!password) { setPasswordError("비밀번호를 입력해주세요."); valid = false } else setPasswordError("")
+        if (!message.trim()) { setMessageError("메시지를 입력해주세요."); valid = false } else setMessageError("")
+        return valid
+    }
 
     const handleSubmit = async () => {
         if (submitting) return
-        if (!name.trim() || !password || !message.trim()) return
+        if (!validate()) return
         setError("")
         setSubmitting(true)
         try {
@@ -38,7 +49,6 @@ const GuestbookForm = ({ onSubmitted, autoFocus, focusTarget, handleToggleForm }
         } catch (err) {
             console.error('방명록 등록 실패:', err)
             const msg = err instanceof Error ? err.message : String(err)
-            // Firebase permission denied 메시지를 사용자 친화적으로 변환
             if (msg.includes('permission-denied') || msg.includes('PERMISSION_DENIED')) {
                 setError('저장 권한이 없습니다. Firebase 보안 규칙을 확인해주세요.')
             } else if (msg.includes('unavailable') || msg.includes('network')) {
@@ -58,15 +68,16 @@ const GuestbookForm = ({ onSubmitted, autoFocus, focusTarget, handleToggleForm }
             message={message}
             submitting={submitting}
             error={error}
-            onChangeName={(v) => setName(v)}
-            onChangeMessage={(v) => setMessage(v)}
-            onChangePassword={(v) => { setPassword(v); setError("") }}
+            nameError={nameError}
+            passwordError={passwordError}
+            messageError={messageError}
+            onChangeName={(v) => { setName(v); if (nameError) setNameError("") }}
+            onChangeMessage={(v) => { setMessage(v); if (messageError) setMessageError("") }}
+            onChangePassword={(v) => { setPassword(v); setError(""); if (passwordError) setPasswordError("") }}
             onCancel={() => {
-                setName("");
-                setPassword("");
-                setMessage("");
-                setError("");
-                if (handleToggleForm) handleToggleForm();
+                setName(""); setPassword(""); setMessage("")
+                setError(""); setNameError(""); setPasswordError(""); setMessageError("")
+                if (handleToggleForm) handleToggleForm()
             }}
             onSubmit={handleSubmit}
             autoFocus={typeof autoFocus !== 'undefined' ? autoFocus : true}

@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import { HiMail, HiUser, HiChatAlt2, HiRefresh, HiPaperAirplane, HiInformationCircle } from "react-icons/hi";
 import { useTranslation } from "react-i18next";
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export const MessageCardForm = () => {
     const { t } = useTranslation();
     const EMAIL = import.meta.env.VITE_EMAIL;
@@ -9,6 +11,9 @@ export const MessageCardForm = () => {
     const [name, setName] = useState("");
     const [fromEmail, setFromEmail] = useState("");
     const [message, setMessage] = useState("");
+    const [nameError, setNameError] = useState("");
+    const [emailError, setEmailError] = useState("");
+    const [messageError, setMessageError] = useState("");
 
     const mailtoHref = useMemo(() => {
         const subject = `[Portfolio] ${name || "Contact"} (${fromEmail || "no-email"})`;
@@ -16,10 +21,24 @@ export const MessageCardForm = () => {
         return `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }, [EMAIL, name, fromEmail, message]);
 
+    const validate = () => {
+        let valid = true;
+        if (!name.trim()) { setNameError("이름을 입력해주세요."); valid = false; } else setNameError("");
+        if (!fromEmail.trim()) { setEmailError("이메일을 입력해주세요."); valid = false; }
+        else if (!EMAIL_REGEX.test(fromEmail)) { setEmailError("올바른 이메일 형식이 아닙니다."); valid = false; }
+        else setEmailError("");
+        if (!message.trim()) { setMessageError("메시지를 입력해주세요."); valid = false; } else setMessageError("");
+        return valid;
+    };
+
+    const handleSend = () => {
+        if (!validate()) return;
+        window.location.href = mailtoHref;
+    };
+
     const handleReset = () => {
-        setName("");
-        setFromEmail("");
-        setMessage("");
+        setName(""); setFromEmail(""); setMessage("");
+        setNameError(""); setEmailError(""); setMessageError("");
     };
 
     return (
@@ -37,46 +56,61 @@ export const MessageCardForm = () => {
 
             {/* 폼 필드 */}
             <div className="grid gap-4">
-                <label className="grid gap-2">
+                <label className="grid gap-1.5">
                     <span className="text-sm font-medium text-white/70 flex items-center gap-2">
                         <HiUser className="w-4 h-4 text-primary/70" />
                         {t("pages.contact.messageForm.name")}
                     </span>
                     <input
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="rounded-xl border border-white/10 bg-linear-to-br from-black/30 to-black/10 sm:px-4 px-3 sm:py-3 py-2 outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/30 transition-all placeholder:text-white/30"
+                        onChange={(e) => { setName(e.target.value); if (nameError) setNameError(""); }}
+                        className={`rounded-xl border bg-linear-to-br from-black/30 to-black/10 sm:px-4 px-3 sm:py-3 py-2 outline-none transition-all placeholder:text-white/30 ${
+                            nameError
+                                ? 'border-rose-400/50 focus:ring-2 focus:ring-rose-400/30'
+                                : 'border-white/10 focus:ring-2 focus:ring-primary/50 focus:border-primary/30'
+                        }`}
                         placeholder={t("pages.contact.messageForm.namePlaceholder")}
                         autoComplete="name"
                     />
+                    {nameError && <p className="text-xs text-rose-400" role="alert">{nameError}</p>}
                 </label>
 
-                <label className="grid gap-2">
+                <label className="grid gap-1.5">
                     <span className="text-sm font-medium text-white/70 flex items-center gap-2">
                         <HiMail className="w-4 h-4 text-primary/70" />
                         {t("pages.contact.messageForm.email")}
                     </span>
                     <input
                         value={fromEmail}
-                        onChange={(e) => setFromEmail(e.target.value)}
-                        className="rounded-xl border border-white/10 bg-linear-to-br from-black/30 to-black/10 sm:px-4 px-3 sm:py-3 py-2 outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/30 transition-all placeholder:text-white/30"
+                        onChange={(e) => { setFromEmail(e.target.value); if (emailError) setEmailError(""); }}
+                        className={`rounded-xl border bg-linear-to-br from-black/30 to-black/10 sm:px-4 px-3 sm:py-3 py-2 outline-none transition-all placeholder:text-white/30 ${
+                            emailError
+                                ? 'border-rose-400/50 focus:ring-2 focus:ring-rose-400/30'
+                                : 'border-white/10 focus:ring-2 focus:ring-primary/50 focus:border-primary/30'
+                        }`}
                         placeholder={t("pages.contact.messageForm.emailPlaceholder")}
                         autoComplete="email"
                         inputMode="email"
                     />
+                    {emailError && <p className="text-xs text-rose-400" role="alert">{emailError}</p>}
                 </label>
 
-                <label className="grid gap-2">
+                <label className="grid gap-1.5">
                     <span className="text-sm font-medium text-white/70 flex items-center gap-2">
                         <HiChatAlt2 className="w-4 h-4 text-primary/70" />
                         {t("pages.contact.messageForm.message")}
                     </span>
                     <textarea
                         value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        className="min-h-40 md:min-h-36 resize-y rounded-xl border border-white/10 bg-linear-to-br from-black/30 to-black/10 sm:px-4 px-3 sm:py-3 py-2 outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/30 transition-all text-[clamp(0.75rem,1vw,0.875rem)] placeholder:text-white/30"
+                        onChange={(e) => { setMessage(e.target.value); if (messageError) setMessageError(""); }}
+                        className={`min-h-40 md:min-h-36 resize-y rounded-xl border bg-linear-to-br from-black/30 to-black/10 sm:px-4 px-3 sm:py-3 py-2 outline-none transition-all text-[clamp(0.75rem,1vw,0.875rem)] placeholder:text-white/30 ${
+                            messageError
+                                ? 'border-rose-400/50 focus:ring-2 focus:ring-rose-400/30'
+                                : 'border-white/10 focus:ring-2 focus:ring-primary/50 focus:border-primary/30'
+                        }`}
                         placeholder={t("pages.contact.messageForm.messagePlaceholder")}
                     />
+                    {messageError && <p className="text-xs text-rose-400" role="alert">{messageError}</p>}
                 </label>
 
                 {/* 버튼 그룹 */}
@@ -90,13 +124,14 @@ export const MessageCardForm = () => {
                         {t("pages.contact.messageForm.reset")}
                     </button>
 
-                    <a
-                        href={mailtoHref}
+                    <button
+                        type="button"
+                        onClick={handleSend}
                         className="rounded-xl bg-linear-to-r from-primary to-primary/80 sm:px-5 px-4 sm:py-2.5 py-2 text-sm font-semibold text-white hover:from-primary/90 hover:to-primary/70 transition-all active:scale-95 flex items-center gap-2 shadow-lg shadow-primary/20"
                     >
                         <HiPaperAirplane className="w-4 h-4" />
                         {t("pages.contact.messageForm.send")}
-                    </a>
+                    </button>
                 </div>
 
                 {/* 안내 문구 */}

@@ -3,6 +3,7 @@ import { FiMessageSquare } from 'react-icons/fi'
 import { TbLockPassword } from 'react-icons/tb'
 import { HiUser } from 'react-icons/hi'
 import { IoClose } from 'react-icons/io5'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 
 type EditorProps = {
     mode: 'create' | 'edit'
@@ -18,6 +19,9 @@ type EditorProps = {
     autoFocus?: boolean
     focusTarget?: 'name' | 'password' | 'message'
     error?: string
+    nameError?: string
+    passwordError?: string
+    messageError?: string
 }
 
 const GuestbookEditor: React.FC<EditorProps> = ({
@@ -33,6 +37,9 @@ const GuestbookEditor: React.FC<EditorProps> = ({
     autoFocus = false,
     focusTarget = 'name',
     error,
+    nameError,
+    passwordError,
+    messageError,
 }) => {
     const nameRef = React.useRef<HTMLInputElement | null>(null)
     const passwordRef = React.useRef<HTMLInputElement | null>(null)
@@ -74,51 +81,70 @@ const GuestbookEditor: React.FC<EditorProps> = ({
             <div className="px-5 py-4 space-y-3">
                 {/* Name & Password */}
                 <div className="grid sm:grid-cols-2 grid-cols-1 gap-3">
-                    <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <HiUser className="w-4 h-4 text-primary" />
+                    <div className="flex flex-col gap-1">
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <HiUser className="w-4 h-4 text-primary" />
+                            </div>
+                            <input
+                                ref={nameRef}
+                                value={name}
+                                readOnly={mode === 'edit'}
+                                onChange={(e) => onChangeName && onChangeName(e.target.value)}
+                                className={`pl-9 pr-3 py-2.5 rounded-xl border text-sm transition-all placeholder:text-white/30 w-full outline-none ${
+                                    mode === 'edit'
+                                        ? 'border-white/5 bg-white/3 text-white/35 cursor-not-allowed'
+                                        : nameError
+                                        ? 'border-rose-400/50 bg-white/5 text-white focus:ring-2 focus:ring-rose-400/30 focus:border-rose-400/30'
+                                        : 'border-white/10 bg-white/5 text-white focus:ring-2 focus:ring-primary/40 focus:border-primary/30'
+                                }`}
+                                placeholder="이름"
+                            />
                         </div>
-                        <input
-                            ref={nameRef}
-                            value={name}
-                            readOnly={mode === 'edit'}
-                            onChange={(e) => onChangeName && onChangeName(e.target.value)}
-                            className={`pl-9 pr-3 py-2.5 rounded-xl border text-sm transition-all placeholder:text-white/30 w-full outline-none ${
-                                mode === 'edit'
-                                    ? 'border-white/5 bg-white/3 text-white/35 cursor-not-allowed'
-                                    : 'border-white/10 bg-white/5 text-white focus:ring-2 focus:ring-primary/40 focus:border-primary/30'
-                            }`}
-                            placeholder="이름"
-                        />
+                        {nameError && <p className="text-xs text-rose-400" role="alert">{nameError}</p>}
                     </div>
-                    <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <TbLockPassword className="w-4 h-4 text-primary" />
+                    <div className="flex flex-col gap-1">
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <TbLockPassword className="w-4 h-4 text-primary" />
+                            </div>
+                            <input
+                                ref={passwordRef}
+                                onChange={(e) => onChangePassword && onChangePassword(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && onSubmit?.()}
+                                className={`pl-9 pr-3 py-2.5 rounded-xl border outline-none text-sm transition-all placeholder:text-white/30 text-white w-full ${
+                                    passwordError
+                                        ? 'border-rose-400/50 bg-white/5 focus:ring-2 focus:ring-rose-400/30 focus:border-rose-400/30'
+                                        : 'border-white/10 bg-white/5 focus:ring-2 focus:ring-primary/40 focus:border-primary/30'
+                                }`}
+                                placeholder={mode === 'create' ? '비밀번호' : '비밀번호 확인'}
+                                type="password"
+                            />
                         </div>
-                        <input
-                            ref={passwordRef}
-                            onChange={(e) => onChangePassword && onChangePassword(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && onSubmit?.()}
-                            className="pl-9 pr-3 py-2.5 rounded-xl border border-white/10 bg-white/5 outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/30 text-sm transition-all placeholder:text-white/30 text-white w-full"
-                            placeholder={mode === 'create' ? '비밀번호' : '비밀번호 확인'}
-                            type="password"
-                        />
+                        {passwordError && <p className="text-xs text-rose-400" role="alert">{passwordError}</p>}
                     </div>
                 </div>
 
                 {/* Message */}
-                <div className="relative">
-                    <div className="absolute top-3 left-3 pointer-events-none">
-                        <FiMessageSquare className="w-4 h-4 text-primary" />
+                <div className="flex flex-col gap-1">
+                    <div className="relative">
+                        <div className="absolute top-3 left-3 pointer-events-none">
+                            <FiMessageSquare className="w-4 h-4 text-primary" />
+                        </div>
+                        <textarea
+                            ref={messageRef}
+                            value={message}
+                            onChange={(e) => onChangeMessage && onChangeMessage(e.target.value)}
+                            className={`w-full pl-9 pr-4 py-3 rounded-xl border outline-none text-sm transition-all placeholder:text-white/30 resize-none text-white ${
+                                messageError
+                                    ? 'border-rose-400/50 bg-white/5 focus:ring-2 focus:ring-rose-400/30 focus:border-rose-400/30'
+                                    : 'border-white/10 bg-white/5 focus:ring-2 focus:ring-primary/40 focus:border-primary/30'
+                            }`}
+                            rows={4}
+                            placeholder="소중한 메시지를 남겨주세요..."
+                        />
                     </div>
-                    <textarea
-                        ref={messageRef}
-                        value={message}
-                        onChange={(e) => onChangeMessage && onChangeMessage(e.target.value)}
-                        className="w-full pl-9 pr-4 py-3 rounded-xl border border-white/10 bg-white/5 outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/30 text-sm transition-all placeholder:text-white/30 resize-none text-white"
-                        rows={4}
-                        placeholder="소중한 메시지를 남겨주세요..."
-                    />
+                    {messageError && <p className="text-xs text-rose-400" role="alert">{messageError}</p>}
                 </div>
 
                 {error && (
@@ -140,7 +166,12 @@ const GuestbookEditor: React.FC<EditorProps> = ({
                         className="flex-1 px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-xl transition-all cursor-pointer font-semibold text-sm disabled:opacity-50 shadow-lg shadow-primary/20"
                         disabled={submitting}
                     >
-                        {submitting ? '처리 중...' : mode === 'create' ? '등록하기' : '저장하기'}
+                        {submitting ? (
+                            <span className="flex items-center justify-center gap-2">
+                                <AiOutlineLoading3Quarters className="w-4 h-4 animate-spin" />
+                                처리 중...
+                            </span>
+                        ) : (mode === 'create' ? '등록하기' : '저장하기')}
                     </button>
                 </div>
             </div>
