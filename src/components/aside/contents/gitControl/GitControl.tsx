@@ -5,6 +5,9 @@ import { useTranslation } from "react-i18next";
 import { useGitControl } from "./useGitControl";
 import { REPOS } from "./gitControlTypes";
 import type { TabType } from "./gitControlTypes";
+import { useEffect } from "react";
+
+const GIT_ACTIVITY_OPEN_EVENT = "portfolio-git-open-activity";
 
 export const GitControl = () => {
     const { t } = useTranslation();
@@ -21,6 +24,17 @@ export const GitControl = () => {
         isSelected,
         handleRepoClick,
     } = useGitControl();
+
+    useEffect(() => {
+        const handleOpenActivity = () => {
+            setShowActivity(true);
+        };
+
+        window.addEventListener(GIT_ACTIVITY_OPEN_EVENT, handleOpenActivity);
+        return () => {
+            window.removeEventListener(GIT_ACTIVITY_OPEN_EVENT, handleOpenActivity);
+        };
+    }, [setShowActivity]);
 
     return (
         <section className={`w-full h-full flex flex-col ${backgroundClass} overflow-y-auto scrolls text-white`} style={backgroundStyle}>
@@ -106,7 +120,7 @@ export const GitControl = () => {
                                                     <div className="w-full flex items-center justify-between gap-2">
                                                         <span className="truncate">{branch}</span>
                                                         {isSelected(repo, branch) && gitStates[repo].commits.length > 0 && (
-                                                            <span className="text-[10px] flex-shrink-0">
+                                                            <span className="text-[10px] shrink-0">
                                                                 {t("gitControl.commits")} {gitStates[repo].commits.length}
                                                             </span>
                                                         )}
@@ -130,18 +144,18 @@ export const GitControl = () => {
                                                                 return (
                                                                     <article
                                                                         key={commit.sha}
-                                                                        className="w-full py-2 flex flex-col border-b border-sub-gary/20 hover:bg-sub-gary/10 cursor-default gap-[6px] text-[10px]"
+                                                                        className="w-full py-2 flex flex-col border-b border-sub-gary/20 hover:bg-sub-gary/10 cursor-default gap-1.5 text-[10px]"
                                                                     >
                                                                         <div className="w-full flex items-center justify-between gap-2">
                                                                             <div className="flex items-center gap-1 min-w-0 flex-1">
                                                                                 {profileUrl && avatarUrl ? (
-                                                                                    <Link to={profileUrl} target="_blank" title={t("gitControl.viewProfile")} className="flex-shrink-0">
+                                                                                    <Link to={profileUrl} target="_blank" title={t("gitControl.viewProfile")} className="shrink-0">
                                                                                         <img src={avatarUrl} alt="avatar" className="w-6 h-6 rounded-[5px] overflow-hidden" />
                                                                                     </Link>
                                                                                 ) : null}
                                                                                 <span className="truncate">{authorName}</span>
                                                                             </div>
-                                                                            <span className="flex-shrink-0">{dateStr}</span>
+                                                                            <span className="shrink-0">{dateStr}</span>
                                                                         </div>
                                                                         <p className="text-[12px] font-bold line-clamp-2">{commit?.commit?.message}</p>
                                                                         <Link to={commit.html_url} target="_blank" className="underline hover:text-primary w-max">
@@ -177,12 +191,12 @@ export const GitControl = () => {
                                                             )}
                                                             <div className="flex-1 min-w-0">
                                                                 <div className="flex items-center gap-2 mb-1">
-                                                                    <span className={`text-[10px] px-2 py-0.5 rounded flex-shrink-0 ${
+                                                                    <span className={`text-[10px] px-2 py-0.5 rounded shrink-0 ${
                                                                         issue.state === "open" ? "bg-green-500/20 text-green-400" : "bg-purple-500/20 text-purple-400"
                                                                     }`}>
                                                                         {issue.state}
                                                                     </span>
-                                                                    <span className="text-[10px] text-white/50 flex-shrink-0">#{issue.number}</span>
+                                                                    <span className="text-[10px] text-white/50 shrink-0">#{issue.number}</span>
                                                                 </div>
                                                                 <p className="text-xs font-medium mb-1 line-clamp-2">{issue.title}</p>
                                                                 {issue.labels.length > 0 && (

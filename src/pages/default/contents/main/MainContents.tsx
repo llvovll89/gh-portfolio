@@ -4,23 +4,21 @@ import {useCheckedMobileSize} from "../../../../hooks/useCheckedMobileSize";
 import {useEffect, useMemo, useState} from "react";
 import {useTranslation, Trans} from "react-i18next";
 
+const PARTICLES = Array.from({length: 20}, (_, i) => ({
+    id: i,
+    left: `${Math.random() * 100}%`,
+    top: `${Math.random() * 100}%`,
+    animationDelay: `${Math.random() * 3}s`,
+    animationDuration: `${2 + Math.random() * 3}s`,
+}));
+
 export const MainContents = () => {
     const {t} = useTranslation();
     const handlePushPath = useHandlePushPath();
     const isMobileSize = useCheckedMobileSize();
     const [mousePosition, setMousePosition] = useState({x: 0, y: 0});
 
-    const particles = useMemo(
-        () =>
-            Array.from({length: 20}, (_, i) => ({
-                id: i,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 3}s`,
-            })),
-        [],
-    );
+    const particles = useMemo(() => PARTICLES, []);
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
@@ -46,7 +44,7 @@ export const MainContents = () => {
 
     return (
         <article
-            className={`relative z-10 w-full h-full sm:px-0 px-1 ${isMobileSize ? "overflow-auto" : "overflow-hidden"}`}
+            className={`relative z-10 w-full h-full sm:px-0 px-1 ${isMobileSize ? "overflow-y-auto overflow-x-hidden touch-pan-y" : "overflow-hidden"}`}
         >
             {/* 배경 그라디언트 효과 - 마우스 따라 움직임 */}
             <div
@@ -80,8 +78,8 @@ export const MainContents = () => {
                 ))}
             </div>
 
-            <div className="relative flex flex-col lg:flex-row items-center gap-12 lg:gap-16 h-full p-2">
-                <section className="w-full flex-1 space-y-8 animate-[fadeIn_0.8s_ease-out] px-0.5">
+            <div className="relative flex min-w-0 flex-col lg:flex-row items-center gap-12 lg:gap-16 h-full p-2">
+                <section className="w-full min-w-0 flex-1 space-y-8 animate-[fadeIn_0.8s_ease-out] px-0.5">
                     <div className="flex flex-wrap items-center justify-between gap-4">
                         <div className="group flex items-center gap-3">
                             <div className="relative">

@@ -270,3 +270,63 @@ export const handleToggleFullscreen = (event: KeyboardEvent) => {
         }
     }
 };
+
+/**
+ * 마지막으로 닫은 탭 다시 열기 핸들러
+ * @description Ctrl + Shift + T로 최근에 닫은 탭을 복원
+ */
+export const handleReopenClosedTab = (
+    event: KeyboardEvent,
+    closedTabs: string[],
+    setClosedTabs: React.Dispatch<React.SetStateAction<string[]>>,
+    setSelectedPathState: React.Dispatch<
+        React.SetStateAction<{ list: string[]; state: string }>
+    >,
+    navigate: (path: string) => void,
+) => {
+    const combo =
+        DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.REOPEN_CLOSED_TAB];
+
+    if (!matchesKeyCombination(event, combo)) return;
+
+    event.preventDefault();
+
+    const lastClosedTab = closedTabs[closedTabs.length - 1];
+    if (!lastClosedTab) return;
+
+    setClosedTabs((prev) => prev.slice(0, -1));
+    setSelectedPathState((prev) => ({
+        ...prev,
+        list: prev.list.includes(lastClosedTab)
+            ? prev.list
+            : [...prev.list, lastClosedTab],
+        state: lastClosedTab,
+    }));
+    navigate(lastClosedTab);
+};
+
+/**
+ * 현재 활성 탭 고정/해제 핸들러
+ * @description Ctrl + Alt + P로 현재 탭을 고정 또는 해제
+ */
+export const handleTogglePinCurrentTab = (
+    event: KeyboardEvent,
+    selectedPathState: { list: string[]; state: string },
+    setPinnedTabs: React.Dispatch<React.SetStateAction<string[]>>,
+) => {
+    const combo =
+        DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_PIN_CURRENT_TAB];
+
+    if (!matchesKeyCombination(event, combo)) return;
+
+    event.preventDefault();
+
+    const activePath = selectedPathState.state;
+    if (!activePath || !selectedPathState.list.includes(activePath)) return;
+
+    setPinnedTabs((prev) =>
+        prev.includes(activePath)
+            ? prev.filter((path) => path !== activePath)
+            : [activePath, ...prev],
+    );
+};

@@ -95,4 +95,6 @@ export enum KeyboardShortcutId {
     TOGGLE_GIT_CONTROL = "toggle_git_control",
     TOGGLE_BOOKMARKS = "toggle_bookmarks",
     TOGGLE_SETTINGS = "toggle_settings",
+    REOPEN_CLOSED_TAB = "reopen_closed_tab",
+    TOGGLE_PIN_CURRENT_TAB = "toggle_pin_current_tab",
 }

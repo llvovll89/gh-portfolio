@@ -83,6 +83,16 @@ export const DEFAULT_KEY_COMBINATIONS: Record<
         key: "Comma",
         ctrl: true,
     },
+    [KeyboardShortcutId.REOPEN_CLOSED_TAB]: {
+        key: "KeyT",
+        ctrl: true,
+        shift: true,
+    },
+    [KeyboardShortcutId.TOGGLE_PIN_CURRENT_TAB]: {
+        key: "KeyP",
+        ctrl: true,
+        alt: true,
+    },
 } as const;
 
 /**
@@ -102,6 +112,8 @@ export const SHORTCUT_DESCRIPTIONS_KO: Record<KeyboardShortcutId, string> = {
     [KeyboardShortcutId.TOGGLE_GIT_CONTROL]: "Git Control 패널 열기/닫기",
     [KeyboardShortcutId.TOGGLE_BOOKMARKS]: "북마크 패널 열기/닫기",
     [KeyboardShortcutId.TOGGLE_SETTINGS]: "설정 패널 열기/닫기",
+    [KeyboardShortcutId.REOPEN_CLOSED_TAB]: "닫힌 탭 다시 열기",
+    [KeyboardShortcutId.TOGGLE_PIN_CURRENT_TAB]: "현재 탭 고정/해제",
 } as const;
 
 /**
@@ -121,6 +133,8 @@ export const SHORTCUT_DESCRIPTIONS_EN: Record<KeyboardShortcutId, string> = {
     [KeyboardShortcutId.TOGGLE_GIT_CONTROL]: "Toggle Git Control Panel",
     [KeyboardShortcutId.TOGGLE_BOOKMARKS]: "Toggle Bookmarks Panel",
     [KeyboardShortcutId.TOGGLE_SETTINGS]: "Toggle Settings Panel",
+    [KeyboardShortcutId.REOPEN_CLOSED_TAB]: "Reopen Closed Tab",
+    [KeyboardShortcutId.TOGGLE_PIN_CURRENT_TAB]: "Toggle Pin Current Tab",
 } as const;
 
 /**
@@ -140,6 +154,8 @@ export const SHORTCUT_DESCRIPTIONS_JA: Record<KeyboardShortcutId, string> = {
     [KeyboardShortcutId.TOGGLE_GIT_CONTROL]: "Git Controlパネルを開く/閉じる",
     [KeyboardShortcutId.TOGGLE_BOOKMARKS]: "ブックマークパネルを開く/閉じる",
     [KeyboardShortcutId.TOGGLE_SETTINGS]: "設定パネルを開く/閉じる",
+    [KeyboardShortcutId.REOPEN_CLOSED_TAB]: "閉じたタブを再度開く",
+    [KeyboardShortcutId.TOGGLE_PIN_CURRENT_TAB]: "現在のタブを固定/解除",
 } as const;
 
 /**

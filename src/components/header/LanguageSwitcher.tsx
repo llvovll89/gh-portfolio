@@ -2,6 +2,9 @@ import { useTranslation } from 'react-i18next'
 
 const LANG_CYCLE: Record<string, string> = { ko: 'en', en: 'ja', ja: 'ko' }
 const LANG_LABEL: Record<string, string> = { ko: 'KO', en: 'EN', ja: 'JA' }
+const SETTINGS_STORAGE_KEY = 'portfolio-settings'
+const SETTINGS_BADGE_STORAGE_KEY = 'portfolio-settings-has-updates'
+const SETTINGS_UPDATED_EVENT = 'portfolio-settings-updated'
 
 /**
  * 헤더 언어 전환 버튼 — KO → EN → JA → KO 순환
@@ -14,8 +17,10 @@ export const LanguageSwitcher = () => {
     const toggle = () => {
         const next = LANG_CYCLE[current] ?? 'en'
         i18n.changeLanguage(next)
-        const existing = JSON.parse(localStorage.getItem('portfolio-settings') ?? '{}')
-        localStorage.setItem('portfolio-settings', JSON.stringify({ ...existing, language: next }))
+        const existing = JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY) ?? '{}')
+        localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ ...existing, language: next }))
+        localStorage.setItem(SETTINGS_BADGE_STORAGE_KEY, '1')
+        window.dispatchEvent(new CustomEvent(SETTINGS_UPDATED_EVENT, { detail: { dirty: true } }))
     }
 
     const nextLabel = LANG_LABEL[LANG_CYCLE[current] ?? 'en']

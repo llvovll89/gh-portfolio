@@ -1,3 +1,42 @@
+const CLI_COMMANDS = ["help", "date", "echo", "clear", "tip", "git", "export", "tutorial"] as const;
+const GIT_SUB_COMMANDS = [
+    "status",
+    "log",
+    "branch",
+    "push",
+    "pull",
+    "add",
+    "commit",
+    "diff",
+] as const;
+const TUTORIAL_SUB_COMMANDS = ["start", "next", "prev", "status", "stop"] as const;
+
+export const getCliSuggestions = (raw: string): string[] => {
+    const input = raw.trimStart();
+    const tokens = input.split(/\s+/).filter(Boolean);
+
+    // 공백 입력이거나 첫 토큰 작성 중인 경우: 최상위 명령어 제안
+    if (tokens.length <= 1 && !input.includes(" ")) {
+        const prefix = (tokens[0] ?? "").toLowerCase();
+        return CLI_COMMANDS.filter((command) => command.startsWith(prefix));
+    }
+
+    const [cmd, sub = ""] = tokens;
+    if (cmd?.toLowerCase() === "git") {
+        return GIT_SUB_COMMANDS.filter((subCommand) =>
+            subCommand.startsWith(sub.toLowerCase()),
+        ).map((subCommand) => `git ${subCommand}`);
+    }
+
+    if (cmd?.toLowerCase() === "tutorial") {
+        return TUTORIAL_SUB_COMMANDS.filter((subCommand) =>
+            subCommand.startsWith(sub.toLowerCase()),
+        ).map((subCommand) => `tutorial ${subCommand}`);
+    }
+
+    return [];
+};
+
 export const runCliCommand = (raw: string): string => {
     const input = raw.trim();
     if (!input) return "";
@@ -14,6 +53,12 @@ export const runCliCommand = (raw: string): string => {
                 "  clear                : 출력 비우기",
                 "  tip                  : 숨은 팁 보기",
                 "  git <command>        : Git 명령 (정보 표시용)",
+                "  export [txt|md]      : 현재 CLI 로그 다운로드",
+                "  tutorial <sub>       : CLI 튜토리얼 (start/next/prev/status/stop)",
+                "",
+                "CLI 편의 기능:",
+                "  Tab                  : 명령 자동완성",
+                "  ↑ / ↓                : 최근 명령어 탐색",
                 "",
                 "예) echo Hello, I'm Gunho",
             ].join("\n");

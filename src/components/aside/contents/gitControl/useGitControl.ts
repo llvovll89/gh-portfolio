@@ -13,6 +13,8 @@ import type {
 } from "./gitControlTypes";
 import { REPOS } from "./gitControlTypes";
 
+const GIT_SUMMARY_UPDATED_EVENT = "portfolio-git-summary-updated";
+
 const EMPTY_REPO_STATE: RepoState = {
     branches: [],
     commits: [],
@@ -128,6 +130,21 @@ export function useGitControl() {
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selected?.repo, selected?.branch]);
+
+    useEffect(() => {
+        const openCount = REPOS.reduce((acc, repo) => {
+            const state = gitStates[repo];
+            const openIssues = state.issues.filter((issue) => issue.state === "open").length;
+            const openPullRequests = state.pullRequests.filter((pr) => pr.state === "open").length;
+            return acc + openIssues + openPullRequests;
+        }, 0);
+
+        window.dispatchEvent(
+            new CustomEvent(GIT_SUMMARY_UPDATED_EVENT, {
+                detail: { openCount },
+            }),
+        );
+    }, [gitStates]);
 
     const isSelected = (repo: RepoName, branch: string) =>
         selected?.repo === repo && selected?.branch === branch;

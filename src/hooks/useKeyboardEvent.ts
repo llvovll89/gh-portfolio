@@ -3,6 +3,7 @@ import { KeyboardContext } from "@/context/KeyboardState.context";
 import { LayoutContext } from "@/context/LayoutContext";
 import { NavigationContext } from "@/context/NavigationContext";
 import { TerminalContext } from "@/context/TerminalContext";
+import { useNavigate } from "react-router-dom";
 
 import {
     handleActiveFolderUI,
@@ -16,6 +17,8 @@ import {
     handleToggleCommandPalette,
     handleToggleFooterUI,
     handleTogglePanelUI,
+    handleReopenClosedTab,
+    handleTogglePinCurrentTab,
     handleToggleSidebarUI,
 } from "@/utils/keyboardEvents";
 import { RESTRICTED_TAGS } from "@/constants/keyboardConstants";
@@ -31,8 +34,9 @@ export const useKeyboardEvent = () => {
         setIsVisibleCommandPalette,
     } = useContext(KeyboardContext);
     const { setLayoutState } = useContext(LayoutContext);
-    const { setSelectedNav } = useContext(NavigationContext);
+    const { setSelectedNav, closedTabs, setClosedTabs, setSelectedPathState, selectedPathState, setPinnedTabs } = useContext(NavigationContext);
     const { setIsTerminalVisible } = useContext(TerminalContext);
+    const navigate = useNavigate();
 
     /**
      * 키보드 이벤트 핸들러
@@ -69,6 +73,20 @@ export const useKeyboardEvent = () => {
             handleCloseKeyboardInfoUI(event, setIsVisibleKeyboardInfo);
             handleToggleCommandPalette(event, setIsVisibleCommandPalette);
 
+            handleReopenClosedTab(
+                event,
+                closedTabs,
+                setClosedTabs,
+                setSelectedPathState,
+                navigate,
+            );
+
+            handleTogglePinCurrentTab(
+                event,
+                selectedPathState,
+                setPinnedTabs,
+            );
+
             // CLI 관련 핸들러
             handleCliEnterEvent(event, setSubmitCliCommand);
 
@@ -82,6 +100,12 @@ export const useKeyboardEvent = () => {
         [
             setLayoutState,
             setSelectedNav,
+            closedTabs,
+            setClosedTabs,
+            setSelectedPathState,
+            selectedPathState,
+            setPinnedTabs,
+            navigate,
             setIsVisibleKeyboardInfo,
             setSubmitCliCommand,
             setIsVisibleCommandPalette,

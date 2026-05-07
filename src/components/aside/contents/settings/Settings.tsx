@@ -16,6 +16,10 @@ interface GeneralSettings {
     animationSpeed: string;
 }
 
+const SETTINGS_STORAGE_KEY = "portfolio-settings";
+const SETTINGS_BADGE_STORAGE_KEY = "portfolio-settings-has-updates";
+const SETTINGS_UPDATED_EVENT = "portfolio-settings-updated";
+
 const SHORTCUT_IDS = [
     KeyboardShortcutId.TOGGLE_FOOTER,
     KeyboardShortcutId.TOGGLE_KEYBOARD_INFO,
@@ -45,14 +49,18 @@ export const Settings = () => {
     });
 
     useEffect(() => {
-        const stored = localStorage.getItem("portfolio-settings");
+        const stored = localStorage.getItem(SETTINGS_STORAGE_KEY);
         if (stored) {
             setGeneralSettings(JSON.parse(stored));
         }
     }, []);
 
     const saveSettings = (settings: GeneralSettings) => {
-        localStorage.setItem("portfolio-settings", JSON.stringify(settings));
+        localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+        localStorage.setItem(SETTINGS_BADGE_STORAGE_KEY, "1");
+        window.dispatchEvent(
+            new CustomEvent(SETTINGS_UPDATED_EVENT, { detail: { dirty: true } }),
+        );
         setGeneralSettings(settings);
     };
 

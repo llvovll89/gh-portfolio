@@ -1,5 +1,5 @@
 import { Route, Routes, useLocation } from "react-router-dom";
-import { Suspense } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { GlobalStateProvider } from "./context/GlobalState.context";
 import { TerminalContext } from "./context/TerminalContext";
 import { KeyboardProvider } from "./context/KeyboardState.context";
@@ -20,8 +20,58 @@ function AppContent() {
     const isMobile = useCheckedMobile();
     const location = useLocation();
     usePageTracking();
+    const scrollPositionsRef = useRef<Record<string, number>>({});
     const isBlogDetailPage = location.pathname.startsWith("/blog/") && location.pathname !== "/blog/";
     const { isTerminalVisible } = useContext(TerminalContext);
+
+    useEffect(() => {
+        try {
+            const stored = localStorage.getItem("portfolio-scroll-positions");
+            if (!stored) return;
+            const parsed = JSON.parse(stored);
+            if (parsed && typeof parsed === "object") {
+                scrollPositionsRef.current = Object.fromEntries(
+                    Object.entries(parsed).filter(
+                        ([key, value]) =>
+                            typeof key === "string" &&
+                            typeof value === "number" &&
+                            Number.isFinite(value),
+                    ),
+                );
+            }
+        } catch {
+            // ignore storage parsing errors
+        }
+    }, []);
+
+    useEffect(() => {
+        const container = document.getElementById("main-content");
+        if (!container) return;
+
+        const handleScroll = () => {
+            scrollPositionsRef.current[location.pathname] = container.scrollTop;
+            try {
+                localStorage.setItem(
+                    "portfolio-scroll-positions",
+                    JSON.stringify(scrollPositionsRef.current),
+                );
+            } catch {
+                // ignore storage errors
+            }
+        };
+
+        const restore = () => {
+            const saved = scrollPositionsRef.current[location.pathname] ?? 0;
+            container.scrollTop = saved;
+        };
+
+        requestAnimationFrame(restore);
+        container.addEventListener("scroll", handleScroll, { passive: true });
+
+        return () => {
+            container.removeEventListener("scroll", handleScroll);
+        };
+    }, [location.pathname]);
 
     return (
         <section className="w-full min-h-dvh flex flex-col relative overflow-x-hidden overflow-y-auto">

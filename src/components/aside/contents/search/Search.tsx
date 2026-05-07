@@ -4,10 +4,12 @@ import { FiFileText } from "react-icons/fi";
 import { CiSquareRemove } from "react-icons/ci";
 import { MdHistory, MdClearAll } from "react-icons/md";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 import { useSearch } from "./useSearch";
 import { HighlightedText } from "./HighlightedText";
 
 const LISTBOX_ID = "search-results-listbox";
+const SEARCH_FOCUS_EVENT = "portfolio-search-focus";
 
 export const Search = () => {
     const { backgroundStyle, backgroundClass } = useThemeStyle();
@@ -38,6 +40,17 @@ export const Search = () => {
         openBlogPost,
         handleKeyDown,
     } = useSearch();
+
+    useEffect(() => {
+        const handleFocusRequest = () => {
+            inputRef.current?.focus();
+        };
+
+        window.addEventListener(SEARCH_FOCUS_EVENT, handleFocusRequest);
+        return () => {
+            window.removeEventListener(SEARCH_FOCUS_EVENT, handleFocusRequest);
+        };
+    }, [inputRef]);
 
     return (
         <section

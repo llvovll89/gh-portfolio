@@ -164,6 +164,36 @@ span {
     }
 }
 
+@keyframes nav-press-pulse {
+    0% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 0 rgba(0, 153, 255, 0));
+    }
+    45% {
+        transform: scale(1.18);
+        filter: drop-shadow(0 0 8px rgba(0, 153, 255, 0.45));
+    }
+    100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 0 rgba(0, 153, 255, 0));
+    }
+}
+
+@keyframes quick-action-pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(9, 153, 255, 0);
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 0 0.75rem rgba(9, 153, 255, 0.28);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(9, 153, 255, 0);
+    }
+}
+
 /* Skeleton shimmer */
 @keyframes skeleton-shimmer {
     0% {

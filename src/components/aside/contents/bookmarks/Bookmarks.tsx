@@ -23,6 +23,9 @@ interface Bookmark {
     addedAt: number;
 }
 
+const BOOKMARKS_STORAGE_KEY = "portfolio-bookmarks";
+const BOOKMARKS_UPDATED_EVENT = "portfolio-bookmarks-updated";
+
 export const Bookmarks = () => {
     const { selectedPathState } = useContext(NavigationContext);
     const { backgroundStyle, backgroundClass } = useThemeStyle();
@@ -42,14 +45,15 @@ export const Bookmarks = () => {
     );
 
     useEffect(() => {
-        const stored = localStorage.getItem("portfolio-bookmarks");
+        const stored = localStorage.getItem(BOOKMARKS_STORAGE_KEY);
         if (stored) {
             setBookmarks(JSON.parse(stored));
         }
     }, []);
 
     const saveBookmarks = (bks: Bookmark[]) => {
-        localStorage.setItem("portfolio-bookmarks", JSON.stringify(bks));
+        localStorage.setItem(BOOKMARKS_STORAGE_KEY, JSON.stringify(bks));
+        window.dispatchEvent(new Event(BOOKMARKS_UPDATED_EVENT));
         setBookmarks(bks);
     };
 
@@ -180,7 +184,7 @@ export const Bookmarks = () => {
                                         : ""
                                     } w-full flex items-center gap-2 px-3 py-2 text-white cursor-pointer text-xs hover:bg-primary/20 border-b border-sub-gary/30`}
                             >
-                                <VscStarFull className="w-4 h-4 text-yellow-400 flex-shrink-0" />
+                                <VscStarFull className="w-4 h-4 text-yellow-400 shrink-0" />
                                 <span
                                     onClick={() => handleClickBookmark(bookmark.path)}
                                     className="flex-1 truncate"
@@ -192,7 +196,7 @@ export const Bookmarks = () => {
                                         e.stopPropagation();
                                         handleRemoveBookmark(bookmark.id);
                                     }}
-                                    className="hover:bg-primary/20 p-1 rounded transition-colors flex-shrink-0"
+                                    className="hover:bg-primary/20 p-1 rounded transition-colors shrink-0"
                                     aria-label={t("common.delete")}
                                 >
                                     <VscTrash className="w-3 h-3 text-white/70 hover:text-white" />

@@ -1,6 +1,6 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation, matchPath } from "react-router-dom";
 import { routesPath } from "../../routes/route";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { LayoutContext } from "../../context/LayoutContext";
 import { NavigationContext } from "../../context/NavigationContext";
 import { useThemeStyle } from "../../hooks/useThemeStyle";
@@ -30,7 +30,7 @@ const HeaderClock = () => {
 
 export const Header = () => {
     const { layoutState } = useContext(LayoutContext);
-    const { selectedPathState, setSelectedPathState } = useContext(NavigationContext);
+    const { selectedPathState, setSelectedPathState, setClosedTabs, pinnedTabs, setPinnedTabs } = useContext(NavigationContext);
     const { backgroundStyle, backgroundClass } = useThemeStyle();
 
     const navigate = useNavigate();
@@ -69,15 +69,32 @@ export const Header = () => {
         };
     }, [toggleFullscreen]);
 
-    // 브라우저 앞/뒤로 가기 시 URL과 탭 선택 상태 동기화
+    // 현재 URL과 탭 선택 상태를 동기화 (동적 라우트 포함)
     useEffect(() => {
-        if (selectedPathState.list.includes(location.pathname)) {
-            setSelectedPathState((prev) => ({
+        const matchedRoute = routesPath.find(
+            (route) =>
+                route.path !== "*" &&
+                Boolean(matchPath({ path: route.path, end: true }, location.pathname)),
+        );
+
+        const nextPath = matchedRoute?.path;
+        if (!nextPath) return;
+
+        setSelectedPathState((prev) => {
+            const hasPath = prev.list.includes(nextPath);
+            const nextList = hasPath ? prev.list : [...prev.list, nextPath];
+
+            if (hasPath && prev.state === nextPath) {
+                return prev;
+            }
+
+            return {
                 ...prev,
-                state: location.pathname,
-            }));
-        }
-    }, [location.pathname]);
+                list: nextList,
+                state: nextPath,
+            };
+        });
+    }, [location.pathname, setSelectedPathState]);
 
     const selectedStyle = (path: string) => {
         return {
@@ -85,7 +102,25 @@ export const Header = () => {
         };
     };
 
+    const orderedTabs = useMemo(() => {
+        const pinnedSet = new Set(pinnedTabs);
+        const pinned = selectedPathState.list.filter((path) => pinnedSet.has(path));
+        const rest = selectedPathState.list.filter((path) => !pinnedSet.has(path));
+        return [...pinned, ...rest];
+    }, [pinnedTabs, selectedPathState.list]);
+
+    const togglePinPath = (path: string) => {
+        setPinnedTabs((prev) =>
+            prev.includes(path)
+                ? prev.filter((p) => p !== path)
+                : [path, ...prev],
+        );
+    };
+
     const handleClosePAth = (path: string) => {
+        setClosedTabs((prev) => [...prev, path]);
+        setPinnedTabs((prev) => prev.filter((p) => p !== path));
+
         setSelectedPathState((prev) => {
             const idx = prev.list.indexOf(path);
             const newList = prev.list.filter((p) => p !== path);
@@ -146,9 +181,10 @@ export const Header = () => {
                     aria-label="File tabs"
                     className={`flex items-center h-full flex-1 overflow-x-auto`}
                 >
-                    {selectedPathState.list.map((path) => {
+                    {orderedTabs.map((path) => {
                         const route = routesPath.find((r) => r.path === path);
                         if (!route) return null;
+                        const isPinned = pinnedTabs.includes(route.path);
                         return (
                             <li
                                 role="tab"
@@ -180,6 +216,21 @@ export const Header = () => {
                                         {route.name}.tsx
                                     </span>
                                 </Link>
+
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        togglePinPath(route.path);
+                                    }}
+                                    aria-label={isPinned ? `Unpin ${route.name} tab` : `Pin ${route.name} tab`}
+                                    className={`h-full px-1 flex items-center justify-center cursor-pointer rounded transition-colors ${isPinned ? "text-amber-300" : "text-white/50 hover:text-white/80"}`}
+                                    title={isPinned ? "고정 해제" : "탭 고정"}
+                                >
+                                    <span className="text-[11px] sm:text-xs">
+                                        {isPinned ? "★" : "☆"}
+                                    </span>
+                                </button>
 
                                 <button
                                     onClick={(e) => {
@@ -217,7 +268,7 @@ export const Header = () => {
                     {/* 뒤로 가기 버튼 */}
                     <button
                         onClick={() => navigate(-1)}
-                        className="h-full px-3 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors"
+                        className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors"
                         title="뒤로 가기"
                     >
                         <svg
@@ -265,7 +316,7 @@ export const Header = () => {
                     {/* 새로고침 버튼 */}
                     <button
                         onClick={() => navigate(0)}
-                        className="h-full px-3 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
+                        className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
                         title="새로고침"
                     >
                         <svg
@@ -331,7 +382,7 @@ export const Header = () => {
                     <LanguageSwitcher />
 
                     {/* 시계 */}
-                    <HeaderClock />
+                    {!isMobileSize && <HeaderClock />}
                 </div>
             </header>
 
