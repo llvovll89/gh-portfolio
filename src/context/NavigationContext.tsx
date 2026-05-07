@@ -45,13 +45,18 @@ function loadSelectedPathState(): SelectedPathState {
             return { list: [DEFAULT], state: DEFAULT };
         }
 
-        const parsed = JSON.parse(stored);
-        const list = Array.isArray(parsed?.list)
-            ? parsed.list.filter((path: unknown): path is string => typeof path === "string")
-            : [];
-        const state = typeof parsed?.state === "string" ? parsed.state : "";
+        const parsed: unknown = JSON.parse(stored);
+        const parsedState =
+            parsed && typeof parsed === "object"
+                ? (parsed as { list?: unknown; state?: unknown })
+                : undefined;
 
-        const nextList = list.length > 0 ? [...new Set(list)] : [DEFAULT];
+        const list = Array.isArray(parsedState?.list)
+            ? parsedState.list.filter((path: unknown): path is string => typeof path === "string")
+            : [];
+        const state = typeof parsedState?.state === "string" ? parsedState.state : "";
+
+        const nextList: string[] = list.length > 0 ? [...new Set(list)] : [DEFAULT];
         const nextState = nextList.includes(state) ? state : nextList[0];
 
         return {

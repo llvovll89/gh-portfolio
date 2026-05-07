@@ -28,16 +28,15 @@ function AppContent() {
         try {
             const stored = localStorage.getItem("portfolio-scroll-positions");
             if (!stored) return;
-            const parsed = JSON.parse(stored);
+            const parsed: unknown = JSON.parse(stored);
             if (parsed && typeof parsed === "object") {
-                scrollPositionsRef.current = Object.fromEntries(
-                    Object.entries(parsed).filter(
-                        ([key, value]) =>
-                            typeof key === "string" &&
-                            typeof value === "number" &&
-                            Number.isFinite(value),
-                    ),
-                );
+                const nextPositions: Record<string, number> = {};
+                for (const [key, value] of Object.entries(parsed)) {
+                    if (typeof value === "number" && Number.isFinite(value)) {
+                        nextPositions[key] = value;
+                    }
+                }
+                scrollPositionsRef.current = nextPositions;
             }
         } catch {
             // ignore storage parsing errors

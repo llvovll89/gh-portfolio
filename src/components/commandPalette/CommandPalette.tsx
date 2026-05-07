@@ -557,7 +557,8 @@ export const CommandPalette = () => {
 
         const recent = recentCommandIds
             .map((id) => byUsage.find((cmd) => cmd.id === id))
-            .filter((cmd): cmd is Command => Boolean(cmd) && !pinnedIds.has(cmd.id));
+            .filter((cmd): cmd is Command => cmd !== undefined)
+            .filter((cmd) => !pinnedIds.has(cmd.id));
 
         const recentIds = new Set(recent.map((cmd) => cmd.id));
         const rest = byUsage.filter(
