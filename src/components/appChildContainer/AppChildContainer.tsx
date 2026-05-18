@@ -1,8 +1,13 @@
-import { useContext, useEffect } from "react";
+import { Suspense, lazy, useContext, useEffect } from "react";
 import { KeyboardContext } from "../../context/KeyboardState.context";
-import { LogViewer } from "../LogViewer/LogViewer";
 import { useKeyboardEvent } from "../../hooks/useKeyboardEvent";
-import { CommandPalette } from "../commandPalette/CommandPalette";
+
+const LogViewer = lazy(() =>
+    import("../LogViewer/LogViewer").then((m) => ({ default: m.LogViewer })),
+);
+const CommandPalette = lazy(() =>
+    import("../commandPalette/CommandPalette").then((m) => ({ default: m.CommandPalette })),
+);
 
 export const AppChildContainer = () => {
     const { submitCliCommand, setSubmitCliCommand } = useContext(KeyboardContext);
@@ -19,8 +24,10 @@ export const AppChildContainer = () => {
 
     return (
         <>
-            {submitCliCommand.isVisibleCommandUi && <LogViewer />}
-            <CommandPalette />
+            <Suspense fallback={null}>
+                {submitCliCommand.isVisibleCommandUi && <LogViewer />}
+                <CommandPalette />
+            </Suspense>
         </>
     );
 };

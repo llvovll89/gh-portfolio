@@ -1,5 +1,6 @@
 import { BlogSearchInput } from "./BlogSearchInput";
 import { BlogTagFilter } from "./BlogTagFilter";
+import { BlogCategoryFilter } from "./BlogCategoryFilter";
 import { BlogSortToggle } from "./BlogSortToggle";
 import { BlogViewToggle } from "./BlogViewToggle";
 import { HiX } from "react-icons/hi";
@@ -11,11 +12,14 @@ interface BlogFilterBarProps {
     onDebouncedSearchChange: (query: string) => void;
     selectedTags: string[];
     onTagsChange: (tags: string[]) => void;
+    selectedCategory: string;
+    onCategoryChange: (category: string) => void;
     sortOrder: "asc" | "desc";
     onSortChange: (order: "asc" | "desc") => void;
     viewMode: "list" | "grouped" | "grid";
     onViewModeChange: (mode: "list" | "grouped" | "grid") => void;
     availableTags: string[];
+    availableCategories: string[];
     tagCounts: Record<string, number>;
     totalPosts: number;
     filteredCount: number;
@@ -27,21 +31,25 @@ export const BlogFilterBar = ({
     onDebouncedSearchChange,
     selectedTags,
     onTagsChange,
+    selectedCategory,
+    onCategoryChange,
     sortOrder,
     onSortChange,
     viewMode,
     onViewModeChange,
     availableTags,
+    availableCategories,
     tagCounts,
     totalPosts,
     filteredCount,
 }: BlogFilterBarProps) => {
     const { t } = useTranslation();
-    const hasActiveFilters = searchQuery || selectedTags.length > 0;
+    const hasActiveFilters = searchQuery || selectedTags.length > 0 || selectedCategory;
 
     const clearAllFilters = () => {
         onSearchChange("");
         onTagsChange([]);
+        onCategoryChange("");
     };
 
     return (
@@ -64,6 +72,12 @@ export const BlogFilterBar = ({
                         selectedTags={selectedTags}
                         onTagsChange={onTagsChange}
                         tagCounts={tagCounts}
+                    />
+
+                    <BlogCategoryFilter
+                        availableCategories={availableCategories}
+                        selectedCategory={selectedCategory}
+                        onCategoryChange={onCategoryChange}
                     />
 
                     <BlogSortToggle

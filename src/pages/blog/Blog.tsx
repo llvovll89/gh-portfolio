@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, lazy, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useSeoMeta } from "../../hooks/useSeoMeta";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
@@ -9,15 +9,19 @@ import { Header } from "../../components/header/Header";
 import { loadAllPosts } from "../../utils/loadAllPosts";
 import { BlogCard } from "./contents/BlogCard";
 import { BlogFilterBar } from "./components/BlogFilterBar";
-import { BlogGroupedView } from "./components/BlogGroupedView";
 import { useTranslation } from "react-i18next";
 import {
+    extractAllCategories,
     extractAllTags,
     filterPosts,
     sortPosts,
     groupPostsByTag,
     getTagCounts,
 } from "../../utils/blogFilters";
+
+const BlogGroupedView = lazy(() =>
+    import("./components/BlogGroupedView").then((m) => ({ default: m.BlogGroupedView })),
+);
 
 const ALL_POSTS = loadAllPosts();
 
@@ -50,6 +54,7 @@ export const Blog = () => {
         const raw = searchParams.get("tags");
         return raw ? raw.split(",").filter(Boolean) : [];
     });
+    const [selectedCategory, setSelectedCategory] = useState(() => searchParams.get("category") ?? "");
 
     // 뷰 설정은 URL 불필요 — localStorage 유지
     const [sortOrder, setSortOrder] = useLocalStorage<"asc" | "desc">(STORAGE_KEYS.SORT_ORDER, "desc");
@@ -63,17 +68,20 @@ export const Blog = () => {
             else next.delete("q");
             if (selectedTags.length > 0) next.set("tags", selectedTags.join(","));
             else next.delete("tags");
+            if (selectedCategory) next.set("category", selectedCategory);
+            else next.delete("category");
             return next;
         }, { replace: true });
-    }, [debouncedQuery, selectedTags]);
+    }, [debouncedQuery, selectedTags, selectedCategory, setSearchParams]);
 
     // ── 필터링 / 정렬 ────────────────────────────────────────
     const availableTags = useMemo(() => extractAllTags(allPosts), [allPosts]);
+    const availableCategories = useMemo(() => extractAllCategories(allPosts), [allPosts]);
     const tagCounts = useMemo(() => getTagCounts(allPosts), [allPosts]);
 
     const filteredPosts = useMemo(
-        () => filterPosts(allPosts, debouncedQuery, selectedTags),
-        [allPosts, debouncedQuery, selectedTags],
+        () => filterPosts(allPosts, debouncedQuery, selectedTags, selectedCategory),
+        [allPosts, debouncedQuery, selectedTags, selectedCategory],
     );
 
     const sortedPosts = useMemo(() => {
@@ -103,11 +111,14 @@ export const Blog = () => {
                             onDebouncedSearchChange={setDebouncedQuery}
                             selectedTags={selectedTags}
                             onTagsChange={setSelectedTags}
+                            selectedCategory={selectedCategory}
+                            onCategoryChange={setSelectedCategory}
                             sortOrder={sortOrder}
                             onSortChange={setSortOrder}
                             viewMode={viewMode}
                             onViewModeChange={setViewMode}
                             availableTags={availableTags}
+                            availableCategories={availableCategories}
                             tagCounts={tagCounts}
                             totalPosts={allPosts.length}
                             filteredCount={sortedPosts.length}
@@ -143,7 +154,9 @@ export const Blog = () => {
                             </ul>
                         ) : (
                             <div className="pb-4">
-                                <BlogGroupedView posts={groupedPosts} />
+                                <Suspense fallback={<BlogListSkeleton />}>
+                                    <BlogGroupedView posts={groupedPosts} />
+                                </Suspense>
                             </div>
                         )}
                     </div>

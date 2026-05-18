@@ -68,6 +68,8 @@ const THEME_LABELS: Record<Exclude<ThemeMode, ThemeMode.CUSTOM>, string> = {
     [ThemeMode.SUB_TEAL]: "테마: 푸른 나무",
 };
 
+const THEME_MODE_ORDER = Object.keys(THEME_LABELS) as Array<Exclude<ThemeMode, ThemeMode.CUSTOM>>;
+
 const LANGUAGE_LABELS = {
     ko: "언어: 한국어",
     en: "언어: English",
@@ -350,6 +352,68 @@ export const CommandPalette = () => {
                         ? prev.filter((path) => path !== activePath)
                         : [activePath, ...prev],
                 );
+            },
+        },
+        {
+            id: "theme-cycle-next",
+            label: "테마 순환: 다음",
+            description: "현재 테마 기준으로 다음 테마로 전환합니다",
+            shortcut: "",
+            category: "Theme",
+            keywords: ["theme", "next", "cycle", "테마"],
+            action: () => {
+                setSelectedTheme((prev) => {
+                    const current = prev.mode as Exclude<ThemeMode, ThemeMode.CUSTOM>;
+                    const currentIndex = THEME_MODE_ORDER.indexOf(current);
+                    const nextIndex = currentIndex === -1
+                        ? 0
+                        : (currentIndex + 1) % THEME_MODE_ORDER.length;
+                    return {
+                        ...prev,
+                        mode: THEME_MODE_ORDER[nextIndex],
+                        isVisibleThemeDropdown: false,
+                    };
+                });
+            },
+        },
+        {
+            id: "theme-cycle-prev",
+            label: "테마 순환: 이전",
+            description: "현재 테마 기준으로 이전 테마로 전환합니다",
+            shortcut: "",
+            category: "Theme",
+            keywords: ["theme", "prev", "cycle", "테마"],
+            action: () => {
+                setSelectedTheme((prev) => {
+                    const current = prev.mode as Exclude<ThemeMode, ThemeMode.CUSTOM>;
+                    const currentIndex = THEME_MODE_ORDER.indexOf(current);
+                    const prevIndex = currentIndex === -1
+                        ? 0
+                        : (currentIndex - 1 + THEME_MODE_ORDER.length) % THEME_MODE_ORDER.length;
+                    return {
+                        ...prev,
+                        mode: THEME_MODE_ORDER[prevIndex],
+                        isVisibleThemeDropdown: false,
+                    };
+                });
+            },
+        },
+        {
+            id: "system-clear-command-history",
+            label: "명령 팔레트: 최근/사용 통계 초기화",
+            description: "최근 실행 명령과 추천 계산용 사용 통계를 지웁니다",
+            shortcut: "",
+            category: "System",
+            keywords: ["palette", "recent", "history", "reset"],
+            action: () => {
+                setRecentCommandIds([]);
+                setUsageStats({});
+                try {
+                    localStorage.removeItem(RECENT_COMMANDS_STORAGE_KEY);
+                    localStorage.removeItem(COMMAND_USAGE_STATS_STORAGE_KEY);
+                } catch {
+                    // ignore storage errors
+                }
             },
         },
         {

@@ -11,12 +11,24 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
-// Firebase 환경변수 누락 감지 (배포 환경 디버깅용)
-if (!firebaseConfig.projectId) {
-    console.error(
-        '[Firebase] VITE_FIREBASE_* 환경변수가 설정되지 않았습니다. ' +
-        'Vercel 대시보드 → Settings → Environment Variables를 확인해주세요.'
-    )
+const REQUIRED_FIREBASE_ENV_KEYS = [
+  'VITE_FIREBASE_API_KEY',
+  'VITE_FIREBASE_AUTH_DOMAIN',
+  'VITE_FIREBASE_PROJECT_ID',
+  'VITE_FIREBASE_STORAGE_BUCKET',
+  'VITE_FIREBASE_MESSAGING_SENDER_ID',
+  'VITE_FIREBASE_APP_ID',
+] as const
+
+const missingKeys = REQUIRED_FIREBASE_ENV_KEYS.filter((key) => {
+  const value = import.meta.env[key]
+  return typeof value !== 'string' || !value.trim()
+})
+
+if (missingKeys.length > 0) {
+  throw new Error(
+    `[Firebase] 필수 환경변수가 누락되었습니다: ${missingKeys.join(', ')}`,
+  )
 }
 
 // Firebase 앱 초기화

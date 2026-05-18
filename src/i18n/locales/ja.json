@@ -148,6 +148,8 @@
       },
       "filter": {
         "tagFilter": "タグフィルター",
+        "categoryFilter": "カテゴリーフィルター",
+        "allCategories": "すべてのカテゴリー",
         "allTags": "すべてのタグ",
         "selectedTags": "タグ（{{count}}）",
         "clearAll": "すべて解除",

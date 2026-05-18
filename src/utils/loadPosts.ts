@@ -7,6 +7,7 @@ export type BlogPost = {
     date: string; // YYYY-MM-DD
     summary?: string;
     tags?: string[];
+    category?: string;
     body: string;
     readingTime: string;
     type?: "md" | "html";
@@ -36,8 +37,11 @@ export function loadPosts(): BlogPost[] {
         const tags = Array.isArray(frontmatter.tags)
             ? (frontmatter.tags as string[])
             : undefined;
+        const category = frontmatter.category
+            ? String(frontmatter.category)
+            : undefined;
 
-        return {slug, title, date, summary, tags, body, readingTime: calculateReadingTime(body)};
+        return {slug, title, date, summary, tags, category, body, readingTime: calculateReadingTime(body)};
     });
 
     posts.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));

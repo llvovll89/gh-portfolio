@@ -148,6 +148,8 @@
       },
       "filter": {
         "tagFilter": "태그 필터",
+        "categoryFilter": "카테고리 필터",
+        "allCategories": "모든 카테고리",
         "allTags": "모든 태그",
         "selectedTags": "태그 ({{count}})",
         "clearAll": "전체 해제",

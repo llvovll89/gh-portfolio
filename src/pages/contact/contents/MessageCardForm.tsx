@@ -6,7 +6,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const MessageCardForm = () => {
     const { t } = useTranslation();
-    const EMAIL = import.meta.env.VITE_EMAIL;
+    const EMAIL = (import.meta.env.VITE_EMAIL as string | undefined)?.trim() ?? "";
 
     const [name, setName] = useState("");
     const [fromEmail, setFromEmail] = useState("");
@@ -32,6 +32,10 @@ export const MessageCardForm = () => {
     };
 
     const handleSend = () => {
+        if (!EMAIL) {
+            setEmailError("수신 이메일 설정이 누락되었습니다. VITE_EMAIL을 확인해주세요.");
+            return;
+        }
         if (!validate()) return;
         window.location.href = mailtoHref;
     };
@@ -127,6 +131,7 @@ export const MessageCardForm = () => {
                     <button
                         type="button"
                         onClick={handleSend}
+                        disabled={!EMAIL}
                         className="rounded-xl bg-linear-to-r from-primary to-primary/80 sm:px-5 px-4 sm:py-2.5 py-2 text-sm font-semibold text-white hover:from-primary/90 hover:to-primary/70 transition-all active:scale-95 flex items-center gap-2 shadow-lg shadow-primary/20"
                     >
                         <HiPaperAirplane className="w-4 h-4" />
@@ -137,9 +142,16 @@ export const MessageCardForm = () => {
                 {/* 안내 문구 */}
                 <div className="flex items-start gap-2 rounded-lg bg-primary/5 border border-primary/20 sm:px-3 px-2 sm:py-2.5 py-2">
                     <HiInformationCircle className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
-                    <p className="text-xs text-white/60">
-                        {t("pages.contact.messageForm.infoNotice")}
-                    </p>
+                    <div>
+                        <p className="text-xs text-white/60">
+                            {t("pages.contact.messageForm.infoNotice")}
+                        </p>
+                        {!EMAIL && (
+                            <p className="mt-1 text-xs text-rose-400">
+                                VITE_EMAIL 환경변수가 비어 있어 메일 앱 전송이 비활성화되었습니다.
+                            </p>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

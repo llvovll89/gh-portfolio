@@ -57,6 +57,11 @@ export const BlogCard = ({ p, searchQuery = "" }: BlogCardProps) => {
                             HTML
                         </span>
                     )}
+                    {p.category && (
+                        <span className="text-[10px] font-semibold text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-950/30 px-1.5 py-0.5 rounded">
+                            {p.category}
+                        </span>
+                    )}
                     {p.tags?.length ? (
                         <div className="flex flex-wrap gap-1">
                             {p.tags.slice(0, 2).map((t) => (

@@ -28,6 +28,23 @@ function setMeta(selector: string, attr: string, value: string) {
     el.setAttribute(attr, value)
 }
 
+function setCanonical(url: string) {
+    let el = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')
+    if (!el) {
+        el = document.createElement('link')
+        el.setAttribute('rel', 'canonical')
+        document.head.appendChild(el)
+    }
+    el.setAttribute('href', url)
+}
+
+function getBaseUrl() {
+    if (typeof window !== 'undefined' && window.location?.origin) {
+        return window.location.origin
+    }
+    return SITE_URL
+}
+
 export function useSeoMeta({
     title,
     description = DEFAULT_DESC,
@@ -36,8 +53,11 @@ export function useSeoMeta({
     type = 'website',
 }: SeoMetaOptions = {}) {
     useEffect(() => {
+        const baseUrl = getBaseUrl()
+        const defaultImage = `${baseUrl}/og/thumbnail.webp`
         const fullTitle = title ? `${title} | GH Portfolio` : DEFAULT_TITLE
-        const fullUrl = url ? `${SITE_URL}${url}` : SITE_URL
+        const fullUrl = url ? `${baseUrl}${url}` : baseUrl
+        const fullImage = image.startsWith('http') ? image : `${baseUrl}${image.startsWith('/') ? image : `/${image}`}`
 
         // document title
         document.title = fullTitle
@@ -48,14 +68,16 @@ export function useSeoMeta({
         // OG
         setMeta('meta[property="og:title"]', 'content', fullTitle)
         setMeta('meta[property="og:description"]', 'content', description)
-        setMeta('meta[property="og:image"]', 'content', image)
+        setMeta('meta[property="og:image"]', 'content', fullImage)
         setMeta('meta[property="og:url"]', 'content', fullUrl)
         setMeta('meta[property="og:type"]', 'content', type)
+        setCanonical(fullUrl)
 
         // Twitter
         setMeta('meta[name="twitter:title"]', 'content', fullTitle)
         setMeta('meta[name="twitter:description"]', 'content', description)
-        setMeta('meta[name="twitter:image"]', 'content', image)
+        setMeta('meta[name="twitter:image"]', 'content', fullImage)
+        setMeta('meta[name="twitter:url"]', 'content', fullUrl)
 
         // 언마운트 시 기본값 복원
         return () => {
@@ -63,12 +85,14 @@ export function useSeoMeta({
             setMeta('meta[name="description"]', 'content', DEFAULT_DESC)
             setMeta('meta[property="og:title"]', 'content', DEFAULT_TITLE)
             setMeta('meta[property="og:description"]', 'content', DEFAULT_DESC)
-            setMeta('meta[property="og:image"]', 'content', DEFAULT_IMAGE)
-            setMeta('meta[property="og:url"]', 'content', SITE_URL)
+            setMeta('meta[property="og:image"]', 'content', defaultImage)
+            setMeta('meta[property="og:url"]', 'content', baseUrl)
             setMeta('meta[property="og:type"]', 'content', 'website')
             setMeta('meta[name="twitter:title"]', 'content', DEFAULT_TITLE)
             setMeta('meta[name="twitter:description"]', 'content', DEFAULT_DESC)
-            setMeta('meta[name="twitter:image"]', 'content', DEFAULT_IMAGE)
+            setMeta('meta[name="twitter:image"]', 'content', defaultImage)
+            setMeta('meta[name="twitter:url"]', 'content', baseUrl)
+            setCanonical(baseUrl)
         }
     }, [title, description, image, url, type])
 }

@@ -109,7 +109,7 @@ export const Detail = () => {
     return (
         <>
             {/* 읽기 진행도 바 - Detail 페이지는 헤더 없으므로 top-0 */}
-            <div className="fixed top-0 left-0 right-0 h-[3px] z-50 pointer-events-none">
+            <div className="fixed top-0 left-0 right-0 h-0.75 z-50 pointer-events-none">
                 <div
                     ref={progressBarRef}
                     className="h-full bg-primary"
@@ -193,6 +193,7 @@ export const Detail = () => {
                 {post.type === "html" ? (
                     <iframe
                         srcDoc={post.body}
+                        loading="lazy"
                         className="w-full rounded-lg border border-zinc-200 dark:border-zinc-700"
                         style={{ height: "80vh" }}
                         title={post.title}

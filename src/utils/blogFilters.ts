@@ -14,6 +14,18 @@ export function extractAllTags(posts: BlogPost[]): string[] {
     return Array.from(tagSet).sort((a, b) => a.localeCompare(b));
 }
 
+export function extractAllCategories(posts: BlogPost[]): string[] {
+    const categorySet = new Set<string>();
+
+    posts.forEach((post) => {
+        if (post.category?.trim()) {
+            categorySet.add(post.category.trim());
+        }
+    });
+
+    return Array.from(categorySet).sort((a, b) => a.localeCompare(b));
+}
+
 /**
  * 검색 점수 계산 (Search.tsx의 scoreRoute 패턴 참고)
  */
@@ -102,9 +114,16 @@ export function scorePost(
 export function filterPosts(
     posts: BlogPost[],
     searchQuery: string,
-    selectedTags: string[]
+    selectedTags: string[],
+    selectedCategory: string
 ): BlogPost[] {
     let filtered = posts;
+
+    if (selectedCategory.trim()) {
+        filtered = filtered.filter(
+            (post) => (post.category ?? "") === selectedCategory,
+        );
+    }
 
     // 태그 필터 적용 (AND 조건: 선택한 모든 태그를 포함해야 함)
     if (selectedTags.length > 0) {

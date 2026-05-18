@@ -148,6 +148,8 @@
       },
       "filter": {
         "tagFilter": "Tag Filter",
+        "categoryFilter": "Category Filter",
+        "allCategories": "All Categories",
         "allTags": "All Tags",
         "selectedTags": "Tags ({{count}})",
         "clearAll": "Clear All",

@@ -46,6 +46,7 @@ export function loadHtmlPosts(): BlogPost[] {
         const tags = keywordsRaw
             ? keywordsRaw.split(",").map((t) => t.trim()).filter(Boolean)
             : undefined;
+        const category = extractMeta(raw, "category");
 
         const summary = extractMeta(raw, "description") ?? extractTextSummary(raw);
 
@@ -55,6 +56,7 @@ export function loadHtmlPosts(): BlogPost[] {
             date,
             summary,
             tags,
+            category,
             body: raw,
             readingTime: "",
             type: "html" as const,
