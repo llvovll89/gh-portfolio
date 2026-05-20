@@ -33,20 +33,19 @@ export const projects = [
     },
     {
         id: 2,
-        title: "ModArt",
+        title: "Run River",
         scale: "개인 프로젝트",
-        image: "/assets/images/projects/modArt.png",
+        image: "/assets/images/projects/run-river.png",
         link: {
-            repositoryUrl: "https://github.com/llvovll89/modart",
-            projectUrl: "https://llvovll89.github.io/modart/",
+            repositoryUrl: "https://github.com/llvovll89/Run-River",
+            projectUrl: "https://run-river.vercel.app/",
         },
         description:
-            "사용자들이 자신의 데일리룩 사진을 업로드하고 공유할 수 있는 패션 커뮤니티 플랫폼입니다.",
+            "카카오 지도 기반으로 러닝 경로를 설정하고 거리·시간·인터벌을 기록할 수 있는 러닝 앱입니다.",
         detailedDescription:
-            "사용자들이 자신의 데일리룩 사진을 업로드하고 공유할 수 있는 플랫폼입니다. 각 사진에는 해시태그를 추가하여 스타일을 분류할 수 있으며, 다른 사용자들의 사진을 탐색하고 좋아요를 누를 수 있습니다. 또한, 인기 있는 스타일과 트렌드를 쉽게 확인할 수 있도록 디자인되었습니다.",
-        skills: ["React", "Redux", "Firebase", "Styled-Components"],
+            "카카오 지도와 OSRM 라우팅을 활용하여 러닝·워킹 경로를 설정하고, 거리·시간·인터벌 모드로 운동을 기록하는 웹 애플리케이션입니다. 페이스 구간별 MET 기반 칼로리 계산, 결과 공유 카드, 음성 안내 기능을 제공하며, 주간 챌린지로 꾸준한 운동 습관을 지원합니다. PWA를 지원하여 모바일에서도 앱처럼 사용할 수 있습니다.",
+        skills: ["Next.js", "TypeScript", "Tailwind CSS", "Supabase", "Kakao Maps API", "OSRM", "PWA", "Vercel"],
         projectMembers: ["김건호"],
-        status: "updating",
     },
     {
         id: 3,

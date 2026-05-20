@@ -74,6 +74,7 @@ const GuestbookList = ({
     const [lastDoc, setLastDoc] = useState<DocumentSnapshot | null>(null)
 
     const [readError, setReadError] = useState('')
+    const [loadMoreError, setLoadMoreError] = useState('')
     const [detailEntry, setDetailEntry] = useState<GuestbookEntry | null>(null)
     const [editEntry, setEditEntry] = useState<GuestbookEntry | null>(null)
     const [deleteEntry, setDeleteEntry] = useState<GuestbookEntry | null>(null)
@@ -113,6 +114,7 @@ const GuestbookList = ({
     const loadMore = async () => {
         if (!lastDoc || loadingMore) return
         setLoadingMore(true)
+        setLoadMoreError('')
         try {
             const q = query(
                 collection(db, 'guestbook'),
@@ -127,6 +129,7 @@ const GuestbookList = ({
             setLastDoc(snapshot.docs[snapshot.docs.length - 1] ?? lastDoc)
         } catch (err) {
             logger.error('방명록 추가 로드 실패', err)
+            setLoadMoreError('추가 항목을 불러오지 못했습니다. 다시 시도해주세요.')
         } finally {
             setLoadingMore(false)
         }
@@ -243,7 +246,10 @@ const GuestbookList = ({
 
                         {/* 더 보기 버튼 */}
                         {hasMore && (
-                            <div className="flex justify-center mt-4 pb-2">
+                            <div className="flex flex-col items-center gap-2 mt-4 pb-2">
+                                {loadMoreError && (
+                                    <p className="text-xs text-rose-400/80">{loadMoreError}</p>
+                                )}
                                 <button
                                     onClick={loadMore}
                                     disabled={loadingMore}
@@ -254,6 +260,8 @@ const GuestbookList = ({
                                             <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white/70 rounded-full animate-spin" />
                                             불러오는 중…
                                         </span>
+                                    ) : loadMoreError ? (
+                                        '다시 시도'
                                     ) : (
                                         '더 보기'
                                     )}

@@ -72,6 +72,7 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                                 "border border-[#3e3e42] shadow-lg",
                                 "transition-all duration-200",
                                 "hover:bg-[#2a2a2d] hover:scale-110 hover:text-white",
+                                "cursor-pointer",
                                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1e1e1e]",
                             ].join(" ")}
                             aria-label={t("pages.projects.close")}
