@@ -3,6 +3,7 @@ import { db } from "@/firebase/config"
 import { collection, addDoc, serverTimestamp } from "firebase/firestore"
 import hashPassword from "@/utils/hashPassword"
 import GuestbookEditor from './GuestbookEditor'
+import { logger } from "@/utils/logger"
 
 type Props = {
     onSubmitted?: (msg?: string) => void
@@ -47,7 +48,7 @@ const GuestbookForm = ({ onSubmitted, autoFocus, focusTarget, handleToggleForm }
             setMessage('')
             if (onSubmitted) onSubmitted('방명록이 등록되었습니다.')
         } catch (err) {
-            console.error('방명록 등록 실패:', err)
+            logger.error('방명록 등록 실패', err)
             const msg = err instanceof Error ? err.message : String(err)
             if (msg.includes('permission-denied') || msg.includes('PERMISSION_DENIED')) {
                 setError('저장 권한이 없습니다. Firebase 보안 규칙을 확인해주세요.')

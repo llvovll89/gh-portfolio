@@ -4,9 +4,15 @@ import { Header } from "../../components/header/Header";
 import { ProjectContentsCards } from "./common/ProjectContentsCards";
 import { useTranslation } from "react-i18next";
 import { FaFolder } from "react-icons/fa";
+import { useSeoMeta } from "../../hooks/useSeoMeta";
 
 export const Projects = () => {
     const { t } = useTranslation();
+    useSeoMeta({
+        title: "Projects",
+        description: "김건호가 개발한 웹 프로젝트 모음 — React, TypeScript, Firebase 기반",
+        url: "/projects",
+    });
 
     return (
         <>

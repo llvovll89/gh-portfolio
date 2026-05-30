@@ -7,6 +7,7 @@ import { TableOfContents } from "./TableOfContents";
 import { Minimap } from "./Minimap";
 import { incrementViewCount, subscribeViewCount } from "../../../utils/blogViews";
 import { FiEye } from "react-icons/fi";
+import { logger } from "../../../utils/logger";
 import { BlogComments } from "../comments/BlogComments";
 import { useSeoMeta } from "../../../hooks/useSeoMeta";
 import { ShareButton } from "../../../components/ShareButton";
@@ -73,7 +74,7 @@ export const Detail = () => {
     // 조회수 증가 + 실시간 구독
     useEffect(() => {
         if (!slug) return;
-        incrementViewCount(slug).catch(console.error);
+        incrementViewCount(slug).catch((e) => logger.error("조회수 증가 실패", e));
         const unsubscribe = subscribeViewCount(slug, setViewCount);
         return unsubscribe;
     }, [slug]);
