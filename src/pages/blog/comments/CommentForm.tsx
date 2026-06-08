@@ -38,7 +38,7 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
     }
 
     return (
-        <div className="mt-6 rounded-2xl border border-zinc-200 dark:border-white/10 bg-white dark:bg-white/3 p-5 shadow-sm">
+        <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5 shadow-sm">
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-bold text-zinc-800 dark:text-white/90">댓글 작성</h3>
                 <button

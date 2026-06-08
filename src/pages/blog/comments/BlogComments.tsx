@@ -27,7 +27,7 @@ export function BlogComments({ slug }: Props) {
     }, [slug])
 
     return (
-        <section className="mt-12 pt-8 border-t border-zinc-200 dark:border-white/10">
+        <section className="mt-12 pt-8 border-t border-white/15">
             <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-2">
                     <FiMessageSquare className="w-5 h-5 text-zinc-500 dark:text-white/50" />
@@ -54,11 +54,11 @@ export function BlogComments({ slug }: Props) {
                 <div className="space-y-4">
                     {[1, 2].map((i) => (
                         <div key={i} className="flex gap-3 animate-pulse">
-                            <div className="w-9 h-9 rounded-full bg-zinc-200 dark:bg-white/10 shrink-0" />
+                            <div className="w-9 h-9 rounded-full bg-white/10 shrink-0" />
                             <div className="flex-1 space-y-2 pt-1">
-                                <div className="h-3 bg-zinc-200 dark:bg-white/10 rounded-full w-24" />
-                                <div className="h-3 bg-zinc-100 dark:bg-white/7 rounded-full w-full" />
-                                <div className="h-3 bg-zinc-100 dark:bg-white/5 rounded-full w-3/4" />
+                                <div className="h-3 bg-white/10 rounded-full w-24" />
+                                <div className="h-3 bg-white/8 rounded-full w-full" />
+                                <div className="h-3 bg-white/6 rounded-full w-3/4" />
                             </div>
                         </div>
                     ))}

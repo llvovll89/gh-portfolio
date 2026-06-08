@@ -124,12 +124,12 @@ export const Detail = () => {
              */}
             <section
                 id={DETAIL_SCROLL_ID}
-                className="w-full h-dvh overflow-y-auto scrolls flex flex-col md:py-10 md:px-15 p-4"
+                className="w-full h-dvh overflow-y-auto scrolls flex flex-col md:py-10 md:px-15 p-4 bg-base-navy"
             >
                 <div className="mb-4">
                     <Link
                         to="/blog"
-                        className="text-sm underline underline-offset-4 text-zinc-600 dark:text-zinc-400"
+                        className="text-sm underline underline-offset-4 text-zinc-400 hover:text-zinc-200 transition-colors"
                     >
                         ← Posts
                     </Link>
@@ -137,7 +137,7 @@ export const Detail = () => {
 
                 <header className="mb-6">
                     <div className="flex items-start justify-between gap-4">
-                        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+                        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-100">
                             {post.title}
                         </h1>
                         <div className="shrink-0 pt-1">
@@ -149,22 +149,22 @@ export const Detail = () => {
                         </div>
                     </div>
 
-                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm select-none text-zinc-600 dark:text-zinc-400">
+                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm select-none text-zinc-400">
                         <span className="text-[clamp(0.75rem,1.5vw,0.9rem)]">
                             {post.date || "날짜 없음"}
                         </span>
                         {post.readingTime && (
                             <>
-                                <span className="text-zinc-400 dark:text-zinc-600">•</span>
-                                <span className="text-[clamp(0.75rem,1.5vw,0.9rem)] text-zinc-600 dark:text-zinc-400">
+                                <span className="text-zinc-600">•</span>
+                                <span className="text-[clamp(0.75rem,1.5vw,0.9rem)]">
                                     {post.readingTime}
                                 </span>
                             </>
                         )}
                         {viewCount !== null && (
                             <>
-                                <span className="text-zinc-400 dark:text-zinc-600">•</span>
-                                <span className="flex items-center gap-1 text-[clamp(0.75rem,1.5vw,0.9rem)] text-zinc-600 dark:text-zinc-400">
+                                <span className="text-zinc-600">•</span>
+                                <span className="flex items-center gap-1 text-[clamp(0.75rem,1.5vw,0.9rem)]">
                                     <FiEye className="w-3 h-3" />
                                     {viewCount.toLocaleString()}
                                 </span>
@@ -175,7 +175,7 @@ export const Detail = () => {
                                 {post.tags.map((t) => (
                                     <span
                                         key={t}
-                                        className="rounded-full border border-zinc-200 bg-black/80 text-white dark:border-zinc-800 px-2 py-0.5 text-xs"
+                                        className="rounded-full border border-zinc-700 bg-zinc-800/80 text-zinc-200 px-2 py-0.5 text-xs"
                                     >
                                         {t}
                                     </span>
@@ -185,7 +185,7 @@ export const Detail = () => {
                     </div>
 
                     {post.summary ? (
-                        <p className={`mt-2 text-zinc-800 dark:text-zinc-300 ${post.type === "html" ? "leading-tight" : "leading-7"}`}>{post.summary}</p>
+                        <p className={`mt-2 text-zinc-300 ${post.type === "html" ? "leading-tight" : "leading-7"}`}>{post.summary}</p>
                     ) : null}
                 </header>
 
