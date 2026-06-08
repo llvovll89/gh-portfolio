@@ -129,7 +129,7 @@ export const Detail = () => {
                 <div className="mb-4">
                     <Link
                         to="/blog"
-                        className="text-sm underline underline-offset-4 text-zinc-600"
+                        className="text-sm underline underline-offset-4 text-zinc-600 dark:text-zinc-400"
                     >
                         ← Posts
                     </Link>
@@ -137,7 +137,7 @@ export const Detail = () => {
 
                 <header className="mb-6">
                     <div className="flex items-start justify-between gap-4">
-                        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900">
+                        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
                             {post.title}
                         </h1>
                         <div className="shrink-0 pt-1">
@@ -149,7 +149,7 @@ export const Detail = () => {
                         </div>
                     </div>
 
-                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm select-none">
+                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm select-none text-zinc-600 dark:text-zinc-400">
                         <span className="text-[clamp(0.75rem,1.5vw,0.9rem)]">
                             {post.date || "날짜 없음"}
                         </span>
@@ -185,7 +185,7 @@ export const Detail = () => {
                     </div>
 
                     {post.summary ? (
-                        <p className={`mt-2 text-zinc-800 ${post.type === "html" ? "leading-tight" : "leading-7"}`}>{post.summary}</p>
+                        <p className={`mt-2 text-zinc-800 dark:text-zinc-300 ${post.type === "html" ? "leading-tight" : "leading-7"}`}>{post.summary}</p>
                     ) : null}
                 </header>
 

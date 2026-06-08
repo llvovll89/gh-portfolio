@@ -100,13 +100,19 @@ export const MessageCardForm = () => {
                 </label>
 
                 <label className="grid gap-1.5">
-                    <span className="text-sm font-medium text-white/70 flex items-center gap-2">
-                        <HiChatAlt2 className="w-4 h-4 text-primary/70" />
-                        {t("pages.contact.messageForm.message")}
+                    <span className="text-sm font-medium text-white/70 flex items-center justify-between gap-2">
+                        <span className="flex items-center gap-2">
+                            <HiChatAlt2 className="w-4 h-4 text-primary/70" />
+                            {t("pages.contact.messageForm.message")}
+                        </span>
+                        <span className={`text-xs tabular-nums transition-colors ${message.length > 450 ? 'text-rose-400' : message.length > 300 ? 'text-amber-400' : 'text-white/40'}`}>
+                            {message.length} / 500
+                        </span>
                     </span>
                     <textarea
                         value={message}
                         onChange={(e) => { setMessage(e.target.value); if (messageError) setMessageError(""); }}
+                        maxLength={500}
                         className={`min-h-40 md:min-h-36 resize-y rounded-xl border bg-linear-to-br from-black/30 to-black/10 sm:px-4 px-3 sm:py-3 py-2 outline-none transition-all text-[clamp(0.75rem,1vw,0.875rem)] placeholder:text-white/30 ${
                             messageError
                                 ? 'border-rose-400/50 focus:ring-2 focus:ring-rose-400/30'
