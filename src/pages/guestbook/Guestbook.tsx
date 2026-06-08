@@ -12,6 +12,7 @@ import { useSeoMeta } from '@/hooks/useSeoMeta'
 
 export const Guestbook = () => {
 	const [showForm, setShowForm] = useState(false)
+	const [entryCount, setEntryCount] = useState<number | null>(null)
 	const { t } = useTranslation()
 	const { showToast } = useToast()
 	useSeoMeta({ title: "Guestbook", description: "김건호 포트폴리오 방명록 — 방문 소감이나 메시지를 남겨주세요", url: "/guestbook" })
@@ -28,37 +29,61 @@ export const Guestbook = () => {
 			<Header />
 			<Aside />
 			<Contents className="select-none">
-				<article className="flex flex-col h-[calc(100vh-8rem)] sm:py-4 py-1 md:px-0 px-2 relative gap-3">
-					{/* Page Header */}
-					<div className="flex items-center justify-between max-w-5xl mx-auto w-full">
-						<div className="flex items-center gap-3">
-							<div className="p-2 bg-primary/10 rounded-lg">
-								<FiMessageSquare className="sm:w-7 sm:h-7 w-5 h-5 text-primary" />
+				<article className="flex flex-col h-full sm:py-4 py-2 md:px-0 px-2 relative gap-3 overflow-hidden">
+
+					{/* Hero Header */}
+					<div className="relative max-w-5xl mx-auto w-full rounded-2xl overflow-hidden border border-white/8 bg-[#111115]">
+						{/* Ambient orbs */}
+						<div className="pointer-events-none absolute -top-16 -left-16 w-56 h-56 bg-primary/10 rounded-full blur-3xl" />
+						<div className="pointer-events-none absolute -bottom-12 right-8 w-40 h-40 bg-blue-500/6 rounded-full blur-2xl" />
+
+						<div className="relative flex items-center justify-between px-5 py-4 gap-4">
+							<div className="flex items-center gap-4">
+								<div className="p-2.5 rounded-xl bg-primary/15 border border-primary/25 shadow-lg shadow-primary/10">
+									<FiMessageSquare className="sm:w-6 sm:h-6 w-5 h-5 text-primary" />
+								</div>
+								<div>
+									<h1 className="text-[clamp(1rem,2vw,1.3rem)] font-extrabold tracking-tight text-white/95">
+										{t("pages.guestbook.title")}
+									</h1>
+									<p className="text-xs text-white/35 mt-0.5 hidden sm:block">
+										방문해주신 분들의 소중한 메시지를 남겨주세요 💌
+									</p>
+								</div>
 							</div>
-							<h1 className="text-[clamp(1.1rem,2vw,1.4rem)] font-extrabold tracking-tight text-white/90">
-								{t("pages.guestbook.title")}
-							</h1>
+
+							<div className="flex items-center gap-3 shrink-0">
+								{entryCount !== null && (
+									<div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/8">
+										<span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+										<span className="text-xs text-white/50 font-medium">{entryCount}개</span>
+									</div>
+								)}
+								<button
+									onClick={() => setShowForm(!showForm)}
+									className="group cursor-pointer relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl sm:px-5 sm:py-2.5 px-3.5 py-2 text-sm font-bold transition-all duration-300 text-white bg-primary hover:scale-105 active:scale-95 focus:outline-none"
+								>
+									<FaPencil className="w-3.5 h-3.5 transition-transform group-hover:-translate-y-0.5" />
+									<span className="hidden sm:inline">{showForm ? '닫기' : '글쓰기'}</span>
+									<div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+								</button>
+							</div>
 						</div>
-						<button
-							onClick={() => setShowForm(!showForm)}
-							className="group cursor-pointer relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl sm:px-5 sm:py-2.5 px-3.5 py-2 text-sm font-bold transition-all duration-300 bg-linear-to-r from-primary via-blue-500 to-cyan-400 text-white shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-105 active:scale-95 focus:outline-none"
-						>
-							<FaPencil className="w-3.5 h-3.5 transition-transform group-hover:-translate-y-0.5" />
-							<span className="hidden sm:inline">{showForm ? '폼 닫기' : '방명록 등록'}</span>
-							<span className="sm:hidden">{showForm ? '닫기' : '등록'}</span>
-							<div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-						</button>
 					</div>
 
 					{/* List */}
-					<div className="sm:p-4 p-2 m-auto w-full h-full max-w-5xl overflow-hidden">
-						<GuestbookList handleToggleForm={() => setShowForm(true)} onSuccess={(m) => showToast(m)} />
+					<div className="m-auto w-full flex-1 max-w-5xl overflow-hidden">
+						<GuestbookList
+							handleToggleForm={() => setShowForm(true)}
+							onSuccess={(m) => showToast(m)}
+							onCountChange={setEntryCount}
+						/>
 					</div>
 
 					{/* Create Form Modal */}
 					{showForm && (
 						<>
-							<div className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm" onClick={() => setShowForm(false)} />
+							<div className="fixed inset-0 bg-black/55 z-40 backdrop-blur-sm" onClick={() => setShowForm(false)} />
 							<div className="fixed left-0 right-0 bottom-0 z-50 md:inset-0 md:flex md:items-center md:justify-center md:p-4">
 								<div className="w-full md:max-w-xl animate-in slide-in-from-bottom md:zoom-in-95 duration-200">
 									<GuestbookForm

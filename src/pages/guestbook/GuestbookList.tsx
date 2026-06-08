@@ -29,17 +29,16 @@ const getRelativeTime = (date: Date): string => {
 }
 
 const SkeletonCard = () => (
-    <li className="p-5 bg-white/3 border border-white/6 rounded-2xl animate-pulse">
-        <div className="flex gap-4">
-            <div className="w-10 h-10 rounded-full bg-white/10 shrink-0" />
+    <li className="p-4 rounded-2xl border border-white/6 bg-[#111115] animate-pulse">
+        <div className="flex gap-3">
+            <div className="w-9 h-9 rounded-full bg-white/10 shrink-0" />
             <div className="flex-1 space-y-2 pt-0.5">
-                <div className="flex items-center gap-3">
-                    <div className="h-3.5 bg-white/10 rounded-full w-20" />
-                    <div className="h-3 bg-white/7 rounded-full w-14" />
+                <div className="flex items-center gap-2">
+                    <div className="h-3 bg-white/10 rounded-full w-16" />
+                    <div className="h-2.5 bg-white/6 rounded-full w-10" />
                 </div>
-                <div className="h-3 bg-white/7 rounded-full w-full mt-2" />
-                <div className="h-3 bg-white/7 rounded-full w-4/5" />
-                <div className="h-3 bg-white/5 rounded-full w-2/3" />
+                <div className="h-2.5 bg-white/7 rounded-full w-full" />
+                <div className="h-2.5 bg-white/5 rounded-full w-3/4" />
             </div>
         </div>
     </li>
@@ -59,13 +58,13 @@ function parseEntry(docSnap: { id: string; data: () => Record<string, unknown> }
 const GuestbookList = ({
     handleToggleForm,
     onSuccess,
+    onCountChange,
 }: {
     handleToggleForm: () => void
     onSuccess?: (msg: string) => void
+    onCountChange?: (count: number) => void
 }) => {
-    // 최신 PAGE_SIZE개 — 실시간
     const [latestEntries, setLatestEntries] = useState<GuestbookEntry[]>([])
-    // 더 보기로 불러온 오래된 항목들 — 정적
     const [olderEntries, setOlderEntries] = useState<GuestbookEntry[]>([])
 
     const [loading, setLoading] = useState(true)
@@ -79,7 +78,6 @@ const GuestbookList = ({
     const [editEntry, setEditEntry] = useState<GuestbookEntry | null>(null)
     const [deleteEntry, setDeleteEntry] = useState<GuestbookEntry | null>(null)
 
-    // 최신 PAGE_SIZE개 실시간 구독
     useEffect(() => {
         const q = query(
             collection(db, 'guestbook'),
@@ -100,7 +98,7 @@ const GuestbookList = ({
                 logger.error('방명록 불러오기 실패', err)
                 const msg = err instanceof Error ? err.message : String(err)
                 if (msg.includes('permission-denied') || msg.includes('PERMISSION_DENIED')) {
-                    setReadError('Firebase 보안 규칙이 읽기를 차단하고 있습니다. Firebase Console → Firestore → Rules를 확인해주세요.')
+                    setReadError('Firebase 보안 규칙이 읽기를 차단하고 있습니다.')
                 } else {
                     setReadError(`불러오기 실패: ${msg}`)
                 }
@@ -110,7 +108,6 @@ const GuestbookList = ({
         return () => unsub()
     }, [])
 
-    // 더 보기 — 오래된 항목 cursor 기반 로드
     const loadMore = async () => {
         if (!lastDoc || loadingMore) return
         setLoadingMore(true)
@@ -129,111 +126,136 @@ const GuestbookList = ({
             setLastDoc(snapshot.docs[snapshot.docs.length - 1] ?? lastDoc)
         } catch (err) {
             logger.error('방명록 추가 로드 실패', err)
-            setLoadMoreError('추가 항목을 불러오지 못했습니다. 다시 시도해주세요.')
+            setLoadMoreError('추가 항목을 불러오지 못했습니다.')
         } finally {
             setLoadingMore(false)
         }
     }
 
-    // 삭제 후 선택 항목 해제
     const allEntries = [...latestEntries, ...olderEntries]
+
     useEffect(() => {
         if (detailEntry && !allEntries.find((e) => e.id === detailEntry.id)) {
             setDetailEntry(null)
         }
     }, [latestEntries, olderEntries])
 
+    useEffect(() => {
+        if (!loading) onCountChange?.(allEntries.length)
+    }, [allEntries.length, loading])
+
     return (
-        <div className="w-full h-full flex gap-4">
+        <div className="w-full h-full flex gap-3">
             {/* 왼쪽: 목록 */}
-            <div className="overflow-y-auto scrolls w-full md:w-1/2 md:max-w-[50%] shrink-0">
+            <div className="overflow-y-auto scrolls w-full md:w-[45%] shrink-0 pb-2">
                 {loading ? (
-                    <ul className="grid grid-cols-1 gap-3">
-                        <SkeletonCard /><SkeletonCard /><SkeletonCard />
+                    <ul className="flex flex-col gap-2.5">
+                        <SkeletonCard /><SkeletonCard /><SkeletonCard /><SkeletonCard />
                     </ul>
                 ) : readError ? (
-                    <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center gap-4">
+                    <div className="h-full flex flex-col items-center justify-center gap-4 p-8 text-center">
                         <div className="p-5 rounded-2xl bg-rose-500/10 border border-rose-500/20">
-                            <FiMessageSquare className="w-10 h-10 text-rose-400/60" />
+                            <FiMessageSquare className="w-8 h-8 text-rose-400/60" />
                         </div>
                         <div>
-                            <div className="text-base font-bold text-rose-400 mb-1.5">불러오기 실패</div>
-                            <p className="text-xs text-white/50 max-w-xs break-words">{readError}</p>
+                            <p className="text-sm font-bold text-rose-400 mb-1">불러오기 실패</p>
+                            <p className="text-xs text-white/40 max-w-xs break-words">{readError}</p>
                         </div>
                     </div>
                 ) : allEntries.length === 0 ? (
-                    <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center gap-5">
-                        <div className="p-5 rounded-2xl bg-white/5 border border-white/10">
-                            <FiMessageSquare className="w-10 h-10 text-white/30" />
+                    <div className="h-full flex flex-col items-center justify-center gap-5 p-8 text-center">
+                        <div className="relative">
+                            <div className="p-5 rounded-2xl bg-white/4 border border-white/8">
+                                <FiMessageSquare className="w-9 h-9 text-white/25" />
+                            </div>
+                            <div className="absolute inset-0 bg-primary/5 rounded-2xl blur-xl -z-10" />
                         </div>
                         <div>
-                            <div className="text-lg font-bold text-white/70 mb-1.5">아직 방명록이 없어요</div>
-                            <p className="text-sm text-white/40">첫 번째 메시지를 남겨보세요!</p>
+                            <p className="text-base font-bold text-white/60 mb-1.5">아직 방명록이 없어요</p>
+                            <p className="text-xs text-white/35">첫 번째 메시지를 남겨보세요!</p>
                         </div>
                         <button
                             onClick={handleToggleForm}
-                            className="inline-flex items-center gap-2 cursor-pointer bg-primary/80 hover:bg-primary transition-colors px-5 py-2.5 rounded-xl font-semibold text-white text-sm"
+                            className="inline-flex items-center gap-2 cursor-pointer bg-linear-to-r from-primary to-blue-500 hover:from-primary/90 hover:to-blue-500/90 transition-all px-5 py-2.5 rounded-xl font-semibold text-white text-sm shadow-lg shadow-primary/20 hover:scale-105 active:scale-95"
                         >
                             <FaPencil className="w-3.5 h-3.5" />
-                            방명록 남기기
+                            메시지 남기기
                         </button>
                     </div>
                 ) : (
                     <>
-                        <ul className="grid grid-cols-1 gap-3">
-                            {allEntries.map((entry) => {
+                        <ul className="flex flex-col gap-2.5">
+                            {allEntries.map((entry, idx) => {
                                 const gradient = getAvatarGradient(entry.name)
                                 const initial = entry.name[0]?.toUpperCase() || '?'
                                 const dateStr = entry.createdAt?.toDate ? getRelativeTime(entry.createdAt.toDate()) : ''
-                                const isLong = entry.message.length > 120 || entry.message.split('\n').length > 3
+                                const isLong = entry.message.length > 100 || entry.message.split('\n').length > 2
                                 const isSelected = detailEntry?.id === entry.id
 
                                 return (
                                     <li
                                         key={entry.id}
                                         onClick={() => setDetailEntry(isSelected ? null : entry)}
-                                        className={`group p-5 border rounded-2xl backdrop-blur-sm transition-all duration-200 cursor-pointer ${
+                                        className={[
+                                            'group relative rounded-2xl border transition-all duration-200 cursor-pointer overflow-hidden',
+                                            'animate-[fadeIn_0.35s_ease-out_both]',
                                             isSelected
-                                                ? 'border-primary/40 bg-primary/[0.07]'
-                                                : 'bg-white/3 hover:bg-white/[0.05] border-white/6 hover:border-white/10'
-                                        }`}
+                                                ? 'border-primary/40 bg-gradient-to-br from-primary/[0.07] to-transparent shadow-[0_0_24px_rgba(0,153,255,0.12)]'
+                                                : 'border-white/8 bg-[#111115] hover:border-white/14 hover:bg-[#161619] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/40',
+                                        ].join(' ')}
+                                        style={{ animationDelay: `${idx * 0.04}s` }}
                                     >
-                                        <div className="flex gap-3.5">
-                                            <div className={`shrink-0 w-10 h-10 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-base shadow-lg`}>
-                                                {initial}
+                                        {/* Left accent bar */}
+                                        <div className={`absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full transition-all duration-300 ${isSelected ? 'bg-primary' : 'bg-transparent group-hover:bg-primary/25'}`} />
+
+                                        {/* Decorative quote */}
+                                        <div className="absolute right-3 top-1 text-6xl font-serif leading-none text-white/[0.035] pointer-events-none select-none">"</div>
+
+                                        <div className="pl-3 pr-4 py-4 flex gap-3">
+                                            {/* Avatar */}
+                                            <div className="shrink-0 relative">
+                                                <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-sm shadow-md`}>
+                                                    {initial}
+                                                </div>
+                                                {isSelected && (
+                                                    <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${gradient} opacity-40 blur-md -z-10 scale-125`} />
+                                                )}
                                             </div>
+
                                             <div className="flex-1 min-w-0">
-                                                <div className="flex items-center justify-between gap-2 mb-2">
-                                                    <div className="flex items-center gap-2 min-w-0 flex-wrap">
-                                                        <span className="font-semibold text-white/90 text-sm">{entry.name}</span>
+                                                <div className="flex items-start justify-between gap-2 mb-1.5">
+                                                    <div className="flex items-center gap-2 flex-wrap min-w-0">
+                                                        <span className="font-semibold text-white/90 text-sm truncate">{entry.name}</span>
                                                         {dateStr && (
-                                                            <span className="text-[11px] text-white/35 shrink-0">{dateStr}</span>
+                                                            <span className="text-[10px] text-white/28 shrink-0">{dateStr}</span>
                                                         )}
                                                     </div>
-                                                    <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity shrink-0">
+                                                    <div className="flex items-center gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
                                                         <button
                                                             type="button"
                                                             onClick={(e) => { e.stopPropagation(); setEditEntry(entry) }}
-                                                            className="p-1.5 rounded-lg text-white/40 hover:text-primary hover:bg-primary/10 active:bg-primary/20 transition-all cursor-pointer"
+                                                            className="p-1.5 rounded-lg text-white/30 hover:text-primary hover:bg-primary/10 transition-all cursor-pointer"
                                                             title="수정"
                                                         >
-                                                            <FaEdit className="w-3.5 h-3.5" />
+                                                            <FaEdit className="w-3 h-3" />
                                                         </button>
                                                         <button
                                                             type="button"
                                                             onClick={(e) => { e.stopPropagation(); setDeleteEntry(entry) }}
-                                                            className="p-1.5 rounded-lg text-white/40 hover:text-rose-400 hover:bg-rose-400/10 active:bg-rose-400/20 transition-all cursor-pointer"
+                                                            className="p-1.5 rounded-lg text-white/30 hover:text-rose-400 hover:bg-rose-400/10 transition-all cursor-pointer"
                                                             title="삭제"
                                                         >
-                                                            <MdDelete className="w-4 h-4" />
+                                                            <MdDelete className="w-3.5 h-3.5" />
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <p className="text-white/70 text-sm whitespace-pre-wrap break-words leading-relaxed line-clamp-3">
+
+                                                <p className="text-white/55 text-xs leading-relaxed line-clamp-3 whitespace-pre-wrap break-words">
                                                     {entry.message}
                                                 </p>
+
                                                 {isLong && (
-                                                    <span className="text-[11px] text-primary/70 mt-1.5 inline-block">
+                                                    <span className="text-[10px] text-primary/50 mt-1.5 inline-flex items-center gap-0.5 group-hover:text-primary/80 transition-colors">
                                                         더 보기 →
                                                     </span>
                                                 )}
@@ -244,7 +266,6 @@ const GuestbookList = ({
                             })}
                         </ul>
 
-                        {/* 더 보기 버튼 */}
                         {hasMore && (
                             <div className="flex flex-col items-center gap-2 mt-4 pb-2">
                                 {loadMoreError && (
@@ -253,18 +274,14 @@ const GuestbookList = ({
                                 <button
                                     onClick={loadMore}
                                     disabled={loadingMore}
-                                    className="px-6 py-2.5 text-sm font-medium text-white/60 hover:text-white border border-white/10 hover:border-white/20 rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                                    className="px-6 py-2 text-xs font-medium text-white/50 hover:text-white/80 border border-white/8 hover:border-white/18 rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed bg-white/3 hover:bg-white/5"
                                 >
                                     {loadingMore ? (
                                         <span className="flex items-center gap-2">
-                                            <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white/70 rounded-full animate-spin" />
+                                            <span className="w-3 h-3 border-2 border-white/30 border-t-white/70 rounded-full animate-spin" />
                                             불러오는 중…
                                         </span>
-                                    ) : loadMoreError ? (
-                                        '다시 시도'
-                                    ) : (
-                                        '더 보기'
-                                    )}
+                                    ) : loadMoreError ? '다시 시도' : '더 보기'}
                                 </button>
                             </div>
                         )}
