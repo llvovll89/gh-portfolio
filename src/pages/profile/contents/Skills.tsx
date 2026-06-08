@@ -3,6 +3,22 @@ import { RiTailwindCssFill } from "react-icons/ri";
 import { SiPostgresql, SiRedux, SiSpring } from "react-icons/si";
 import { TbBrandTypescript } from "react-icons/tb";
 
+const LevelDots = ({ level }: { level: number }) => (
+    <div className="flex gap-0.5 ml-auto shrink-0">
+        {Array.from({ length: 5 }, (_, i) => (
+            <span
+                key={i}
+                className={[
+                    "block w-1.5 h-1.5 rounded-full transition-all duration-300",
+                    i < level
+                        ? "bg-primary group-hover/item:scale-110"
+                        : "bg-white/15",
+                ].join(" ")}
+            />
+        ))}
+    </div>
+);
+
 export const Skills = () => {
     const skillGroups = [
         {
@@ -12,10 +28,10 @@ export const Skills = () => {
             badge: "bg-linear-to-r from-blue-500 to-cyan-500 text-white",
             glowColor: "bg-blue-500/20",
             items: [
-                { label: "React", Icon: FaReact },
-                { label: "TypeScript", Icon: TbBrandTypescript },
-                { label: "Redux", Icon: SiRedux },
-                { label: "TailwindCSS", Icon: RiTailwindCssFill },
+                { label: "React", Icon: FaReact, level: 4 },
+                { label: "TypeScript", Icon: TbBrandTypescript, level: 4 },
+                { label: "Redux", Icon: SiRedux, level: 3 },
+                { label: "TailwindCSS", Icon: RiTailwindCssFill, level: 4 },
             ],
         },
         {
@@ -25,9 +41,9 @@ export const Skills = () => {
             badge: "bg-linear-to-r from-emerald-500 to-teal-500 text-white",
             glowColor: "bg-emerald-500/20",
             items: [
-                { label: "JAVA", Icon: FaJava },
-                { label: "SpringBoot", Icon: SiSpring },
-                { label: "PostgreSQL / Oracle", Icon: SiPostgresql },
+                { label: "JAVA", Icon: FaJava, level: 3 },
+                { label: "SpringBoot", Icon: SiSpring, level: 3 },
+                { label: "PostgreSQL / Oracle", Icon: SiPostgresql, level: 3 },
             ],
         },
     ] as const;
@@ -92,7 +108,7 @@ export const Skills = () => {
 
                         {/* 스킬 목록 */}
                         <ul className="relative flex flex-wrap gap-2.5">
-                            {group.items.map(({ label, Icon }) => (
+                            {group.items.map(({ label, Icon, level }) => (
                                 <li
                                     key={label}
                                     className={[
@@ -115,6 +131,7 @@ export const Skills = () => {
                                 >
                                     <Icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 transition-transform group-hover/item:scale-110" />
                                     <span className="whitespace-nowrap">{label}</span>
+                                    <LevelDots level={level} />
 
                                     {/* 호버 시 빛나는 효과 */}
                                     <div className="absolute inset-0 rounded-lg bg-linear-to-r from-white/0 via-white/5 to-white/0 opacity-0 group-hover/item:opacity-100 transition-opacity" />

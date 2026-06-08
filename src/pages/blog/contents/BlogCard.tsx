@@ -42,12 +42,12 @@ export const BlogCard = ({ p, searchQuery = "" }: BlogCardProps) => {
                         {p.date || "No Date"}
                     </time>
                     {p.readingTime && (
-                        <span className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500">
+                        <span className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
                             {p.readingTime}
                         </span>
                     )}
                     {viewCount !== null && viewCount > 0 && (
-                        <span className="flex items-center gap-1 text-[10px] font-medium text-zinc-400 dark:text-zinc-500">
+                        <span className="flex items-center gap-1 text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
                             <FiEye className="w-3 h-3" />
                             {viewCount.toLocaleString()}
                         </span>
@@ -89,7 +89,7 @@ export const BlogCard = ({ p, searchQuery = "" }: BlogCardProps) => {
                     )}
 
                     {bodySnippet && (
-                        <p className="mt-1.5 line-clamp-2 text-[clamp(0.7rem,1vw,0.8rem)] leading-relaxed text-zinc-500 dark:text-zinc-500 italic border-l-2 border-blue-400/50 pl-2">
+                        <p className="mt-1.5 line-clamp-2 text-[clamp(0.7rem,1vw,0.8rem)] leading-relaxed text-zinc-500 dark:text-zinc-400 italic border-l-2 border-blue-400/50 pl-2">
                             {bodySnippet}
                         </p>
                     )}

@@ -60,7 +60,7 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
 
             {/* 컴팩트 리스트 */}
             <div className={`flex flex-col gap-2 ${className ?? ""}`}>
-                {filteredProjects.map((project) => {
+                {filteredProjects.map((project, index) => {
                     const isSelected = project.id === selectedProjectId;
 
                     const isUpdating = project.status === "updating";
@@ -72,15 +72,20 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                             key={project.id}
                             onClick={() => !isUpdating && setSelectedProjectId(project.id)}
                             disabled={isUpdating}
+                            style={{
+                                animationDelay: `${index * 0.07}s`,
+                                animationFillMode: 'both',
+                            }}
                             className={[
                                 "group relative flex sm:flex-row flex-col items-start sm:gap-4 gap-2 p-4 rounded-lg border text-left",
                                 "bg-[#181818] transition-all duration-200",
+                                "animate-[fadeIn_0.4s_ease-out]",
                                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70",
                                 isUpdating
                                     ? "cursor-not-allowed opacity-60 border-[#3e3e42]"
                                     : isSelected
                                     ? "cursor-pointer border-primary bg-[#000000] shadow-[0_0_0_1px_rgba(59,130,246,0.35)]"
-                                    : "cursor-pointer border-[#3e3e42] hover:border-[#CECECE] hover:bg-[rgba(0,0,0,0.12)]",
+                                    : "cursor-pointer border-[#3e3e42] hover:border-[#CECECE] hover:bg-[rgba(0,0,0,0.12)] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/30",
                             ].join(" ")}
                         >
                             {/* 프로젝트 번호 */}

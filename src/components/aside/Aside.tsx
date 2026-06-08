@@ -563,13 +563,13 @@ export const Aside = () => {
                     aria-label="사이드바 너비 조절"
                     aria-orientation="vertical"
                     className={[
-                        "absolute top-0 right-0 z-10 h-full",
+                        "group absolute top-0 right-0 z-10 h-full",
                         "w-5 md:w-2",
                         "bg-linear-to-l from-slate-900/10 to-transparent",
-                        "active:from-primary/20",
-                        "transition-colors",
+                        "hover:from-primary/15 active:from-primary/25",
+                        "transition-colors duration-200",
                         "touch-none select-none",
-                        "cursor-ew-resize",
+                        "cursor-col-resize",
                         "flex items-center justify-center",
                     ].join(" ")}
                     style={{
@@ -581,10 +581,10 @@ export const Aside = () => {
                     onTouchStart={handleMouseDown}
                 >
                     {/* grip dots */}
-                    <div className="flex flex-col gap-1.5 opacity-70">
-                        <span className="block h-1 w-1 rounded-full bg-slate-400" />
-                        <span className="block h-1 w-1 rounded-full bg-slate-400" />
-                        <span className="block h-1 w-1 rounded-full bg-slate-400" />
+                    <div className="flex flex-col gap-1.5 opacity-40 group-hover:opacity-90 transition-opacity duration-200">
+                        <span className="block h-1 w-1 rounded-full bg-slate-300 group-hover:bg-primary transition-colors duration-200" />
+                        <span className="block h-1 w-1 rounded-full bg-slate-300 group-hover:bg-primary transition-colors duration-200" />
+                        <span className="block h-1 w-1 rounded-full bg-slate-300 group-hover:bg-primary transition-colors duration-200" />
                     </div>
                 </div>
             )}

@@ -113,7 +113,8 @@ export const MainContents = () => {
                             </h1>
                         </div>
 
-                        <p className="text-[clamp(0.9rem,1.4vw,1.3rem)] text-white/80 leading-relaxed max-w-2xl font-medium animate-[fadeIn_1s_ease-out_0.3s] opacity-0 [animation-fill-mode:forwards]">
+                        <p className="text-[clamp(0.9rem,1.4vw,1.3rem)] text-white/80 leading-relaxed max-w-2xl font-medium animate-[fadeIn_1s_ease-out] opacity-0 [animation-fill-mode:forwards]"
+                            style={{ animationDelay: isMobileSize ? '0.1s' : '0.3s' }}>
                             <Trans
                                 i18nKey="pages.home.tagline"
                                 components={[
@@ -125,7 +126,8 @@ export const MainContents = () => {
                         </p>
                     </div>
 
-                    <div className="text-[clamp(0.8rem,1.1vw,0.9rem)] text-white/70 leading-relaxed max-w-xl animate-[fadeIn_1.2s_ease-out_0.5s] opacity-0 [animation-fill-mode:forwards]">
+                    <div className="text-[clamp(0.8rem,1.1vw,0.9rem)] text-white/70 leading-relaxed max-w-xl animate-[fadeIn_1.2s_ease-out] opacity-0 [animation-fill-mode:forwards]"
+                        style={{ animationDelay: isMobileSize ? '0.15s' : '0.5s' }}>
                         <p className="flex items-start gap-2">
                             <span className="text-primary sm:mt-1 mt-0">▹</span>
                             <span>{t("pages.home.bullet1")}</span>
@@ -146,7 +148,8 @@ export const MainContents = () => {
                         </p>
                     </div>
 
-                    <div className="flex flex-wrap sm:gap-3 gap-2 animate-[fadeIn_1.4s_ease-out_0.7s] opacity-0 [animation-fill-mode:forwards]">
+                    <div className="flex flex-wrap sm:gap-3 gap-2 animate-[fadeIn_1.4s_ease-out] opacity-0 [animation-fill-mode:forwards]"
+                        style={{ animationDelay: isMobileSize ? '0.2s' : '0.7s' }}>
                         {skills.map((skill) => (
                             <div
                                 key={skill.text}
@@ -164,7 +167,8 @@ export const MainContents = () => {
                         ))}
                     </div>
 
-                    <div className="flex flex-wrap sm:gap-4 gap-3 animate-[fadeIn_1.6s_ease-out_0.9s] opacity-0 [animation-fill-mode:forwards]">
+                    <div className="flex flex-wrap sm:gap-4 gap-3 animate-[fadeIn_1.6s_ease-out] opacity-0 [animation-fill-mode:forwards]"
+                        style={{ animationDelay: isMobileSize ? '0.25s' : '0.9s' }}>
                         <button
                             onClick={() => handlePushPath(PROJECTS)}
                             className={primaryButton}
