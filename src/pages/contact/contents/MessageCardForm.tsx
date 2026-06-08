@@ -1,12 +1,17 @@
 import { useMemo, useState } from "react";
-import { HiMail, HiUser, HiChatAlt2, HiRefresh, HiPaperAirplane, HiInformationCircle } from "react-icons/hi";
+import { HiMail, HiUser, HiChatAlt2, HiRefresh, HiPaperAirplane, HiInformationCircle, HiCheckCircle, HiXCircle } from "react-icons/hi";
 import { useTranslation } from "react-i18next";
+import emailjs from "@emailjs/browser";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+const SERVICE_ID = (import.meta.env.VITE_EMAILJS_SERVICE_ID as string | undefined)?.trim() ?? "";
+const TEMPLATE_ID = (import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string | undefined)?.trim() ?? "";
+const PUBLIC_KEY = (import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string | undefined)?.trim() ?? "";
+const EMAILJS_READY = !!(SERVICE_ID && TEMPLATE_ID && PUBLIC_KEY);
+
 export const MessageCardForm = () => {
     const { t } = useTranslation();
-    const EMAIL = (import.meta.env.VITE_EMAIL as string | undefined)?.trim() ?? "";
 
     const [name, setName] = useState("");
     const [fromEmail, setFromEmail] = useState("");
@@ -14,12 +19,9 @@ export const MessageCardForm = () => {
     const [nameError, setNameError] = useState("");
     const [emailError, setEmailError] = useState("");
     const [messageError, setMessageError] = useState("");
+    const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
-    const mailtoHref = useMemo(() => {
-        const subject = `[Portfolio] ${name || "Contact"} (${fromEmail || "no-email"})`;
-        const body = `이름: ${name}\n이메일: ${fromEmail}\n\n메시지:\n${message}`;
-        return `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    }, [EMAIL, name, fromEmail, message]);
+    const isDisabled = useMemo(() => !EMAILJS_READY || status === "sending", [status]);
 
     const validate = () => {
         let valid = true;
@@ -31,18 +33,28 @@ export const MessageCardForm = () => {
         return valid;
     };
 
-    const handleSend = () => {
-        if (!EMAIL) {
-            setEmailError("수신 이메일 설정이 누락되었습니다. VITE_EMAIL을 확인해주세요.");
-            return;
-        }
+    const handleSend = async () => {
         if (!validate()) return;
-        window.location.href = mailtoHref;
+
+        setStatus("sending");
+        try {
+            await emailjs.send(
+                SERVICE_ID,
+                TEMPLATE_ID,
+                { from_name: name, "e-mail": fromEmail, text: message, to_name: "김건호", reply_to: fromEmail },
+                { publicKey: PUBLIC_KEY },
+            );
+            setStatus("success");
+            setName(""); setFromEmail(""); setMessage("");
+        } catch {
+            setStatus("error");
+        }
     };
 
     const handleReset = () => {
         setName(""); setFromEmail(""); setMessage("");
         setNameError(""); setEmailError(""); setMessageError("");
+        setStatus("idle");
     };
 
     return (
@@ -57,6 +69,20 @@ export const MessageCardForm = () => {
                     {t("pages.contact.messageForm.description")}
                 </p>
             </div>
+
+            {/* 전송 결과 알림 */}
+            {status === "success" && (
+                <div className="flex items-center gap-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 px-3 py-2.5">
+                    <HiCheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <p className="text-xs text-emerald-300">메시지가 성공적으로 전송되었습니다!</p>
+                </div>
+            )}
+            {status === "error" && (
+                <div className="flex items-center gap-2 rounded-lg bg-rose-500/10 border border-rose-500/30 px-3 py-2.5">
+                    <HiXCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                    <p className="text-xs text-rose-300">전송에 실패했습니다. 잠시 후 다시 시도해 주세요.</p>
+                </div>
+            )}
 
             {/* 폼 필드 */}
             <div className="grid gap-4">
@@ -137,11 +163,15 @@ export const MessageCardForm = () => {
                     <button
                         type="button"
                         onClick={handleSend}
-                        disabled={!EMAIL}
-                        className="rounded-xl bg-linear-to-r from-primary to-primary/80 sm:px-5 px-4 sm:py-2.5 py-2 text-sm font-semibold text-white hover:from-primary/90 hover:to-primary/70 transition-all active:scale-95 flex items-center gap-2 shadow-lg shadow-primary/20"
+                        disabled={isDisabled}
+                        className="rounded-xl bg-linear-to-r from-primary to-primary/80 sm:px-5 px-4 sm:py-2.5 py-2 text-sm font-semibold text-white hover:from-primary/90 hover:to-primary/70 transition-all active:scale-95 flex items-center gap-2 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        <HiPaperAirplane className="w-4 h-4" />
-                        {t("pages.contact.messageForm.send")}
+                        {status === "sending" ? (
+                            <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                        ) : (
+                            <HiPaperAirplane className="w-4 h-4" />
+                        )}
+                        {status === "sending" ? "전송 중..." : t("pages.contact.messageForm.send")}
                     </button>
                 </div>
 
@@ -152,9 +182,9 @@ export const MessageCardForm = () => {
                         <p className="text-xs text-white/60">
                             {t("pages.contact.messageForm.infoNotice")}
                         </p>
-                        {!EMAIL && (
-                            <p className="mt-1 text-xs text-rose-400">
-                                VITE_EMAIL 환경변수가 비어 있어 메일 앱 전송이 비활성화되었습니다.
+                        {!EMAILJS_READY && (
+                            <p className="mt-1 text-xs text-amber-400">
+                                EmailJS 환경변수가 설정되지 않아 전송이 비활성화되었습니다.
                             </p>
                         )}
                     </div>

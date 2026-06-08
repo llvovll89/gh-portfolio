@@ -8,9 +8,10 @@ import { getBodySnippet } from "../../../utils/fuseSearch";
 interface BlogCardProps {
     p: BlogPost;
     searchQuery?: string;
+    index?: number;
 }
 
-export const BlogCard = ({ p, searchQuery = "" }: BlogCardProps) => {
+export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
     const [viewCount, setViewCount] = useState<number | null>(null);
 
     useEffect(() => {
@@ -25,7 +26,7 @@ export const BlogCard = ({ p, searchQuery = "" }: BlogCardProps) => {
     }, [p, searchQuery]);
 
     return (
-        <li className="list-none">
+        <li className="list-none animate-fade-in-up" style={{ animationDelay: `${index * 0.05}s` }}>
             <Link
                 to={`/blog/${p.slug}`}
                 className={[

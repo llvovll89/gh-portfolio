@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import { projects } from "../mocks/projectData";
 import { CardDetail } from "./CardDetail";
 
+type SortKey = "default" | "name";
+
 interface CardProps {
     className?: string;
 }
@@ -9,16 +11,18 @@ interface CardProps {
 export const ProjectContentsCards = ({ className }: CardProps) => {
     const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
     const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
+    const [sortKey, setSortKey] = useState<SortKey>("default");
 
     const allSkills = useMemo(
         () => [...new Set(projects.flatMap((p) => p.skills))].sort(),
         [],
     );
 
-    const filteredProjects = useMemo(
-        () => (selectedSkill ? projects.filter((p) => p.skills.includes(selectedSkill)) : projects),
-        [selectedSkill],
-    );
+    const filteredProjects = useMemo(() => {
+        const base = selectedSkill ? projects.filter((p) => p.skills.includes(selectedSkill)) : projects;
+        if (sortKey === "name") return [...base].sort((a, b) => a.title.localeCompare(b.title, "ko"));
+        return base;
+    }, [selectedSkill, sortKey]);
 
     const selected = useMemo(
         () => (selectedProjectId === null ? null : projects.find((p) => p.id === selectedProjectId) ?? null),
@@ -27,8 +31,9 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
 
     return (
         <>
-            {/* 스킬 필터 */}
-            <div className="flex gap-1.5 flex-wrap mb-3">
+            {/* 필터 + 정렬 */}
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div className="flex gap-1.5 flex-wrap">
                 <button
                     type="button"
                     onClick={() => { setSelectedSkill(null); setSelectedProjectId(null); }}
@@ -56,6 +61,16 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                         {skill}
                     </button>
                 ))}
+            </div>
+            {/* 정렬 */}
+            <select
+                value={sortKey}
+                onChange={(e) => setSortKey(e.target.value as SortKey)}
+                className="px-2 py-1 rounded-md text-xs bg-[#2a2a2d] border border-[#3e3e42] text-slate-400 outline-none cursor-pointer hover:border-primary/50 transition-all"
+            >
+                <option value="default">기본순</option>
+                <option value="name">이름순</option>
+            </select>
             </div>
 
             {/* 컴팩트 리스트 */}

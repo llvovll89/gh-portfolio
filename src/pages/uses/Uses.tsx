@@ -5,8 +5,10 @@ import { FaReact, FaGithub, FaFigma } from "react-icons/fa";
 import { TbBrandTypescript, TbBrandVscode } from "react-icons/tb";
 import { SiPostman, SiSlack, SiTailwindcss, SiPostgresql, SiOracle, SiJira, SiFirebase } from "react-icons/si";
 import { BiLogoSpringBoot } from "react-icons/bi";
+import { useSeoMeta } from "../../hooks/useSeoMeta";
 
 export const Uses = () => {
+    useSeoMeta({ title: "Uses", description: "김건호가 사용하는 개발 도구, 기술 스택, 환경 설정 소개", url: "/uses" });
     const toolCategories = [
         {
             title: "개발 도구",

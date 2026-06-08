@@ -2,6 +2,7 @@ import { FaJava, FaReact } from "react-icons/fa";
 import { RiTailwindCssFill } from "react-icons/ri";
 import { SiPostgresql, SiRedux, SiSpring } from "react-icons/si";
 import { TbBrandTypescript } from "react-icons/tb";
+import { useScrollAnimation } from "../../../hooks/useScrollAnimation";
 
 const LevelDots = ({ level }: { level: number }) => (
     <div className="flex gap-0.5 ml-auto shrink-0">
@@ -20,6 +21,7 @@ const LevelDots = ({ level }: { level: number }) => (
 );
 
 export const Skills = () => {
+    const ref = useScrollAnimation();
     const skillGroups = [
         {
             title: "FrontEnd",
@@ -49,7 +51,7 @@ export const Skills = () => {
     ] as const;
 
     return (
-        <article className="w-full flex flex-col gap-4 overflow-auto scrolls">
+        <article ref={ref} className="scroll-reveal w-full flex flex-col gap-4 overflow-auto scrolls">
             <div className="flex items-center gap-3 md:gap-5">
                 <div className="flex-1 md:flex-none md:w-20 h-px bg-linear-to-r from-transparent via-primary/50 to-primary" />
                 <h1 className="text-[clamp(1.2rem,2.5vw,2rem)] shrink-0 whitespace-nowrap font-bold text-white/90 pr-2 flex items-center gap-2">

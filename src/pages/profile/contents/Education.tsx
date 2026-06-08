@@ -1,7 +1,9 @@
 import { useTranslation } from "react-i18next";
+import { useScrollAnimation } from "../../../hooks/useScrollAnimation";
 
 export const Education = () => {
     const { t } = useTranslation();
+    const ref = useScrollAnimation();
 
     const educationList = [
         {
@@ -19,7 +21,7 @@ export const Education = () => {
     ];
 
     return (
-        <article className="w-full flex flex-col gap-4">
+        <article ref={ref} className="scroll-reveal w-full flex flex-col gap-4">
             <div className="w-full flex items-center gap-3 md:gap-5">
                 <div className="flex-1 md:flex-none md:w-20 h-px bg-linear-to-r from-transparent via-primary/50 to-primary" />
                 <h1 className="text-[clamp(1.2rem,2.5vw,2rem)] font-bold text-white/90 pr-2 flex items-center gap-2">

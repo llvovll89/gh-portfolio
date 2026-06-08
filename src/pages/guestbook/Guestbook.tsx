@@ -8,11 +8,13 @@ import { FiMessageSquare } from 'react-icons/fi'
 import { useTranslation } from 'react-i18next'
 import { FaPencil } from 'react-icons/fa6'
 import { useToast } from '@/context/ToastContext'
+import { useSeoMeta } from '@/hooks/useSeoMeta'
 
 export const Guestbook = () => {
 	const [showForm, setShowForm] = useState(false)
 	const { t } = useTranslation()
 	const { showToast } = useToast()
+	useSeoMeta({ title: "Guestbook", description: "김건호 포트폴리오 방명록 — 방문 소감이나 메시지를 남겨주세요", url: "/guestbook" })
 
 	useEffect(() => {
 		if (!showForm) return;

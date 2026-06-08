@@ -3,10 +3,13 @@ import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
 import { HiDocumentDownload } from "react-icons/hi";
 import { FaFilePdf } from "react-icons/fa";
+import { logger } from "../../utils/logger";
 import { useTranslation } from "react-i18next";
+import { useSeoMeta } from "../../hooks/useSeoMeta";
 
 export const Resume = () => {
     const { t } = useTranslation();
+    useSeoMeta({ title: "Resume", description: "웹 개발자 김건호의 이력서 — 경력, 기술 스택, 프로젝트 요약", url: "/resume" });
 
     const handleDownloadResume = async () => {
         let objectUrl: string | null = null;
@@ -23,7 +26,7 @@ export const Resume = () => {
             document.body.appendChild(link);
             link.click();
         } catch (error) {
-            console.error("이력서 다운로드 실패:", error);
+            logger.error("이력서 다운로드 실패", error);
             alert("이력서 다운로드에 실패했습니다.");
         } finally {
             if (link && document.body.contains(link)) document.body.removeChild(link);

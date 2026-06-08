@@ -272,3 +272,67 @@ span {
         -webkit-tap-highlight-color: transparent;
     }
 }
+
+/* ── Scroll-triggered animations ─────────────────────────── */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(28px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(-24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.scroll-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.scroll-reveal-right {
+    opacity: 0;
+    transform: translateX(-24px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.scroll-reveal-right.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scroll-reveal,
+    .scroll-reveal-right {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
+/* ── Hero fadeInUp utility ────────────────────────────────── */
+.animate-fade-in-up {
+    animation: fadeInUp 0.7s ease both;
+}
+
+.animate-delay-100 { animation-delay: 0.1s; }
+.animate-delay-200 { animation-delay: 0.2s; }
+.animate-delay-300 { animation-delay: 0.3s; }
+.animate-delay-400 { animation-delay: 0.4s; }

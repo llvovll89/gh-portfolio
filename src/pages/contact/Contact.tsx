@@ -5,9 +5,11 @@ import { CommunicationCard } from "./contents/CommnuiCationCard";
 import { MessageCardForm } from "./contents/MessageCardForm";
 import { HiMailOpen } from "react-icons/hi";
 import { useTranslation } from "react-i18next";
+import { useSeoMeta } from "../../hooks/useSeoMeta";
 
 export const Contact = () => {
     const { t } = useTranslation();
+    useSeoMeta({ title: "Contact", description: "김건호에게 메시지를 보내세요. 이메일 또는 폼으로 연락할 수 있습니다.", url: "/contact" });
 
     return (
         <>
