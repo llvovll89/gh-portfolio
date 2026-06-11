@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
@@ -9,9 +10,12 @@ import { useSeoMeta } from "../../hooks/useSeoMeta";
 
 export const Resume = () => {
     const { t } = useTranslation();
+    const [downloading, setDownloading] = useState(false);
     useSeoMeta({ title: "Resume", description: "웹 개발자 김건호의 이력서 — 경력, 기술 스택, 프로젝트 요약", url: "/resume" });
 
     const handleDownloadResume = async () => {
+        if (downloading) return;
+        setDownloading(true);
         let objectUrl: string | null = null;
         let link: HTMLAnchorElement | null = null;
         try {
@@ -31,6 +35,7 @@ export const Resume = () => {
         } finally {
             if (link && document.body.contains(link)) document.body.removeChild(link);
             if (objectUrl) window.URL.revokeObjectURL(objectUrl);
+            setDownloading(false);
         }
     };
 
@@ -40,7 +45,6 @@ export const Resume = () => {
             icon: "👤",
             content: [
                 { label: "이름", value: "김건호 (Kim Geon Ho)" },
-                { label: "생년월일", value: "1994.05.04" },
                 { label: "이메일", value: "svvvs5579@naver.com" },
             ],
         },
@@ -96,11 +100,21 @@ export const Resume = () => {
                             {/* 다운로드 버튼 */}
                             <button
                                 onClick={handleDownloadResume}
-                                className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl px-6 py-3 text-sm md:text-base font-bold transition-all duration-300 bg-linear-to-r from-primary via-blue-500 to-cyan-400 text-white shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2"
+                                disabled={downloading}
+                                className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl px-6 py-3 text-sm md:text-base font-bold transition-all duration-300 bg-linear-to-r from-primary via-blue-500 to-cyan-400 text-white shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
                             >
-                                <HiDocumentDownload className="w-5 h-5 transition-transform group-hover:-translate-y-0.5" />
-                                <span>이력서 다운로드</span>
-                                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                                {downloading ? (
+                                    <>
+                                        <span className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                                        <span>다운로드 중…</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <HiDocumentDownload className="w-5 h-5 transition-transform group-hover:-translate-y-0.5" />
+                                        <span>이력서 다운로드</span>
+                                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                                    </>
+                                )}
                             </button>
                         </div>
 

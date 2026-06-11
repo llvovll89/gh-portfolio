@@ -151,6 +151,7 @@ export const Uses = () => {
                                             href={tool.link}
                                             target="_blank"
                                             rel="noopener noreferrer"
+                                            aria-label={`${tool.name} - 새 창에서 열기`}
                                             className={[
                                                 "group relative overflow-hidden",
                                                 "rounded-xl p-5",

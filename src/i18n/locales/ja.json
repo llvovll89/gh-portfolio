@@ -97,7 +97,15 @@
       "viewRepository": "GitHubリポジトリ",
       "projectIntro": "プロジェクト概要",
       "techStack": "技術スタック",
-      "team": "チーム構成"
+      "team": "チーム構成",
+      "filterAll": "すべて",
+      "sortDefault": "デフォルト順",
+      "sortName": "名前順",
+      "noProjects": "このスタックのプロジェクトはありません",
+      "noProjectsHint": "別のスタックを選択するか、すべて表示してください",
+      "viewAll": "すべて表示",
+      "statusUpdating": "更新中",
+      "statusIncomplete": "未完成"
     },
     "contact": {
       "title": "Contact",
@@ -183,7 +191,11 @@
     },
     "guestbook": {
       "title": "ゲストブック",
-      "description": "ゲストブックにメッセージを残して交流しましょう！"
+      "description": "ゲストブックにメッセージを残して交流しましょう！",
+      "subtitle": "訪問者の皆様へ、大切なメッセージをお残しください 💌",
+      "write": "書く",
+      "close": "閉じる",
+      "entryCount": "{{count}}件"
     },
     "home": {
       "badge": "Web Developer",

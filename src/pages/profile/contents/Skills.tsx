@@ -4,6 +4,34 @@ import { SiPostgresql, SiRedux, SiSpring } from "react-icons/si";
 import { TbBrandTypescript } from "react-icons/tb";
 import { useScrollAnimation } from "../../../hooks/useScrollAnimation";
 
+const SKILL_GROUPS = [
+    {
+        title: "FrontEnd",
+        tone: "from-blue-500/15 via-cyan-400/10 to-sky-500/5",
+        border: "border-blue-400/25",
+        badge: "bg-linear-to-r from-blue-500 to-cyan-500 text-white",
+        glowColor: "bg-blue-500/20",
+        items: [
+            { label: "React", Icon: FaReact, level: 4 },
+            { label: "TypeScript", Icon: TbBrandTypescript, level: 4 },
+            { label: "Redux", Icon: SiRedux, level: 3 },
+            { label: "TailwindCSS", Icon: RiTailwindCssFill, level: 4 },
+        ],
+    },
+    {
+        title: "BackEnd",
+        tone: "from-emerald-500/15 via-green-400/10 to-teal-500/5",
+        border: "border-emerald-400/25",
+        badge: "bg-linear-to-r from-emerald-500 to-teal-500 text-white",
+        glowColor: "bg-emerald-500/20",
+        items: [
+            { label: "JAVA", Icon: FaJava, level: 3 },
+            { label: "SpringBoot", Icon: SiSpring, level: 3 },
+            { label: "PostgreSQL / Oracle", Icon: SiPostgresql, level: 3 },
+        ],
+    },
+] as const;
+
 const LevelDots = ({ level }: { level: number }) => (
     <div className="flex gap-0.5 ml-auto shrink-0">
         {Array.from({ length: 5 }, (_, i) => (
@@ -22,33 +50,6 @@ const LevelDots = ({ level }: { level: number }) => (
 
 export const Skills = () => {
     const ref = useScrollAnimation();
-    const skillGroups = [
-        {
-            title: "FrontEnd",
-            tone: "from-blue-500/15 via-cyan-400/10 to-sky-500/5",
-            border: "border-blue-400/25",
-            badge: "bg-linear-to-r from-blue-500 to-cyan-500 text-white",
-            glowColor: "bg-blue-500/20",
-            items: [
-                { label: "React", Icon: FaReact, level: 4 },
-                { label: "TypeScript", Icon: TbBrandTypescript, level: 4 },
-                { label: "Redux", Icon: SiRedux, level: 3 },
-                { label: "TailwindCSS", Icon: RiTailwindCssFill, level: 4 },
-            ],
-        },
-        {
-            title: "BackEnd",
-            tone: "from-emerald-500/15 via-green-400/10 to-teal-500/5",
-            border: "border-emerald-400/25",
-            badge: "bg-linear-to-r from-emerald-500 to-teal-500 text-white",
-            glowColor: "bg-emerald-500/20",
-            items: [
-                { label: "JAVA", Icon: FaJava, level: 3 },
-                { label: "SpringBoot", Icon: SiSpring, level: 3 },
-                { label: "PostgreSQL / Oracle", Icon: SiPostgresql, level: 3 },
-            ],
-        },
-    ] as const;
 
     return (
         <article ref={ref} className="scroll-reveal w-full flex flex-col gap-4 overflow-auto scrolls">
@@ -62,7 +63,7 @@ export const Skills = () => {
 
             {/* content */}
             <ul className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-                {skillGroups.map((group) => (
+                {SKILL_GROUPS.map((group) => (
                     <li
                         key={group.title}
                         className={[

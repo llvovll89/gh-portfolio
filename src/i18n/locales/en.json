@@ -97,7 +97,15 @@
       "viewRepository": "GitHub Repository",
       "projectIntro": "Project Overview",
       "techStack": "Tech Stack",
-      "team": "Team"
+      "team": "Team",
+      "filterAll": "All",
+      "sortDefault": "Default",
+      "sortName": "By Name",
+      "noProjects": "No projects found for this stack",
+      "noProjectsHint": "Try selecting a different stack or view all",
+      "viewAll": "View All",
+      "statusUpdating": "Updating",
+      "statusIncomplete": "Incomplete"
     },
     "contact": {
       "title": "Contact",
@@ -183,7 +191,11 @@
     },
     "guestbook": {
       "title": "Guestbook",
-      "description": "Leave a message in the guestbook and let's connect!"
+      "description": "Leave a message in the guestbook and let's connect!",
+      "subtitle": "Leave a precious message for our visitors 💌",
+      "write": "Write",
+      "close": "Close",
+      "entryCount": "{{count}} entries"
     },
     "home": {
       "badge": "Web Developer",

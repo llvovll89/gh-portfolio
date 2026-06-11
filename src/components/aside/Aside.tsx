@@ -312,6 +312,14 @@ export const Aside = () => {
     const isMobileFolderNav = isMobileSize && selectedNav === NavType.FOLDER;
 
     useEffect(() => {
+        if (!isMobileSize) return;
+        document.body.style.overflow = selectedNav ? "hidden" : "";
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [selectedNav, isMobileSize]);
+
+    useEffect(() => {
         if (isMobileSize) {
             setLayoutState((prev) => ({
                 ...prev,

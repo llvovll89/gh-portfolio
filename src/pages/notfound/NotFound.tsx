@@ -48,7 +48,7 @@ export const NotFound = () => {
         `  RollupError: [plugin vite:import-analysis] 404 Not Found`,
     ];
 
-    const { displayed, currentLine } = useTypewriter(terminalLines, 22);
+    const { displayed, currentLine } = useTypewriter(terminalLines, 45);
 
     const codeLines = [
         { num: 1,  tokens: [{ t: "comment", v: `// 📂 src/pages${path}.tsx` }] },

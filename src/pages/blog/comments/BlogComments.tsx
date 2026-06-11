@@ -79,7 +79,7 @@ export function BlogComments({ slug }: Props) {
 
                         return (
                             <li key={c.id} className="group flex gap-3">
-                                <div className={`shrink-0 w-9 h-9 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-sm shadow-sm`}>
+                                <div className={`shrink-0 w-9 h-9 rounded-full bg-linear-to-br ${gradient} flex items-center justify-center text-white font-bold text-sm shadow-sm`}>
                                     {initial}
                                 </div>
                                 <div className="flex-1 min-w-0">

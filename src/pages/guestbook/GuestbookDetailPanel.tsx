@@ -63,10 +63,10 @@ const DetailContent = ({ entry, onEdit, onDelete, onClose, showClose }: {
             {/* Header */}
             <div className="flex items-center gap-3 px-5 pt-5 pb-4 border-b border-white/6 shrink-0">
                 <div className="relative shrink-0">
-                    <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-base shadow-lg`}>
+                    <div className={`w-10 h-10 rounded-full bg-linear-to-br ${gradient} flex items-center justify-center text-white font-bold text-base shadow-lg`}>
                         {entry.name[0]?.toUpperCase() || '?'}
                     </div>
-                    <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${gradient} opacity-40 blur-md -z-10 scale-125`} />
+                    <div className={`absolute inset-0 rounded-full bg-linear-to-br ${gradient} opacity-40 blur-md -z-10 scale-125`} />
                 </div>
                 <div className="flex-1 min-w-0">
                     <div className="font-semibold text-white/90 text-sm">{entry.name}</div>

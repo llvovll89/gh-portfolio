@@ -3,6 +3,7 @@ import {useHandlePushPath} from "../../../../hooks/useHandlePushPath";
 import {useCheckedMobileSize} from "../../../../hooks/useCheckedMobileSize";
 import {useEffect, useMemo, useState} from "react";
 import {useTranslation, Trans} from "react-i18next";
+import GhActivityDashboard from "../../../../components/ghActivity/GhActivityDashboard";
 
 const PARTICLES = Array.from({length: 20}, (_, i) => ({
     id: i,
@@ -17,23 +18,27 @@ export const MainContents = () => {
     const handlePushPath = useHandlePushPath();
     const isMobileSize = useCheckedMobileSize();
     const [mousePosition, setMousePosition] = useState({x: 0, y: 0});
+    const [prefersReducedMotion] = useState(
+        () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    );
 
     const particles = useMemo(() => PARTICLES, []);
 
     useEffect(() => {
+        if (prefersReducedMotion) return;
         const handleMouseMove = (e: MouseEvent) => {
             setMousePosition({x: e.clientX, y: e.clientY});
         };
         window.addEventListener("mousemove", handleMouseMove);
         return () => window.removeEventListener("mousemove", handleMouseMove);
-    }, []);
+    }, [prefersReducedMotion]);
 
     const baseButton =
         "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-2xl sm:px-6 px-4 sm:py-3.5 py-2 text-sm md:text-base font-bold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2";
 
     const primaryButton = `${baseButton} bg-linear-to-r from-primary via-blue-500 to-cyan-400 text-white shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:scale-105 active:scale-95`;
 
-    const secondaryButton = `${baseButton} border-2 border-white/20 bg-white/5 text-white backdrop-blur-sm hover:bg-white/10 hover:border-white/30 hover:scale-105 active:scale-95`;
+    const secondaryButton = `${baseButton} border-2 border-white/20 bg-white/5 text-white backdrop-blur-sm hover:bg-white/10 hover:border-white/30 hover:scale-105 active:scale-95 [will-change:transform]`;
 
     const skills = [
         {text: "React", icon: "⚛️", delay: "0s"},
@@ -63,20 +68,22 @@ export const MainContents = () => {
             />
 
             {/* 파티클 효과 */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                {particles.map((particle) => (
-                    <div
-                        key={particle.id}
-                        className="absolute w-1 h-1 bg-white/30 rounded-full animate-pulse"
-                        style={{
-                            left: particle.left,
-                            top: particle.top,
-                            animationDelay: particle.animationDelay,
-                            animationDuration: particle.animationDuration,
-                        }}
-                    />
-                ))}
-            </div>
+            {!prefersReducedMotion && (
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    {particles.map((particle) => (
+                        <div
+                            key={particle.id}
+                            className="absolute w-1 h-1 bg-white/30 rounded-full animate-pulse"
+                            style={{
+                                left: particle.left,
+                                top: particle.top,
+                                animationDelay: particle.animationDelay,
+                                animationDuration: particle.animationDuration,
+                            }}
+                        />
+                    ))}
+                </div>
+            )}
 
             <div className="relative flex min-w-0 flex-col lg:flex-row items-center gap-12 lg:gap-16 h-full p-2">
                 <section className="w-full min-w-0 flex-1 space-y-8 animate-[fadeIn_0.8s_ease-out] px-0.5">
@@ -218,97 +225,16 @@ export const MainContents = () => {
                     </div>
                 </section>
 
-                {/* 오른쪽: 3D 인터랙티브 영역 */}
+                {/* 오른쪽: GitHub Activity */}
                 {!isMobileSize && (
-                    <aside className="flex-1 flex items-center justify-center min-h-150 relative">
-                        {/* 배경 텍스트 */}
-                        <div className="absolute inset-0 flex flex-col items-end justify-between py-10 opacity-5 pointer-events-none select-none">
-                            <span className="text-[clamp(3rem,10vw,14rem)] font-black italic tracking-tighter">
-                                KIM
-                            </span>
-                            <span className="text-[clamp(3rem,10vw,14rem)] font-black italic tracking-tighter">
-                                GEON HO
-                            </span>
+                    <aside className="flex-1 flex items-start justify-center min-h-150 relative pt-4">
+                        {/* 배경 글로우 */}
+                        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                            <div className="w-80 h-80 bg-primary/10 rounded-full blur-3xl" />
                         </div>
 
-                        {/* 3D 카드 */}
-                        <div className="relative w-full max-w-md aspect-square">
-                            {/* 회전하는 링 */}
-                            <div className="absolute inset-0 animate-[spin_20s_linear_infinite]">
-                                <div className="absolute w-full h-full border-2 border-primary/20 rounded-full" />
-                                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-primary shadow-[0_0_20px_rgba(0,153,255,0.8)]" />
-                            </div>
-
-                            <div className="absolute inset-8 animate-[spin_15s_linear_infinite_reverse]">
-                                <div className="absolute w-full h-full border-2 border-cyan-400/20 rounded-full" />
-                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-3 h-3 rounded-full bg-cyan-400" />
-                            </div>
-
-                            {/* 중앙 글로우 */}
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="w-64 h-64 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-                                <div
-                                    className="absolute w-48 h-48 bg-cyan-400/15 rounded-full blur-2xl animate-pulse"
-                                    style={{animationDelay: "1s"}}
-                                />
-                                <div
-                                    className="absolute w-32 h-32 bg-blue-500/20 rounded-full blur-xl animate-pulse"
-                                    style={{animationDelay: "2s"}}
-                                />
-                            </div>
-
-                            {/* 플로팅 코드 태그 */}
-                            <div className="absolute inset-0">
-                                {[
-                                    {
-                                        text: "<Developer />",
-                                        x: "15%",
-                                        y: "20%",
-                                        delay: "0s",
-                                    },
-                                    {
-                                        text: "<VSCode />",
-                                        x: "75%",
-                                        y: "30%",
-                                        delay: "0.5s",
-                                    },
-                                    {
-                                        text: "<UX Focus />",
-                                        x: "60%",
-                                        y: "70%",
-                                        delay: "1s",
-                                    },
-                                    {
-                                        text: "<Clean Code />",
-                                        x: "20%",
-                                        y: "65%",
-                                        delay: "1.5s",
-                                    },
-                                    {
-                                        text: "<Fast UI />",
-                                        x: "80%",
-                                        y: "80%",
-                                        delay: "2s",
-                                    },
-                                ].map((tag, i) => (
-                                    <div
-                                        key={i}
-                                        style={{
-                                            left: tag.x,
-                                            top: tag.y,
-                                            animationDelay: tag.delay,
-                                        }}
-                                        className="absolute -translate-x-1/2 -translate-y-1/2 animate-[float_3s_ease-in-out_infinite]"
-                                    >
-                                        <div className="group relative cursor-default">
-                                            <div className="absolute inset-0 bg-primary/20 blur-xl rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                                            <div className="relative px-4 py-2 rounded-xl border border-white/20 bg-white/10 backdrop-blur-md shadow-2xl text-xs font-mono text-white/90 whitespace-nowrap hover:bg-white/20 hover:border-primary/40 transition-all">
-                                                {tag.text}
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                        <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 shadow-2xl animate-[fadeIn_1s_ease-out]">
+                            <GhActivityDashboard />
                         </div>
                     </aside>
                 )}

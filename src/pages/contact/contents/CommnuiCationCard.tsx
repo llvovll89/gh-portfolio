@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
-import { HiMail, HiUser, HiCalendar, HiLocationMarker, HiBriefcase, HiCheckCircle } from "react-icons/hi";
+import { useEffect, useMemo, useState } from "react";
+import { HiMail, HiUser, HiLocationMarker, HiBriefcase, HiCheckCircle } from "react-icons/hi";
 import { FaGithub } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+
+const INTEREST_TAGS = ["React", "TypeScript", "UI/UX", "Performance"] as const;
+const CAREER_START = new Date(2023, 6, 1);
 
 export const CommunicationCard = () => {
     const { t } = useTranslation();
@@ -10,29 +13,19 @@ export const CommunicationCard = () => {
 
     const [copied, setCopied] = useState(false);
 
-    // 경력 계산 (2023.07.01 기준)
-    const calculateCareer = () => {
-        const startDate = new Date(2023, 6, 1); // 2023년 7월 1일 (월은 0부터 시작)
+    const careerLabel = useMemo(() => {
         const today = new Date();
-
-        let years = today.getFullYear() - startDate.getFullYear();
-        let months = today.getMonth() - startDate.getMonth();
-
-        if (months < 0) {
-            years--;
-            months += 12;
-        }
-
-        if (years > 0) {
-            return t("pages.contact.communicationCard.careerYearsMonths", { years, months });
-        }
+        let years = today.getFullYear() - CAREER_START.getFullYear();
+        let months = today.getMonth() - CAREER_START.getMonth();
+        if (months < 0) { years--; months += 12; }
+        if (years > 0) return t("pages.contact.communicationCard.careerYearsMonths", { years, months });
         return t("pages.contact.communicationCard.careerMonths", { months });
-    };
+    }, [t]);
 
     useEffect(() => {
         if (!copied) return;
-        const t = window.setTimeout(() => setCopied(false), 1500);
-        return () => window.clearTimeout(t);
+        const timerId = window.setTimeout(() => setCopied(false), 1500);
+        return () => window.clearTimeout(timerId);
     }, [copied]);
 
     const legacyCopy = (text: string) => {
@@ -115,14 +108,7 @@ export const CommunicationCard = () => {
                         <HiBriefcase className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
                         <div>
                             <dt className="text-[clamp(0.7rem,1vw,0.8rem)] text-white/50">{t("pages.contact.communicationCard.career")}</dt>
-                            <dd className="mt-1 font-semibold text-white text-[clamp(0.75rem,1vw,0.8rem)]">{calculateCareer()}</dd>
-                        </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                        <HiCalendar className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
-                        <div>
-                            <dt className="text-[clamp(0.7rem,1vw,0.8rem)] text-white/50">{t("pages.contact.communicationCard.birthDate")}</dt>
-                            <dd className="mt-1 font-semibold text-white text-[clamp(0.75rem,1vw,0.8rem)]">1994-05-04</dd>
+                            <dd className="mt-1 font-semibold text-white text-[clamp(0.75rem,1vw,0.8rem)]">{careerLabel}</dd>
                         </div>
                     </div>
                     <div className="flex items-start gap-2">
@@ -161,7 +147,7 @@ export const CommunicationCard = () => {
                     href={GITHUB}
                     target="_blank"
                     rel="noreferrer"
-                    className="group rounded-xl border border-white/10 bg-gradient-to-r from-black/30 to-black/10 sm:p-4 p-2 hover:border-primary/30 hover:bg-primary/5 transition-all active:scale-[0.99]"
+                    className="group rounded-xl border border-white/10 bg-linear-to-r from-black/30 to-black/10 sm:p-4 p-2 hover:border-primary/30 hover:bg-primary/5 transition-all active:scale-[0.99]"
                 >
                     <div className="flex items-center gap-3">
                         <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors shrink-0">
@@ -181,7 +167,7 @@ export const CommunicationCard = () => {
             </div>
 
             {/* 관심/태그 */}
-            <div className="rounded-xl border border-white/10 bg-gradient-to-br from-black/30 to-black/10 sm:p-4 p-3 space-y-3">
+            <div className="rounded-xl border border-white/10 bg-linear-to-br from-black/30 to-black/10 sm:p-4 p-3 space-y-3">
                 <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                     <p className="text-sm text-white/70">
@@ -193,12 +179,12 @@ export const CommunicationCard = () => {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                    {["React", "TypeScript", "UI/UX", "Performance"].map((t) => (
+                    {INTEREST_TAGS.map((tag) => (
                         <span
-                            key={t}
+                            key={tag}
                             className="text-xs font-medium text-primary/90 bg-primary/10 border border-primary/30 px-3 py-1.5 rounded-full hover:bg-primary/20 transition-colors"
                         >
-                            {t}
+                            {tag}
                         </span>
                     ))}
                 </div>

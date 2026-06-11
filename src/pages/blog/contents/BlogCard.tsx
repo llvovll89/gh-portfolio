@@ -14,6 +14,16 @@ interface BlogCardProps {
 export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
     const [viewCount, setViewCount] = useState<number | null>(null);
 
+    const prefersReducedMotion = useMemo(
+        () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+        []
+    );
+
+    const animStyle = useMemo(
+        () => (prefersReducedMotion ? undefined : { animationDelay: `${index * 0.05}s` }),
+        [index, prefersReducedMotion]
+    );
+
     useEffect(() => {
         getViewCount(p.slug).then(setViewCount).catch(() => {});
     }, [p.slug]);
@@ -26,7 +36,7 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
     }, [p, searchQuery]);
 
     return (
-        <li className="list-none animate-fade-in-up" style={{ animationDelay: `${index * 0.05}s` }}>
+        <li className={`list-none${prefersReducedMotion ? "" : " animate-fade-in-up"}`} style={animStyle}>
             <Link
                 to={`/blog/${p.slug}`}
                 className={[

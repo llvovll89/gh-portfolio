@@ -56,10 +56,12 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
                         <HiUser className="w-4 h-4 text-zinc-400 dark:text-primary" />
                     </div>
                     <input
+                        id="comment-name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/5 text-zinc-900 dark:text-white text-sm outline-none focus:ring-2 focus:ring-zinc-400/40 dark:focus:ring-primary/40 placeholder:text-zinc-400 dark:placeholder:text-white/30 transition-all"
                         placeholder="이름"
+                        aria-label="이름"
                         autoFocus
                     />
                 </div>
@@ -68,10 +70,12 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
                         <TbLockPassword className="w-4 h-4 text-zinc-400 dark:text-primary" />
                     </div>
                     <input
+                        id="comment-password"
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/5 text-zinc-900 dark:text-white text-sm outline-none focus:ring-2 focus:ring-zinc-400/40 dark:focus:ring-primary/40 placeholder:text-zinc-400 dark:placeholder:text-white/30 transition-all"
                         placeholder="비밀번호 (수정·삭제 시 필요)"
+                        aria-label="비밀번호"
                     />
                 </div>
             </div>
@@ -81,11 +85,14 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
                     <FiMessageSquare className="w-4 h-4 text-zinc-400 dark:text-primary" />
                 </div>
                 <textarea
+                    id="comment-message"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={(e) => { if (e.ctrlKey && e.key === 'Enter') handleSubmit(); }}
                     rows={3}
                     className="w-full pl-9 pr-4 py-3 rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/5 text-zinc-900 dark:text-white text-sm outline-none focus:ring-2 focus:ring-zinc-400/40 dark:focus:ring-primary/40 placeholder:text-zinc-400 dark:placeholder:text-white/30 resize-none transition-all"
-                    placeholder="댓글을 남겨주세요..."
+                    placeholder="댓글을 남겨주세요… (Ctrl+Enter로 등록)"
+                    aria-label="댓글 내용"
                 />
             </div>
 

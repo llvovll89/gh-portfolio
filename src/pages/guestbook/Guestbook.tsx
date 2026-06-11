@@ -47,7 +47,7 @@ export const Guestbook = () => {
 										{t("pages.guestbook.title")}
 									</h1>
 									<p className="text-xs text-white/35 mt-0.5 hidden sm:block">
-										방문해주신 분들의 소중한 메시지를 남겨주세요 💌
+										{t("pages.guestbook.subtitle")}
 									</p>
 								</div>
 							</div>
@@ -56,7 +56,7 @@ export const Guestbook = () => {
 								{entryCount !== null && (
 									<div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/8">
 										<span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-										<span className="text-xs text-white/50 font-medium">{entryCount}개</span>
+										<span className="text-xs text-white/50 font-medium">{t("pages.guestbook.entryCount", { count: entryCount })}</span>
 									</div>
 								)}
 								<button
@@ -64,7 +64,7 @@ export const Guestbook = () => {
 									className="group cursor-pointer relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl sm:px-5 sm:py-2.5 px-3.5 py-2 text-sm font-bold transition-all duration-300 text-white bg-primary hover:scale-105 active:scale-95 focus:outline-none"
 								>
 									<FaPencil className="w-3.5 h-3.5 transition-transform group-hover:-translate-y-0.5" />
-									<span className="hidden sm:inline">{showForm ? '닫기' : '글쓰기'}</span>
+									<span className="hidden sm:inline">{showForm ? t("pages.guestbook.close") : t("pages.guestbook.write")}</span>
 									<div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
 								</button>
 							</div>

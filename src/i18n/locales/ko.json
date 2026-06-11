@@ -97,7 +97,15 @@
       "viewRepository": "깃허브 저장소",
       "projectIntro": "프로젝트 소개",
       "techStack": "기술 스택",
-      "team": "팀 구성"
+      "team": "팀 구성",
+      "filterAll": "전체",
+      "sortDefault": "기본순",
+      "sortName": "이름순",
+      "noProjects": "해당 기술 스택의 프로젝트가 없습니다",
+      "noProjectsHint": "다른 스택을 선택하거나 전체 보기를 눌러주세요",
+      "viewAll": "전체 보기",
+      "statusUpdating": "업데이트 중",
+      "statusIncomplete": "미완성"
     },
     "contact": {
       "title": "Contact",
@@ -183,7 +191,11 @@
     },
     "guestbook": {
       "title": "방명록",
-      "description": "방명록에 메시지를 남기고 소통해봐요!"
+      "description": "방명록에 메시지를 남기고 소통해봐요!",
+      "subtitle": "방문해주신 분들의 소중한 메시지를 남겨주세요 💌",
+      "write": "글쓰기",
+      "close": "닫기",
+      "entryCount": "{{count}}개"
     },
     "home": {
       "badge": "Web Developer",

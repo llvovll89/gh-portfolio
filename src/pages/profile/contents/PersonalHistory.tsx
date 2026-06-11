@@ -76,11 +76,9 @@ export const PersonalHistory = () => {
                                         </p>
                                     </div>
 
-                                    {career.isActive && (
-                                        <span className="px-2.5 py-1 rounded-full bg-primary/10 border border-primary/30 text-[10px] md:text-xs text-primary font-semibold whitespace-nowrap">
-                                            {t("pages.profile.personalHistory.currentlyEmployed")}
-                                        </span>
-                                    )}
+                                    <span className={`px-2.5 py-1 rounded-full bg-primary/10 border border-primary/30 text-[10px] md:text-xs text-primary font-semibold whitespace-nowrap ${career.isActive ? "visible" : "invisible"}`}>
+                                        {t("pages.profile.personalHistory.currentlyEmployed")}
+                                    </span>
                                 </div>
 
                                 {/* 기간 */}

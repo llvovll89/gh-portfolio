@@ -163,7 +163,7 @@ const GuestbookList = ({
                         </div>
                     </div>
                 ) : allEntries.length === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center gap-5 p-8 text-center">
+                    <div role="status" aria-live="polite" className="h-full flex flex-col items-center justify-center gap-5 p-8 text-center">
                         <div className="relative">
                             <div className="p-5 rounded-2xl bg-white/4 border border-white/8">
                                 <FiMessageSquare className="w-9 h-9 text-white/25" />
@@ -200,7 +200,7 @@ const GuestbookList = ({
                                             'group relative rounded-2xl border transition-all duration-200 cursor-pointer overflow-hidden',
                                             'animate-[fadeIn_0.35s_ease-out_both]',
                                             isSelected
-                                                ? 'border-primary/40 bg-gradient-to-br from-primary/[0.07] to-transparent shadow-[0_0_24px_rgba(0,153,255,0.12)]'
+                                                ? 'border-primary/40 bg-linear-to-br from-primary/[0.07] to-transparent shadow-[0_0_24px_rgba(0,153,255,0.12)]'
                                                 : 'border-white/8 bg-[#111115] hover:border-white/14 hover:bg-[#161619] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/40',
                                         ].join(' ')}
                                         style={{ animationDelay: `${idx * 0.04}s` }}
@@ -214,11 +214,11 @@ const GuestbookList = ({
                                         <div className="pl-3 pr-4 py-4 flex gap-3">
                                             {/* Avatar */}
                                             <div className="shrink-0 relative">
-                                                <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-sm shadow-md`}>
+                                                <div className={`w-9 h-9 rounded-full bg-linear-to-br ${gradient} flex items-center justify-center text-white font-bold text-sm shadow-md`}>
                                                     {initial}
                                                 </div>
                                                 {isSelected && (
-                                                    <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${gradient} opacity-40 blur-md -z-10 scale-125`} />
+                                                    <div className={`absolute inset-0 rounded-full bg-linear-to-br ${gradient} opacity-40 blur-md -z-10 scale-125`} />
                                                 )}
                                             </div>
 
@@ -234,18 +234,20 @@ const GuestbookList = ({
                                                         <button
                                                             type="button"
                                                             onClick={(e) => { e.stopPropagation(); setEditEntry(entry) }}
-                                                            className="p-1.5 rounded-lg text-white/30 hover:text-primary hover:bg-primary/10 transition-all cursor-pointer"
+                                                            className="p-2 rounded-lg text-white/30 hover:text-primary hover:bg-primary/10 transition-all cursor-pointer"
+                                                            aria-label={`${entry.name}의 메시지 수정`}
                                                             title="수정"
                                                         >
-                                                            <FaEdit className="w-3 h-3" />
+                                                            <FaEdit className="w-3.5 h-3.5" />
                                                         </button>
                                                         <button
                                                             type="button"
                                                             onClick={(e) => { e.stopPropagation(); setDeleteEntry(entry) }}
-                                                            className="p-1.5 rounded-lg text-white/30 hover:text-rose-400 hover:bg-rose-400/10 transition-all cursor-pointer"
+                                                            className="p-2 rounded-lg text-white/30 hover:text-rose-400 hover:bg-rose-400/10 transition-all cursor-pointer"
+                                                            aria-label={`${entry.name}의 메시지 삭제`}
                                                             title="삭제"
                                                         >
-                                                            <MdDelete className="w-3.5 h-3.5" />
+                                                            <MdDelete className="w-4 h-4" />
                                                         </button>
                                                     </div>
                                                 </div>

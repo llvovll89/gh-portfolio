@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { projects } from "../mocks/projectData";
 import { CardDetail } from "./CardDetail";
+import { useTranslation } from "react-i18next";
 
 type SortKey = "default" | "name";
 
@@ -9,6 +10,7 @@ interface CardProps {
 }
 
 export const ProjectContentsCards = ({ className }: CardProps) => {
+    const { t } = useTranslation();
     const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
     const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
     const [sortKey, setSortKey] = useState<SortKey>("default");
@@ -44,7 +46,7 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                             : "bg-[#2a2a2d] border-[#3e3e42] text-slate-400 hover:border-primary/50 hover:text-slate-200",
                     ].join(" ")}
                 >
-                    전체
+                    {t("pages.projects.filterAll")}
                 </button>
                 {allSkills.map((skill) => (
                     <button
@@ -68,12 +70,32 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                 onChange={(e) => setSortKey(e.target.value as SortKey)}
                 className="px-2 py-1 rounded-md text-xs bg-[#2a2a2d] border border-[#3e3e42] text-slate-400 outline-none cursor-pointer hover:border-primary/50 transition-all"
             >
-                <option value="default">기본순</option>
-                <option value="name">이름순</option>
+                <option value="default">{t("pages.projects.sortDefault")}</option>
+                <option value="name">{t("pages.projects.sortName")}</option>
             </select>
             </div>
 
             {/* 컴팩트 리스트 */}
+            {filteredProjects.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
+                    <div className="w-12 h-12 rounded-full bg-[#2a2a2d] flex items-center justify-center text-2xl">
+                        📂
+                    </div>
+                    <div>
+                        <p className="text-sm font-medium text-slate-300 mb-1">
+                            {t("pages.projects.noProjects")}
+                        </p>
+                        <p className="text-xs text-slate-500">{t("pages.projects.noProjectsHint")}</p>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => { setSelectedSkill(null); setSelectedProjectId(null); }}
+                        className="px-4 py-2 rounded-lg text-xs font-medium bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 transition-colors cursor-pointer"
+                    >
+                        {t("pages.projects.viewAll")}
+                    </button>
+                </div>
+            ) : (
             <div className={`flex flex-col gap-2 ${className ?? ""}`}>
                 {filteredProjects.map((project, index) => {
                     const isSelected = project.id === selectedProjectId;
@@ -124,7 +146,7 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" />
                                                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-sky-400" />
                                             </span>
-                                            업데이트 중
+                                            {t("pages.projects.statusUpdating")}
                                         </span>
                                     </div>
                                 )}
@@ -150,12 +172,12 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                                         </span>
                                         {isIncomplete && (
                                             <span className="inline-flex items-center rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold text-amber-400">
-                                                미완성
+                                                {t("pages.projects.statusIncomplete")}
                                             </span>
                                         )}
                                         {isUpdating && (
                                             <span className="inline-flex items-center rounded-full border border-sky-400/40 bg-sky-500/10 px-2 py-0.5 text-[10px] font-semibold text-sky-400">
-                                                업데이트 중
+                                                {t("pages.projects.statusUpdating")}
                                             </span>
                                         )}
                                     </div>
@@ -201,6 +223,7 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                     );
                 })}
             </div>
+            )}
 
             {/* 모달 상세 */}
             {selected && (

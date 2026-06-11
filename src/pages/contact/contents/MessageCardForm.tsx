@@ -94,6 +94,7 @@ export const MessageCardForm = () => {
                     <input
                         value={name}
                         onChange={(e) => { setName(e.target.value); if (nameError) setNameError(""); }}
+                        onKeyDown={(e) => { if (e.key === "Enter" && !isDisabled) handleSend(); }}
                         className={`rounded-xl border bg-linear-to-br from-black/30 to-black/10 sm:px-4 px-3 sm:py-3 py-2 outline-none transition-all placeholder:text-white/30 ${
                             nameError
                                 ? 'border-rose-400/50 focus:ring-2 focus:ring-rose-400/30'
@@ -113,6 +114,7 @@ export const MessageCardForm = () => {
                     <input
                         value={fromEmail}
                         onChange={(e) => { setFromEmail(e.target.value); if (emailError) setEmailError(""); }}
+                        onKeyDown={(e) => { if (e.key === "Enter" && !isDisabled) handleSend(); }}
                         className={`rounded-xl border bg-linear-to-br from-black/30 to-black/10 sm:px-4 px-3 sm:py-3 py-2 outline-none transition-all placeholder:text-white/30 ${
                             emailError
                                 ? 'border-rose-400/50 focus:ring-2 focus:ring-rose-400/30'
@@ -131,13 +133,18 @@ export const MessageCardForm = () => {
                             <HiChatAlt2 className="w-4 h-4 text-primary/70" />
                             {t("pages.contact.messageForm.message")}
                         </span>
-                        <span className={`text-xs tabular-nums transition-colors ${message.length > 450 ? 'text-rose-400' : message.length > 300 ? 'text-amber-400' : 'text-white/40'}`}>
+                        <span
+                            aria-live="polite"
+                            aria-label={`${message.length}자 입력됨, 최대 500자`}
+                            className={`text-xs tabular-nums transition-colors ${message.length > 450 ? 'text-rose-400' : message.length > 300 ? 'text-amber-400' : 'text-white/40'}`}
+                        >
                             {message.length} / 500
                         </span>
                     </span>
                     <textarea
                         value={message}
                         onChange={(e) => { setMessage(e.target.value); if (messageError) setMessageError(""); }}
+                        onKeyDown={(e) => { if (e.ctrlKey && e.key === "Enter" && !isDisabled) handleSend(); }}
                         maxLength={500}
                         className={`min-h-40 md:min-h-36 resize-y rounded-xl border bg-linear-to-br from-black/30 to-black/10 sm:px-4 px-3 sm:py-3 py-2 outline-none transition-all text-[clamp(0.75rem,1vw,0.875rem)] placeholder:text-white/30 ${
                             messageError

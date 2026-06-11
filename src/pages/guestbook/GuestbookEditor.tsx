@@ -150,7 +150,11 @@ const GuestbookEditor: React.FC<EditorProps> = ({
                             rows={4}
                             placeholder="소중한 메시지를 남겨주세요..."
                         />
-                        <span className={`absolute bottom-3 right-3 text-[10px] tabular-nums transition-colors ${msgColor}`}>
+                        <span
+                            aria-live="polite"
+                            aria-label={`${msgLen}자 입력됨, 최대 ${MAX_MSG}자`}
+                            className={`absolute bottom-3 right-3 text-[10px] tabular-nums transition-colors ${msgColor}`}
+                        >
                             {msgLen} / {MAX_MSG}
                         </span>
                     </div>

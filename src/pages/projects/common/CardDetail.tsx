@@ -13,9 +13,14 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
-        // 애니메이션을 위해 약간의 지연 후 표시
         const timer = setTimeout(() => setIsVisible(true), 10);
         return () => clearTimeout(timer);
+    }, []);
+
+    useEffect(() => {
+        const onKeyDown = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose(); };
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
     }, []);
 
     const handleClose = () => {
@@ -34,6 +39,7 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
             onClick={handleClose}
             role="dialog"
             aria-modal="true"
+            aria-labelledby="card-detail-title"
         >
             <div
                 className={[
@@ -98,7 +104,7 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                     {/* 타이틀과 배지 */}
                     <div className="mb-6">
                         <div className="flex flex-wrap items-center gap-3 mb-3">
-                            <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-100">
+                            <h3 id="card-detail-title" className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-slate-100">
                                 {selected.title}
                             </h3>
                             <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">

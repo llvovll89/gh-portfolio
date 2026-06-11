@@ -49,9 +49,9 @@ export const Detail = () => {
                 const { scrollTop, scrollHeight, clientHeight } = container;
                 setShowScrollButtons(scrollTop > 300);
                 const total = scrollHeight - clientHeight;
-                const progress = total > 0 ? Math.min(100, (scrollTop / total) * 100) : 0;
+                const progress = total > 0 ? Math.min(1, scrollTop / total) : 0;
                 if (progressBarRef.current) {
-                    progressBarRef.current.style.width = `${progress}%`;
+                    progressBarRef.current.style.transform = `scaleX(${progress})`;
                 }
             });
         };
@@ -113,8 +113,8 @@ export const Detail = () => {
             <div className="fixed top-0 left-0 right-0 h-0.75 z-50 pointer-events-none">
                 <div
                     ref={progressBarRef}
-                    className="h-full bg-primary"
-                    style={{ width: "0%" }}
+                    className="h-full bg-primary origin-left"
+                    style={{ transform: "scaleX(0)" }}
                 />
             </div>
 

@@ -189,7 +189,6 @@ export const Header = () => {
                             <li
                                 role="tab"
                                 aria-selected={selectedPathState.state === route.path}
-                                aria-controls={`tabpanel-${route.name}`}
                                 tabIndex={selectedPathState.state === route.path ? 0 : -1}
                                 onClick={() =>
                                     setSelectedPathState((prev) => ({
