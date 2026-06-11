@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface Line {
@@ -84,7 +84,8 @@ const useTypewriter = (lines: Line[], speed = 40) => {
 export const TerminalCard = () => {
     const { t } = useTranslation();
 
-    const LINES: Line[] = [
+    const badge = t("pages.home.badge");
+    const LINES: Line[] = useMemo(() => [
         { type: "cmd", text: "whoami" },
         { type: "out", text: "Geonho Kim · Frontend Developer" },
         { type: "blank", text: "" },
@@ -93,11 +94,11 @@ export const TerminalCard = () => {
         { type: "out", text: "SpringBoot  PostgreSQL  Firebase" },
         { type: "blank", text: "" },
         { type: "cmd", text: "echo $status" },
-        { type: "out", text: t("pages.home.badge") + " · Available ✓" },
+        { type: "out", text: badge + " · Available ✓" },
         { type: "blank", text: "" },
         { type: "cmd", text: "cat location.txt" },
         { type: "out", text: "Seoul, South Korea 🇰🇷" },
-    ];
+    ], [badge]);
 
     const { displayed, cursorVisible } = useTypewriter(LINES, 38);
     const bottomRef = useRef<HTMLDivElement>(null);
