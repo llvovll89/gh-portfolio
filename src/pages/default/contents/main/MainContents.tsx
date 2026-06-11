@@ -3,7 +3,7 @@ import {useHandlePushPath} from "../../../../hooks/useHandlePushPath";
 import {useCheckedMobileSize} from "../../../../hooks/useCheckedMobileSize";
 import {useEffect, useMemo, useState} from "react";
 import {useTranslation, Trans} from "react-i18next";
-import GhActivityDashboard from "../../../../components/ghActivity/GhActivityDashboard";
+import { TerminalCard } from "../../../../components/terminalCard/TerminalCard";
 
 const PARTICLES = Array.from({length: 20}, (_, i) => ({
     id: i,
@@ -225,16 +225,14 @@ export const MainContents = () => {
                     </div>
                 </section>
 
-                {/* 오른쪽: GitHub Activity */}
+                {/* 오른쪽: 터미널 카드 */}
                 {!isMobileSize && (
-                    <aside className="flex-1 flex items-start justify-center min-h-150 relative pt-4">
-                        {/* 배경 글로우 */}
+                    <aside className="flex-1 flex items-center justify-center min-h-150 relative">
                         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                             <div className="w-80 h-80 bg-primary/10 rounded-full blur-3xl" />
                         </div>
-
-                        <div className="relative w-full max-w-md rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 shadow-2xl animate-[fadeIn_1s_ease-out]">
-                            <GhActivityDashboard />
+                        <div className="relative w-full max-w-md animate-[fadeIn_1s_ease-out]">
+                            <TerminalCard />
                         </div>
                     </aside>
                 )}
