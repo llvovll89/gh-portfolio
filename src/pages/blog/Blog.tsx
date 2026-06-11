@@ -41,9 +41,6 @@ export const Blog = () => {
         url: '/blog',
     });
 
-    const [isInitialLoad, setIsInitialLoad] = useState(true);
-    useEffect(() => { setIsInitialLoad(false); }, []);
-
     // ── URL ↔ 필터 상태 동기화 ──────────────────────────────
     // 검색어: URL ?q= 에서 초기화
     const [searchQuery, setSearchQuery] = useState(() => searchParams.get("q") ?? "");
@@ -126,9 +123,7 @@ export const Blog = () => {
                     </div>
 
                     <div className="flex-1 overflow-y-auto pr-2 scrolls">
-                        {isInitialLoad ? (
-                            <BlogListSkeleton />
-                        ) : allPosts.length === 0 ? (
+                        {allPosts.length === 0 ? (
                             <p className="text-zinc-700 dark:text-zinc-300">
                                 {t("pages.blog.noPosts")}{" "}
                                 {t("pages.blog.addPostsHint")}{" "}
