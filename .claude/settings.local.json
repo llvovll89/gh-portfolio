@@ -28,7 +28,12 @@
       "WebFetch(domain:northflank.com)",
       "Bash(xargs wc:*)",
       "Bash(grep -r \"TODO\\\\|FIXME\\\\|BUG\\\\|HACK\\\\|XXX\" /d/workspace/gh-portfolio/src --include=*.ts --include=*.tsx -n)",
-      "Skill(update-config)"
+      "Skill(update-config)",
+      "WebFetch(domain:api.anthropic.com)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"cd 'C:\\\\Users\\\\svvvs\\\\바탕 화면\\\\kimgeonho\\\\gh-portfolio'; npm run dev\")",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\svvvs\\\\바탕 화면\\\\kimgeonho\\\\gh-portfolio\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)"
     ]
   }
 }
