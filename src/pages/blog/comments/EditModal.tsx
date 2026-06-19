@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { TbLockPassword } from 'react-icons/tb'
-import { IoClose } from 'react-icons/io5'
+import { LuKeyRound, LuX } from 'react-icons/lu'
 import { verifyPassword } from '@/utils/hashPassword'
 import { updateBlogComment, type BlogComment } from '@/utils/blogComments'
 
@@ -41,12 +40,12 @@ export function EditModal({ slug, comment, onClose, onSuccess }: Props) {
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="text-sm font-bold text-white">댓글 수정</h3>
                             <button type="button" onClick={onClose} className="p-1 rounded-lg text-white/35 hover:text-white/70 cursor-pointer transition-colors">
-                                <IoClose className="w-4 h-4" />
+                                <LuX className="w-4 h-4" />
                             </button>
                         </div>
                         <div className="relative mb-3">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <TbLockPassword className="w-4 h-4 text-primary" />
+                                <LuKeyRound className="w-4 h-4 text-primary" />
                             </div>
                             <input
                                 type="password"

@@ -97,7 +97,7 @@ export const TerminalCard = () => {
         { type: "out", text: badge + " · Available ✓" },
         { type: "blank", text: "" },
         { type: "cmd", text: "cat location.txt" },
-        { type: "out", text: "Seoul, South Korea 🇰🇷" },
+        { type: "out", text: "Daegu, South Korea 🇰🇷" },
     ], [badge]);
 
     const { displayed, cursorVisible } = useTypewriter(LINES, 38);

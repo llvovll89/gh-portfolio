@@ -3,7 +3,7 @@ import { BlogTagFilter } from "./BlogTagFilter";
 import { BlogCategoryFilter } from "./BlogCategoryFilter";
 import { BlogSortToggle } from "./BlogSortToggle";
 import { BlogViewToggle } from "./BlogViewToggle";
-import { HiX } from "react-icons/hi";
+import { LuX } from "react-icons/lu";
 import { useTranslation } from "react-i18next";
 
 interface BlogFilterBarProps {
@@ -119,7 +119,7 @@ export const BlogFilterBar = ({
                                     aria-label={t("pages.blog.filter.removeTag", { tag })}
                                     className="hover:text-primary/70 transition-colors"
                                 >
-                                    <HiX className="w-3.5 h-3.5" />
+                                    <LuX className="w-3.5 h-3.5" />
                                 </button>
                             </span>
                         ))}

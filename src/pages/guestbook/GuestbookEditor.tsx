@@ -1,9 +1,5 @@
 import React from 'react'
-import { FiMessageSquare } from 'react-icons/fi'
-import { TbLockPassword } from 'react-icons/tb'
-import { HiUser } from 'react-icons/hi'
-import { IoClose } from 'react-icons/io5'
-import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { LuMessageSquare, LuKeyRound, LuUser, LuX, LuLoader } from 'react-icons/lu'
 
 const MAX_MSG = 300
 
@@ -74,7 +70,7 @@ const GuestbookEditor: React.FC<EditorProps> = ({
             <div className="relative flex items-center justify-between px-5 pt-5 pb-4 border-b border-white/6">
                 <div className="flex items-center gap-3">
                     <div className="p-1.5 rounded-lg bg-primary/15 border border-primary/20">
-                        <FiMessageSquare className="w-4 h-4 text-primary" />
+                        <LuMessageSquare className="w-4 h-4 text-primary" />
                     </div>
                     <div>
                         <h3 className="text-sm font-bold text-white/90">
@@ -90,7 +86,7 @@ const GuestbookEditor: React.FC<EditorProps> = ({
                     onClick={onCancel}
                     className="p-1.5 rounded-lg text-white/30 hover:text-white/65 hover:bg-white/8 transition-all cursor-pointer"
                 >
-                    <IoClose className="w-5 h-5" />
+                    <LuX className="w-5 h-5" />
                 </button>
             </div>
 
@@ -100,7 +96,7 @@ const GuestbookEditor: React.FC<EditorProps> = ({
                     <div className="flex flex-col gap-1">
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <HiUser className="w-4 h-4 text-primary/70" />
+                                <LuUser className="w-4 h-4 text-primary/70" />
                             </div>
                             <input
                                 ref={nameRef}
@@ -117,7 +113,7 @@ const GuestbookEditor: React.FC<EditorProps> = ({
                     <div className="flex flex-col gap-1">
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <TbLockPassword className="w-4 h-4 text-primary/70" />
+                                <LuKeyRound className="w-4 h-4 text-primary/70" />
                             </div>
                             <input
                                 ref={passwordRef}
@@ -136,7 +132,7 @@ const GuestbookEditor: React.FC<EditorProps> = ({
                 <div className="flex flex-col gap-1">
                     <div className="relative">
                         <div className="absolute top-3 left-3 pointer-events-none">
-                            <FiMessageSquare className="w-4 h-4 text-primary/70" />
+                            <LuMessageSquare className="w-4 h-4 text-primary/70" />
                         </div>
                         <textarea
                             ref={messageRef}
@@ -184,7 +180,7 @@ const GuestbookEditor: React.FC<EditorProps> = ({
                     >
                         {submitting ? (
                             <span className="flex items-center justify-center gap-2">
-                                <AiOutlineLoading3Quarters className="w-4 h-4 animate-spin" />
+                                <LuLoader className="w-4 h-4 animate-spin" />
                                 처리 중...
                             </span>
                         ) : (mode === 'create' ? '등록하기' : '저장하기')}

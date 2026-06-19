@@ -1,12 +1,12 @@
 import { useToast } from "@/context/ToastContext";
 import type { ToastType } from "@/context/ToastContext";
-import { HiCheckCircle, HiXCircle, HiExclamation, HiInformationCircle } from "react-icons/hi";
+import { LuCircleCheck, LuCircleX, LuTriangleAlert, LuInfo } from "react-icons/lu";
 
 const icons: Record<ToastType, React.ReactNode> = {
-    success: <HiCheckCircle className="w-4 h-4 shrink-0" />,
-    error: <HiXCircle className="w-4 h-4 shrink-0" />,
-    warning: <HiExclamation className="w-4 h-4 shrink-0" />,
-    info: <HiInformationCircle className="w-4 h-4 shrink-0" />,
+    success: <LuCircleCheck className="w-4 h-4 shrink-0" />,
+    error: <LuCircleX className="w-4 h-4 shrink-0" />,
+    warning: <LuTriangleAlert className="w-4 h-4 shrink-0" />,
+    info: <LuInfo className="w-4 h-4 shrink-0" />,
 };
 
 const colors: Record<ToastType, string> = {

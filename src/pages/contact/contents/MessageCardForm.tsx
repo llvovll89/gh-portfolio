@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { HiMail, HiUser, HiChatAlt2, HiRefresh, HiPaperAirplane, HiInformationCircle, HiCheckCircle, HiXCircle } from "react-icons/hi";
+import { LuMail, LuUser, LuMessageCircle, LuRefreshCw, LuSend, LuInfo, LuCircleCheck, LuCircleX } from "react-icons/lu";
 import { useTranslation } from "react-i18next";
 import emailjs from "@emailjs/browser";
 
@@ -62,7 +62,7 @@ export const MessageCardForm = () => {
             {/* 헤더 */}
             <div className="pb-4 border-b border-white/10">
                 <h2 className="text-[clamp(1rem,2vw,1.25rem)] md:text-2xl font-bold flex items-center gap-2">
-                    <HiChatAlt2 className="w-5 h-5 text-primary" />
+                    <LuMessageCircle className="w-5 h-5 text-primary" />
                     {t("pages.contact.messageForm.title")}
                 </h2>
                 <p className="mt-2 text-[clamp(0.75rem,1vw,0.9rem)] text-white/70">
@@ -73,13 +73,13 @@ export const MessageCardForm = () => {
             {/* 전송 결과 알림 */}
             {status === "success" && (
                 <div className="flex items-center gap-2 rounded-lg bg-emerald-500/10 border border-emerald-500/30 px-3 py-2.5">
-                    <HiCheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <LuCircleCheck className="w-4 h-4 text-emerald-400 shrink-0" />
                     <p className="text-xs text-emerald-300">메시지가 성공적으로 전송되었습니다!</p>
                 </div>
             )}
             {status === "error" && (
                 <div className="flex items-center gap-2 rounded-lg bg-rose-500/10 border border-rose-500/30 px-3 py-2.5">
-                    <HiXCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                    <LuCircleX className="w-4 h-4 text-rose-400 shrink-0" />
                     <p className="text-xs text-rose-300">전송에 실패했습니다. 잠시 후 다시 시도해 주세요.</p>
                 </div>
             )}
@@ -88,7 +88,7 @@ export const MessageCardForm = () => {
             <div className="grid gap-4">
                 <label className="grid gap-1.5">
                     <span className="text-sm font-medium text-white/70 flex items-center gap-2">
-                        <HiUser className="w-4 h-4 text-primary/70" />
+                        <LuUser className="w-4 h-4 text-primary/70" />
                         {t("pages.contact.messageForm.name")}
                     </span>
                     <input
@@ -108,7 +108,7 @@ export const MessageCardForm = () => {
 
                 <label className="grid gap-1.5">
                     <span className="text-sm font-medium text-white/70 flex items-center gap-2">
-                        <HiMail className="w-4 h-4 text-primary/70" />
+                        <LuMail className="w-4 h-4 text-primary/70" />
                         {t("pages.contact.messageForm.email")}
                     </span>
                     <input
@@ -130,7 +130,7 @@ export const MessageCardForm = () => {
                 <label className="grid gap-1.5">
                     <span className="text-sm font-medium text-white/70 flex items-center justify-between gap-2">
                         <span className="flex items-center gap-2">
-                            <HiChatAlt2 className="w-4 h-4 text-primary/70" />
+                            <LuMessageCircle className="w-4 h-4 text-primary/70" />
                             {t("pages.contact.messageForm.message")}
                         </span>
                         <span
@@ -163,7 +163,7 @@ export const MessageCardForm = () => {
                         onClick={handleReset}
                         className="rounded-xl border border-white/10 bg-linear-to-r from-black/30 to-black/10 flex-1 sm:px-4 px-3 sm:py-2.5 py-2 text-sm font-medium text-white/80 hover:border-white/20 hover:bg-white/5 transition-all active:scale-95 flex items-center justify-center gap-2"
                     >
-                        <HiRefresh className="w-4 h-4" />
+                        <LuRefreshCw className="w-4 h-4" />
                         {t("pages.contact.messageForm.reset")}
                     </button>
 
@@ -176,7 +176,7 @@ export const MessageCardForm = () => {
                         {status === "sending" ? (
                             <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
                         ) : (
-                            <HiPaperAirplane className="w-4 h-4" />
+                            <LuSend className="w-4 h-4" />
                         )}
                         {status === "sending" ? "전송 중..." : t("pages.contact.messageForm.send")}
                     </button>
@@ -184,7 +184,7 @@ export const MessageCardForm = () => {
 
                 {/* 안내 문구 */}
                 <div className="flex items-start gap-2 rounded-lg bg-primary/5 border border-primary/20 sm:px-3 px-2 sm:py-2.5 py-2">
-                    <HiInformationCircle className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
+                    <LuInfo className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
                     <div>
                         <p className="text-xs text-white/60">
                             {t("pages.contact.messageForm.infoNotice")}

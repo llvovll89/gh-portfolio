@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
-import { FiMessageSquare } from 'react-icons/fi'
-import { FaEdit } from 'react-icons/fa'
-import { MdDelete } from 'react-icons/md'
+import { LuMessageSquare, LuPencil, LuTrash2 } from 'react-icons/lu'
 import { subscribeBlogComments, type BlogComment } from '@/utils/blogComments'
 import { getGradient, relativeTime } from './blogCommentUtils'
 import { CommentForm } from './CommentForm'
@@ -30,7 +28,7 @@ export function BlogComments({ slug }: Props) {
         <section className="mt-12 pt-8 border-t border-white/15">
             <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-2">
-                    <FiMessageSquare className="w-5 h-5 text-zinc-500 dark:text-white/50" />
+                    <LuMessageSquare className="w-5 h-5 text-zinc-500 dark:text-white/50" />
                     <h2 className="text-base font-bold text-zinc-800 dark:text-white/90">
                         댓글
                         {!loading && comments.length > 0 && (
@@ -44,7 +42,7 @@ export function BlogComments({ slug }: Props) {
                         onClick={() => setShowForm(true)}
                         className="inline-flex items-center gap-1.5 cursor-pointer text-xs font-medium px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-white/6 dark:hover:bg-white/10 text-zinc-600 dark:text-white/60 transition-all"
                     >
-                        <FiMessageSquare className="w-3.5 h-3.5" />
+                        <LuMessageSquare className="w-3.5 h-3.5" />
                         댓글 작성
                     </button>
                 )}
@@ -66,7 +64,7 @@ export function BlogComments({ slug }: Props) {
             ) : comments.length === 0 && !showForm ? (
                 <div className="py-10 flex flex-col items-center gap-3 text-center">
                     <div className="p-4 rounded-2xl bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10">
-                        <FiMessageSquare className="w-8 h-8 text-zinc-300 dark:text-white/25" />
+                        <LuMessageSquare className="w-8 h-8 text-zinc-300 dark:text-white/25" />
                     </div>
                     <p className="text-sm text-zinc-400 dark:text-white/40">첫 번째 댓글을 남겨보세요!</p>
                 </div>
@@ -95,7 +93,7 @@ export function BlogComments({ slug }: Props) {
                                                 className="p-1.5 rounded-lg text-zinc-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:text-primary dark:hover:bg-primary/10 cursor-pointer transition-all"
                                                 title="수정"
                                             >
-                                                <FaEdit className="w-3 h-3" />
+                                                <LuPencil className="w-3 h-3" />
                                             </button>
                                             <button
                                                 type="button"
@@ -103,7 +101,7 @@ export function BlogComments({ slug }: Props) {
                                                 className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-400/10 cursor-pointer transition-all"
                                                 title="삭제"
                                             >
-                                                <MdDelete className="w-3.5 h-3.5" />
+                                                <LuTrash2 className="w-3.5 h-3.5" />
                                             </button>
                                         </div>
                                     </div>

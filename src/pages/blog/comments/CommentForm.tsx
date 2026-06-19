@@ -1,8 +1,5 @@
 import { useState } from 'react'
-import { HiUser } from 'react-icons/hi'
-import { FiMessageSquare } from 'react-icons/fi'
-import { TbLockPassword } from 'react-icons/tb'
-import { IoClose } from 'react-icons/io5'
+import { LuUser, LuMessageSquare, LuKeyRound, LuX } from 'react-icons/lu'
 import hashPassword from '@/utils/hashPassword'
 import { addBlogComment } from '@/utils/blogComments'
 
@@ -46,14 +43,14 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
                     onClick={onClose}
                     className="p-1 rounded-lg text-zinc-400 hover:text-zinc-600 dark:hover:text-white/60 transition-colors cursor-pointer"
                 >
-                    <IoClose className="w-4 h-4" />
+                    <LuX className="w-4 h-4" />
                 </button>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-3 mb-3">
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <HiUser className="w-4 h-4 text-zinc-400 dark:text-primary" />
+                        <LuUser className="w-4 h-4 text-zinc-400 dark:text-primary" />
                     </div>
                     <input
                         id="comment-name"
@@ -67,7 +64,7 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
                 </div>
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <TbLockPassword className="w-4 h-4 text-zinc-400 dark:text-primary" />
+                        <LuKeyRound className="w-4 h-4 text-zinc-400 dark:text-primary" />
                     </div>
                     <input
                         id="comment-password"
@@ -82,7 +79,7 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
 
             <div className="relative mb-3">
                 <div className="absolute top-3 left-3 pointer-events-none">
-                    <FiMessageSquare className="w-4 h-4 text-zinc-400 dark:text-primary" />
+                    <LuMessageSquare className="w-4 h-4 text-zinc-400 dark:text-primary" />
                 </div>
                 <textarea
                     id="comment-message"

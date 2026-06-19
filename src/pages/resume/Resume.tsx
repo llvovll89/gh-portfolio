@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
-import { HiDocumentDownload } from "react-icons/hi";
-import { FaFilePdf } from "react-icons/fa";
+import { LuDownload, LuFileText } from "react-icons/lu";
 import { logger } from "../../utils/logger";
 import { useTranslation } from "react-i18next";
 import { useSeoMeta } from "../../hooks/useSeoMeta";
@@ -86,7 +85,7 @@ export const Resume = () => {
                             <div>
                                 <div className="flex items-center gap-3 mb-3">
                                     <div className="p-2 bg-primary/10 rounded-lg">
-                                        <FaFilePdf className="w-6 h-6 text-primary" />
+                                        <LuFileText className="w-6 h-6 text-primary" />
                                     </div>
                                     <h1 className="text-[clamp(1.8rem,3vw,2.5rem)] font-extrabold tracking-tight text-white/90">
                                         {t("pages.resume.title")}
@@ -110,7 +109,7 @@ export const Resume = () => {
                                     </>
                                 ) : (
                                     <>
-                                        <HiDocumentDownload className="w-5 h-5 transition-transform group-hover:-translate-y-0.5" />
+                                        <LuDownload className="w-5 h-5 transition-transform group-hover:-translate-y-0.5" />
                                         <span>이력서 다운로드</span>
                                         <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                                     </>

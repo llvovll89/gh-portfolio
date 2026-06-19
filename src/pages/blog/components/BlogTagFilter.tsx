@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { HiChevronDown, HiFilter } from "react-icons/hi";
+import { LuChevronDown, LuFilter } from "react-icons/lu";
 import { useClosePopup } from "../../../hooks/useClosePopup";
 import { useTranslation } from "react-i18next";
 
@@ -64,13 +64,13 @@ export const BlogTagFilter = ({
                     "transition-all duration-200",
                 ].join(" ")}
             >
-                <HiFilter className="w-4 h-4" />
+                <LuFilter className="w-4 h-4" />
                 <span>
                     {selectedTags.length > 0
                         ? t("pages.blog.filter.selectedTags", { count: selectedTags.length })
                         : t("pages.blog.filter.allTags")}
                 </span>
-                <HiChevronDown
+                <LuChevronDown
                     className={[
                         "w-4 h-4 transition-transform duration-200",
                         isOpen ? "rotate-180" : "",

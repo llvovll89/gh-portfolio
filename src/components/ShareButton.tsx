@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { FiShare2, FiLink, FiCheck, FiTwitter } from "react-icons/fi";
+import { LuShare2, LuLink, LuCheck, LuTwitter } from "react-icons/lu";
 import { RiKakaoTalkFill } from "react-icons/ri";
 
 interface ShareButtonProps {
@@ -94,7 +94,7 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                     "transition-all duration-200",
                 ].join(" ")}
             >
-                <FiShare2 className="w-3.5 h-3.5" />
+                <LuShare2 className="w-3.5 h-3.5" />
                 <span>공유</span>
             </button>
         );
@@ -118,7 +118,7 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                     open ? "bg-zinc-50 dark:bg-zinc-800/50 border-zinc-300 dark:border-zinc-600" : "",
                 ].join(" ")}
             >
-                <FiShare2 className="w-3.5 h-3.5" />
+                <LuShare2 className="w-3.5 h-3.5" />
                 <span>공유</span>
             </button>
 
@@ -145,8 +145,8 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                         ].join(" ")}
                     >
                         {copied
-                            ? <FiCheck className="w-4 h-4 text-green-500" />
-                            : <FiLink className="w-4 h-4" />
+                            ? <LuCheck className="w-4 h-4 text-green-500" />
+                            : <LuLink className="w-4 h-4" />
                         }
                         <span>{copied ? "복사됨!" : "링크 복사"}</span>
                     </button>
@@ -163,7 +163,7 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                             "transition-colors duration-150",
                         ].join(" ")}
                     >
-                        <FiTwitter className="w-4 h-4" />
+                        <LuTwitter className="w-4 h-4" />
                         <span>X (트위터)</span>
                     </button>
 

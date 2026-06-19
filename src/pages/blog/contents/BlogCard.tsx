@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
-import { FiEye } from "react-icons/fi";
+import { LuEye } from "react-icons/lu";
 import type { BlogPost } from "../../../utils/loadPosts";
 import { getViewCount } from "../../../utils/blogViews";
 import { getBodySnippet } from "../../../utils/fuseSearch";
@@ -59,7 +59,7 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
                     )}
                     {viewCount !== null && viewCount > 0 && (
                         <span className="flex items-center gap-1 text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
-                            <FiEye className="w-3 h-3" />
+                            <LuEye className="w-3 h-3" />
                             {viewCount.toLocaleString()}
                         </span>
                     )}

@@ -1,6 +1,6 @@
 import { FaGithub } from "react-icons/fa";
 import { SiVelog } from "react-icons/si";
-import { HiHome } from "react-icons/hi";
+import { LuHouse } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import { Img } from "../../../components/Img";
 import { useThemeStyle } from "../../../hooks/useThemeStyle";
@@ -47,7 +47,7 @@ export const CommonPageHeader = ({ title }: CommonPageHeaderProps) => {
                         group"
                     aria-label="홈으로 이동"
                 >
-                    <HiHome className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    <LuHouse className="w-5 h-5 group-hover:scale-110 transition-transform" />
                 </Link>
 
                 <div className="flex flex-col gap-0.5">

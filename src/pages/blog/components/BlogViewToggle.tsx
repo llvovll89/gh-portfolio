@@ -1,5 +1,4 @@
-import { HiViewGrid, HiViewList } from "react-icons/hi";
-import { MdGridView } from "react-icons/md";
+import { LuLayoutGrid, LuList, LuGrid3X3 } from "react-icons/lu";
 import { useTranslation } from "react-i18next";
 
 interface BlogViewToggleProps {
@@ -37,7 +36,7 @@ export const BlogViewToggle = ({
                         : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200",
                 ].join(" ")}
             >
-                <HiViewList className="w-4 h-4" />
+                <LuList className="w-4 h-4" />
                 <span className="whitespace-nowrap">{t("pages.blog.view.list")}</span>
             </button>
 
@@ -55,7 +54,7 @@ export const BlogViewToggle = ({
                         : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200",
                 ].join(" ")}
             >
-                <MdGridView className="w-4 h-4" />
+                <LuGrid3X3 className="w-4 h-4" />
                 <span className="whitespace-nowrap">{t("pages.blog.view.grid") ?? "카드"}</span>
             </button>
 
@@ -73,7 +72,7 @@ export const BlogViewToggle = ({
                         : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200",
                 ].join(" ")}
             >
-                <HiViewGrid className="w-4 h-4" />
+                <LuLayoutGrid className="w-4 h-4" />
                 <span className="whitespace-nowrap">{t("pages.blog.view.grouped")}</span>
             </button>
         </div>

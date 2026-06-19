@@ -1,4 +1,4 @@
-import { HiSortAscending, HiSortDescending } from "react-icons/hi";
+import { LuArrowUp, LuArrowDown } from "react-icons/lu";
 import { useTranslation } from "react-i18next";
 
 interface BlogSortToggleProps {
@@ -37,9 +37,9 @@ export const BlogSortToggle = ({
             ].join(" ")}
         >
             {sortOrder === "desc" ? (
-                <HiSortDescending className="w-5 h-5" />
+                <LuArrowDown className="w-5 h-5" />
             ) : (
-                <HiSortAscending className="w-5 h-5" />
+                <LuArrowUp className="w-5 h-5" />
             )}
             <span className="whitespace-nowrap">
                 {orderLabel}

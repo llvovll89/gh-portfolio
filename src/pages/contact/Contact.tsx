@@ -3,7 +3,7 @@ import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
 import { CommunicationCard } from "./contents/CommnuiCationCard";
 import { MessageCardForm } from "./contents/MessageCardForm";
-import { HiMailOpen } from "react-icons/hi";
+import { LuMailOpen } from "react-icons/lu";
 import { useTranslation } from "react-i18next";
 import { useSeoMeta } from "../../hooks/useSeoMeta";
 
@@ -20,7 +20,7 @@ export const Contact = () => {
                     <div className="relative mb-6 sm:mb-10">
                         <div className="flex items-center gap-3 sm:mb-3 mb-1.5">
                             <div className="p-2 bg-primary/10 rounded-lg">
-                                <HiMailOpen className="w-6 h-6 text-primary" />
+                                <LuMailOpen className="w-6 h-6 text-primary" />
                             </div>
                             <h1 className="text-[clamp(1.5rem,3vw,2.25rem)] font-extrabold tracking-tight">
                                 {t("pages.contact.title")}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { HiSearch, HiX } from "react-icons/hi";
+import { LuSearch, LuX } from "react-icons/lu";
 import { useTranslation } from "react-i18next";
 
 interface BlogSearchInputProps {
@@ -43,7 +43,7 @@ export const BlogSearchInput = ({
     return (
         <div className="relative w-full">
             <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                <HiSearch
+                <LuSearch
                     className={[
                         "w-5 h-5 text-zinc-400 dark:text-zinc-500 transition-transform",
                         isDebouncing ? "animate-pulse" : "",
@@ -85,7 +85,7 @@ export const BlogSearchInput = ({
                         "transition-all duration-200",
                     ].join(" ")}
                 >
-                    <HiX className="w-4 h-4" />
+                    <LuX className="w-4 h-4" />
                 </button>
             )}
         </div>

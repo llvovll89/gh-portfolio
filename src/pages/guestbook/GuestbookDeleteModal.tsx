@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import { db } from '@/firebase/config'
 import { doc, deleteDoc } from 'firebase/firestore'
 import { verifyPassword } from '@/utils/hashPassword'
-import { MdDelete } from 'react-icons/md'
-import { TbLockPassword } from 'react-icons/tb'
+import { LuTrash2, LuKeyRound } from 'react-icons/lu'
 import type { GuestbookEntry } from './types'
 
 type Props = {
@@ -62,14 +61,14 @@ const GuestbookDeleteModal = ({ entry, isOpen, onClose, onSuccess }: Props) => {
                     <div className="rounded-t-2xl md:rounded-2xl border border-white/10 bg-zinc-950/98 backdrop-blur-xl p-6 shadow-2xl">
                         <div className="mb-5">
                             <div className="w-11 h-11 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4">
-                                <MdDelete className="w-5 h-5 text-rose-400" />
+                                <LuTrash2 className="w-5 h-5 text-rose-400" />
                             </div>
                             <h3 className="text-base font-bold text-white mb-1">메시지 삭제</h3>
                             <p className="text-sm text-white/45">삭제하려면 비밀번호를 입력하세요. 삭제된 메시지는 복구할 수 없어요.</p>
                         </div>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <TbLockPassword className="w-4 h-4 text-primary" />
+                                <LuKeyRound className="w-4 h-4 text-primary" />
                             </div>
                             <input
                                 type="password"

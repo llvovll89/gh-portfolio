@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { HiMail, HiUser, HiLocationMarker, HiBriefcase, HiCheckCircle } from "react-icons/hi";
+import { LuMail, LuUser, LuMapPin, LuBriefcase, LuCircleCheck } from "react-icons/lu";
 import { FaGithub } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 
@@ -69,7 +69,7 @@ export const CommunicationCard = () => {
             <div className="flex items-start justify-between gap-3 sm:pb-4 pb-3 border-b border-white/10">
                 <div>
                     <h2 className="text-[clamp(1rem,2vw,1.5rem)] md:text-2xl font-bold flex items-center gap-2">
-                        <HiUser className="w-5 h-5 text-primary" />
+                        <LuUser className="w-5 h-5 text-primary" />
                         {t("pages.contact.communicationCard.quickContact")}
                     </h2>
                     <p className="mt-2 text-[clamp(0.75rem,1vw,0.875rem)] text-white/70">
@@ -88,7 +88,7 @@ export const CommunicationCard = () => {
 
                 {copied && (
                     <div className="fixed top-20 right-4 md:right-8 rounded-lg bg-primary/90 px-4 py-2.5 text-sm font-medium text-white shadow-lg flex items-center gap-2 animate-[fadeIn_0.2s_ease-out]">
-                        <HiCheckCircle className="w-4 h-4" />
+                        <LuCircleCheck className="w-4 h-4" />
                         {t("pages.contact.communicationCard.emailCopied")}
                     </div>
                 )}
@@ -98,21 +98,21 @@ export const CommunicationCard = () => {
             <div className="rounded-xl border border-white/10 bg-linear-to-br from-black/30 to-black/10 p-4">
                 <dl className="grid grid-cols-2 gap-4">
                     <div className="flex items-start gap-2">
-                        <HiUser className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
+                        <LuUser className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
                         <div>
                             <dt className="text-[clamp(0.7rem,1vw,0.8rem)] text-white/50">{t("pages.contact.communicationCard.name")}</dt>
                             <dd className="mt-1 font-semibold text-white text-[clamp(0.75rem,1vw,0.8rem)]">{t("pages.contact.communicationCard.nameValue")}</dd>
                         </div>
                     </div>
                     <div className="flex items-start gap-2">
-                        <HiBriefcase className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
+                        <LuBriefcase className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
                         <div>
                             <dt className="text-[clamp(0.7rem,1vw,0.8rem)] text-white/50">{t("pages.contact.communicationCard.career")}</dt>
                             <dd className="mt-1 font-semibold text-white text-[clamp(0.75rem,1vw,0.8rem)]">{careerLabel}</dd>
                         </div>
                     </div>
                     <div className="flex items-start gap-2">
-                        <HiLocationMarker className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
+                        <LuMapPin className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
                         <div>
                             <dt className="text-[clamp(0.7rem,1vw,0.8rem)] text-white/50">{t("pages.contact.communicationCard.residence")}</dt>
                             <dd className="mt-1 font-semibold text-white text-[clamp(0.75rem,1vw,0.8rem)]">{t("pages.contact.communicationCard.residenceValue")}</dd>
@@ -129,7 +129,7 @@ export const CommunicationCard = () => {
                 >
                     <div className="flex items-center gap-3">
                         <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors shrink-0">
-                            <HiMail className="w-5 h-5 text-primary" />
+                            <LuMail className="w-5 h-5 text-primary" />
                         </div>
                         <div className="min-w-0 flex-1">
                             <p className="text-xs text-white/50 font-medium">Email</p>

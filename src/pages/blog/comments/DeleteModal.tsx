@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { TbLockPassword } from 'react-icons/tb'
-import { MdDelete } from 'react-icons/md'
+import { LuKeyRound, LuTrash2 } from 'react-icons/lu'
 import { verifyPassword } from '@/utils/hashPassword'
 import { deleteBlogComment, type BlogComment } from '@/utils/blogComments'
 
@@ -38,13 +37,13 @@ export function DeleteModal({ slug, comment, onClose, onSuccess }: Props) {
                 <div className="w-full md:max-w-sm animate-in slide-in-from-bottom md:zoom-in-95 duration-200">
                     <div className="rounded-t-2xl md:rounded-2xl border border-white/10 bg-zinc-950/98 backdrop-blur-xl p-6 shadow-2xl">
                         <div className="w-10 h-10 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4">
-                            <MdDelete className="w-5 h-5 text-rose-400" />
+                            <LuTrash2 className="w-5 h-5 text-rose-400" />
                         </div>
                         <h3 className="text-sm font-bold text-white mb-1">댓글 삭제</h3>
                         <p className="text-xs text-white/45 mb-4">삭제된 댓글은 복구할 수 없어요.</p>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <TbLockPassword className="w-4 h-4 text-primary" />
+                                <LuKeyRound className="w-4 h-4 text-primary" />
                             </div>
                             <input
                                 type="password"

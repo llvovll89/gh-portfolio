@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { HiCollection } from "react-icons/hi";
+import { LuLayers } from "react-icons/lu";
 
 interface BlogCategoryFilterProps {
     availableCategories: string[];
@@ -16,7 +16,7 @@ export const BlogCategoryFilter = ({
 
     return (
         <div className="relative">
-            <HiCollection className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+            <LuLayers className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
             <select
                 value={selectedCategory}
                 onChange={(e) => onCategoryChange(e.target.value)}

@@ -6,7 +6,7 @@ import { parseToc } from "../../../utils/parseToc";
 import { TableOfContents } from "./TableOfContents";
 import { Minimap } from "./Minimap";
 import { incrementViewCount, subscribeViewCount } from "../../../utils/blogViews";
-import { FiEye } from "react-icons/fi";
+import { LuEye } from "react-icons/lu";
 import { logger } from "../../../utils/logger";
 import { BlogComments } from "../comments/BlogComments";
 import { useSeoMeta } from "../../../hooks/useSeoMeta";
@@ -166,7 +166,7 @@ export const Detail = () => {
                             <>
                                 <span className="text-zinc-600">•</span>
                                 <span className="flex items-center gap-1 text-[clamp(0.75rem,1.5vw,0.9rem)]">
-                                    <FiEye className="w-3 h-3" />
+                                    <LuEye className="w-3 h-3" />
                                     {viewCount.toLocaleString()}
                                 </span>
                             </>
