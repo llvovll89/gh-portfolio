@@ -229,7 +229,7 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
             {selected && (
                 <CardDetail
                     selected={selected}
-                    setSelectedProject={(_) => setSelectedProjectId(null)}
+                    setSelectedProject={() => setSelectedProjectId(null)}
                 />
             )}
         </>

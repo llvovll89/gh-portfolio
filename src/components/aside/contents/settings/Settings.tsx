@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useThemeStyle } from "../../../../hooks/useThemeStyle";
+import { useLocalStorage } from "../../../../hooks/useLocalStorage";
 import { VscSettingsGear, VscKey, VscRefresh } from "react-icons/vsc";
 import { useTranslation } from "react-i18next";
 import { useKeyboardShortcuts } from "../../../../hooks/useKeyboardShortcuts";
@@ -43,25 +44,17 @@ export const Settings = () => {
     const [activeTab, setActiveTab] = useState<"shortcuts" | "general">(
         "shortcuts",
     );
-    const [generalSettings, setGeneralSettings] = useState<GeneralSettings>({
-        language: "ko",
-        animationSpeed: "normal",
-    });
-
-    useEffect(() => {
-        const stored = localStorage.getItem(SETTINGS_STORAGE_KEY);
-        if (stored) {
-            setGeneralSettings(JSON.parse(stored));
-        }
-    }, []);
+    const [generalSettings, setGeneralSettings] = useLocalStorage<GeneralSettings>(
+        SETTINGS_STORAGE_KEY,
+        { language: "ko", animationSpeed: "normal" },
+    );
 
     const saveSettings = (settings: GeneralSettings) => {
-        localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+        setGeneralSettings(settings);
         localStorage.setItem(SETTINGS_BADGE_STORAGE_KEY, "1");
         window.dispatchEvent(
             new CustomEvent(SETTINGS_UPDATED_EVENT, { detail: { dirty: true } }),
         );
-        setGeneralSettings(settings);
     };
 
     const handleChangeLanguage = (lang: string) => {

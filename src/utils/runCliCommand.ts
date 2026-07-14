@@ -176,7 +176,7 @@ const handleGitCommand = (args: string[]): string => {
             }
             return `✓ 변경사항이 스테이징 영역에 추가되었습니다: ${args.slice(1).join(" ")}`;
 
-        case "commit":
+        case "commit": {
             const messageFlag = args.findIndex((arg) => arg === "-m");
             if (messageFlag === -1) {
                 return [
@@ -191,6 +191,7 @@ const handleGitCommand = (args: string[]): string => {
                 "",
                 "✓ 커밋이 생성되었습니다 (시뮬레이션)",
             ].join("\n");
+        }
 
         case "diff":
             return [

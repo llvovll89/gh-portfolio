@@ -1,17 +1,7 @@
-import { createContext, useState, useEffect, useContext } from "react";
-
-export interface LayoutState {
-    resizeFooterHeight: number;
-    resizeSidebarWidth: number;
-}
-
-interface LayoutContextProps {
-    layoutState: LayoutState;
-    setLayoutState: React.Dispatch<React.SetStateAction<LayoutState>>;
-}
+import { useState, useEffect } from "react";
+import { LayoutContext, DEFAULT_LAYOUT, type LayoutState } from "./LayoutContext";
 
 const LAYOUT_STORAGE_KEY = "portfolio-layout-state";
-const DEFAULT_LAYOUT: LayoutState = { resizeFooterHeight: 32, resizeSidebarWidth: 300 };
 
 function loadLayout(): LayoutState {
     try {
@@ -29,11 +19,6 @@ function loadLayout(): LayoutState {
     return DEFAULT_LAYOUT;
 }
 
-export const LayoutContext = createContext<LayoutContextProps>({
-    layoutState: DEFAULT_LAYOUT,
-    setLayoutState: () => {},
-});
-
 export const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
     const [layoutState, setLayoutState] = useState<LayoutState>(loadLayout);
 
@@ -43,7 +28,7 @@ export const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
         } catch {
             // ignore
         }
-    }, [layoutState.resizeFooterHeight, layoutState.resizeSidebarWidth]);
+    }, [layoutState]);
 
     return (
         <LayoutContext.Provider value={{ layoutState, setLayoutState }}>
@@ -51,5 +36,3 @@ export const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
         </LayoutContext.Provider>
     );
 };
-
-export const useLayoutContext = () => useContext(LayoutContext);

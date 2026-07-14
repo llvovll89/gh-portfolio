@@ -65,6 +65,8 @@ export function useSearch() {
     };
 
     useEffect(() => {
+        // 디바운스 타이머(외부 시스템)와 동기화하는 표시 상태이므로 effect가 적절함
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsDebouncing(true);
         const timer = window.setTimeout(() => {
             setDebouncedQuery((prev) => {

@@ -120,7 +120,7 @@ export const useDragging = ({ targetRef, type }: UseDraggingProps) => {
             window.removeEventListener("pointerup", handleEndNative);
             window.removeEventListener("pointercancel", handleEndNative);
 
-            window.removeEventListener("touchmove", handleMoveNative as any);
+            window.removeEventListener("touchmove", handleMoveNative);
             window.removeEventListener("touchend", handleEndNative);
             window.removeEventListener("touchcancel", handleEndNative);
 

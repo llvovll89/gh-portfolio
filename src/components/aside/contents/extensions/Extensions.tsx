@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useThemeStyle } from "../../../../hooks/useThemeStyle";
+import { useLocalStorage } from "../../../../hooks/useLocalStorage";
 import { VscExtensions, VscTrash, VscAdd } from "react-icons/vsc";
 import { useTranslation } from "react-i18next";
 
@@ -13,22 +14,17 @@ interface Extension {
 export const Extensions = () => {
     const { backgroundStyle, backgroundClass } = useThemeStyle();
     const { t } = useTranslation();
-    const [extensions, setExtensions] = useState<Extension[]>([]);
+    const [extensions, setExtensions] = useLocalStorage<Extension[]>(
+        "portfolio-extensions",
+        [],
+    );
     const [showAddForm, setShowAddForm] = useState(false);
     const [newExtension, setNewExtension] = useState({
         name: "",
         description: "",
     });
 
-    useEffect(() => {
-        const stored = localStorage.getItem("portfolio-extensions");
-        if (stored) {
-            setExtensions(JSON.parse(stored));
-        }
-    }, []);
-
     const saveExtensions = (exts: Extension[]) => {
-        localStorage.setItem("portfolio-extensions", JSON.stringify(exts));
         setExtensions(exts);
     };
 

@@ -1,24 +1,7 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { DEFAULT } from "../routes/route";
 import { NavType } from "../components/aside/constants/Nav.type";
-
-export interface SelectedPathState {
-    list: string[];
-    state: string;
-}
-
-interface NavigationContextProps {
-    selectedPath: string;
-    setSelectedPath: React.Dispatch<React.SetStateAction<string>>;
-    selectedPathState: SelectedPathState;
-    setSelectedPathState: React.Dispatch<React.SetStateAction<SelectedPathState>>;
-    selectedNav: NavType | null;
-    setSelectedNav: React.Dispatch<React.SetStateAction<NavType | null>>;
-    closedTabs: string[];
-    setClosedTabs: React.Dispatch<React.SetStateAction<string[]>>;
-    pinnedTabs: string[];
-    setPinnedTabs: React.Dispatch<React.SetStateAction<string[]>>;
-}
+import { NavigationContext, type SelectedPathState } from "./NavigationContext";
 
 const NAV_STORAGE_KEY = "portfolio-selected-nav";
 const NAV_PATH_STATE_STORAGE_KEY = "portfolio-selected-path-state";
@@ -96,19 +79,6 @@ function loadPinnedTabs(): string[] {
     }
 }
 
-export const NavigationContext = createContext<NavigationContextProps>({
-    selectedPath: "",
-    setSelectedPath: () => {},
-    selectedPathState: { list: [], state: "" },
-    setSelectedPathState: () => {},
-    selectedNav: null,
-    setSelectedNav: () => {},
-    closedTabs: [],
-    setClosedTabs: () => {},
-    pinnedTabs: [],
-    setPinnedTabs: () => {},
-});
-
 export const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
     const [selectedPath, setSelectedPath] = useState<string>("");
     const [selectedPathState, setSelectedPathState] = useState<SelectedPathState>(loadSelectedPathState);
@@ -152,6 +122,8 @@ export const NavigationProvider = ({ children }: { children: React.ReactNode }) 
     }, [pinnedTabs]);
 
     useEffect(() => {
+        // 열린 탭 목록(selectedPathState.list)에서 사라진 경로의 고정 핀을 정리하는 동기화이므로 effect가 적절함
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setPinnedTabs((prev) =>
             prev.filter((path) => selectedPathState.list.includes(path)),
         );
@@ -176,5 +148,3 @@ export const NavigationProvider = ({ children }: { children: React.ReactNode }) 
         </NavigationContext.Provider>
     );
 };
-
-export const useNavigationContext = () => useContext(NavigationContext);

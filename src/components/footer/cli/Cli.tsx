@@ -11,6 +11,18 @@ import {
 const CLI_HISTORY_STORAGE_KEY = "portfolio-cli-history";
 const MAX_HISTORY = 50;
 
+const loadStoredHistory = (): string[] => {
+    try {
+        const stored = localStorage.getItem(CLI_HISTORY_STORAGE_KEY);
+        if (!stored) return [];
+        const parsed = JSON.parse(stored);
+        if (!Array.isArray(parsed)) return [];
+        return parsed.filter((value): value is string => typeof value === "string");
+    } catch {
+        return [];
+    }
+};
+
 const getSharedPrefix = (values: string[]): string => {
     if (values.length === 0) return "";
     if (values.length === 1) return values[0];
@@ -29,24 +41,9 @@ export const Cli = () => {
     const { submitCliCommand, setSubmitCliCommand } = useContext(KeyboardContext);
     const outputRef = useRef<HTMLDivElement>(null);
     const [inputValue, setInputValue] = useState("");
-    const [history, setHistory] = useState<string[]>([]);
+    const [history, setHistory] = useState<string[]>(loadStoredHistory);
     const [historyIndex, setHistoryIndex] = useState(-1);
     const [tutorialStepIndex, setTutorialStepIndex] = useState<number | null>(null);
-
-    useEffect(() => {
-        try {
-            const stored = localStorage.getItem(CLI_HISTORY_STORAGE_KEY);
-            if (!stored) return;
-            const parsed = JSON.parse(stored);
-            if (Array.isArray(parsed)) {
-                setHistory(
-                    parsed.filter((value): value is string => typeof value === "string"),
-                );
-            }
-        } catch {
-            // ignore storage parsing errors
-        }
-    }, []);
 
     // 새 출력이 생길 때마다 스크롤 맨 아래로
     useEffect(() => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     DEFAULT_KEY_COMBINATIONS,
     matchesKeyCombination,
@@ -8,6 +8,19 @@ import { KeyboardShortcutId } from "@/types/Keyboard.types";
 
 const STORAGE_KEY = "keyboard_shortcuts_config";
 
+const loadStoredShortcuts = (): Record<KeyboardShortcutId, KeyCombination> => {
+    try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            return { ...DEFAULT_KEY_COMBINATIONS, ...parsed };
+        }
+    } catch (error) {
+        console.error("Failed to load keyboard shortcuts:", error);
+    }
+    return DEFAULT_KEY_COMBINATIONS;
+};
+
 /**
  * 단축키 설정 관리 훅
  * @description 사용자 정의 단축키 설정을 관리하고 localStorage에 저장
@@ -15,20 +28,7 @@ const STORAGE_KEY = "keyboard_shortcuts_config";
 export const useKeyboardShortcuts = () => {
     const [shortcuts, setShortcuts] = useState<
         Record<KeyboardShortcutId, KeyCombination>
-    >(DEFAULT_KEY_COMBINATIONS);
-
-    // localStorage에서 설정 로드
-    useEffect(() => {
-        try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-                const parsed = JSON.parse(stored);
-                setShortcuts({ ...DEFAULT_KEY_COMBINATIONS, ...parsed });
-            }
-        } catch (error) {
-            console.error("Failed to load keyboard shortcuts:", error);
-        }
-    }, []);
+    >(loadStoredShortcuts);
 
     // 단축키 업데이트
     const updateShortcut = (
@@ -55,7 +55,7 @@ export const useKeyboardShortcuts = () => {
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(newShortcuts));
             return { success: true };
-        } catch (error) {
+        } catch {
             return {
                 success: false,
                 error: "설정 저장에 실패했습니다.",

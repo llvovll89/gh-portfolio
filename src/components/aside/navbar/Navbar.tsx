@@ -28,7 +28,13 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
     const isMobileSize = useCheckedMobileSize();
     const [bookmarkCount, setBookmarkCount] = useState(0);
     const [gitOpenCount, setGitOpenCount] = useState(0);
-    const [hasSettingsUpdates, setHasSettingsUpdates] = useState(false);
+    const [hasSettingsUpdates, setHasSettingsUpdates] = useState(() => {
+        try {
+            return localStorage.getItem(SETTINGS_BADGE_STORAGE_KEY) === "1";
+        } catch {
+            return false;
+        }
+    });
 
     const COLLAPSED_HEIGHT = 32; // 터미널 헤더 바 높이
     const OPEN_HEIGHT = 220; // 터미널 열렸을 때 최소 높이
@@ -95,14 +101,6 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
             setHasSettingsUpdates(true);
         };
 
-        try {
-            setHasSettingsUpdates(
-                localStorage.getItem(SETTINGS_BADGE_STORAGE_KEY) === "1",
-            );
-        } catch {
-            setHasSettingsUpdates(false);
-        }
-
         updateBookmarkCount();
         window.addEventListener("storage", handleStorage);
         window.addEventListener(BOOKMARKS_UPDATED_EVENT, updateBookmarkCount);
@@ -121,6 +119,8 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
         if (selectedNav !== NavType.SETTINGS) return;
         if (!hasSettingsUpdates) return;
 
+        // 설정 탭으로 이동했을 때만 배지를 지우는 내비게이션 동기화이므로 effect가 적절함
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setHasSettingsUpdates(false);
         try {
             localStorage.setItem(SETTINGS_BADGE_STORAGE_KEY, "0");

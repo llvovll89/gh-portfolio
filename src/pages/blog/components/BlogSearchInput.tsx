@@ -16,8 +16,9 @@ export const BlogSearchInput = ({
     const { t } = useTranslation();
     const [isDebouncing, setIsDebouncing] = useState(false);
 
-    // 디바운싱 처리 (200ms)
+    // 디바운싱 처리 (200ms) - 타이머(외부 시스템)와 동기화하는 표시 상태이므로 effect가 적절함
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsDebouncing(true);
         const timer = setTimeout(() => {
             onDebouncedChange(value);

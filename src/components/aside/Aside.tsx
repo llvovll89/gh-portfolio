@@ -41,7 +41,13 @@ export const Aside = () => {
     const quickActionPulseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [bookmarkCount, setBookmarkCount] = useState(0);
     const [gitOpenCount, setGitOpenCount] = useState(0);
-    const [hasSettingsUpdates, setHasSettingsUpdates] = useState(false);
+    const [hasSettingsUpdates, setHasSettingsUpdates] = useState(() => {
+        try {
+            return localStorage.getItem(SETTINGS_BADGE_STORAGE_KEY) === "1";
+        } catch {
+            return false;
+        }
+    });
     const [quickActionNav, setQuickActionNav] = useState<NavType | null>(null);
     const [pressedNav, setPressedNav] = useState<NavType | null>(null);
     const [quickActionPulseKey, setQuickActionPulseKey] = useState<string | null>(null);
@@ -87,13 +93,6 @@ export const Aside = () => {
         };
 
         updateBookmarkCount();
-        try {
-            setHasSettingsUpdates(
-                localStorage.getItem(SETTINGS_BADGE_STORAGE_KEY) === "1",
-            );
-        } catch {
-            setHasSettingsUpdates(false);
-        }
 
         window.addEventListener("storage", handleStorage);
         window.addEventListener(BOOKMARKS_UPDATED_EVENT, updateBookmarkCount);
@@ -112,6 +111,8 @@ export const Aside = () => {
         if (selectedNav !== NavType.SETTINGS) return;
         if (!hasSettingsUpdates) return;
 
+        // 설정 탭으로 이동했을 때만 배지를 지우는 내비게이션 동기화이므로 effect가 적절함
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setHasSettingsUpdates(false);
         try {
             localStorage.setItem(SETTINGS_BADGE_STORAGE_KEY, "0");
@@ -334,7 +335,7 @@ export const Aside = () => {
                     ? NAVBAR_WIDTH + CONTENT_WIDTH
                     : NAVBAR_WIDTH,
         }));
-    }, [selectedNav, isMobileSize]);
+    }, [selectedNav, isMobileSize, isMobileFolderNav, setLayoutState]);
 
     // ── 모바일: 하단 네비 + 바텀시트 ──────────────────────────────
     if (isMobileSize) {

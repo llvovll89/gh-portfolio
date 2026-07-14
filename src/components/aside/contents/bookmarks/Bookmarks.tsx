@@ -1,7 +1,8 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { NavigationContext } from "../../../../context/NavigationContext";
 import { useThemeStyle } from "../../../../hooks/useThemeStyle";
 import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
+import { useLocalStorage } from "../../../../hooks/useLocalStorage";
 import {
     routesPath,
     DEFAULT,
@@ -32,7 +33,10 @@ export const Bookmarks = () => {
     const handlePushPath = useHandlePushPath();
     const { t } = useTranslation();
 
-    const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+    const [bookmarks, setBookmarks] = useLocalStorage<Bookmark[]>(
+        BOOKMARKS_STORAGE_KEY,
+        [],
+    );
     const [showAddForm, setShowAddForm] = useState(false);
     const [customPath, setCustomPath] = useState("");
     const [customName, setCustomName] = useState("");
@@ -44,16 +48,18 @@ export const Bookmarks = () => {
             r.path !== BLOG_DETAIL,
     );
 
+    const isFirstRender = useRef(true);
     useEffect(() => {
-        const stored = localStorage.getItem(BOOKMARKS_STORAGE_KEY);
-        if (stored) {
-            setBookmarks(JSON.parse(stored));
+        // localStorage 저장(useLocalStorage 내부 effect)이 끝난 뒤 이벤트를 알려야
+        // 다른 리스너(예: Aside의 북마크 카운트)가 최신 값을 읽는다.
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
         }
-    }, []);
+        window.dispatchEvent(new Event(BOOKMARKS_UPDATED_EVENT));
+    }, [bookmarks]);
 
     const saveBookmarks = (bks: Bookmark[]) => {
-        localStorage.setItem(BOOKMARKS_STORAGE_KEY, JSON.stringify(bks));
-        window.dispatchEvent(new Event(BOOKMARKS_UPDATED_EVENT));
         setBookmarks(bks);
     };
 

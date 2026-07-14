@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
 
 /**
@@ -22,10 +22,12 @@ export const usePWAUpdate = () => {
 
     const [dismissed, setDismissed] = useState(false);
 
-    // needRefresh 가 바뀔 때 dismissed 초기화
-    useEffect(() => {
+    // needRefresh 가 바뀔 때 dismissed 초기화 (렌더 중 상태 조정, effect 불필요)
+    const [prevNeedRefresh, setPrevNeedRefresh] = useState(needRefresh);
+    if (needRefresh !== prevNeedRefresh) {
+        setPrevNeedRefresh(needRefresh);
         if (needRefresh) setDismissed(false);
-    }, [needRefresh]);
+    }
 
     return {
         needRefresh: needRefresh && !dismissed,

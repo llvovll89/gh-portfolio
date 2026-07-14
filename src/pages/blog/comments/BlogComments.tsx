@@ -16,6 +16,8 @@ export function BlogComments({ slug }: Props) {
     const [deleteTarget, setDeleteTarget] = useState<BlogComment | null>(null)
 
     useEffect(() => {
+        // slug가 바뀔 때마다 새 구독을 시작하기 전 로딩 상태로 되돌리는 동기화이므로 effect가 적절함
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setLoading(true)
         const unsub = subscribeBlogComments(slug, (list) => {
             setComments(list)

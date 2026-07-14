@@ -28,6 +28,8 @@ export const Modal: React.FC<ModalProps> = ({
   useEffect(() => {
     let cleanup: (() => void) | undefined
     if (isOpen) {
+      // isOpen prop(외부 상태) 변화에 따라 열림/닫힘 애니메이션을 동기화하는 effect
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setVisible(true)
       setIsClosing(false)
       setAnnounce(ariaLabel ? `${ariaLabel} 창이 열렸습니다.` : '대화상자가 열렸습니다.')

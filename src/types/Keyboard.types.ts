@@ -3,7 +3,7 @@
  */
 
 import type { NavType } from "@/components/aside/constants/Nav.type";
-import type { LayoutState } from "@/context/GlobalState.context";
+import type { LayoutState } from "@/context/LayoutContext";
 import type { submitCliCommandType } from "@/context/KeyboardState.context";
 
 /**

@@ -51,23 +51,32 @@ function isDismissed() {
     }
 }
 
+function computeInitialStatus(): InstallState {
+    if (isInStandaloneMode()) return { status: "installed" };
+    if (isDismissed()) return { status: "idle" };
+    if (isIos()) {
+        if (isIosSafari()) return { status: "ios-safari" };
+        if (isIosChrome()) return { status: "ios-chrome" };
+        return { status: "ios-other" };
+    }
+    return { status: "idle" };
+}
+
 export function usePWAInstall() {
-    const [state, setState] = useState<InstallState>({ status: "idle" });
+    const [state, setState] = useState<InstallState>(computeInitialStatus);
+
+    function dismiss() {
+        try {
+            localStorage.setItem(DISMISSED_KEY, String(Date.now()));
+        } catch {
+            // ignore
+        }
+        setState({ status: "idle" });
+    }
 
     useEffect(() => {
-        if (isInStandaloneMode()) {
-            setState({ status: "installed" });
-            return;
-        }
-        if (isDismissed()) return;
-
-        // iOS 계열
-        if (isIos()) {
-            if (isIosSafari()) setState({ status: "ios-safari" });
-            else if (isIosChrome()) setState({ status: "ios-chrome" });
-            else setState({ status: "ios-other" });
-            return;
-        }
+        // 설치됨/닫음/iOS 여부는 초기 상태 계산에서 이미 반영됨 - android 네이티브 프롬프트 대기만 남음
+        if (isInStandaloneMode() || isDismissed() || isIos()) return;
 
         // Android/Chrome/Edge/Samsung Internet: 네이티브 프롬프트 대기
         let fired = false;
@@ -103,15 +112,6 @@ export function usePWAInstall() {
             clearTimeout(fallbackTimer);
         };
     }, []);
-
-    function dismiss() {
-        try {
-            localStorage.setItem(DISMISSED_KEY, String(Date.now()));
-        } catch {
-            // ignore
-        }
-        setState({ status: "idle" });
-    }
 
     return { state, dismiss };
 }

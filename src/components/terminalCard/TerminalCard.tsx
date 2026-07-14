@@ -18,6 +18,8 @@ const useTypewriter = (lines: Line[], speed = 40) => {
             window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         if (prefersReduced) {
+            // matchMedia(외부 시스템) 결과에 따라 애니메이션을 건너뛰는 동기화이므로 effect가 적절함
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setDisplayed(lines);
             return;
         }

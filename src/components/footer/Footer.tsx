@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { LayoutContext } from "../../context/LayoutContext";
 import { useThemeStyle } from "../../hooks/useThemeStyle";
 import { useDragging } from "../../hooks/useDragging";
@@ -24,32 +24,33 @@ export const Bottom = () => {
     const isOpen = layoutState.resizeFooterHeight > COLLAPSED_HEIGHT;
     const isMobileSize = useCheckedMobileSize();
 
-    const closeFooter = () => {
+    const closeFooter = useCallback(() => {
         setLayoutState((prev) => ({
             ...prev,
             resizeFooterHeight: COLLAPSED_HEIGHT,
         }));
-    };
+    }, [setLayoutState]);
 
-    const openFooter = () => {
+    const openFooter = useCallback(() => {
         setLayoutState((prev) => ({
             ...prev,
             resizeFooterHeight: Math.max(prev.resizeFooterHeight, OPEN_HEIGHT),
         }));
-    };
+    }, [setLayoutState]);
 
     // 탭 상태 관리
     const [activeTab, setActiveTab] = useState<FooterTabType>(
         () => (localStorage.getItem("footerActiveTab") as FooterTabType) || "terminal"
     );
 
-    // CLI 명령 실행 시 콘솔 탭으로 자동 전환 + 패널 열기
+    // CLI 명령 실행(외부 KeyboardContext 이벤트) 시 콘솔 탭으로 자동 전환 + 패널 열기
     useEffect(() => {
         if (submitCliCommand.value && submitCliCommand.value.trim() !== "") {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setActiveTab("console");
             openFooter();
         }
-    }, [submitCliCommand.value]);
+    }, [submitCliCommand.value, openFooter]);
 
     // activeTab 변경 시 localStorage에 저장
     const handleTabChange = (tab: FooterTabType) => {
