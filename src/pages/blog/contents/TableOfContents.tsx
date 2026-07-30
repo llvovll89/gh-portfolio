@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { TocItem } from "../../../utils/parseToc";
+import { scrollToHeading } from "../../../utils/scrollToHeading";
 import { DETAIL_SCROLL_ID } from "./Detail";
 
 interface Props {
@@ -46,14 +47,7 @@ export const TableOfContents = ({ items }: Props) => {
 
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
         e.preventDefault();
-        const heading = document.getElementById(id);
-        const container = document.getElementById(DETAIL_SCROLL_ID);
-        if (!heading || !container) return;
-
-        const containerRect = container.getBoundingClientRect();
-        const headingRect = heading.getBoundingClientRect();
-        const offset = headingRect.top - containerRect.top + container.scrollTop - 80;
-        container.scrollTo({ top: Math.max(0, offset), behavior: "smooth" });
+        scrollToHeading(id, DETAIL_SCROLL_ID);
     };
 
     if (items.length === 0) return null;

@@ -2,6 +2,7 @@ import { memo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { slugifyHeading } from "../../../utils/parseToc";
+import { scrollToHeading } from "../../../utils/scrollToHeading";
 import { DETAIL_SCROLL_ID } from "./Detail";
 
 function extractText(children: unknown): string {
@@ -116,15 +117,7 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                                     onClick={(e) => {
                                         e.preventDefault();
                                         const id = decodeURIComponent(href!.slice(1));
-                                        const el = document.getElementById(id);
-                                        const container = document.getElementById(DETAIL_SCROLL_ID);
-                                        if (!el || !container) return;
-                                        const offset =
-                                            el.getBoundingClientRect().top -
-                                            container.getBoundingClientRect().top +
-                                            container.scrollTop -
-                                            80;
-                                        container.scrollTo({ top: Math.max(0, offset), behavior: "smooth" });
+                                        scrollToHeading(id, DETAIL_SCROLL_ID);
                                     }}
                                     {...props}
                                 >
@@ -188,6 +181,30 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                     hr: (props) => (
                         <hr
                             className="my-6 border-zinc-200 dark:border-zinc-800 "
+                            {...props}
+                        />
+                    ),
+                    img: (props) => (
+                        <img
+                            loading="lazy"
+                            className="max-w-full h-auto rounded-lg my-4"
+                            {...props}
+                        />
+                    ),
+                    table: (props) => (
+                        <div className="my-4 max-w-full overflow-x-auto scrolls">
+                            <table className="w-full border-collapse text-[clamp(0.85rem,1.5vw,1rem)]" {...props} />
+                        </div>
+                    ),
+                    th: (props) => (
+                        <th
+                            className="border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 px-3 py-2 text-left font-semibold whitespace-nowrap"
+                            {...props}
+                        />
+                    ),
+                    td: (props) => (
+                        <td
+                            className="border border-zinc-300 dark:border-zinc-700 px-3 py-2 align-top"
                             {...props}
                         />
                     ),

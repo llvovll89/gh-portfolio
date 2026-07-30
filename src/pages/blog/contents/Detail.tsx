@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { loadAllPosts } from "../../../utils/loadAllPosts";
 import { MarkdownRenderer } from "./MarkdownRender";
 import { parseToc } from "../../../utils/parseToc";
+import { scrollToHeading } from "../../../utils/scrollToHeading";
 import { TableOfContents } from "./TableOfContents";
 import { Minimap } from "./Minimap";
 import { incrementViewCount, subscribeViewCount } from "../../../utils/blogViews";
@@ -125,7 +126,7 @@ export const Detail = () => {
              */}
             <section
                 id={DETAIL_SCROLL_ID}
-                className="w-full h-dvh overflow-y-auto scrolls flex flex-col md:py-10 md:px-15 p-4 bg-base-navy"
+                className="w-full h-dvh overflow-y-auto scrolls flex flex-col p-4 sm:p-6 md:py-10 md:px-15 bg-base-navy"
             >
                 <div className="mb-4">
                     <Link
@@ -137,8 +138,8 @@ export const Detail = () => {
                 </div>
 
                 <header className="mb-6">
-                    <div className="flex items-start justify-between gap-4">
-                        <h1 className="text-3xl font-extrabold tracking-tight text-zinc-100">
+                    <div className="flex items-start justify-between gap-3 sm:gap-4">
+                        <h1 className="text-[clamp(1.5rem,5vw,2.25rem)] font-extrabold tracking-tight text-zinc-100">
                             {post.title}
                         </h1>
                         <div className="shrink-0 pt-1">
@@ -171,18 +172,14 @@ export const Detail = () => {
                                 </span>
                             </>
                         )}
-                        {post.tags?.length ? (
-                            <div className="flex flex-wrap gap-2">
-                                {post.tags.map((t) => (
-                                    <span
-                                        key={t}
-                                        className="rounded-full border border-zinc-700 bg-zinc-800/80 text-zinc-200 px-2 py-0.5 text-xs"
-                                    >
-                                        {t}
-                                    </span>
-                                ))}
-                            </div>
-                        ) : null}
+                        {post.tags?.map((t) => (
+                            <span
+                                key={t}
+                                className="rounded-full border border-zinc-700 bg-zinc-800/80 text-zinc-200 px-2 py-0.5 text-xs"
+                            >
+                                {t}
+                            </span>
+                        ))}
                     </div>
 
                     {post.summary ? (
@@ -195,13 +192,47 @@ export const Detail = () => {
                     <iframe
                         srcDoc={post.body}
                         loading="lazy"
-                        className="w-full rounded-lg border border-zinc-200 dark:border-zinc-700"
-                        style={{ height: "80vh" }}
+                        className="w-full rounded-lg border border-zinc-200 dark:border-zinc-700 h-[70vh] sm:h-[80vh]"
                         title={post.title}
                         sandbox=""
                     />
                 ) : (
                     <>
+                        {tocItems.length > 0 && (
+                            <details className="xl:hidden mb-5 group rounded-lg border border-zinc-700 bg-zinc-800/40">
+                                <summary className="cursor-pointer select-none marker:content-none [&::-webkit-details-marker]:hidden px-4 py-2.5 text-sm font-semibold text-zinc-300 flex items-center justify-between">
+                                    목차
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={2}
+                                        stroke="currentColor"
+                                        className="w-4 h-4 transition-transform duration-200 group-open:rotate-180"
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                </summary>
+                                <ul className="px-4 pb-3 pt-1 space-y-1 max-h-64 overflow-y-auto scrolls border-t border-zinc-700/60">
+                                    {tocItems.map((item) => (
+                                        <li key={item.id}>
+                                            <a
+                                                href={`#${item.id}`}
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    scrollToHeading(item.id, DETAIL_SCROLL_ID);
+                                                }}
+                                                className={`block text-sm leading-snug py-1.5 text-zinc-400 hover:text-zinc-200 transition-colors ${
+                                                    item.level === 3 ? "pl-4" : "pl-0"
+                                                }`}
+                                            >
+                                                {item.text}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </details>
+                        )}
                         <div className="flex xl:gap-10 items-start">
                             <div className="flex-1 min-w-0">
                                 <MarkdownRenderer content={post.body} />
@@ -218,7 +249,7 @@ export const Detail = () => {
                     <>
                         <button
                             onClick={goBack}
-                            className="fixed left-6 bottom-6 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-zinc-800 text-white shadow-lg hover:bg-zinc-700 transition-all duration-300 ease-in-out opacity-90 hover:opacity-100"
+                            className="fixed left-4 sm:left-6 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-50 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-zinc-800 text-white shadow-lg hover:bg-zinc-700 transition-all duration-300 ease-in-out opacity-90 hover:opacity-100"
                             aria-label="뒤로가기"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
@@ -228,7 +259,7 @@ export const Detail = () => {
 
                         <button
                             onClick={scrollToTop}
-                            className="fixed right-6 bottom-6 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-zinc-800 text-white shadow-lg hover:bg-zinc-700 transition-all duration-300 ease-in-out opacity-90 hover:opacity-100"
+                            className="fixed right-4 sm:right-6 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-50 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-zinc-800 text-white shadow-lg hover:bg-zinc-700 transition-all duration-300 ease-in-out opacity-90 hover:opacity-100"
                             aria-label="위로가기"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
