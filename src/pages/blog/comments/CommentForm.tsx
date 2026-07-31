@@ -37,11 +37,11 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
     return (
         <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-bold text-zinc-800 dark:text-white/90">댓글 작성</h3>
+                <h3 className="text-sm font-bold text-white/90">댓글 작성</h3>
                 <button
                     type="button"
                     onClick={onClose}
-                    className="p-1 rounded-lg text-zinc-400 hover:text-zinc-600 dark:hover:text-white/60 transition-colors cursor-pointer"
+                    className="p-1 rounded-lg text-white/40 hover:text-white/60 transition-colors cursor-pointer"
                 >
                     <LuX className="w-4 h-4" />
                 </button>
@@ -50,13 +50,13 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
             <div className="grid sm:grid-cols-2 gap-3 mb-3">
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <LuUser className="w-4 h-4 text-zinc-400 dark:text-primary" />
+                        <LuUser className="w-4 h-4 text-primary" />
                     </div>
                     <input
                         id="comment-name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/5 text-zinc-900 dark:text-white text-sm outline-none focus:ring-2 focus:ring-zinc-400/40 dark:focus:ring-primary/40 placeholder:text-zinc-400 dark:placeholder:text-white/30 transition-all"
+                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-white/10 bg-white/5 text-white text-sm outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-white/30 transition-all"
                         placeholder="이름"
                         aria-label="이름"
                         autoFocus
@@ -64,13 +64,13 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
                 </div>
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <LuKeyRound className="w-4 h-4 text-zinc-400 dark:text-primary" />
+                        <LuKeyRound className="w-4 h-4 text-primary" />
                     </div>
                     <input
                         id="comment-password"
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/5 text-zinc-900 dark:text-white text-sm outline-none focus:ring-2 focus:ring-zinc-400/40 dark:focus:ring-primary/40 placeholder:text-zinc-400 dark:placeholder:text-white/30 transition-all"
+                        className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-white/10 bg-white/5 text-white text-sm outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-white/30 transition-all"
                         placeholder="비밀번호 (수정·삭제 시 필요)"
                         aria-label="비밀번호"
                     />
@@ -79,7 +79,7 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
 
             <div className="relative mb-3">
                 <div className="absolute top-3 left-3 pointer-events-none">
-                    <LuMessageSquare className="w-4 h-4 text-zinc-400 dark:text-primary" />
+                    <LuMessageSquare className="w-4 h-4 text-primary" />
                 </div>
                 <textarea
                     id="comment-message"
@@ -87,7 +87,7 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyDown={(e) => { if (e.ctrlKey && e.key === 'Enter') handleSubmit(); }}
                     rows={3}
-                    className="w-full pl-9 pr-4 py-3 rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/5 text-zinc-900 dark:text-white text-sm outline-none focus:ring-2 focus:ring-zinc-400/40 dark:focus:ring-primary/40 placeholder:text-zinc-400 dark:placeholder:text-white/30 resize-none transition-all"
+                    className="w-full pl-9 pr-4 py-3 rounded-xl border border-white/10 bg-white/5 text-white text-sm outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-white/30 resize-none transition-all"
                     placeholder="댓글을 남겨주세요… (Ctrl+Enter로 등록)"
                     aria-label="댓글 내용"
                 />
@@ -99,7 +99,7 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
                 <button
                     type="button"
                     onClick={onClose}
-                    className="px-4 py-2 text-sm text-zinc-500 hover:text-zinc-700 dark:text-white/50 dark:hover:text-white/70 rounded-xl bg-zinc-100 dark:bg-white/6 hover:bg-zinc-200 dark:hover:bg-white/10 transition-all cursor-pointer"
+                    className="px-4 py-2 text-sm text-white/50 hover:text-white/70 rounded-xl bg-white/6 hover:bg-white/10 transition-all cursor-pointer"
                 >
                     취소
                 </button>
@@ -107,7 +107,7 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
                     type="button"
                     onClick={handleSubmit}
                     disabled={submitting}
-                    className="px-4 py-2 text-sm font-semibold text-white rounded-xl bg-zinc-800 hover:bg-zinc-700 dark:bg-primary dark:hover:bg-primary/90 disabled:opacity-50 transition-all cursor-pointer shadow-sm"
+                    className="px-4 py-2 text-sm font-semibold text-white rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 transition-all cursor-pointer shadow-sm"
                 >
                     {submitting ? '등록 중...' : '등록'}
                 </button>

@@ -30,11 +30,11 @@ export function BlogComments({ slug }: Props) {
         <section className="mt-12 pt-8 border-t border-white/15">
             <div className="flex items-center justify-between mb-5">
                 <div className="flex items-center gap-2">
-                    <LuMessageSquare className="w-5 h-5 text-zinc-500 dark:text-white/50" />
-                    <h2 className="text-base font-bold text-zinc-800 dark:text-white/90">
+                    <LuMessageSquare className="w-5 h-5 text-white/50" />
+                    <h2 className="text-base font-bold text-white/90">
                         댓글
                         {!loading && comments.length > 0 && (
-                            <span className="ml-2 text-sm font-normal text-zinc-400 dark:text-white/40">{comments.length}</span>
+                            <span className="ml-2 text-sm font-normal text-white/40">{comments.length}</span>
                         )}
                     </h2>
                 </div>
@@ -42,7 +42,7 @@ export function BlogComments({ slug }: Props) {
                     <button
                         type="button"
                         onClick={() => setShowForm(true)}
-                        className="inline-flex items-center gap-1.5 cursor-pointer text-xs font-medium px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-white/6 dark:hover:bg-white/10 text-zinc-600 dark:text-white/60 transition-all"
+                        className="inline-flex items-center gap-1.5 cursor-pointer text-xs font-medium px-3 py-1.5 rounded-lg bg-white/6 hover:bg-white/10 text-white/60 transition-all"
                     >
                         <LuMessageSquare className="w-3.5 h-3.5" />
                         댓글 작성
@@ -65,10 +65,10 @@ export function BlogComments({ slug }: Props) {
                 </div>
             ) : comments.length === 0 && !showForm ? (
                 <div className="py-10 flex flex-col items-center gap-3 text-center">
-                    <div className="p-4 rounded-2xl bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10">
-                        <LuMessageSquare className="w-8 h-8 text-zinc-300 dark:text-white/25" />
+                    <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
+                        <LuMessageSquare className="w-8 h-8 text-white/25" />
                     </div>
-                    <p className="text-sm text-zinc-400 dark:text-white/40">첫 번째 댓글을 남겨보세요!</p>
+                    <p className="text-sm text-white/40">첫 번째 댓글을 남겨보세요!</p>
                 </div>
             ) : (
                 <ul className="space-y-5">
@@ -85,14 +85,14 @@ export function BlogComments({ slug }: Props) {
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center justify-between gap-2 mb-1">
                                         <div className="flex items-center gap-2">
-                                            <span className="text-sm font-semibold text-zinc-800 dark:text-white/90">{c.name}</span>
-                                            {dateStr && <span className="text-[11px] text-zinc-400 dark:text-white/35">{dateStr}</span>}
+                                            <span className="text-sm font-semibold text-white/90">{c.name}</span>
+                                            {dateStr && <span className="text-[11px] text-white/35">{dateStr}</span>}
                                         </div>
                                         <div className="flex items-center gap-0.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                                             <button
                                                 type="button"
                                                 onClick={() => setEditTarget(c)}
-                                                className="p-1.5 rounded-lg text-zinc-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:text-primary dark:hover:bg-primary/10 cursor-pointer transition-all"
+                                                className="p-1.5 rounded-lg text-white/40 hover:text-primary hover:bg-primary/10 cursor-pointer transition-all"
                                                 title="수정"
                                             >
                                                 <LuPencil className="w-3 h-3" />
@@ -100,14 +100,14 @@ export function BlogComments({ slug }: Props) {
                                             <button
                                                 type="button"
                                                 onClick={() => setDeleteTarget(c)}
-                                                className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-400/10 cursor-pointer transition-all"
+                                                className="p-1.5 rounded-lg text-white/40 hover:text-rose-400 hover:bg-rose-400/10 cursor-pointer transition-all"
                                                 title="삭제"
                                             >
                                                 <LuTrash2 className="w-3.5 h-3.5" />
                                             </button>
                                         </div>
                                     </div>
-                                    <p className="text-sm text-zinc-600 dark:text-white/65 whitespace-pre-wrap break-words leading-relaxed">
+                                    <p className="text-sm text-white/65 whitespace-pre-wrap break-words leading-relaxed">
                                         {c.message}
                                     </p>
                                 </div>

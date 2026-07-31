@@ -113,7 +113,7 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                             return (
                                 <a
                                     href={href}
-                                    className="text-blue-600 dark:text-blue-400 underline underline-offset-4 text-[clamp(0.95rem,1.5vw,1.1rem)]"
+                                    className="text-blue-600 underline underline-offset-4 text-[clamp(0.95rem,1.5vw,1.1rem)]"
                                     onClick={(e) => {
                                         e.preventDefault();
                                         const id = decodeURIComponent(href!.slice(1));
@@ -128,7 +128,7 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                         return (
                             <a
                                 href={href}
-                                className="text-blue-600 dark:text-blue-400 underline underline-offset-4 text-[clamp(0.95rem,1.5vw,1.1rem)]"
+                                className="text-blue-600 underline underline-offset-4 text-[clamp(0.95rem,1.5vw,1.1rem)]"
                                 target="_blank"
                                 rel="noreferrer"
                                 {...props}
@@ -146,7 +146,7 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                     li: (props) => <li className="my-1" {...props} />,
                     blockquote: (props) => (
                         <blockquote
-                            className="my-4 border-l-4 border-zinc-300 dark:border-zinc-700 pl-4 text-zinc-700 text-[clamp(0.95rem,1.5vw,1.1rem)] italic"
+                            className="my-4 border-l-4 border-zinc-300 pl-4 text-zinc-700 text-[clamp(0.95rem,1.5vw,1.1rem)] italic"
                             {...props}
                         />
                     ),
@@ -157,9 +157,9 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                             return (
                                 <code
                                     className={[
-                                        "block rounded-lg border border-zinc-200/60 dark:border-zinc-800",
+                                        "block rounded-lg border border-zinc-700",
                                         "bg-black/75",
-                                        "p-4 text-zinc-900 dark:text-zinc-100",
+                                        "p-4 text-zinc-100",
                                         "overflow-x-auto max-w-full text-[clamp(0.9rem,1.5vw,1rem)]",
                                     ].join(" ")}
                                     {...props}
@@ -171,7 +171,7 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
 
                         return (
                             <code
-                                className="rounded bg-zinc-200 px-1.5 py-0.5 text-[clamp(0.9rem,1.5vw,1rem)]"
+                                className="rounded bg-zinc-200 px-1.5 py-0.5 text-zinc-900 text-[clamp(0.9rem,1.5vw,1rem)]"
                                 {...props}
                             >
                                 {children}
@@ -180,7 +180,7 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                     },
                     hr: (props) => (
                         <hr
-                            className="my-6 border-zinc-200 dark:border-zinc-800 "
+                            className="my-6 border-zinc-200"
                             {...props}
                         />
                     ),
@@ -198,13 +198,13 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                     ),
                     th: (props) => (
                         <th
-                            className="border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 px-3 py-2 text-left font-semibold whitespace-nowrap"
+                            className="border border-zinc-300 bg-zinc-100 text-zinc-900 px-3 py-2 text-left font-semibold whitespace-nowrap"
                             {...props}
                         />
                     ),
                     td: (props) => (
                         <td
-                            className="border border-zinc-300 dark:border-zinc-700 px-3 py-2 align-top"
+                            className="border border-zinc-300 px-3 py-2 align-top text-zinc-800"
                             {...props}
                         />
                     ),

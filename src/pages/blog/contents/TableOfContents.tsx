@@ -61,7 +61,7 @@ export const TableOfContents = ({ items }: Props) => {
             <p className="text-xs font-semibold text-zinc-400 uppercase mb-3 tracking-widest">
                 목차
             </p>
-            <ul className="space-y-1 border-l border-zinc-200">
+            <ul className="space-y-1 border-l border-zinc-800">
                 {items.map((item) => (
                     <li key={item.id}>
                         <a
@@ -72,7 +72,7 @@ export const TableOfContents = ({ items }: Props) => {
                                 ${
                                     activeId === item.id
                                         ? "border-primary text-primary font-semibold"
-                                        : "border-transparent text-zinc-400 hover:text-zinc-700 hover:border-zinc-300"
+                                        : "border-transparent text-zinc-400 hover:text-zinc-200 hover:border-zinc-600"
                                 }`}
                         >
                             {item.text}

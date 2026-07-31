@@ -86,11 +86,11 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                 aria-label="포스트 공유"
                 className={[
                     "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium",
-                    "text-zinc-500 dark:text-zinc-400",
-                    "border border-zinc-200/70 dark:border-zinc-700/50",
-                    "hover:text-zinc-800 dark:hover:text-zinc-200",
-                    "hover:border-zinc-300 dark:hover:border-zinc-600",
-                    "hover:bg-zinc-50 dark:hover:bg-zinc-800/50",
+                    "text-zinc-400",
+                    "border border-zinc-700/50",
+                    "hover:text-zinc-200",
+                    "hover:border-zinc-600",
+                    "hover:bg-zinc-800/50",
                     "transition-all duration-200",
                 ].join(" ")}
             >
@@ -109,13 +109,13 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                 aria-expanded={open}
                 className={[
                     "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium",
-                    "text-zinc-500 dark:text-zinc-400",
-                    "border border-zinc-200/70 dark:border-zinc-700/50",
-                    "hover:text-zinc-800 dark:hover:text-zinc-200",
-                    "hover:border-zinc-300 dark:hover:border-zinc-600",
-                    "hover:bg-zinc-50 dark:hover:bg-zinc-800/50",
+                    "text-zinc-400",
+                    "border border-zinc-700/50",
+                    "hover:text-zinc-200",
+                    "hover:border-zinc-600",
+                    "hover:bg-zinc-800/50",
                     "transition-all duration-200",
-                    open ? "bg-zinc-50 dark:bg-zinc-800/50 border-zinc-300 dark:border-zinc-600" : "",
+                    open ? "bg-zinc-800/50 border-zinc-600" : "",
                 ].join(" ")}
             >
                 <LuShare2 className="w-3.5 h-3.5" />
@@ -128,9 +128,9 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                     className={[
                         "absolute right-0 top-full mt-1.5 z-50",
                         "w-44 rounded-xl overflow-hidden",
-                        "bg-white dark:bg-zinc-900",
-                        "border border-zinc-200/80 dark:border-zinc-700/60",
-                        "shadow-xl shadow-black/10 dark:shadow-black/40",
+                        "bg-zinc-900",
+                        "border border-zinc-700/60",
+                        "shadow-xl shadow-black/40",
                         "animate-in fade-in slide-in-from-top-1 duration-150",
                     ].join(" ")}
                 >
@@ -139,8 +139,8 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                         onClick={handleCopy}
                         className={[
                             "w-full flex items-center gap-2.5 px-4 py-2.5 text-sm",
-                            "text-zinc-700 dark:text-zinc-300",
-                            "hover:bg-zinc-50 dark:hover:bg-zinc-800",
+                            "text-zinc-300",
+                            "hover:bg-zinc-800",
                             "transition-colors duration-150",
                         ].join(" ")}
                     >
@@ -151,15 +151,15 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                         <span>{copied ? "복사됨!" : "링크 복사"}</span>
                     </button>
 
-                    <div className="h-px bg-zinc-100 dark:bg-zinc-800" />
+                    <div className="h-px bg-zinc-800" />
 
                     <button
                         role="menuitem"
                         onClick={handleTwitter}
                         className={[
                             "w-full flex items-center gap-2.5 px-4 py-2.5 text-sm",
-                            "text-zinc-700 dark:text-zinc-300",
-                            "hover:bg-zinc-50 dark:hover:bg-zinc-800",
+                            "text-zinc-300",
+                            "hover:bg-zinc-800",
                             "transition-colors duration-150",
                         ].join(" ")}
                     >
@@ -167,15 +167,15 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                         <span>X (트위터)</span>
                     </button>
 
-                    <div className="h-px bg-zinc-100 dark:bg-zinc-800" />
+                    <div className="h-px bg-zinc-800" />
 
                     <button
                         role="menuitem"
                         onClick={handleKakao}
                         className={[
                             "w-full flex items-center gap-2.5 px-4 py-2.5 text-sm",
-                            "text-zinc-700 dark:text-zinc-300",
-                            "hover:bg-zinc-50 dark:hover:bg-zinc-800",
+                            "text-zinc-300",
+                            "hover:bg-zinc-800",
                             "transition-colors duration-150",
                         ].join(" ")}
                     >
