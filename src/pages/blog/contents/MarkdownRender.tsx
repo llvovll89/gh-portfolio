@@ -1,9 +1,41 @@
-import { memo, useRef, useState } from "react";
+import { memo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter";
+import vscDarkPlus from "react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus";
+import tsxLang from "react-syntax-highlighter/dist/esm/languages/prism/tsx";
+import typescriptLang from "react-syntax-highlighter/dist/esm/languages/prism/typescript";
+import jsxLang from "react-syntax-highlighter/dist/esm/languages/prism/jsx";
+import javascriptLang from "react-syntax-highlighter/dist/esm/languages/prism/javascript";
+import jsonLang from "react-syntax-highlighter/dist/esm/languages/prism/json";
+import bashLang from "react-syntax-highlighter/dist/esm/languages/prism/bash";
+import cssLang from "react-syntax-highlighter/dist/esm/languages/prism/css";
+import markupLang from "react-syntax-highlighter/dist/esm/languages/prism/markup";
+import pythonLang from "react-syntax-highlighter/dist/esm/languages/prism/python";
+import sqlLang from "react-syntax-highlighter/dist/esm/languages/prism/sql";
+import markdownLang from "react-syntax-highlighter/dist/esm/languages/prism/markdown";
 import { slugifyHeading } from "../../../utils/parseToc";
 import { scrollToHeading } from "../../../utils/scrollToHeading";
 import { DETAIL_SCROLL_ID } from "./Detail";
+
+SyntaxHighlighter.registerLanguage("tsx", tsxLang);
+SyntaxHighlighter.registerLanguage("typescript", typescriptLang);
+SyntaxHighlighter.registerLanguage("ts", typescriptLang);
+SyntaxHighlighter.registerLanguage("jsx", jsxLang);
+SyntaxHighlighter.registerLanguage("javascript", javascriptLang);
+SyntaxHighlighter.registerLanguage("js", javascriptLang);
+SyntaxHighlighter.registerLanguage("json", jsonLang);
+SyntaxHighlighter.registerLanguage("bash", bashLang);
+SyntaxHighlighter.registerLanguage("sh", bashLang);
+SyntaxHighlighter.registerLanguage("shell", bashLang);
+SyntaxHighlighter.registerLanguage("css", cssLang);
+SyntaxHighlighter.registerLanguage("html", markupLang);
+SyntaxHighlighter.registerLanguage("xml", markupLang);
+SyntaxHighlighter.registerLanguage("python", pythonLang);
+SyntaxHighlighter.registerLanguage("py", pythonLang);
+SyntaxHighlighter.registerLanguage("sql", sqlLang);
+SyntaxHighlighter.registerLanguage("markdown", markdownLang);
+SyntaxHighlighter.registerLanguage("md", markdownLang);
 
 function extractText(children: unknown): string {
     if (typeof children === "string") return children;
@@ -16,27 +48,34 @@ function extractText(children: unknown): string {
     return "";
 }
 
-function CodeBlock({ children, ...props }: React.HTMLAttributes<HTMLPreElement>) {
-    const preRef = useRef<HTMLPreElement>(null);
+function CodeBlock({ language, codeString }: { language: string; codeString: string }) {
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
-        const text = preRef.current?.textContent ?? "";
-        navigator.clipboard.writeText(text).then(() => {
+        navigator.clipboard.writeText(codeString).then(() => {
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         });
     };
 
     return (
-        <div className="relative group my-4">
-            <pre
-                ref={preRef}
-                className="overflow-x-auto max-w-full text-[clamp(0.9rem,1.5vw,1rem)]"
-                {...props}
+        <div className="relative group my-4 max-w-full overflow-hidden rounded-lg">
+            <SyntaxHighlighter
+                language={language}
+                style={vscDarkPlus}
+                showLineNumbers={false}
+                customStyle={{
+                    margin: 0,
+                    padding: "1rem",
+                    maxWidth: "100%",
+                    overflowX: "auto",
+                    fontSize: "clamp(0.85rem, 1.5vw, 0.95rem)",
+                    fontFamily:
+                        "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+                }}
             >
-                {children}
-            </pre>
+                {codeString}
+            </SyntaxHighlighter>
             <button
                 type="button"
                 onClick={handleCopy}
@@ -150,30 +189,18 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                             {...props}
                         />
                     ),
-                    pre: (props) => <CodeBlock {...props} />,
-                    code: ({ className, children, ...props }) => {
+                    pre: ({ children }) => <>{children}</>,
+                    code: ({ className, children }) => {
                         const isBlock = Boolean(className); // ```ts 같은 경우 className에 language-xxx 들어옴
                         if (isBlock) {
-                            return (
-                                <code
-                                    className={[
-                                        "block rounded-lg border border-zinc-700",
-                                        "bg-black/75",
-                                        "p-4 text-zinc-100",
-                                        "overflow-x-auto max-w-full text-[clamp(0.9rem,1.5vw,1rem)]",
-                                    ].join(" ")}
-                                    {...props}
-                                >
-                                    {children}
-                                </code>
-                            );
+                            const match = /language-(\w+)/.exec(className ?? "");
+                            const language = match?.[1] ?? "text";
+                            const codeString = extractText(children).replace(/\n$/, "");
+                            return <CodeBlock language={language} codeString={codeString} />;
                         }
 
                         return (
-                            <code
-                                className="rounded bg-zinc-200 px-1.5 py-0.5 text-zinc-900 text-[clamp(0.9rem,1.5vw,1rem)]"
-                                {...props}
-                            >
+                            <code className="rounded bg-zinc-200 px-1.5 py-0.5 text-zinc-900 text-[clamp(0.9rem,1.5vw,1rem)]">
                                 {children}
                             </code>
                         );

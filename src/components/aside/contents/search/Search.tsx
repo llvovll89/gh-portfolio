@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 import { useSearch } from "./useSearch";
 import { HighlightedText } from "./HighlightedText";
+import { getFileIcon } from "../../../../constants/fileIcons";
 
 const LISTBOX_ID = "search-results-listbox";
 const SEARCH_FOCUS_EVENT = "portfolio-search-focus";
@@ -162,30 +163,33 @@ export const Search = () => {
                         {recentPaths
                             .map((p) => searchableRoutes.find((r) => r.path === p))
                             .filter(Boolean)
-                            .map((r) => (
-                                <li
-                                    key={r!.path}
-                                    onClick={() => openRoute(r!.path)}
-                                    className={[
-                                        "w-full h-8 flex items-center px-3 text-white text-xs cursor-pointer gap-2 rounded-sm relative",
-                                        "hover:bg-primary/20",
-                                        selectedPathState.state === r!.path ? "bg-sub-gary/20" : "",
-                                    ].join(" ")}
-                                >
-                                    <FcOpenedFolder className="w-4 h-4 shrink-0" />
-                                    <span className="truncate flex-1">{r!.name}</span>
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            persistRecents(recentPaths.filter((p) => p !== r!.path));
-                                        }}
-                                        className="text-white/30 hover:text-white/70 transition-colors"
-                                        aria-label="최근 방문 삭제"
+                            .map((r) => {
+                                const { Icon, colorClass } = getFileIcon(r!.path);
+                                return (
+                                    <li
+                                        key={r!.path}
+                                        onClick={() => openRoute(r!.path)}
+                                        className={[
+                                            "w-full h-8 flex items-center px-3 text-white text-xs cursor-pointer gap-2 rounded-sm relative",
+                                            "hover:bg-primary/20",
+                                            selectedPathState.state === r!.path ? "bg-sub-gary/20" : "",
+                                        ].join(" ")}
                                     >
-                                        <CiSquareRemove className="w-4 h-4" />
-                                    </button>
-                                </li>
-                            ))}
+                                        <Icon className={`w-4 h-4 shrink-0 ${colorClass}`} />
+                                        <span className="truncate flex-1">{r!.name}</span>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                persistRecents(recentPaths.filter((p) => p !== r!.path));
+                                            }}
+                                            className="text-white/30 hover:text-white/70 transition-colors"
+                                            aria-label="최근 방문 삭제"
+                                        >
+                                            <CiSquareRemove className="w-4 h-4" />
+                                        </button>
+                                    </li>
+                                );
+                            })}
                     </ul>
                 </div>
             )}
@@ -214,6 +218,7 @@ export const Search = () => {
                                     <ul role="listbox" aria-label={t("search.searchResults")} className="flex flex-col gap-0.5">
                                         {results.map((r, idx) => {
                                             const isActive = idx === activeIndex;
+                                            const { Icon, colorClass } = getFileIcon(r.path);
                                             return (
                                                 <li
                                                     id={`search-option-${idx}`}
@@ -229,7 +234,7 @@ export const Search = () => {
                                                         isActive ? "ring-1 ring-primary/40" : "",
                                                     ].join(" ")}
                                                 >
-                                                    <FcOpenedFolder className="w-4 h-4 shrink-0" />
+                                                    <Icon className={`w-4 h-4 shrink-0 ${colorClass}`} />
                                                     <span className="truncate">
                                                         <HighlightedText text={r.name} keywords={keywords} />
                                                     </span>

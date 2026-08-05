@@ -57,7 +57,7 @@ const GuestbookDeleteModal = ({ entry, isOpen, onClose, onSuccess }: Props) => {
         <>
             <div className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm" onClick={handleClose} />
             <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center md:p-4">
-                <div className="w-full md:max-w-sm animate-in slide-in-from-bottom md:zoom-in-95 duration-200">
+                <div className="w-full md:max-w-sm max-h-[85dvh] overflow-y-auto scrolls animate-in slide-in-from-bottom md:zoom-in-95 duration-200">
                     <div className="rounded-t-2xl md:rounded-2xl border border-white/10 bg-zinc-950/98 backdrop-blur-xl p-6 shadow-2xl">
                         <div className="mb-5">
                             <div className="w-11 h-11 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mb-4">

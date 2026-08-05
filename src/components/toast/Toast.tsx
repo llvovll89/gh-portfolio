@@ -22,13 +22,13 @@ export const Toast = () => {
     if (toasts.length === 0) return null;
 
     return (
-        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[9999] flex flex-col gap-2 items-center pointer-events-none">
+        <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-2 items-end pointer-events-none">
             {toasts.map((toast) => (
                 <div
                     key={toast.id}
                     role="alert"
                     aria-live="polite"
-                    className={`flex items-center gap-2 px-5 py-2.5 rounded-xl shadow-xl text-sm font-medium animate-in slide-in-from-top duration-200 ${colors[toast.type]}`}
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-xl shadow-xl text-sm font-medium max-w-sm whitespace-normal break-words animate-in slide-in-from-bottom duration-200 ${colors[toast.type]}`}
                 >
                     {icons[toast.type]}
                     {toast.msg}

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export type FooterTabType = "terminal" | "console";
+export type FooterTabType = "problems" | "output" | "terminal" | "console";
 
 export interface FooterTab {
     id: FooterTabType;
@@ -9,6 +9,8 @@ export interface FooterTab {
 }
 
 export const FOOTER_TABS: FooterTab[] = [
+    { id: "problems", label: "PROBLEMS" },
+    { id: "output", label: "OUTPUT" },
     { id: "terminal", label: "TERMINAL" },
     { id: "console", label: "CONSOLE" },
 ];

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 @import "./styles/font.css";
 
@@ -13,6 +14,8 @@
     --color-sub-pink: #d46876;
     --color-main-teal: #009d85;
     --color-sub-teal: #8bc783;
+
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
     --user-select-none: none;
 }
@@ -68,12 +71,6 @@ body {
 
 .scrolls::-webkit-scrollbar-track {
     background: rgba(41, 45, 45, 0.1);
-}
-
-span {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
 }
 
 @keyframes soft-float {

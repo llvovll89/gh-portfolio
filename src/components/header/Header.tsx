@@ -9,6 +9,8 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useRedirectionPage } from "../../hooks/useRedirectionPage";
 import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
 import { LAYOUT_CONSTANTS } from "../../constants/layout";
+import { getFileIcon } from "../../constants/fileIcons";
+import { Breadcrumb } from "../breadcrumb/Breadcrumb";
 
 const HeaderClock = () => {
     const [currentTime, setCurrentTime] = useState(new Date());
@@ -185,6 +187,7 @@ export const Header = () => {
                         const route = routesPath.find((r) => r.path === path);
                         if (!route) return null;
                         const isPinned = pinnedTabs.includes(route.path);
+                        const { Icon, colorClass } = getFileIcon(route.path);
                         return (
                             <li
                                 role="tab"
@@ -209,7 +212,7 @@ export const Header = () => {
                                 className={`${selectedStyle(route.path).bgColor
                                     } min-w-20 sm:min-w-24 md:min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[11px] sm:text-[12px] md:text-[13px] flex items-center cursor-pointer user-select-none gap-0.5 sm:gap-1 justify-center px-1.5 sm:px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-inset`}
                             >
-                                <span className="text-xs sm:text-sm">📍</span>
+                                <Icon className={`w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 ${colorClass}`} />
                                 <Link to={route.path} className="h-full">
                                     <span className="h-full flex items-center whitespace-nowrap overflow-hidden text-ellipsis">
                                         {route.name}.tsx
@@ -385,6 +388,7 @@ export const Header = () => {
                 </div>
             </header>
 
+            <Breadcrumb />
             <Theme />
         </>
     );

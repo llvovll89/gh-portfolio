@@ -44,7 +44,8 @@ export const Contents = ({children, className}: ContentsProps) => {
             id="main-content"
             role="main"
             tabIndex={-1}
-            className={`absolute top-10 right-0 flex flex-col sm:pb-10 transition-width transition-transform ease-in-out overflow-x-hidden overflow-y-auto gap-4 scrolls h-[calc(100dvh-40px)] min-h-[calc(100dvh-40px)]
+            className={`absolute right-0 flex flex-col sm:pb-10 transition-width transition-transform ease-in-out overflow-x-hidden overflow-y-auto gap-4 scrolls
+                ${isMobileSize ? "top-10 h-[calc(100dvh-40px)] min-h-[calc(100dvh-40px)]" : "top-[68px] h-[calc(100dvh-92px)] min-h-[calc(100dvh-92px)]"}
                 py-2 sm:py-3 md:py-4 ${isMobileSize ? "px-2 pb-16" : "px-2 sm:px-3 md:px-4 pb-2"} ${isFullscreen ? "justify-center" : ""} ${className} ${backgroundClass} ${textColor}`}
             style={{
                 width: `calc(100% - ${isMobileSize ? LAYOUT_CONSTANTS.MOBILE_SIDEBAR_WIDTH : layoutState.resizeSidebarWidth}px)`,

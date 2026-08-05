@@ -6,7 +6,7 @@ import { KeyboardProvider } from "./context/KeyboardState.context";
 import { routesPath } from "./routes/route";
 import { AppChildContainer } from "./components/appChildContainer/AppChildContainer";
 import { Bottom } from "./components/footer/Footer";
-import { useCheckedMobile } from "./hooks/useCheckedMobile";
+import { useCheckedMobileSize } from "./hooks/useCheckedMobileSize";
 import { usePageTracking } from "./hooks/usePageTracking";
 import { useContext } from "react";
 import { SkipLinks } from "./components/skipLinks/SkipLinks";
@@ -15,9 +15,10 @@ import { PWAUpdateBanner } from "./components/pwa/PWAUpdateBanner";
 import { PWAInstallBanner } from "./components/pwa/PWAInstallBanner";
 import { PageErrorBoundary } from "./components/error/PageErrorBoundary";
 import { Toast } from "./components/toast/Toast";
+import { StatusBar } from "./components/statusBar/StatusBar";
 
 function AppContent() {
-    const isMobile = useCheckedMobile();
+    const isMobile = useCheckedMobileSize();
     const location = useLocation();
     usePageTracking();
     const scrollPositionsRef = useRef<Record<string, number>>({});
@@ -94,6 +95,7 @@ function AppContent() {
             </Suspense>
 
             {!isMobile && !isBlogDetailPage && isTerminalVisible && <Bottom />}
+            {!isMobile && <StatusBar />}
             <PWAInstallBanner />
             <PWAUpdateBanner />
             <Toast />

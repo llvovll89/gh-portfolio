@@ -39,8 +39,9 @@ function parseEntry(docSnap: { id: string; data: () => Record<string, unknown> }
     }
 }
 
-// No.(hidden mobile) | 작성자 | 내용 | 날짜 | 화살표
-const COLS = 'grid grid-cols-[5.5rem_1fr_4.5rem_1.5rem] sm:grid-cols-[3rem_9rem_1fr_5.5rem_1.5rem]'
+// 모바일: 작성자 | 내용 | 화살표 (No./날짜는 sm 이상에서만 표시)
+// sm 이상: No. | 작성자 | 내용 | 날짜 | 화살표
+const COLS = 'grid grid-cols-[4.5rem_1fr_1.5rem] sm:grid-cols-[3rem_9rem_1fr_5.5rem_1.5rem]'
 
 const SkeletonBoard = () => (
     <div className="rounded-xl border border-white/8 overflow-hidden">
@@ -48,7 +49,7 @@ const SkeletonBoard = () => (
             <div className="hidden sm:block h-3 bg-white/8 rounded w-6 self-center" />
             <div className="h-3 bg-white/8 rounded w-16 self-center" />
             <div className="h-3 bg-white/8 rounded self-center" />
-            <div className="h-3 bg-white/8 rounded w-12 self-center justify-self-end" />
+            <div className="hidden sm:block h-3 bg-white/8 rounded w-12 self-center justify-self-end" />
             <div />
         </div>
         {[...Array(6)].map((_, i) => (
@@ -59,7 +60,7 @@ const SkeletonBoard = () => (
                     <div className="h-3 bg-white/8 rounded w-14" />
                 </div>
                 <div className="h-3 bg-white/6 rounded self-center" />
-                <div className="h-3 bg-white/6 rounded w-10 self-center justify-self-end" />
+                <div className="hidden sm:block h-3 bg-white/6 rounded w-10 self-center justify-self-end" />
                 <div />
             </div>
         ))}
@@ -177,7 +178,7 @@ const GuestbookList = ({
                             <span className="hidden sm:block text-[11px] font-semibold text-white/45 text-center self-center">No.</span>
                             <span className="text-[11px] font-semibold text-white/45 self-center">작성자</span>
                             <span className="text-[11px] font-semibold text-white/45 self-center">내용</span>
-                            <span className="text-[11px] font-semibold text-white/45 text-right self-center">날짜</span>
+                            <span className="hidden sm:block text-[11px] font-semibold text-white/45 text-right self-center">날짜</span>
                             <span />
                         </div>
 
@@ -225,7 +226,7 @@ const GuestbookList = ({
                                             </p>
 
                                             {/* 날짜 */}
-                                            <span className="text-[11px] text-white/60 text-right tabular-nums shrink-0">
+                                            <span className="hidden sm:block text-[11px] text-white/60 text-right tabular-nums shrink-0">
                                                 {dateStr}
                                             </span>
 

@@ -77,7 +77,7 @@ export const NotFound = () => {
 
     return (
         <section
-            className={`w-screen h-screen flex flex-col ${backgroundClass} overflow-hidden select-none`}
+            className={`w-full min-h-dvh flex flex-col ${backgroundClass} overflow-hidden select-none`}
             style={backgroundStyle}
         >
             {/* ── 탭 바 ─────────────────────────────────── */}

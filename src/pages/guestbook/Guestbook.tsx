@@ -95,7 +95,7 @@ export const Guestbook = () => {
 						<>
 							<div className="fixed inset-0 bg-black/60 z-40 backdrop-blur-sm" onClick={() => setShowForm(false)} />
 							<div className="fixed left-0 right-0 bottom-0 z-50 md:inset-0 md:flex md:items-center md:justify-center md:p-4">
-								<div className="w-full md:max-w-xl animate-in slide-in-from-bottom md:zoom-in-95 duration-200">
+								<div className="w-full md:max-w-xl max-h-[85dvh] overflow-y-auto scrolls animate-in slide-in-from-bottom md:zoom-in-95 duration-200">
 									<GuestbookForm
 										handleToggleForm={() => setShowForm(false)}
 										onSubmitted={(m) => { setShowForm(false); if (m) showToast(m) }}

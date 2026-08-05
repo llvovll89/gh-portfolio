@@ -132,16 +132,23 @@ export function useGitControl() {
     }, [selected?.repo, selected?.branch]);
 
     useEffect(() => {
-        const openCount = REPOS.reduce((acc, repo) => {
+        const items: Array<{ repo: RepoName; type: "issue" | "pr"; number: number; title: string; url: string }> = [];
+
+        for (const repo of REPOS) {
             const state = gitStates[repo];
-            const openIssues = state.issues.filter((issue) => issue.state === "open").length;
-            const openPullRequests = state.pullRequests.filter((pr) => pr.state === "open").length;
-            return acc + openIssues + openPullRequests;
-        }, 0);
+            for (const issue of state.issues) {
+                if (issue.state !== "open") continue;
+                items.push({ repo, type: "issue", number: issue.number, title: issue.title, url: issue.html_url });
+            }
+            for (const pr of state.pullRequests) {
+                if (pr.state !== "open") continue;
+                items.push({ repo, type: "pr", number: pr.number, title: pr.title, url: pr.html_url });
+            }
+        }
 
         window.dispatchEvent(
             new CustomEvent(GIT_SUMMARY_UPDATED_EVENT, {
-                detail: { openCount },
+                detail: { openCount: items.length, items },
             }),
         );
     }, [gitStates]);

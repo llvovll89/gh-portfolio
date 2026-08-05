@@ -1,4 +1,3 @@
-import { FcOpenedFolder } from "react-icons/fc";
 import {
     BLOG_DETAIL,
     DEFAULT,
@@ -10,6 +9,7 @@ import { NavigationContext } from "../../../../context/NavigationContext";
 import { useThemeStyle } from "../../../../hooks/useThemeStyle";
 import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
 import { useTranslation } from "react-i18next";
+import { getFileIcon } from "../../../../constants/fileIcons";
 
 export const Folder = () => {
     const { selectedPathState, setSelectedNav } = useContext(NavigationContext);
@@ -34,19 +34,22 @@ export const Folder = () => {
                             r.path !== DEFAULT &&
                             r.path !== BLOG_DETAIL,
                     )
-                    .map((r) => (
-                        <li
-                            onClick={() => { handlePushPath(r.path); setSelectedNav(null); }}
-                            key={r.path}
-                            className={`${selectedPathState.state === r.path
-                                    ? "bg-sub-gary/20"
-                                    : ""
-                                } w-full h-8 flex items-center px-3 text-white cursor-pointer text-xs hover:bg-primary/20 user-select-none gap-1`}
-                        >
-                            <FcOpenedFolder className="w-5 h-5 flex-shrink-0" />
-                            <span className="truncate">{t(r.name)}</span>
-                        </li>
-                    ))}
+                    .map((r) => {
+                        const { Icon, colorClass } = getFileIcon(r.path);
+                        return (
+                            <li
+                                onClick={() => { handlePushPath(r.path); setSelectedNav(null); }}
+                                key={r.path}
+                                className={`${selectedPathState.state === r.path
+                                        ? "bg-sub-gary/20"
+                                        : ""
+                                    } w-full h-8 flex items-center px-3 text-white cursor-pointer text-xs hover:bg-primary/20 user-select-none gap-1`}
+                            >
+                                <Icon className={`w-4 h-4 flex-shrink-0 ${colorClass}`} />
+                                <span className="truncate">{t(r.name)}</span>
+                            </li>
+                        );
+                    })}
             </ul>
         </section>
     );

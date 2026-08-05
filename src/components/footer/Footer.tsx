@@ -7,6 +7,8 @@ import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
 import { LAYOUT_CONSTANTS } from "../../constants/layout";
 import { FooterTabs } from "./tabs/FooterTabs";
 import { ConsoleTab } from "./tabs/ConsoleTab";
+import { ProblemsTab } from "./tabs/ProblemsTab";
+import { OutputTab } from "./tabs/OutputTab";
 import type { FooterTabType } from "./types";
 import { KeyboardContext } from "../../context/KeyboardState.context";
 
@@ -61,7 +63,7 @@ export const Bottom = () => {
     return (
         <footer
             ref={footerRef}
-            className={`absolute z-10 bottom-0 right-0 border-t border-sub-gary/30 ${backgroundClass} overflow-hidden flex flex-col`}
+            className={`absolute z-10 bottom-6 right-0 border-t border-sub-gary/30 ${backgroundClass} overflow-hidden flex flex-col`}
             style={{
                 width: `calc(100% - ${isMobileSize ? LAYOUT_CONSTANTS.MOBILE_SIDEBAR_WIDTH : layoutState.resizeSidebarWidth}px)`,
                 height: layoutState.resizeFooterHeight || COLLAPSED_HEIGHT,
@@ -88,6 +90,28 @@ export const Bottom = () => {
             {/* 콘텐츠 영역 */}
             {isOpen && (
                 <div className="flex-1 overflow-hidden">
+                    {activeTab === "problems" && (
+                        <div
+                            id="footer-tabpanel-problems"
+                            role="tabpanel"
+                            aria-labelledby="footer-tab-problems"
+                            tabIndex={0}
+                            className="h-full"
+                        >
+                            <ProblemsTab />
+                        </div>
+                    )}
+                    {activeTab === "output" && (
+                        <div
+                            id="footer-tabpanel-output"
+                            role="tabpanel"
+                            aria-labelledby="footer-tab-output"
+                            tabIndex={0}
+                            className="h-full"
+                        >
+                            <OutputTab />
+                        </div>
+                    )}
                     {activeTab === "terminal" && (
                         <div
                             id="footer-tabpanel-terminal"

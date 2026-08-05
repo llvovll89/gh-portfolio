@@ -35,7 +35,7 @@ export function EditModal({ slug, comment, onClose, onSuccess }: Props) {
         <>
             <div className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm" onClick={onClose} />
             <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center md:p-4">
-                <div className="w-full md:max-w-md animate-in slide-in-from-bottom md:zoom-in-95 duration-200">
+                <div className="w-full md:max-w-md max-h-[85dvh] overflow-y-auto scrolls animate-in slide-in-from-bottom md:zoom-in-95 duration-200">
                     <div className="rounded-t-2xl md:rounded-2xl border border-white/10 bg-zinc-950/98 backdrop-blur-xl p-5 shadow-2xl">
                         <div className="flex items-center justify-between mb-4">
                             <h3 className="text-sm font-bold text-white">댓글 수정</h3>

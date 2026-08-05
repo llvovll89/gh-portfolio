@@ -53,7 +53,7 @@ const GuestbookEditModal = ({ entry, isOpen, onClose, onSuccess }: Props) => {
         <>
             <div className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm" onClick={handleClose} />
             <div className="fixed left-0 right-0 bottom-0 z-50 md:inset-0 md:flex md:items-center md:justify-center md:p-4">
-                <div className="w-full md:max-w-md animate-in slide-in-from-bottom md:zoom-in-95 duration-200">
+                <div className="w-full md:max-w-md max-h-[85dvh] overflow-y-auto scrolls animate-in slide-in-from-bottom md:zoom-in-95 duration-200">
                     <GuestbookEditor
                         mode="edit"
                         name={entry.name}
