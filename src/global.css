@@ -272,6 +272,16 @@ body {
     }
 }
 
+/* 모바일에서 input/textarea/select 폰트가 16px 미만이면 iOS/Android가
+   포커스 시 페이지를 강제로 확대해 레이아웃이 깨진다 — 16px로 고정해 방지 */
+@media (max-width: 639px) {
+    input,
+    textarea,
+    select {
+        font-size: 16px;
+    }
+}
+
 /* ── Scroll-triggered animations ─────────────────────────── */
 @keyframes fadeInUp {
     from {

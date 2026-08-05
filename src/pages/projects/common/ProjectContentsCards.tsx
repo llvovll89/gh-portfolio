@@ -35,12 +35,12 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
         <>
             {/* 필터 + 정렬 */}
             <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-            <div className="flex gap-1.5 flex-wrap">
+            <div className="flex gap-1.5 flex-nowrap sm:flex-wrap overflow-x-auto sm:overflow-visible scrolls -mx-1 px-1 sm:mx-0 sm:px-0 pb-1 sm:pb-0">
                 <button
                     type="button"
                     onClick={() => { setSelectedSkill(null); setSelectedProjectId(null); }}
                     className={[
-                        "px-3 py-1 rounded-full text-xs font-medium border transition-all cursor-pointer",
+                        "shrink-0 px-3 py-1 rounded-full text-xs font-medium border transition-all cursor-pointer",
                         selectedSkill === null
                             ? "bg-primary border-primary text-white"
                             : "bg-[#2a2a2d] border-[#3e3e42] text-slate-400 hover:border-primary/50 hover:text-slate-200",
@@ -54,7 +54,7 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                         key={skill}
                         onClick={() => { setSelectedSkill(skill); setSelectedProjectId(null); }}
                         className={[
-                            "px-3 py-1 rounded-full text-xs font-medium border transition-all cursor-pointer",
+                            "shrink-0 px-3 py-1 rounded-full text-xs font-medium border transition-all cursor-pointer",
                             selectedSkill === skill
                                 ? "bg-primary border-primary text-white"
                                 : "bg-[#2a2a2d] border-[#3e3e42] text-slate-400 hover:border-primary/50 hover:text-slate-200",

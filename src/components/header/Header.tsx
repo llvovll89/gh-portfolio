@@ -210,10 +210,10 @@ export const Header = () => {
                                 }}
                                 key={route.path}
                                 className={`${selectedStyle(route.path).bgColor
-                                    } min-w-20 sm:min-w-24 md:min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[11px] sm:text-[12px] md:text-[13px] flex items-center cursor-pointer user-select-none gap-0.5 sm:gap-1 justify-center px-1.5 sm:px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-inset`}
+                                    } min-w-24 md:min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[11px] sm:text-[12px] md:text-[13px] flex items-center cursor-pointer user-select-none gap-1 justify-center px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-inset`}
                             >
-                                <Icon className={`w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 ${colorClass}`} />
-                                <Link to={route.path} className="h-full">
+                                <Icon className={`w-3.5 h-3.5 shrink-0 ${colorClass}`} />
+                                <Link to={route.path} className="h-full min-w-0 flex-1">
                                     <span className="h-full flex items-center whitespace-nowrap overflow-hidden text-ellipsis">
                                         {route.name}.tsx
                                     </span>
@@ -226,7 +226,7 @@ export const Header = () => {
                                         togglePinPath(route.path);
                                     }}
                                     aria-label={isPinned ? `Unpin ${route.name} tab` : `Pin ${route.name} tab`}
-                                    className={`h-full px-1 flex items-center justify-center cursor-pointer rounded transition-colors ${isPinned ? "text-amber-300" : "text-white/50 hover:text-white/80"}`}
+                                    className={`hidden sm:flex h-full px-1 items-center justify-center cursor-pointer rounded transition-colors shrink-0 ${isPinned ? "text-amber-300" : "text-white/50 hover:text-white/80"}`}
                                     title={isPinned ? "고정 해제" : "탭 고정"}
                                 >
                                     <span className="text-[11px] sm:text-xs">
@@ -241,7 +241,7 @@ export const Header = () => {
                                         handleClosePAth(route.path);
                                     }}
                                     aria-label={`Close ${route.name} tab`}
-                                    className="h-full px-2 sm:px-1.5 flex items-center justify-center cursor-pointer hover:bg-sub-gary/30 rounded transition-colors"
+                                    className="h-full px-2 sm:px-1.5 flex items-center justify-center cursor-pointer hover:bg-sub-gary/30 rounded transition-colors shrink-0"
                                     title="닫기"
                                 >
                                     <svg

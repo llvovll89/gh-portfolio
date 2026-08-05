@@ -12,7 +12,7 @@ export const PWAUpdateBanner = () => {
         <div
             role="status"
             aria-live="polite"
-            className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3
+            className="fixed bottom-20 sm:bottom-4 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3
                        px-5 py-3 rounded-xl shadow-2xl
                        bg-[#1e1e2e] border border-white/10 text-white text-sm
                        animate-[fadeIn_0.3s_ease-out]"

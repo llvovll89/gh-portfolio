@@ -22,7 +22,7 @@ export const Toast = () => {
     if (toasts.length === 0) return null;
 
     return (
-        <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-2 items-end pointer-events-none">
+        <div className="fixed z-[9999] flex flex-col gap-2 pointer-events-none bottom-20 inset-x-4 items-center sm:bottom-6 sm:inset-x-auto sm:right-6 sm:items-end">
             {toasts.map((toast) => (
                 <div
                     key={toast.id}

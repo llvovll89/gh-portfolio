@@ -21,7 +21,7 @@ export const PWAInstallBanner = () => {
             role="dialog"
             aria-modal="false"
             aria-label="앱 설치 안내"
-            className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[9998] w-[calc(100%-2rem)] max-w-sm
+            className="fixed bottom-20 sm:bottom-4 left-1/2 -translate-x-1/2 z-[9998] w-[calc(100%-2rem)] max-w-sm
                        rounded-2xl shadow-2xl border border-white/10
                        bg-[#1e1e2e] text-white text-sm
                        animate-[fadeIn_0.3s_ease-out]"
