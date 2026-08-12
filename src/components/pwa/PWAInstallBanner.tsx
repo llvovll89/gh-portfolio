@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { usePWAInstall } from "../../hooks/usePWAInstall";
 import { useCheckedMobile } from "../../hooks/useCheckedMobile";
 
@@ -12,19 +13,25 @@ import { useCheckedMobile } from "../../hooks/useCheckedMobile";
 export const PWAInstallBanner = () => {
     const isMobile = useCheckedMobile();
     const { state, dismiss } = usePWAInstall();
+    const [closing, setClosing] = useState(false);
 
     if (!isMobile) return null;
     if (state.status === "idle" || state.status === "installed") return null;
+
+    const handleDismiss = () => {
+        setClosing(true);
+        setTimeout(dismiss, 250);
+    };
 
     return (
         <div
             role="dialog"
             aria-modal="false"
             aria-label="앱 설치 안내"
-            className="fixed bottom-20 sm:bottom-4 left-1/2 -translate-x-1/2 z-[9998] w-[calc(100%-2rem)] max-w-sm
+            className={`fixed bottom-20 sm:bottom-4 left-1/2 -translate-x-1/2 z-[9998] w-[calc(100%-2rem)] max-w-sm
                        rounded-2xl shadow-2xl border border-white/10
                        bg-[#1e1e2e] text-white text-sm
-                       animate-[fadeIn_0.3s_ease-out]"
+                       ${closing ? "animate-[fadeOut_0.25s_ease-in_forwards]" : "animate-[fadeIn_0.3s_ease-out]"}`}
         >
             {/* 헤더 */}
             <div className="flex items-center justify-between px-4 pt-4 pb-2">
@@ -37,7 +44,7 @@ export const PWAInstallBanner = () => {
                     <span className="font-semibold text-white/90">GH Portfolio</span>
                 </div>
                 <button
-                    onClick={dismiss}
+                    onClick={handleDismiss}
                     aria-label="닫기"
                     className="text-white/40 hover:text-white/70 transition-colors text-xl leading-none px-1"
                 >

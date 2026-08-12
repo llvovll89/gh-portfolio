@@ -1,229 +1,230 @@
 {
-  "nav": {
-    "explorer": "Explorer",
-    "search": "Search",
-    "gitControl": "Git Control",
-    "extensions": "Extensions",
-    "bookmarks": "Bookmarks",
-    "settings": "Settings"
-  },
-  "folder": {
-    "title": "Explorer"
-  },
-  "search": {
-    "title": "Search",
-    "placeholder": "Enter search term",
-    "noResults": "No results found.",
-    "searchResults": "Search Results",
-    "recentSearches": "Recent Searches",
-    "recentVisits": "Recent Visits",
-    "clearAll": "Clear All"
-  },
-  "gitControl": {
-    "title": "Git Control",
-    "repository": "Repository",
-    "commits": "Commits",
-    "noCommits": "No commits",
-    "viewProfile": "View GitHub Profile",
-    "viewCommit": "View Commit"
-  },
-  "extensions": {
-    "title": "Extensions",
-    "noExtensions": "No extensions installed",
-    "name": "Extension name",
-    "description": "Description (optional)",
-    "enabled": "Enabled",
-    "disabled": "Disabled",
-    "add": "Add",
-    "cancel": "Cancel"
-  },
-  "bookmarks": {
-    "title": "Bookmarks",
-    "noBookmarks": "No bookmarks",
-    "addPrompt": "Click + to add bookmark",
-    "selectPage": "Select a page to bookmark"
-  },
-  "settings": {
-    "title": "Settings",
-    "shortcutsTab": "Shortcuts",
-    "general": "General",
-    "keyboardShortcuts": "Available keyboard shortcuts",
-    "language": "Language",
-    "animationSpeed": "Animation Speed",
-    "slow": "Slow",
-    "normal": "Normal",
-    "fast": "Fast",
-    "storedInLocalStorage": "Settings are stored in local storage",
-    "shortcutsList": {
-      "toggleTerminal": "Toggle Terminal",
-      "toggleKeyboardInfo": "Toggle Keyboard Info",
-      "toggleFolder": "Toggle Folder Explorer",
-      "toggleSearch": "Toggle Search UI",
-      "executeCommand": "Execute CLI Command",
-      "closeAll": "Close All UI"
+    "nav": {
+        "explorer": "Explorer",
+        "search": "Search",
+        "gitControl": "Git Control",
+        "extensions": "Extensions",
+        "bookmarks": "Bookmarks",
+        "settings": "Settings"
+    },
+    "folder": {
+        "title": "Explorer"
+    },
+    "search": {
+        "title": "Search",
+        "placeholder": "Enter search term",
+        "noResults": "No results found.",
+        "searchResults": "Search Results",
+        "recentSearches": "Recent Searches",
+        "recentVisits": "Recent Visits",
+        "clearAll": "Clear All"
+    },
+    "gitControl": {
+        "title": "Git Control",
+        "repository": "Repository",
+        "commits": "Commits",
+        "noCommits": "No commits",
+        "viewProfile": "View GitHub Profile",
+        "viewCommit": "View Commit"
+    },
+    "extensions": {
+        "title": "Extensions",
+        "noExtensions": "No extensions installed",
+        "name": "Extension name",
+        "description": "Description (optional)",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "add": "Add",
+        "cancel": "Cancel"
+    },
+    "bookmarks": {
+        "title": "Bookmarks",
+        "noBookmarks": "No bookmarks",
+        "addPrompt": "Click + to add bookmark",
+        "selectPage": "Select a page to bookmark"
+    },
+    "settings": {
+        "title": "Settings",
+        "shortcutsTab": "Shortcuts",
+        "general": "General",
+        "keyboardShortcuts": "Available keyboard shortcuts",
+        "language": "Language",
+        "animationSpeed": "Animation Speed",
+        "slow": "Slow",
+        "normal": "Normal",
+        "fast": "Fast",
+        "storedInLocalStorage": "Settings are stored in local storage",
+        "resetAll": "Reset All",
+        "shortcutsList": {
+            "toggleTerminal": "Toggle Terminal",
+            "toggleKeyboardInfo": "Toggle Keyboard Info",
+            "toggleFolder": "Toggle Folder Explorer",
+            "toggleSearch": "Toggle Search UI",
+            "executeCommand": "Execute CLI Command",
+            "closeAll": "Close All UI"
+        }
+    },
+    "footer": {
+        "terminal": "Terminal"
+    },
+    "pages": {
+        "profile": {
+            "title": "Profile",
+            "skills": "Skills",
+            "description": {
+                "intro": "I'm Gunho Kim, a developer passionate about learning new technologies.",
+                "frontend": "While I primarily focus on frontend development, I'm also interested in backend development and strive to grow as a full-stack developer.",
+                "collaboration": "I value collaboration and communication, and aim to grow together with my teammates.",
+                "ux": "I prioritize user experience and am passionate about creating intuitive and user-friendly interfaces."
+            },
+            "education": {
+                "title": "Education",
+                "graduated": "Graduated",
+                "highSchool": "Daegu Cheonggu High School",
+                "university": "Daegu University"
+            },
+            "personalHistory": {
+                "title": "Work Experience",
+                "company": "IGIS",
+                "description": "Web application development and maintenance",
+                "currentlyEmployed": "Current"
+            }
+        },
+        "projects": {
+            "title": "Projects",
+            "viewDetails": "View Details",
+            "close": "Close",
+            "viewProject": "View Project",
+            "viewRepository": "GitHub Repository",
+            "projectIntro": "Project Overview",
+            "techStack": "Tech Stack",
+            "team": "Team",
+            "filterAll": "All",
+            "sortDefault": "Default",
+            "sortName": "By Name",
+            "noProjects": "No projects found for this stack",
+            "noProjectsHint": "Try selecting a different stack or view all",
+            "viewAll": "View All",
+            "statusUpdating": "Updating",
+            "statusIncomplete": "Incomplete"
+        },
+        "contact": {
+            "title": "Contact",
+            "subtitle": "Feel free to reach out for job opportunities, collaborations, or side projects. Email is the fastest channel.",
+            "communicationCard": {
+                "quickContact": "Quick Contact",
+                "contactPrompt": "Reach out through the channels below.",
+                "copyEmail": "Copy Email",
+                "emailCopied": "Email copied to clipboard!",
+                "name": "Name",
+                "nameValue": "Gunho Kim",
+                "career": "Experience",
+                "careerYearsMonths": "{{years}}yr {{months}}mo",
+                "careerMonths": "{{months}}mo",
+                "birthDate": "Birth Date",
+                "residence": "Location",
+                "residenceValue": "Daegu, South Korea",
+                "sendAction": "Send →",
+                "openAction": "Open →",
+                "interests": "Interests",
+                "welcomeMessage": "Open to collaboration, job opportunities, and side projects."
+            },
+            "messageForm": {
+                "title": "Leave a Message",
+                "description": "Click 'Send via Email App' after filling out the form to open your default email client.",
+                "name": "Name",
+                "namePlaceholder": "John Doe",
+                "email": "Reply Email",
+                "emailPlaceholder": "name@example.com",
+                "message": "Message",
+                "messagePlaceholder": "I'd like to discuss project/collaboration...",
+                "reset": "Reset",
+                "send": "Send via Email App",
+                "infoNotice": "Form submission is not stored on the server and will be sent via your email client."
+            }
+        },
+        "blog": {
+            "title": "Blog",
+            "posts": "Posts",
+            "noPosts": "No posts yet.",
+            "addPostsHint": "Add .md files to",
+            "noResults": "No results found",
+            "noResultsHint": "Try different keywords or filters",
+            "search": {
+                "label": "Search blog posts",
+                "placeholder": "Search by title, summary, tags, content...",
+                "clear": "Clear search"
+            },
+            "filter": {
+                "tagFilter": "Tag Filter",
+                "categoryFilter": "Category Filter",
+                "allCategories": "All Categories",
+                "allTags": "All Tags",
+                "selectedTags": "Tags ({{count}})",
+                "clearAll": "Clear All",
+                "noTags": "No tags available",
+                "removeTag": "Remove {{tag}} tag",
+                "resetFilters": "Reset Filters"
+            },
+            "sort": {
+                "label": "Sort order: {{order}}",
+                "newest": "Newest",
+                "oldest": "Oldest"
+            },
+            "view": {
+                "label": "View mode",
+                "list": "List",
+                "grouped": "Grouped",
+                "grid": "Grid"
+            },
+            "count": {
+                "total": "{{count}} posts",
+                "filtered": "{{filtered}} / {{total}} shown"
+            }
+        },
+        "resume": {
+            "title": "Resume",
+            "description": "Check out my experience and tech stack."
+        },
+        "uses": {
+            "title": "Uses",
+            "description": "Here are the development tools, tech stacks, and collaboration tools I use daily."
+        },
+        "guestbook": {
+            "title": "Guestbook",
+            "description": "Leave a message in the guestbook and let's connect!",
+            "subtitle": "Leave a precious message for our visitors 💌",
+            "write": "Write",
+            "close": "Close",
+            "entryCount": "{{count}} entries"
+        },
+        "home": {
+            "badge": "Web Developer",
+            "tagline": "Focused on creating experiences that feel <0>\"effortless\"</0> to users,",
+            "taglineSub": "I aim to build fast, consistent UIs as a maintainable web developer.",
+            "bullet1": "Welcome to my website.",
+            "bullet2": "This is a space where I share projects I've developed and my tech blog.",
+            "bullet3": "I aim to provide useful insights based on various tech stacks and development experience.",
+            "cta": "Feel free to look around — reach out anytime if you have questions!",
+            "viewProjects": "View Projects",
+            "getInTouch": "Get in Touch"
+        }
+    },
+    "routes": {
+        "default": "Default",
+        "projects": "Projects",
+        "blog": "Blog",
+        "blogDetail": "Blog Detail",
+        "resume": "Resume",
+        "uses": "Uses",
+        "contact": "Contact",
+        "notFound": "Not Found"
+    },
+    "common": {
+        "add": "Add",
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit"
     }
-  },
-  "footer": {
-    "terminal": "Terminal"
-  },
-  "pages": {
-    "profile": {
-      "title": "Profile",
-      "skills": "Skills",
-      "description": {
-        "intro": "I'm Gunho Kim, a developer passionate about learning new technologies.",
-        "frontend": "While I primarily focus on frontend development, I'm also interested in backend development and strive to grow as a full-stack developer.",
-        "collaboration": "I value collaboration and communication, and aim to grow together with my teammates.",
-        "ux": "I prioritize user experience and am passionate about creating intuitive and user-friendly interfaces."
-      },
-      "education": {
-        "title": "Education",
-        "graduated": "Graduated",
-        "highSchool": "Daegu Cheonggu High School",
-        "university": "Daegu University"
-      },
-      "personalHistory": {
-        "title": "Work Experience",
-        "company": "IGIS",
-        "description": "Web application development and maintenance",
-        "currentlyEmployed": "Current"
-      }
-    },
-    "projects": {
-      "title": "Projects",
-      "viewDetails": "View Details",
-      "close": "Close",
-      "viewProject": "View Project",
-      "viewRepository": "GitHub Repository",
-      "projectIntro": "Project Overview",
-      "techStack": "Tech Stack",
-      "team": "Team",
-      "filterAll": "All",
-      "sortDefault": "Default",
-      "sortName": "By Name",
-      "noProjects": "No projects found for this stack",
-      "noProjectsHint": "Try selecting a different stack or view all",
-      "viewAll": "View All",
-      "statusUpdating": "Updating",
-      "statusIncomplete": "Incomplete"
-    },
-    "contact": {
-      "title": "Contact",
-      "subtitle": "Feel free to reach out for job opportunities, collaborations, or side projects. Email is the fastest channel.",
-      "communicationCard": {
-        "quickContact": "Quick Contact",
-        "contactPrompt": "Reach out through the channels below.",
-        "copyEmail": "Copy Email",
-        "emailCopied": "Email copied to clipboard!",
-        "name": "Name",
-        "nameValue": "Gunho Kim",
-        "career": "Experience",
-        "careerYearsMonths": "{{years}}yr {{months}}mo",
-        "careerMonths": "{{months}}mo",
-        "birthDate": "Birth Date",
-        "residence": "Location",
-        "residenceValue": "Daegu, South Korea",
-        "sendAction": "Send →",
-        "openAction": "Open →",
-        "interests": "Interests",
-        "welcomeMessage": "Open to collaboration, job opportunities, and side projects."
-      },
-      "messageForm": {
-        "title": "Leave a Message",
-        "description": "Click 'Send via Email App' after filling out the form to open your default email client.",
-        "name": "Name",
-        "namePlaceholder": "John Doe",
-        "email": "Reply Email",
-        "emailPlaceholder": "name@example.com",
-        "message": "Message",
-        "messagePlaceholder": "I'd like to discuss project/collaboration...",
-        "reset": "Reset",
-        "send": "Send via Email App",
-        "infoNotice": "Form submission is not stored on the server and will be sent via your email client."
-      }
-    },
-    "blog": {
-      "title": "Blog",
-      "posts": "Posts",
-      "noPosts": "No posts yet.",
-      "addPostsHint": "Add .md files to",
-      "noResults": "No results found",
-      "noResultsHint": "Try different keywords or filters",
-      "search": {
-        "label": "Search blog posts",
-        "placeholder": "Search by title, summary, tags, content...",
-        "clear": "Clear search"
-      },
-      "filter": {
-        "tagFilter": "Tag Filter",
-        "categoryFilter": "Category Filter",
-        "allCategories": "All Categories",
-        "allTags": "All Tags",
-        "selectedTags": "Tags ({{count}})",
-        "clearAll": "Clear All",
-        "noTags": "No tags available",
-        "removeTag": "Remove {{tag}} tag",
-        "resetFilters": "Reset Filters"
-      },
-      "sort": {
-        "label": "Sort order: {{order}}",
-        "newest": "Newest",
-        "oldest": "Oldest"
-      },
-      "view": {
-        "label": "View mode",
-        "list": "List",
-        "grouped": "Grouped"
-        ,"grid": "Grid"
-      },
-      "count": {
-        "total": "{{count}} posts",
-        "filtered": "{{filtered}} / {{total}} shown"
-      }
-    },
-    "resume": {
-      "title": "Resume",
-      "description": "Check out my experience and tech stack."
-    },
-    "uses": {
-      "title": "Uses",
-      "description": "Here are the development tools, tech stacks, and collaboration tools I use daily."
-    },
-    "guestbook": {
-      "title": "Guestbook",
-      "description": "Leave a message in the guestbook and let's connect!",
-      "subtitle": "Leave a precious message for our visitors 💌",
-      "write": "Write",
-      "close": "Close",
-      "entryCount": "{{count}} entries"
-    },
-    "home": {
-      "badge": "Web Developer",
-      "tagline": "Focused on creating experiences that feel <0>\"effortless\"</0> to users,",
-      "taglineSub": "I aim to build fast, consistent UIs as a maintainable web developer.",
-      "bullet1": "Welcome to my website.",
-      "bullet2": "This is a space where I share projects I've developed and my tech blog.",
-      "bullet3": "I aim to provide useful insights based on various tech stacks and development experience.",
-      "cta": "Feel free to look around — reach out anytime if you have questions!",
-      "viewProjects": "View Projects",
-      "getInTouch": "Get in Touch"
-    }
-  },
-  "routes": {
-    "default": "Default",
-    "projects": "Projects",
-    "blog": "Blog",
-    "blogDetail": "Blog Detail",
-    "resume": "Resume",
-    "uses": "Uses",
-    "contact": "Contact",
-    "notFound": "Not Found"
-  },
-  "common": {
-    "add": "Add",
-    "cancel": "Cancel",
-    "save": "Save",
-    "delete": "Delete",
-    "edit": "Edit"
-  }
 }

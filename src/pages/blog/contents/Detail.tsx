@@ -1,17 +1,17 @@
-import { useMemo, useState, useEffect, useRef } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import { loadAllPosts } from "../../../utils/loadAllPosts";
-import { MarkdownRenderer } from "./MarkdownRender";
-import { parseToc } from "../../../utils/parseToc";
-import { scrollToHeading } from "../../../utils/scrollToHeading";
-import { TableOfContents } from "./TableOfContents";
-import { Minimap } from "./Minimap";
-import { incrementViewCount, subscribeViewCount } from "../../../utils/blogViews";
-import { LuEye } from "react-icons/lu";
-import { logger } from "../../../utils/logger";
-import { BlogComments } from "../comments/BlogComments";
-import { useSeoMeta } from "../../../hooks/useSeoMeta";
-import { ShareButton } from "../../../components/ShareButton";
+import {useMemo, useState, useEffect, useRef} from "react";
+import {useParams, Link, useNavigate} from "react-router-dom";
+import {loadAllPosts} from "../../../utils/loadAllPosts";
+import {MarkdownRenderer} from "./MarkdownRender";
+import {parseToc} from "../../../utils/parseToc";
+import {scrollToHeading} from "../../../utils/scrollToHeading";
+import {TableOfContents} from "./TableOfContents";
+import {Minimap} from "./Minimap";
+import {incrementViewCount, subscribeViewCount} from "../../../utils/blogViews";
+import {LuEye, LuChevronLeft, LuChevronRight} from "react-icons/lu";
+import {logger} from "../../../utils/logger";
+import {BlogComments} from "../comments/BlogComments";
+import {useSeoMeta} from "../../../hooks/useSeoMeta";
+import {ShareButton} from "../../../components/ShareButton";
 
 // 빌드 타임에 결정되는 정적 데이터 — slug가 바뀔 때마다 재호출 방지
 const ALL_POSTS = loadAllPosts();
@@ -20,7 +20,7 @@ const ALL_POSTS = loadAllPosts();
 export const DETAIL_SCROLL_ID = "detail-content";
 
 export const Detail = () => {
-    const { slug } = useParams<{ slug: string }>();
+    const {slug} = useParams<{slug: string}>();
     const navigate = useNavigate();
 
     const [showScrollButtons, setShowScrollButtons] = useState(false);
@@ -29,6 +29,14 @@ export const Detail = () => {
 
     const post = useMemo(() => {
         return ALL_POSTS.find((p) => p.slug === slug);
+    }, [slug]);
+
+    const {prevPost, nextPost} = useMemo(() => {
+        const idx = ALL_POSTS.findIndex((p) => p.slug === slug);
+        return {
+            prevPost: idx < ALL_POSTS.length - 1 ? ALL_POSTS[idx + 1] : null,
+            nextPost: idx > 0 ? ALL_POSTS[idx - 1] : null,
+        };
     }, [slug]);
 
     const tocItems = useMemo(() => {
@@ -47,7 +55,7 @@ export const Detail = () => {
             if (rafId !== null) return;
             rafId = requestAnimationFrame(() => {
                 rafId = null;
-                const { scrollTop, scrollHeight, clientHeight } = container;
+                const {scrollTop, scrollHeight, clientHeight} = container;
                 setShowScrollButtons(scrollTop > 300);
                 const total = scrollHeight - clientHeight;
                 const progress = total > 0 ? Math.min(1, scrollTop / total) : 0;
@@ -57,7 +65,7 @@ export const Detail = () => {
             });
         };
 
-        container.addEventListener("scroll", handleScroll, { passive: true });
+        container.addEventListener("scroll", handleScroll, {passive: true});
         return () => {
             container.removeEventListener("scroll", handleScroll);
             if (rafId !== null) cancelAnimationFrame(rafId);
@@ -67,30 +75,58 @@ export const Detail = () => {
     // SEO 메타태그 업데이트 (title, og:title, og:description 등)
     useSeoMeta({
         title: post?.title,
-        description: post?.summary ?? (post ? `${post.title} — 김건호 블로그` : undefined),
+        description:
+            post?.summary ??
+            (post ? `${post.title} — 김건호 블로그` : undefined),
         url: slug ? `/blog/${slug}` : undefined,
-        type: 'article',
+        type: "article",
     });
 
     // 조회수 증가 + 실시간 구독
     useEffect(() => {
         if (!slug) return;
-        incrementViewCount(slug).catch((e) => logger.error("조회수 증가 실패", e));
+        incrementViewCount(slug).catch((e) =>
+            logger.error("조회수 증가 실패", e),
+        );
         const unsubscribe = subscribeViewCount(slug, setViewCount);
         return unsubscribe;
     }, [slug]);
 
     const scrollToTop = () => {
-        document.getElementById(DETAIL_SCROLL_ID)?.scrollTo({ top: 0, behavior: "smooth" });
+        document
+            .getElementById(DETAIL_SCROLL_ID)
+            ?.scrollTo({top: 0, behavior: "smooth"});
     };
 
     const goBack = () => navigate("/blog");
 
+    // ← / → 키로 이전/다음 포스트 이동
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (
+                e.target instanceof HTMLInputElement ||
+                e.target instanceof HTMLTextAreaElement
+            )
+                return;
+            if (e.key === "ArrowLeft" && prevPost)
+                navigate(`/blog/${prevPost.slug}`);
+            if (e.key === "ArrowRight" && nextPost)
+                navigate(`/blog/${nextPost.slug}`);
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [prevPost, nextPost, navigate]);
+
     if (!slug) {
         return (
             <div className="py-6">
-                <p className="text-zinc-700 dark:text-zinc-300">잘못된 접근입니다.</p>
-                <Link className="mt-3 inline-block underline underline-offset-4" to="/blog">
+                <p className="text-zinc-700 dark:text-zinc-300">
+                    잘못된 접근입니다.
+                </p>
+                <Link
+                    className="mt-3 inline-block underline underline-offset-4"
+                    to="/blog"
+                >
                     목록으로
                 </Link>
             </div>
@@ -100,8 +136,13 @@ export const Detail = () => {
     if (!post) {
         return (
             <div className="py-6">
-                <p className="text-zinc-700 dark:text-zinc-300">글을 찾을 수 없습니다: {slug}</p>
-                <Link className="mt-3 inline-block underline underline-offset-4" to="/blog">
+                <p className="text-zinc-700 dark:text-zinc-300">
+                    글을 찾을 수 없습니다: {slug}
+                </p>
+                <Link
+                    className="mt-3 inline-block underline underline-offset-4"
+                    to="/blog"
+                >
                     목록으로
                 </Link>
             </div>
@@ -115,7 +156,7 @@ export const Detail = () => {
                 <div
                     ref={progressBarRef}
                     className="h-full bg-primary origin-left"
-                    style={{ transform: "scaleX(0)" }}
+                    style={{transform: "scaleX(0)"}}
                 />
             </div>
 
@@ -183,7 +224,11 @@ export const Detail = () => {
                     </div>
 
                     {post.summary ? (
-                        <p className={`mt-2 text-zinc-300 ${post.type === "html" ? "leading-tight" : "leading-7"}`}>{post.summary}</p>
+                        <p
+                            className={`mt-2 text-zinc-300 ${post.type === "html" ? "leading-tight" : "leading-7"}`}
+                        >
+                            {post.summary}
+                        </p>
                     ) : null}
                 </header>
 
@@ -210,7 +255,11 @@ export const Detail = () => {
                                         stroke="currentColor"
                                         className="w-4 h-4 transition-transform duration-200 group-open:rotate-180"
                                     >
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                                        />
                                     </svg>
                                 </summary>
                                 <ul className="px-4 pb-3 pt-1 space-y-1 max-h-64 overflow-y-auto scrolls border-t border-zinc-700/60">
@@ -220,10 +269,15 @@ export const Detail = () => {
                                                 href={`#${item.id}`}
                                                 onClick={(e) => {
                                                     e.preventDefault();
-                                                    scrollToHeading(item.id, DETAIL_SCROLL_ID);
+                                                    scrollToHeading(
+                                                        item.id,
+                                                        DETAIL_SCROLL_ID,
+                                                    );
                                                 }}
                                                 className={`block text-sm leading-snug py-1.5 text-zinc-400 hover:text-zinc-200 transition-colors ${
-                                                    item.level === 3 ? "pl-4" : "pl-0"
+                                                    item.level === 3
+                                                        ? "pl-4"
+                                                        : "pl-0"
                                                 }`}
                                             >
                                                 {item.text}
@@ -237,10 +291,55 @@ export const Detail = () => {
                             <div className="flex-1 min-w-0">
                                 <MarkdownRenderer content={post.body} />
                                 <BlogComments slug={slug} />
+                                {/* 이전/다음 포스트 네비게이션 */}
+                                {(prevPost || nextPost) && (
+                                    <nav
+                                        aria-label="포스트 네비게이션"
+                                        className="mt-10 pt-8 border-t border-zinc-800 grid grid-cols-2 gap-4"
+                                    >
+                                        {prevPost ? (
+                                            <Link
+                                                to={`/blog/${prevPost.slug}`}
+                                                className="group flex flex-col gap-1 p-4 rounded-xl border border-zinc-800 hover:border-zinc-600 bg-zinc-900/40 hover:bg-zinc-800/50 transition-all"
+                                            >
+                                                <span className="flex items-center gap-1 text-xs text-zinc-500 group-hover:text-zinc-400">
+                                                    <LuChevronLeft className="w-3 h-3" />{" "}
+                                                    이전 글
+                                                </span>
+                                                <span className="text-sm text-zinc-300 group-hover:text-white line-clamp-2 transition-colors">
+                                                    {prevPost.title}
+                                                </span>
+                                            </Link>
+                                        ) : (
+                                            <div />
+                                        )}
+                                        {nextPost ? (
+                                            <Link
+                                                to={`/blog/${nextPost.slug}`}
+                                                className="group flex flex-col gap-1 p-4 rounded-xl border border-zinc-800 hover:border-zinc-600 bg-zinc-900/40 hover:bg-zinc-800/50 transition-all text-right"
+                                            >
+                                                <span className="flex items-center justify-end gap-1 text-xs text-zinc-500 group-hover:text-zinc-400">
+                                                    다음 글{" "}
+                                                    <LuChevronRight className="w-3 h-3" />
+                                                </span>
+                                                <span className="text-sm text-zinc-300 group-hover:text-white line-clamp-2 transition-colors">
+                                                    {nextPost.title}
+                                                </span>
+                                            </Link>
+                                        ) : (
+                                            <div />
+                                        )}
+                                    </nav>
+                                )}
                             </div>
-                            {tocItems.length > 0 && <TableOfContents items={tocItems} />}
+                            {tocItems.length > 0 && (
+                                <TableOfContents items={tocItems} />
+                            )}
                         </div>
-                        <Minimap content={post.body} scrollContainerId={DETAIL_SCROLL_ID} />
+                        <Minimap
+                            content={post.body}
+                            scrollContainerId={DETAIL_SCROLL_ID}
+                        />
                     </>
                 )}
 
@@ -252,8 +351,19 @@ export const Detail = () => {
                             className="fixed left-4 sm:left-6 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-50 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-zinc-800 text-white shadow-lg hover:bg-zinc-700 transition-all duration-300 ease-in-out opacity-90 hover:opacity-100"
                             aria-label="뒤로가기"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={2}
+                                stroke="currentColor"
+                                className="w-6 h-6"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                                />
                             </svg>
                         </button>
 
@@ -262,8 +372,19 @@ export const Detail = () => {
                             className="fixed right-4 sm:right-6 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-50 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-zinc-800 text-white shadow-lg hover:bg-zinc-700 transition-all duration-300 ease-in-out opacity-90 hover:opacity-100"
                             aria-label="위로가기"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={2}
+                                stroke="currentColor"
+                                className="w-6 h-6"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M4.5 15.75l7.5-7.5 7.5 7.5"
+                                />
                             </svg>
                         </button>
                     </>

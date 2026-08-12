@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 
 export const useCheckedMobileSize = () => {
     const [isMobileSize, setIsMobileSize] = useState<boolean>(() => {
@@ -7,12 +7,17 @@ export const useCheckedMobileSize = () => {
     });
 
     useEffect(() => {
+        let timer: ReturnType<typeof setTimeout>;
         const checkMobileSize = () => {
-            setIsMobileSize(window.innerWidth < 640); // 640px 미만을 모바일로 간주 (Tailwind sm breakpoint와 일치)
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                setIsMobileSize(window.innerWidth < 640); // 640px 미만을 모바일로 간주 (Tailwind sm breakpoint와 일치)
+            }, 100);
         };
 
         window.addEventListener("resize", checkMobileSize);
         return () => {
+            clearTimeout(timer);
             window.removeEventListener("resize", checkMobileSize);
         };
     }, []);

@@ -1,29 +1,31 @@
-import { Route, Routes, useLocation } from "react-router-dom";
-import { Suspense, useEffect, useRef } from "react";
-import { GlobalStateProvider } from "./context/GlobalState.context";
-import { TerminalContext } from "./context/TerminalContext";
-import { KeyboardProvider } from "./context/KeyboardState.context";
-import { routesPath } from "./routes/route";
-import { AppChildContainer } from "./components/appChildContainer/AppChildContainer";
-import { Bottom } from "./components/footer/Footer";
-import { useCheckedMobileSize } from "./hooks/useCheckedMobileSize";
-import { usePageTracking } from "./hooks/usePageTracking";
-import { useContext } from "react";
-import { SkipLinks } from "./components/skipLinks/SkipLinks";
-import { RouteLoading } from "./components/loading/RouteLoading";
-import { PWAUpdateBanner } from "./components/pwa/PWAUpdateBanner";
-import { PWAInstallBanner } from "./components/pwa/PWAInstallBanner";
-import { PageErrorBoundary } from "./components/error/PageErrorBoundary";
-import { Toast } from "./components/toast/Toast";
-import { StatusBar } from "./components/statusBar/StatusBar";
+import {Route, Routes, useLocation} from "react-router-dom";
+import {Suspense, useEffect, useRef} from "react";
+import {GlobalStateProvider} from "./context/GlobalState.context";
+import {TerminalContext} from "./context/TerminalContext";
+import {KeyboardProvider} from "./context/KeyboardState.context";
+import {routesPath} from "./routes/route";
+import {AppChildContainer} from "./components/appChildContainer/AppChildContainer";
+import {Bottom} from "./components/footer/Footer";
+import {useCheckedMobileSize} from "./hooks/useCheckedMobileSize";
+import {usePageTracking} from "./hooks/usePageTracking";
+import {useContext} from "react";
+import {SkipLinks} from "./components/skipLinks/SkipLinks";
+import {RouteLoading} from "./components/loading/RouteLoading";
+import {PWAUpdateBanner} from "./components/pwa/PWAUpdateBanner";
+import {PWAInstallBanner} from "./components/pwa/PWAInstallBanner";
+import {PageErrorBoundary} from "./components/error/PageErrorBoundary";
+import {Toast} from "./components/toast/Toast";
+import {StatusBar} from "./components/statusBar/StatusBar";
 
 function AppContent() {
     const isMobile = useCheckedMobileSize();
     const location = useLocation();
     usePageTracking();
     const scrollPositionsRef = useRef<Record<string, number>>({});
-    const isBlogDetailPage = location.pathname.startsWith("/blog/") && location.pathname !== "/blog/";
-    const { isTerminalVisible } = useContext(TerminalContext);
+    const isBlogDetailPage =
+        location.pathname.startsWith("/blog/") &&
+        location.pathname !== "/blog/";
+    const {isTerminalVisible} = useContext(TerminalContext);
 
     useEffect(() => {
         try {
@@ -66,7 +68,7 @@ function AppContent() {
         };
 
         requestAnimationFrame(restore);
-        container.addEventListener("scroll", handleScroll, { passive: true });
+        container.addEventListener("scroll", handleScroll, {passive: true});
 
         return () => {
             container.removeEventListener("scroll", handleScroll);
@@ -86,7 +88,12 @@ function AppContent() {
                             path={r.path}
                             element={
                                 <PageErrorBoundary pageName={r.name}>
-                                    <r.component />
+                                    <div
+                                        key={location.pathname}
+                                        className="page-enter"
+                                    >
+                                        <r.component />
+                                    </div>
                                 </PageErrorBoundary>
                             }
                         />

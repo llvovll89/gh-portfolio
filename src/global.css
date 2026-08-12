@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 @import "./styles/font.css";
 
@@ -15,7 +15,9 @@
     --color-main-teal: #009d85;
     --color-sub-teal: #8bc783;
 
-    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --font-mono:
+        "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+        monospace;
 
     --user-select-none: none;
 }
@@ -30,7 +32,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
         transition-duration: 0ms !important;
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
@@ -128,7 +132,8 @@ body {
 }
 
 @keyframes float {
-    0%, 100% {
+    0%,
+    100% {
         transform: translate(-50%, -50%) translateY(0px);
     }
     50% {
@@ -308,7 +313,9 @@ body {
 .scroll-reveal {
     opacity: 0;
     transform: translateY(28px);
-    transition: opacity 0.55s ease, transform 0.55s ease;
+    transition:
+        opacity 0.55s ease,
+        transform 0.55s ease;
 }
 
 .scroll-reveal.is-visible {
@@ -319,7 +326,9 @@ body {
 .scroll-reveal-right {
     opacity: 0;
     transform: translateX(-24px);
-    transition: opacity 0.55s ease, transform 0.55s ease;
+    transition:
+        opacity 0.55s ease,
+        transform 0.55s ease;
 }
 
 .scroll-reveal-right.is-visible {
@@ -341,7 +350,42 @@ body {
     animation: fadeInUp 0.7s ease both;
 }
 
-.animate-delay-100 { animation-delay: 0.1s; }
-.animate-delay-200 { animation-delay: 0.2s; }
-.animate-delay-300 { animation-delay: 0.3s; }
-.animate-delay-400 { animation-delay: 0.4s; }
+.animate-delay-100 {
+    animation-delay: 0.1s;
+}
+.animate-delay-200 {
+    animation-delay: 0.2s;
+}
+.animate-delay-300 {
+    animation-delay: 0.3s;
+}
+.animate-delay-400 {
+    animation-delay: 0.4s;
+}
+
+/* ── 페이지 전환 진입 애니메이션 ────────────────────────────── */
+.page-enter {
+    animation: pageEnter 0.22s ease-out both;
+}
+
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+}

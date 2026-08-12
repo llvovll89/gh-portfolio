@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { usePWAUpdate } from "../../hooks/usePWAUpdate";
 
 /**
@@ -5,17 +6,23 @@ import { usePWAUpdate } from "../../hooks/usePWAUpdate";
  */
 export const PWAUpdateBanner = () => {
     const { needRefresh, updateSW, dismissUpdate } = usePWAUpdate();
+    const [closing, setClosing] = useState(false);
 
     if (!needRefresh) return null;
+
+    const handleDismiss = () => {
+        setClosing(true);
+        setTimeout(dismissUpdate, 250);
+    };
 
     return (
         <div
             role="status"
             aria-live="polite"
-            className="fixed bottom-20 sm:bottom-4 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3
+            className={`fixed bottom-20 sm:bottom-4 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3
                        px-5 py-3 rounded-xl shadow-2xl
                        bg-[#1e1e2e] border border-white/10 text-white text-sm
-                       animate-[fadeIn_0.3s_ease-out]"
+                       ${closing ? "animate-[fadeOut_0.25s_ease-in_forwards]" : "animate-[fadeIn_0.3s_ease-out]"}`}
         >
             <span className="text-white/80">새 버전이 있습니다.</span>
             <button
@@ -26,7 +33,7 @@ export const PWAUpdateBanner = () => {
                 업데이트
             </button>
             <button
-                onClick={dismissUpdate}
+                onClick={handleDismiss}
                 aria-label="닫기"
                 className="text-white/50 hover:text-white/80 transition-colors text-lg leading-none"
             >
