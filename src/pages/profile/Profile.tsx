@@ -21,14 +21,13 @@ export const Profile = () => {
             <Contents className="select-none">
                 <section className="w-full">
                     {/* Hero 섹션 */}
-                    <div className="relative flex flex-col items-center justify-center min-h-[340px] md:min-h-[420px] px-4 pt-10 pb-8 overflow-hidden">
+                    <div className="profile-intro relative flex flex-col items-center justify-center px-4 pt-10 pb-8 overflow-hidden">
                         {/* 배경 그라디언트 */}
-                        <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-primary/8 via-transparent to-transparent" />
-                        <div className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary/10 rounded-full blur-3xl" />
+
 
                         {/* 프로필 이미지 */}
                         <figure className="relative mb-6 group animate-fade-in-up">
-                            <div className="relative p-1 rounded-full bg-linear-to-br from-primary/60 via-primary/20 to-transparent shadow-[0_0_40px_rgba(0,153,255,0.25)]">
+                            <div className="relative p-1">
                                 <div className="w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden border border-white/10 bg-black/30">
                                     <img
                                         src="/assets/images/kimgeonho/증명사진.png"
@@ -40,7 +39,7 @@ export const Profile = () => {
                                 </div>
                             </div>
                             {/* 온라인 배지 */}
-                            <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-emerald-400 border-2 border-[#0c0b10] shadow" />
+
                         </figure>
 
                         {/* 이름 & 직함 */}
@@ -51,7 +50,7 @@ export const Profile = () => {
                                     Kim Geon Ho
                                 </span>
                             </h1>
-                            <p className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold text-white bg-linear-to-r from-primary to-blue-500 border border-white/20 backdrop-blur shadow-lg shadow-primary/20">
+                            <p className="text-sm font-medium text-white/65">
                                 FullStack Developer
                             </p>
                         </div>

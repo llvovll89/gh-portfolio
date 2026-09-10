@@ -40,36 +40,36 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
             <Link
                 to={`/blog/${p.slug}`}
                 className={[
-                    "group relative flex flex-col sm:flex-row sm:items-center overflow-hidden rounded-xl border",
-                    "border-zinc-200/80 dark:border-zinc-800/50",
+                    "blog-entry group relative flex flex-col sm:flex-row sm:items-center overflow-hidden",
+                    "border-zinc-200/80 blog-dark:border-zinc-800/50",
                     "px-4 py-4 sm:px-6 sm:py-5 transition-all duration-300",
                     "hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/5",
-                    "hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30",
+                    "hover:bg-zinc-50/50 blog-dark:hover:bg-zinc-900/30",
                 ].join(" ")}
             >
                 {/* 왼쪽 메타데이터 섹션 */}
-                <div className="flex flex-col items-start gap-2 sm:min-w-35 pb-3 sm:pb-0 sm:pr-6 border-b sm:border-b-0 sm:border-r border-zinc-200/60 dark:border-zinc-700/60">
-                    <time className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide">
+                <div className="flex flex-col items-start gap-2 sm:min-w-35 pb-3 sm:pb-0 sm:pr-6 border-b sm:border-b-0 sm:border-r border-zinc-200/60 blog-dark:border-zinc-700/60">
+                    <time className="text-xs font-semibold text-zinc-500 blog-dark:text-zinc-300 uppercase tracking-wide">
                         {p.date || "No Date"}
                     </time>
                     {p.readingTime && (
-                        <span className="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                        <span className="text-[10px] font-medium text-zinc-500 blog-dark:text-zinc-300">
                             {p.readingTime}
                         </span>
                     )}
                     {viewCount !== null && viewCount > 0 && (
-                        <span className="flex items-center gap-1 text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                        <span className="flex items-center gap-1 text-[10px] font-medium text-zinc-500 blog-dark:text-zinc-300">
                             <LuEye className="w-3 h-3" />
                             {viewCount.toLocaleString()}
                         </span>
                     )}
                     {p.type === "html" && (
-                        <span className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 px-1.5 py-0.5 rounded">
+                        <span className="text-[10px] font-semibold text-amber-600 blog-dark:text-amber-400 bg-amber-50 blog-dark:bg-amber-950/30 px-1.5 py-0.5 rounded">
                             HTML
                         </span>
                     )}
                     {p.category && (
-                        <span className="text-[10px] font-semibold text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-950/30 px-1.5 py-0.5 rounded">
+                        <span className="text-[10px] font-semibold text-violet-600 blog-dark:text-violet-400 bg-violet-50 blog-dark:bg-violet-950/30 px-1.5 py-0.5 rounded">
                             {p.category}
                         </span>
                     )}
@@ -78,7 +78,7 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
                             {p.tags.slice(0, 2).map((t) => (
                                 <span
                                     key={t}
-                                    className="text-[10px] font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 px-1.5 py-0.5 rounded"
+                                    className="text-[10px] font-medium text-blue-600 blog-dark:text-blue-400 bg-blue-50 blog-dark:bg-blue-950/30 px-1.5 py-0.5 rounded"
                                 >
                                     {t}
                                 </span>
@@ -89,18 +89,18 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
 
                 {/* 오른쪽 콘텐츠 섹션 */}
                 <div className="flex-1 pt-3 sm:pt-0 sm:pl-6 min-w-0">
-                    <h3 className="text-base sm:text-xl font-bold leading-snug text-zinc-900 dark:text-zinc-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    <h3 className="text-base sm:text-xl font-bold leading-snug text-zinc-900 blog-dark:text-zinc-100 mb-2 group-hover:text-blue-600 blog-dark:group-hover:text-blue-400 transition-colors">
                         {p.title}
                     </h3>
 
                     {(p.summary || (p.type !== "html" && p.body)) && (
-                        <p className="line-clamp-2 text-[clamp(0.75rem,1vw,0.875rem)] leading-relaxed text-zinc-600 dark:text-zinc-400">
+                        <p className="line-clamp-2 text-[clamp(0.75rem,1vw,0.875rem)] leading-relaxed text-zinc-600 blog-dark:text-zinc-200">
                             {p.summary ?? p.body}
                         </p>
                     )}
 
                     {bodySnippet && (
-                        <p className="mt-1.5 line-clamp-2 text-[clamp(0.7rem,1vw,0.8rem)] leading-relaxed text-zinc-500 dark:text-zinc-400 italic border-l-2 border-blue-400/50 pl-2">
+                        <p className="mt-1.5 line-clamp-2 text-[clamp(0.7rem,1vw,0.8rem)] leading-relaxed text-zinc-500 blog-dark:text-zinc-300 italic border-l-2 border-blue-400/50 pl-2">
                             {bodySnippet}
                         </p>
                     )}
@@ -109,7 +109,7 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
                 {/* 호버 시 화살표 아이콘 */}
                 <div className="hidden sm:block ml-4 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
                     <svg
-                        className="w-5 h-5 text-blue-600 dark:text-blue-400"
+                        className="w-5 h-5 text-blue-600 blog-dark:text-blue-400"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"

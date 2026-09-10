@@ -126,9 +126,9 @@ export const Resume = () => {
                         </p>
                     </header>
 
-                    <div className="grid gap-4 md:grid-cols-2">
+                    <div className="resume-sections">
                         {sections.map(({ title, Icon, items }) => (
-                            <section key={title} className="rounded-2xl border border-white/10 bg-white/4 p-5 sm:p-6">
+                            <section key={title} className="resume-section">
                                 <div className="mb-5 flex items-center gap-3">
                                     <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
                                     <h2 className="text-lg font-bold text-white/90">{title}</h2>

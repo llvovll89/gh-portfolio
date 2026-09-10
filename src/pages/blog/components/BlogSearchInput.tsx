@@ -46,7 +46,7 @@ export const BlogSearchInput = ({
             <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                 <LuSearch
                     className={[
-                        "w-5 h-5 text-zinc-400 dark:text-zinc-500 transition-transform",
+                        "w-5 h-5 text-zinc-400 blog-dark:text-zinc-400 transition-transform",
                         isDebouncing ? "animate-pulse" : "",
                     ].join(" ")}
                 />
@@ -63,10 +63,10 @@ export const BlogSearchInput = ({
                 className={[
                     "w-full sm:h-11 h-9 pl-10 pr-10",
                     "rounded-2xl border",
-                    "border-zinc-200/80 dark:border-zinc-800/50",
-                    "bg-white dark:bg-zinc-900/50",
-                    "text-sm text-zinc-900 dark:text-zinc-100",
-                    "placeholder:text-zinc-400 dark:placeholder:text-zinc-500",
+                    "border-zinc-200/80 blog-dark:border-zinc-800/50",
+                    "bg-white blog-dark:bg-zinc-900/50",
+                    "text-sm text-zinc-900 blog-dark:text-zinc-100",
+                    "placeholder:text-zinc-400 blog-dark:placeholder:text-zinc-400",
                     "focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary",
                     "transition-all duration-200",
                 ].join(" ")}
@@ -81,8 +81,8 @@ export const BlogSearchInput = ({
                         "absolute right-3 top-1/2 -translate-y-1/2",
                         "p-1 rounded-full",
                         "text-zinc-400 hover:text-zinc-600",
-                        "dark:text-zinc-500 dark:hover:text-zinc-300",
-                        "hover:bg-zinc-100 dark:hover:bg-zinc-800",
+                        "blog-dark:text-zinc-400 blog-dark:hover:text-zinc-300",
+                        "hover:bg-zinc-100 blog-dark:hover:bg-zinc-800",
                         "transition-all duration-200",
                     ].join(" ")}
                 >

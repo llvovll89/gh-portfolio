@@ -33,7 +33,8 @@
       "PowerShell(Get-ChildItem *)",
       "PowerShell(Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"cd 'C:\\\\Users\\\\svvvs\\\\바탕 화면\\\\kimgeonho\\\\gh-portfolio'; npm run dev\")",
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\svvvs\\\\바탕 화면\\\\kimgeonho\\\\gh-portfolio\" -Recurse -Directory)",
-      "Bash(Select-Object -ExpandProperty FullName)"
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(npx eslint *)"
     ]
   }
 }

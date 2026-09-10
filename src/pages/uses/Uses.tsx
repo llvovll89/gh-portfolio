@@ -125,16 +125,14 @@ export const Uses = () => {
             <Header />
             <Aside />
             <Contents className="select-none">
-                <section className="relative w-full max-w-7xl mx-auto overflow-auto scrolls px-2 md:px-6 py-4 md:py-8">
+                <section className="uses-page relative w-full max-w-7xl mx-auto overflow-auto scrolls px-2 md:px-6 py-4 md:py-8">
                     {/* 도구 카테고리 */}
                     <div className="space-y-8 md:space-y-12">
                         {toolCategories.map((category, idx) => (
                             <article key={idx} className="space-y-4 md:space-y-6">
                                 {/* 카테고리 헤더 */}
                                 <div className="flex items-center gap-3 md:gap-5">
-                                    <div className="flex-1 md:flex-none md:w-20 h-px bg-linear-to-r from-transparent via-primary/50 to-primary" />
                                     <h2 className="text-[clamp(1.2rem,2.5vw,1.8rem)] shrink-0 whitespace-nowrap font-bold text-white/90 pr-2 flex items-center gap-2">
-                                        <span className="text-2xl">{category.icon}</span>
                                         {category.title}
                                     </h2>
                                 </div>
@@ -153,7 +151,7 @@ export const Uses = () => {
                                             rel="noopener noreferrer"
                                             aria-label={`${tool.name} - 새 창에서 열기`}
                                             className={[
-                                                "group relative overflow-hidden",
+                                                "tool-item group relative overflow-hidden",
                                                 "rounded-xl p-5",
                                                 "border",
                                                 "bg-linear-to-br",
@@ -209,7 +207,6 @@ export const Uses = () => {
                     {/* 추가 정보 */}
                     <div className="mt-8 md:mt-12 p-5 md:p-6 rounded-2xl bg-linear-to-br from-primary/5 to-primary/2 border border-primary/20">
                         <h3 className="text-base md:text-lg font-bold text-white/90 mb-3 flex items-center gap-2">
-                            <span>💡</span>
                             참고
                         </h3>
                         <p className="text-xs md:text-sm text-white/70 leading-relaxed">

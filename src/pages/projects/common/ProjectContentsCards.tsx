@@ -16,11 +16,11 @@ const ProjectCard = ({ project, onOpen, featured = false }: { project: Project; 
         <button
         type="button"
         onClick={onOpen}
-        className={`group grid w-full overflow-hidden rounded-2xl border border-white/10 bg-[#18181b] text-left transition-colors hover:border-primary/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${featured ? "md:grid-cols-[0.9fr_1.1fr]" : ""}`}
+        className={`project-card group grid w-full overflow-hidden rounded-2xl border border-white/10 bg-[#18181b] text-left transition-colors hover:border-primary/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${featured ? "md:grid-cols-[0.9fr_1.1fr]" : ""}`}
     >
         <div className={`relative overflow-hidden bg-[#202024] ${featured ? "min-h-52 md:min-h-64" : "h-44"}`}>
             <img src={project.image} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
-            <div className="absolute inset-0 bg-linear-to-t from-black/65 via-transparent to-transparent" />
+
         </div>
         <div className="flex min-w-0 flex-col p-5 sm:p-6">
             <div className="flex items-start justify-between gap-4">
@@ -90,7 +90,7 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                     {archiveProjects.length > 0 && (
                         <section aria-labelledby="project-archive">
                             <h2 id="project-archive" className="mb-4 text-sm font-bold text-white/58">{t("pages.projects.archive")}</h2>
-                            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                            <div className="grid gap-6 md:grid-cols-2">
                                 {archiveProjects.map((project) => <ProjectCard key={project.id} project={project} onOpen={() => setSelectedProjectId(project.id)} />)}
                             </div>
                         </section>

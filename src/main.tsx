@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./global.css";
+import "./styles/workbench.css";
 import { BrowserRouter } from "react-router-dom";
 import "./i18n/i18n";
 import { initGa } from "./utils/gtag";

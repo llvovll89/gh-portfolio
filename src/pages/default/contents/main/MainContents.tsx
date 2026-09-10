@@ -1,59 +1,65 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { LuArrowRight, LuMail } from "react-icons/lu";
-import { TerminalCard } from "../../../../components/terminalCard/TerminalCard";
+import { LuArrowRight, LuArrowUpRight, LuMail } from "react-icons/lu";
 import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
 import { CONTACT, PROJECTS } from "../../../../routes/route";
+import { projects, type Project } from "../../../projects/mocks/projectData";
+import { CardDetail } from "../../../projects/common/CardDetail";
 
 export const MainContents = () => {
     const { t } = useTranslation();
     const handlePushPath = useHandlePushPath();
-    const proofPoints = [
-        { value: "3+", label: t("pages.home.metricExperience") },
-        { value: "6", label: t("pages.home.metricProjects") },
-        { value: "66", label: t("pages.home.metricPosts") },
-    ];
-
+    const [selected, setSelected] = useState<Project | null>(null);
+    const featuredProjects = projects.filter(project => project.featured);
+    const [spotlightIndex, setSpotlightIndex] = useState(0);
+    const spotlight = featuredProjects[spotlightIndex];
     return (
-        <article className="relative min-h-full overflow-hidden px-4 py-10 sm:px-8 sm:py-14 lg:px-14 lg:py-16">
-            <div aria-hidden="true" className="pointer-events-none absolute -right-40 -top-52 h-130 w-130 rounded-full bg-primary/14 blur-3xl" />
-            <div className="relative mx-auto grid min-h-full max-w-7xl items-center gap-14 lg:grid-cols-[minmax(0,1.15fr)_minmax(360px,0.85fr)]">
-                <section className="min-w-0">
-                    <p className="mb-5 border-l-2 border-primary pl-3 text-xs font-semibold uppercase tracking-[0.18em] text-primary sm:text-sm">
-                        {t("pages.home.badge")}
-                    </p>
-                    <h1 className="max-w-4xl text-[clamp(2.35rem,4vw,4.25rem)] font-black leading-[0.98] tracking-[-0.055em] text-white">
-                        {t("pages.home.headlineLine1")}
-                        <span className="mt-2 block text-primary lg:whitespace-nowrap">{t("pages.home.headlineLine2")}</span>
-                    </h1>
-                    <p className="mt-7 max-w-2xl text-base leading-7 text-white/68 sm:text-lg sm:leading-8">
-                        {t("pages.home.summary")}
-                    </p>
-                    <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                        <button type="button" onClick={() => handlePushPath(PROJECTS)} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[#007acc] px-6 text-sm font-bold text-white transition-colors hover:bg-[#0086dd] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#18181b]">
-                            {t("pages.home.viewProjects")}
-                            <LuArrowRight className="h-4 w-4" aria-hidden="true" />
+        <article className="portfolio-home">
+            <section className="home-intro">
+                <div>
+                    <div className="home-byline">
+                        <img src="/assets/images/kimgeonho/증명사진.png" alt="" width="40" height="40" />
+                        <p>Geon Ho Kim <span>{t("pages.home.badge")}</span></p>
+                    </div>
+                    <h1>{t("pages.home.headlineLine1")}<span>{t("pages.home.headlineLine2")}</span></h1>
+                    <p className="home-summary">{t("pages.home.summary")}</p>
+                    <div className="home-actions">
+                        <button type="button" onClick={() => handlePushPath(PROJECTS)} className="workbench-button workbench-button-primary">
+                            {t("pages.home.viewProjects")} <LuArrowRight aria-hidden="true" />
                         </button>
-                        <button type="button" onClick={() => handlePushPath(CONTACT)} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-white/14 bg-white/4 px-6 text-sm font-bold text-white transition-colors hover:border-white/28 hover:bg-white/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#18181b]">
-                            <LuMail className="h-4 w-4" aria-hidden="true" />
-                            {t("pages.home.getInTouch")}
+                        <button type="button" onClick={() => handlePushPath(CONTACT)} className="workbench-button">
+                            <LuMail aria-hidden="true" /> {t("pages.home.getInTouch")}
                         </button>
                     </div>
-                    <dl className="mt-12 grid max-w-2xl grid-cols-3 border-y border-white/10 py-5">
-                        {proofPoints.map((item, index) => (
-                            <div key={item.label} className={`min-w-0 px-3 first:pl-0 ${index > 0 ? "border-l border-white/10" : ""}`}>
-                                <dt className="text-[11px] leading-4 text-white/48 sm:text-xs">{item.label}</dt>
-                                <dd className="mt-1 text-xl font-black tracking-tight text-white sm:text-2xl">{item.value}</dd>
-                            </div>
+                </div>
+                <div className="home-spotlight">
+                    <div className="home-spotlight-tabs" aria-label={t("pages.projects.featuredProjects")}>
+                        {featuredProjects.map((project, index) => (
+                            <button type="button" key={project.id} aria-pressed={spotlightIndex === index} onClick={() => setSpotlightIndex(index)}>{project.title}</button>
                         ))}
-                    </dl>
-                </section>
-                <aside className="hidden lg:block" aria-label={t("pages.home.terminalPreview")}>
-                    <div className="relative mx-auto max-w-md">
-                        <div className="absolute -inset-8 rounded-[2rem] border border-primary/10 bg-primary/5" />
-                        <div className="relative"><TerminalCard /></div>
                     </div>
-                </aside>
-            </div>
+                    <button type="button" className="home-spotlight-project" onClick={() => setSelected(spotlight)}>
+                        <div className="home-spotlight-image"><img key={spotlight.id} src={spotlight.image} alt={spotlight.title} width="800" height="600" /></div>
+                        <div className="home-spotlight-caption">
+                            <div><h2>{spotlight.title}</h2><p>{spotlight.skills.slice(0, 3).join(" / ")}</p></div>
+                            <LuArrowUpRight aria-hidden="true" />
+                        </div>
+                    </button>
+                </div>
+            </section>
+            <section className="home-work" aria-labelledby="home-work-title">
+                <h2 id="home-work-title">{t("pages.projects.featuredProjects")}</h2>
+                <div className="home-projects">
+                    {projects.filter(project => !project.featured).slice(0, 2).map(project => (
+                        <button key={project.id} type="button" className="home-project" onClick={() => setSelected(project)}>
+                            <div className="home-project-image"><img src={project.image} alt={project.title} width="800" height="450" /></div>
+                            <div className="home-project-caption"><h3>{project.title}</h3><LuArrowUpRight aria-hidden="true" /></div>
+                            <p>{project.skills.slice(0, 3).join(" / ")}</p>
+                        </button>
+                    ))}
+                </div>
+            </section>
+            {selected && <CardDetail selected={selected} setSelectedProject={() => setSelected(null)} />}
         </article>
     );
 };

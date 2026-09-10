@@ -55,10 +55,10 @@ export const BlogTagFilter = ({
                     "flex items-center gap-2 sm:h-11 h-9 px-4",
                     "rounded-2xl border",
                     selectedTags.length > 0
-                        ? "border-primary/50 bg-primary/5 dark:bg-primary/10"
-                        : "border-zinc-200/80 dark:border-zinc-800/50 bg-white dark:bg-zinc-900/50",
+                        ? "border-primary/50 bg-primary/5 blog-dark:bg-primary/10"
+                        : "border-zinc-200/80 blog-dark:border-zinc-800/50 bg-white blog-dark:bg-zinc-900/50",
                     "text-sm font-medium",
-                    "text-zinc-900 dark:text-zinc-100",
+                    "text-zinc-900 blog-dark:text-zinc-100",
                     "hover:border-primary/50 hover:shadow-md",
                     "focus:outline-none focus:ring-2 focus:ring-primary/50",
                     "transition-all duration-200",
@@ -87,15 +87,15 @@ export const BlogTagFilter = ({
                         "absolute top-full left-0 mt-2 z-50",
                         "w-72 max-h-96 overflow-y-auto",
                         "rounded-2xl border",
-                        "border-zinc-200/80 dark:border-zinc-800/50",
-                        "bg-white dark:bg-zinc-900",
-                        "shadow-lg shadow-zinc-900/10 dark:shadow-black/30",
+                        "border-zinc-200/80 blog-dark:border-zinc-800/50",
+                        "bg-white blog-dark:bg-zinc-900",
+                        "shadow-lg shadow-zinc-900/10 blog-dark:shadow-black/30",
                         "scrolls",
                     ].join(" ")}
                 >
-                    <div className="sticky top-0 z-10 bg-white dark:bg-zinc-900 border-b border-zinc-200/80 dark:border-zinc-800 px-4 py-3">
+                    <div className="sticky top-0 z-10 bg-white blog-dark:bg-zinc-900 border-b border-zinc-200/80 blog-dark:border-zinc-800 px-4 py-3">
                         <div className="flex items-center justify-between">
-                            <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                            <span className="text-sm font-semibold text-zinc-900 blog-dark:text-zinc-100">
                                 {t("pages.blog.filter.tagFilter")}
                             </span>
                             {selectedTags.length > 0 && (
@@ -116,7 +116,7 @@ export const BlogTagFilter = ({
 
                     <div className="p-2">
                         {availableTags.length === 0 ? (
-                            <div className="px-3 py-6 text-center text-sm text-zinc-500 dark:text-zinc-400">
+                            <div className="px-3 py-6 text-center text-sm text-zinc-500 blog-dark:text-zinc-300">
                                 {t("pages.blog.filter.noTags")}
                             </div>
                         ) : (
@@ -132,7 +132,7 @@ export const BlogTagFilter = ({
                                         className={[
                                             "flex items-center gap-3 px-3 py-2.5",
                                             "rounded-xl cursor-pointer",
-                                            "hover:bg-zinc-100 dark:hover:bg-zinc-800/50",
+                                            "hover:bg-zinc-100 blog-dark:hover:bg-zinc-800/50",
                                             "transition-colors duration-150",
                                             "group",
                                         ].join(" ")}
@@ -143,15 +143,15 @@ export const BlogTagFilter = ({
                                             onChange={() => toggleTag(tag)}
                                             className={[
                                                 "w-4 h-4 rounded border-2",
-                                                "border-zinc-300 dark:border-zinc-600",
+                                                "border-zinc-300 blog-dark:border-zinc-600",
                                                 "text-primary focus:ring-2 focus:ring-primary/50",
                                                 "cursor-pointer",
                                             ].join(" ")}
                                         />
-                                        <span className="flex-1 text-sm text-zinc-900 dark:text-zinc-100">
+                                        <span className="flex-1 text-sm text-zinc-900 blog-dark:text-zinc-100">
                                             #{tag}
                                         </span>
-                                        <span className="text-xs text-zinc-500 dark:text-zinc-400 tabular-nums">
+                                        <span className="text-xs text-zinc-500 blog-dark:text-zinc-300 tabular-nums">
                                             {count}
                                         </span>
                                     </label>

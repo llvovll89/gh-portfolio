@@ -24,20 +24,20 @@ export const BlogGroupedView = ({ posts }: BlogGroupedViewProps) => {
                                     "inline-flex items-center px-4 py-2",
                                     "rounded-lg",
                                     "bg-linear-to-r from-primary/10 to-primary/5",
-                                    "dark:from-primary/20 dark:to-primary/10",
-                                    "border border-primary/20 dark:border-primary/30",
+                                    "blog-dark:from-primary/20 blog-dark:to-primary/10",
+                                    "border border-primary/20 blog-dark:border-primary/30",
                                     "text-sm font-semibold",
-                                    "text-primary dark:text-primary",
+                                    "text-primary blog-dark:text-primary",
                                 ].join(" ")}
                             >
                                 #{tag}
                             </span>
-                            <span className="text-sm text-zinc-500 dark:text-zinc-400">
+                            <span className="text-sm text-zinc-500 blog-dark:text-zinc-300">
                                 {groupPosts.length}{" "}
                                 {groupPosts.length === 1 ? "post" : "posts"}
                             </span>
                         </div>
-                        <div className="flex-1 h-px bg-zinc-200 dark:bg-zinc-800" />
+                        <div className="flex-1 h-px bg-zinc-200 blog-dark:bg-zinc-800" />
                     </div>
 
                     <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

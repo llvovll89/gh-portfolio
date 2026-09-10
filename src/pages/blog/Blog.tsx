@@ -10,6 +10,9 @@ import { loadAllPosts } from "../../utils/loadAllPosts";
 import { BlogCard } from "./contents/BlogCard";
 import { BlogFilterBar } from "./components/BlogFilterBar";
 import { useTranslation } from "react-i18next";
+import { useThemeStyle } from "../../hooks/useThemeStyle";
+import { ThemeMode } from "../../context/constatns/Theme.type";
+import { convertThemeTextColor, getTextColorFromBg } from "../../utils/convertThemeTextColor";
 import {
     extractAllCategories,
     extractAllTags,
@@ -32,6 +35,11 @@ const STORAGE_KEYS = {
 
 export const Blog = () => {
     const { t } = useTranslation();
+    const { selectedTheme } = useThemeStyle();
+    const themeText = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
+        ? getTextColorFromBg(selectedTheme.customColor)
+        : convertThemeTextColor(selectedTheme.mode);
+    const blogTheme = themeText === "text-white" ? "dark" : "light";
     const allPosts = ALL_POSTS;
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -96,9 +104,9 @@ export const Blog = () => {
             <Header />
             <Aside />
             <Contents>
-                <div className="flex flex-col h-[calc(100vh-8rem)] sm:py-4 py-1 md:px-0 px-2">
+                <div data-blog-theme={blogTheme} style={{ colorScheme: blogTheme }} className="blog-page flex flex-col h-[calc(100vh-8rem)] sm:py-4 py-1 md:px-0 px-2">
                     <div className="flex-none mb-6">
-                        <h2 className="text-[clamp(0.85rem,1.5vw,1.25rem)] font-bold text-zinc-900 dark:text-zinc-100 mb-4">
+                        <h2 className="text-[clamp(0.85rem,1.5vw,1.25rem)] font-bold text-zinc-900 blog-dark:text-zinc-100 mb-4">
                             {t("pages.blog.posts")}
                         </h2>
 
@@ -124,7 +132,7 @@ export const Blog = () => {
 
                     <div className="flex-1 overflow-y-auto pr-2 scrolls">
                         {allPosts.length === 0 ? (
-                            <p className="text-zinc-700 dark:text-zinc-300">
+                            <p className="text-zinc-700 blog-dark:text-zinc-300">
                                 {t("pages.blog.noPosts")}{" "}
                                 {t("pages.blog.addPostsHint")}{" "}
                                 <span className="font-mono">src/content/posts</span>{" "}

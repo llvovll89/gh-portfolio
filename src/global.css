@@ -1,14 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 @import "./styles/font.css";
 
+/* Blog colors follow the selected portfolio theme, not the OS preference. */
+@custom-variant blog-dark (&:where([data-blog-theme="dark"], [data-blog-theme="dark"] *));
+
 @theme {
-    --color-primary: #09f;
+    --color-primary: #75b8e8;
     --color-main: #1c1b1b;
     --color-navy: #0c0b10;
     --color-sub-gary: #cecece73;
     --color-sub-navy: #1f1e25;
-    --color-base-navy: #0c0b10;
+    --color-base-navy: #181b20;
     --color-sub-blue: #1e52e3;
     --color-sub-green: #43b54e;
     --color-sub-pink: #d46876;

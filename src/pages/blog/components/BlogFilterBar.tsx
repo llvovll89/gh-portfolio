@@ -103,9 +103,9 @@ export const BlogFilterBar = ({
                                 className={[
                                     "inline-flex items-center gap-1.5 px-3 py-1",
                                     "rounded-full text-xs font-medium",
-                                    "bg-primary/10 dark:bg-primary/20",
-                                    "text-primary dark:text-primary",
-                                    "border border-primary/20 dark:border-primary/30",
+                                    "bg-primary/10 blog-dark:bg-primary/20",
+                                    "text-primary blog-dark:text-primary",
+                                    "border border-primary/20 blog-dark:border-primary/30",
                                 ].join(" ")}
                             >
                                 #{tag}
@@ -129,7 +129,7 @@ export const BlogFilterBar = ({
                 {/* 결과 카운트 및 필터 초기화 */}
                 <div className="flex items-center gap-3 ml-auto">
                     <span
-                        className="text-[clamp(0.75rem,1vw,0.875rem)] text-zinc-600 dark:text-zinc-400 tabular-nums"
+                        className="text-[clamp(0.75rem,1vw,0.875rem)] text-zinc-600 blog-dark:text-zinc-300 tabular-nums"
                         role="status"
                         aria-live="polite"
                     >
@@ -145,9 +145,9 @@ export const BlogFilterBar = ({
                             className={[
                                 "text-xs font-medium px-3 py-1.5",
                                 "rounded-lg",
-                                "text-zinc-600 dark:text-zinc-400",
-                                "hover:text-zinc-900 dark:hover:text-zinc-100",
-                                "hover:bg-zinc-100 dark:hover:bg-zinc-800",
+                                "text-zinc-600 blog-dark:text-zinc-300",
+                                "hover:text-zinc-900 blog-dark:hover:text-zinc-100",
+                                "hover:bg-zinc-100 blog-dark:hover:bg-zinc-800",
                                 "transition-all duration-200",
                             ].join(" ")}
                         >
