@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Project } from "../mocks/projectData";
 import { CardDescAndSkills } from "./CardDescAndSkills";
 import { useTranslation } from "react-i18next";
+import { Portal } from "../../../components/Portal";
 
 interface CardDetailProps {
     selected: Project;
@@ -11,6 +12,7 @@ interface CardDetailProps {
 export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) => {
     const { t } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
+    const closeButtonRef = useRef<HTMLButtonElement>(null);
 
     const handleClose = useCallback(() => {
         setIsVisible(false);
@@ -23,15 +25,33 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
     }, []);
 
     useEffect(() => {
+        const scrollContainer = document.getElementById("main-content");
+        const previousBodyOverflow = document.body.style.overflow;
+        const previousContentOverflow = scrollContainer?.style.overflow ?? "";
+        const previouslyFocused = document.activeElement as HTMLElement | null;
+
+        document.body.style.overflow = "hidden";
+        if (scrollContainer) scrollContainer.style.overflow = "hidden";
+        closeButtonRef.current?.focus();
+
+        return () => {
+            document.body.style.overflow = previousBodyOverflow;
+            if (scrollContainer) scrollContainer.style.overflow = previousContentOverflow;
+            previouslyFocused?.focus();
+        };
+    }, []);
+
+    useEffect(() => {
         const onKeyDown = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose(); };
         document.addEventListener('keydown', onKeyDown);
         return () => document.removeEventListener('keydown', onKeyDown);
     }, [handleClose]);
 
     return (
+        <Portal>
         <div
             className={[
-                "fixed inset-0 z-50 flex items-center justify-center p-4",
+                "fixed inset-0 z-[100] grid place-items-center overflow-y-auto p-4 sm:p-8",
                 "bg-black/70 backdrop-blur-md",
                 "transition-opacity duration-200",
                 isVisible ? "opacity-100" : "opacity-0",
@@ -43,7 +63,7 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
         >
             <div
                 className={[
-                    "relative w-full max-w-4xl max-h-[95dvh] sm:max-h-[90vh] overflow-y-auto scrolls",
+                    "relative my-auto w-full max-w-4xl max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100dvh-4rem)] overflow-y-auto scrolls",
                     "rounded-2xl border border-[#3e3e42]",
                     "bg-[#111114] text-slate-100",
                     "shadow-[0_30px_90px_rgba(0,0,0,0.5)]",
@@ -69,6 +89,8 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                     {/* 닫기 버튼 절대 위치 */}
                     <div className="absolute top-4 right-4">
                         <button
+                            ref={closeButtonRef}
+                            type="button"
                             onClick={handleClose}
                             className={[
                                 "group relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full",
@@ -130,10 +152,10 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                                 href={selected.link.projectUrl}
                                 className={[
                                     "group inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold",
-                                    "bg-primary text-white",
+                                    "bg-[#007acc] text-white",
                                     "shadow-lg shadow-primary/25",
                                     "transition-all duration-200",
-                                    "hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5",
+                                    "hover:-translate-y-0.5 hover:bg-[#0086dd] hover:shadow-xl hover:shadow-primary/30",
                                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1e1e1e]",
                                 ].join(" ")}
                                 target="_blank"
@@ -179,5 +201,6 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                 </div>
             </div>
         </div>
+        </Portal>
     );
 };
