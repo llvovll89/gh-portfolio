@@ -11,6 +11,11 @@ export interface Project {
     };
     skills: string[];
     projectMembers: string[];
+    featured?: boolean;
+    role?: string;
+    challenge?: string;
+    contributions?: string[];
+    outcome?: string;
     status?: "updating" | "incomplete";
 }
 
@@ -30,6 +35,11 @@ export const projects = [
             사용자들은 장르별로 콘텐츠를 탐색하고, 상세 페이지에서 줄거리, 출연진, 예고편 등을 확인할 수 있습니다. 또한, 반응형 디자인을 적용하여 다양한 기기에서 최적의 사용자 경험을 제공합니다.`,
         skills: ["React", "Tailwind CSS", "TMDB API", "Firebase", "Vercel"],
         projectMembers: ["김건호"],
+        featured: true,
+        role: "기획, UI 설계, 프론트엔드, 배포",
+        challenge: "많은 영화 정보를 탐색하면서도 상세 정보로 자연스럽게 이어지는 흐름이 필요했습니다.",
+        contributions: ["TMDB 데이터 탐색 구조 설계", "장르별 목록과 상세 화면 구현", "반응형 레이아웃 및 배포"],
+        outcome: "탐색부터 예고편 확인까지 하나의 반응형 웹 흐름으로 완성했습니다.",
     },
     {
         id: 2,
@@ -46,6 +56,11 @@ export const projects = [
             "카카오 지도와 OSRM 라우팅을 활용하여 러닝·워킹 경로를 설정하고, 거리·시간·인터벌 모드로 운동을 기록하는 웹 애플리케이션입니다. 페이스 구간별 MET 기반 칼로리 계산, 결과 공유 카드, 음성 안내 기능을 제공하며, 주간 챌린지로 꾸준한 운동 습관을 지원합니다. PWA를 지원하여 모바일에서도 앱처럼 사용할 수 있습니다.",
         skills: ["Next.js", "TypeScript", "Tailwind CSS", "Supabase", "Kakao Maps API", "OSRM", "PWA", "Vercel"],
         projectMembers: ["김건호"],
+        featured: true,
+        role: "제품 기획, 풀스택 개발, PWA",
+        challenge: "지도 위 경로 설정과 운동 기록을 모바일 환경에서도 끊김 없이 연결해야 했습니다.",
+        contributions: ["Kakao Maps와 OSRM 경로 계산 연동", "페이스와 MET 기반 기록 기능 구현", "음성 안내와 공유 카드, PWA 지원"],
+        outcome: "경로 계획, 기록, 결과 공유를 하나의 모바일 중심 러닝 경험으로 통합했습니다.",
     },
     {
         id: 3,
@@ -62,6 +77,11 @@ export const projects = [
             "VS Code의 UI를 모티브로 제작한 포트폴리오 웹사이트입니다. 사이드바, 터미널, 단축키 등 개발 환경의 친숙한 인터페이스를 활용하여 독특한 사용자 경험을 제공합니다. 프로젝트 소개, 블로그 포스팅, GitHub 연동 기능을 포함하고 있으며, 다양한 테마와 키보드 단축키를 지원합니다.",
         skills: ["React", "TypeScript", "Vite", "Tailwind CSS", "React Router", "Octokit"],
         projectMembers: ["김건호"],
+        featured: true,
+        role: "UX 설계, 프론트엔드, 콘텐츠 운영",
+        challenge: "VS Code 콘셉트를 유지하면서 비개발자도 핵심 정보를 쉽게 찾을 수 있어야 했습니다.",
+        contributions: ["탭과 사이드바 기반 정보 구조 구현", "테마와 키보드 단축키 지원", "프로젝트와 기술 블로그 통합"],
+        outcome: "개발 도구의 개성을 포트폴리오 탐색 경험으로 확장했습니다.",
     },
     {
         id: 4,

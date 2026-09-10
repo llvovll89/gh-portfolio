@@ -10,6 +10,7 @@ const PINNED_TABS_STORAGE_KEY = "portfolio-pinned-tabs";
 
 function loadSelectedNav(): NavType | null {
     try {
+        if (window.innerWidth < 640) return null;
         const stored = localStorage.getItem(NAV_STORAGE_KEY);
         if (stored === "null") return null;
         if (stored && Object.values(NavType).includes(stored as NavType)) {

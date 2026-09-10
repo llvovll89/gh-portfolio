@@ -183,7 +183,10 @@ export const Header = () => {
                     aria-label="File tabs"
                     className={`flex items-center h-full flex-1 overflow-x-auto`}
                 >
-                    {orderedTabs.map((path) => {
+                    {(isMobileSize
+                        ? orderedTabs.filter((path) => path === selectedPathState.state)
+                        : orderedTabs
+                    ).map((path) => {
                         const route = routesPath.find((r) => r.path === path);
                         if (!route) return null;
                         const isPinned = pinnedTabs.includes(route.path);
@@ -210,7 +213,7 @@ export const Header = () => {
                                 }}
                                 key={route.path}
                                 className={`${selectedStyle(route.path).bgColor
-                                    } min-w-24 md:min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[11px] sm:text-[12px] md:text-[13px] flex items-center cursor-pointer user-select-none gap-1 justify-center px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-inset`}
+                                    } min-w-0 sm:min-w-24 md:min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[11px] sm:text-[12px] md:text-[13px] flex items-center cursor-pointer user-select-none gap-1 justify-center px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-inset`}
                             >
                                 <Icon className={`w-3.5 h-3.5 shrink-0 ${colorClass}`} />
                                 <Link to={route.path} className="h-full min-w-0 flex-1">
@@ -241,7 +244,7 @@ export const Header = () => {
                                         handleClosePAth(route.path);
                                     }}
                                     aria-label={`Close ${route.name} tab`}
-                                    className="h-full px-2 sm:px-1.5 flex items-center justify-center cursor-pointer hover:bg-sub-gary/30 rounded transition-colors shrink-0"
+                                    className="hidden sm:flex h-full px-1.5 items-center justify-center cursor-pointer hover:bg-sub-gary/30 rounded transition-colors shrink-0"
                                     title="닫기"
                                 >
                                     <svg

@@ -1,13 +1,46 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { LuArrowUpRight, LuFolderOpen } from "react-icons/lu";
+import type { Project } from "../mocks/projectData";
 import { projects } from "../mocks/projectData";
 import { CardDetail } from "./CardDetail";
-import { useTranslation } from "react-i18next";
 
 type SortKey = "default" | "name";
 
-interface CardProps {
-    className?: string;
-}
+interface CardProps { className?: string }
+
+const ProjectCard = ({ project, onOpen, featured = false }: { project: Project; onOpen: () => void; featured?: boolean }) => {
+    const { t } = useTranslation();
+
+    return (
+        <button
+        type="button"
+        onClick={onOpen}
+        className={`group grid w-full overflow-hidden rounded-2xl border border-white/10 bg-[#18181b] text-left transition-colors hover:border-primary/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${featured ? "md:grid-cols-[0.9fr_1.1fr]" : ""}`}
+    >
+        <div className={`relative overflow-hidden bg-[#202024] ${featured ? "min-h-52 md:min-h-64" : "h-44"}`}>
+            <img src={project.image} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/65 via-transparent to-transparent" />
+        </div>
+        <div className="flex min-w-0 flex-col p-5 sm:p-6">
+            <div className="flex items-start justify-between gap-4">
+                <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/42">{project.scale}</p>
+                    <h2 className="mt-1 text-xl font-bold tracking-tight text-white sm:text-2xl">{project.title}</h2>
+                </div>
+                <LuArrowUpRight className="h-5 w-5 shrink-0 text-white/38 transition-colors group-hover:text-primary" aria-hidden="true" />
+            </div>
+            <p className="mt-4 line-clamp-3 text-sm leading-6 text-white/62">{project.description}</p>
+            {project.role && <p className="mt-5 border-l-2 border-primary/55 pl-3 text-xs leading-5 text-white/72"><span className="text-white/38">{t("pages.projects.role")} </span>{project.role}</p>}
+            <div className="mt-auto flex flex-wrap gap-1.5 pt-5">
+                {project.skills.slice(0, featured ? 5 : 4).map((skill) => (
+                    <span key={skill} className="rounded-md border border-white/9 bg-white/4 px-2 py-1 text-[10px] font-medium text-white/55">{skill}</span>
+                ))}
+            </div>
+        </div>
+        </button>
+    );
+};
 
 export const ProjectContentsCards = ({ className }: CardProps) => {
     const { t } = useTranslation();
@@ -15,223 +48,56 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
     const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
     const [sortKey, setSortKey] = useState<SortKey>("default");
 
-    const allSkills = useMemo(
-        () => [...new Set(projects.flatMap((p) => p.skills))].sort(),
-        [],
-    );
-
+    const allSkills = useMemo(() => [...new Set(projects.flatMap((project) => project.skills))].sort(), []);
     const filteredProjects = useMemo(() => {
-        const base = selectedSkill ? projects.filter((p) => p.skills.includes(selectedSkill)) : projects;
-        if (sortKey === "name") return [...base].sort((a, b) => a.title.localeCompare(b.title, "ko"));
-        return base;
+        const base = selectedSkill ? projects.filter((project) => project.skills.includes(selectedSkill)) : projects;
+        return sortKey === "name" ? [...base].sort((a, b) => a.title.localeCompare(b.title, "ko")) : base;
     }, [selectedSkill, sortKey]);
-
-    const selected = useMemo(
-        () => (selectedProjectId === null ? null : projects.find((p) => p.id === selectedProjectId) ?? null),
-        [selectedProjectId],
-    );
+    const selected = projects.find((project) => project.id === selectedProjectId) ?? null;
+    const featuredProjects = filteredProjects.filter((project) => project.featured);
+    const archiveProjects = filteredProjects.filter((project) => !project.featured);
 
     return (
         <>
-            {/* 필터 + 정렬 */}
-            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-            <div className="flex gap-1.5 flex-nowrap sm:flex-wrap overflow-x-auto sm:overflow-visible scrolls -mx-1 px-1 sm:mx-0 sm:px-0 pb-1 sm:pb-0">
-                <button
-                    type="button"
-                    onClick={() => { setSelectedSkill(null); setSelectedProjectId(null); }}
-                    className={[
-                        "shrink-0 px-3 py-1 rounded-full text-xs font-medium border transition-all cursor-pointer",
-                        selectedSkill === null
-                            ? "bg-primary border-primary text-white"
-                            : "bg-[#2a2a2d] border-[#3e3e42] text-slate-400 hover:border-primary/50 hover:text-slate-200",
-                    ].join(" ")}
-                >
-                    {t("pages.projects.filterAll")}
-                </button>
-                {allSkills.map((skill) => (
-                    <button
-                        type="button"
-                        key={skill}
-                        onClick={() => { setSelectedSkill(skill); setSelectedProjectId(null); }}
-                        className={[
-                            "shrink-0 px-3 py-1 rounded-full text-xs font-medium border transition-all cursor-pointer",
-                            selectedSkill === skill
-                                ? "bg-primary border-primary text-white"
-                                : "bg-[#2a2a2d] border-[#3e3e42] text-slate-400 hover:border-primary/50 hover:text-slate-200",
-                        ].join(" ")}
-                    >
-                        {skill}
-                    </button>
-                ))}
-            </div>
-            {/* 정렬 */}
-            <select
-                value={sortKey}
-                onChange={(e) => setSortKey(e.target.value as SortKey)}
-                className="px-2 py-1 rounded-md text-xs bg-[#2a2a2d] border border-[#3e3e42] text-slate-400 outline-none cursor-pointer hover:border-primary/50 transition-all"
-            >
-                <option value="default">{t("pages.projects.sortDefault")}</option>
-                <option value="name">{t("pages.projects.sortName")}</option>
-            </select>
+            <div className="mb-7 flex flex-col gap-3 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
+                <div className="min-w-0">
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/38">{t("pages.projects.filterByTech")}</p>
+                    <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 scrolls">
+                        <button type="button" onClick={() => setSelectedSkill(null)} className={`shrink-0 rounded-lg border px-3 py-2 text-xs font-semibold ${selectedSkill === null ? "border-primary bg-primary text-slate-950" : "border-white/10 bg-white/4 text-white/58 hover:text-white"}`}>{t("pages.projects.filterAll")}</button>
+                        {allSkills.map((skill) => <button type="button" key={skill} onClick={() => setSelectedSkill(skill)} className={`shrink-0 rounded-lg border px-3 py-2 text-xs font-semibold ${selectedSkill === skill ? "border-primary bg-primary text-slate-950" : "border-white/10 bg-white/4 text-white/58 hover:text-white"}`}>{skill}</button>)}
+                    </div>
+                </div>
+                <select aria-label={t("pages.projects.sortLabel")} value={sortKey} onChange={(event) => setSortKey(event.target.value as SortKey)} className="min-h-10 rounded-lg border border-white/10 bg-[#202024] px-3 text-xs text-white/64 outline-none focus:border-primary">
+                    <option value="default">{t("pages.projects.sortDefault")}</option>
+                    <option value="name">{t("pages.projects.sortName")}</option>
+                </select>
             </div>
 
-            {/* 컴팩트 리스트 */}
             {filteredProjects.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
-                    <div className="w-12 h-12 rounded-full bg-[#2a2a2d] flex items-center justify-center text-2xl">
-                        📂
-                    </div>
-                    <div>
-                        <p className="text-sm font-medium text-slate-300 mb-1">
-                            {t("pages.projects.noProjects")}
-                        </p>
-                        <p className="text-xs text-slate-500">{t("pages.projects.noProjectsHint")}</p>
-                    </div>
-                    <button
-                        type="button"
-                        onClick={() => { setSelectedSkill(null); setSelectedProjectId(null); }}
-                        className="px-4 py-2 rounded-lg text-xs font-medium bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 transition-colors cursor-pointer"
-                    >
-                        {t("pages.projects.viewAll")}
-                    </button>
+                <div className="grid min-h-64 place-items-center rounded-2xl border border-dashed border-white/12 text-center">
+                    <div><LuFolderOpen className="mx-auto h-8 w-8 text-white/30" /><p className="mt-3 text-sm text-white/60">{t("pages.projects.noProjects")}</p></div>
                 </div>
             ) : (
-            <div className={`flex flex-col gap-2 ${className ?? ""}`}>
-                {filteredProjects.map((project, index) => {
-                    const isSelected = project.id === selectedProjectId;
-
-                    const isUpdating = project.status === "updating";
-                    const isIncomplete = project.status === "incomplete";
-
-                    return (
-                        <button
-                            type="button"
-                            key={project.id}
-                            onClick={() => !isUpdating && setSelectedProjectId(project.id)}
-                            disabled={isUpdating}
-                            style={{
-                                animationDelay: `${index * 0.07}s`,
-                                animationFillMode: 'both',
-                            }}
-                            className={[
-                                "group relative flex sm:flex-row flex-col items-start sm:gap-4 gap-2 p-4 rounded-lg border text-left",
-                                "bg-[#181818] transition-all duration-200",
-                                "animate-[fadeIn_0.4s_ease-out]",
-                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/70",
-                                isUpdating
-                                    ? "cursor-not-allowed opacity-60 border-[#3e3e42]"
-                                    : isSelected
-                                    ? "cursor-pointer border-primary bg-[#000000] shadow-[0_0_0_1px_rgba(59,130,246,0.35)]"
-                                    : "cursor-pointer border-[#3e3e42] hover:border-[#CECECE] hover:bg-[rgba(0,0,0,0.12)] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/30",
-                            ].join(" ")}
-                        >
-                            {/* 프로젝트 번호 */}
-                            <div className="sm:static absolute z-1 shrink-0 flex items-center justify-center sm:w-8 sm:h-8 w-7 h-7 left-2 top-2 rounded-full sm:bg-[#2a2a2d] bg-[#121212] border sm:border-[#3e3e42] border-[#CECECE]/20 text-xs font-semibold text-slate-400">
-                                {project.id}
+                <div className={`space-y-10 ${className ?? ""}`}>
+                    {featuredProjects.length > 0 && (
+                        <section aria-labelledby="featured-projects">
+                            <h2 id="featured-projects" className="mb-4 text-sm font-bold text-white/58">{t("pages.projects.featuredProjects")}</h2>
+                            <div className="grid gap-4 lg:grid-cols-2">
+                                {featuredProjects.map((project, index) => <div key={project.id} className={index === 0 ? "lg:col-span-2" : ""}><ProjectCard project={project} featured={index === 0} onOpen={() => setSelectedProjectId(project.id)} /></div>)}
                             </div>
-
-                            {/* 썸네일 이미지 */}
-                            <div className="relative shrink-0 w-full h-34 sm:w-24 sm:h-24 rounded-md overflow-hidden bg-[#252526] border border-[#3e3e42]">
-                                <img
-                                    src={project.image}
-                                    alt={project.title}
-                                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                                />
-
-                                {/* 업데이트 중 오버레이 */}
-                                {isUpdating && (
-                                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                                        <span className="inline-flex items-center gap-1 rounded-full border border-sky-400/50 bg-sky-500/20 px-2 py-1 text-[10px] font-semibold text-sky-300">
-                                            <span className="relative flex h-1.5 w-1.5">
-                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" />
-                                                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-sky-400" />
-                                            </span>
-                                            {t("pages.projects.statusUpdating")}
-                                        </span>
-                                    </div>
-                                )}
-
-                                {/* 호버 오버레이 */}
-                                {!isUpdating && (
-                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-                                        <span className="text-white text-xs font-medium">→</span>
-                                    </div>
-                                )}
+                        </section>
+                    )}
+                    {archiveProjects.length > 0 && (
+                        <section aria-labelledby="project-archive">
+                            <h2 id="project-archive" className="mb-4 text-sm font-bold text-white/58">{t("pages.projects.archive")}</h2>
+                            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                                {archiveProjects.map((project) => <ProjectCard key={project.id} project={project} onOpen={() => setSelectedProjectId(project.id)} />)}
                             </div>
-
-                            {/* 프로젝트 정보 */}
-                            <div className="flex-1 min-w-0 space-y-2">
-                                <div className="space-y-1">
-                                    <div className="flex flex-wrap items-center gap-2">
-                                        <h2 className="text-base md:text-lg font-semibold text-slate-100 group-hover:text-primary transition-colors duration-200">
-                                            {project.title}
-                                        </h2>
-                                        <span className="h-1 w-1 rounded-full bg-slate-600" />
-                                        <span className="text-[clamp(0.65rem,1vw,0.9rem)] text-slate-400">
-                                            {project.scale}
-                                        </span>
-                                        {isIncomplete && (
-                                            <span className="inline-flex items-center rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold text-amber-400">
-                                                {t("pages.projects.statusIncomplete")}
-                                            </span>
-                                        )}
-                                        {isUpdating && (
-                                            <span className="inline-flex items-center rounded-full border border-sky-400/40 bg-sky-500/10 px-2 py-0.5 text-[10px] font-semibold text-sky-400">
-                                                {t("pages.projects.statusUpdating")}
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    <p className="text-[clamp(0.75rem,1vw,1rem)] text-slate-400 line-clamp-2">
-                                        {project.description}
-                                    </p>
-                                </div>
-
-                                {/* 스킬 태그 */}
-                                <div className="flex flex-wrap gap-1.5">
-                                    {(project.skills ?? [])
-                                        .slice(0, 5)
-                                        .map((s: string) => (
-                                            <span
-                                                key={s}
-                                                className={[
-                                                    "inline-flex items-center gap-1 rounded border px-2 py-0.5 text-[10px] font-medium transition-colors",
-                                                    s === selectedSkill
-                                                        ? "border-primary/60 bg-primary/20 text-primary"
-                                                        : "border-[#3e3e42] bg-[#2a2a2d] text-slate-300 group-hover:border-primary/30 group-hover:bg-primary/10",
-                                                ].join(" ")}
-                                            >
-                                                <span className="h-1 w-1 rounded-full bg-primary" />
-                                                {s}
-                                            </span>
-                                        ))}
-                                    {project.skills.length > 5 && (
-                                        <span className="inline-flex items-center rounded bg-[#2a2a2d] px-2 py-0.5 text-[10px] font-medium text-slate-500">
-                                            +{project.skills.length - 5}
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* 상세보기 아이콘 */}
-                            <div className="sm:block hidden shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                <div className="flex items-center justify-center w-8 h-8 rounded bg-primary/10 text-primary">
-                                    <span className="text-sm">→</span>
-                                </div>
-                            </div>
-                        </button>
-                    );
-                })}
-            </div>
+                        </section>
+                    )}
+                </div>
             )}
-
-            {/* 모달 상세 */}
-            {selected && (
-                <CardDetail
-                    selected={selected}
-                    setSelectedProject={() => setSelectedProjectId(null)}
-                />
-            )}
+            {selected && <CardDetail selected={selected} setSelectedProject={() => setSelectedProjectId(null)} />}
         </>
     );
 };

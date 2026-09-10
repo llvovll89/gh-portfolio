@@ -7,6 +7,7 @@ const Detail = lazy(() => import("../pages/blog/contents/Detail").then((m) => ({
 const Resume = lazy(() => import("../pages/resume/Resume").then((m) => ({default: m.Resume})));
 const Uses = lazy(() => import("../pages/uses/Uses").then((m) => ({default: m.Uses})));
 const Contact = lazy(() => import("../pages/contact/Contact").then((m) => ({default: m.Contact})));
+const Profile = lazy(() => import("../pages/profile/Profile").then((m) => ({default: m.Profile})));
 const Guestbook = lazy(() => import("../pages/guestbook/Guestbook").then((m) => ({ default: m.Guestbook })));
 const NotFound = lazy(() => import("../pages/notfound/NotFound").then((m) => ({default: m.NotFound})));
 
@@ -14,6 +15,7 @@ export const PATHS = {
     DEFAULT: "/",
     PROJECTS: "/projects",
     CONTACT: "/contact",
+    PROFILE: "/profile",
     BLOG: "/blog",
     BLOG_DETAIL: "/blog/:slug",
     GUESTBOOK: "/guestbook",
@@ -25,6 +27,7 @@ export const PATHS = {
 export const DEFAULT = PATHS.DEFAULT;
 export const PROJECTS = PATHS.PROJECTS;
 export const CONTACT = PATHS.CONTACT;
+export const PROFILE = PATHS.PROFILE;
 export const BLOG = PATHS.BLOG;
 export const BLOG_DETAIL = PATHS.BLOG_DETAIL;
 export const GUESTBOOK = PATHS.GUESTBOOK;
@@ -44,6 +47,7 @@ export type AppRoute = {
 export const routesPath = [
     {path: PATHS.DEFAULT, name: "default", icon: "", component: Default},
     {path: PATHS.PROJECTS, name: "projects", icon: "", component: Projects},
+    {path: PATHS.PROFILE, name: "profile", icon: "", component: Profile},
     {path: PATHS.BLOG, name: "blog", icon: "", component: Blog},
     {path: PATHS.BLOG_DETAIL, name: "blogDetail", icon: "", component: Detail},
     {path: PATHS.RESUME, name: "resume", icon: "", component: Resume},

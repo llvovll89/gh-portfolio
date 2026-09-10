@@ -11,6 +11,37 @@ export const CardDescAndSkills = ({ project }: CardDescAndSkillsProps) => {
 
     return (
         <div className="w-full flex flex-col gap-6">
+            {project.role && (
+                <div className="grid gap-3 rounded-xl border border-white/10 bg-white/4 p-4 sm:grid-cols-[110px_1fr]">
+                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-white/40">{t("pages.projects.role")}</p>
+                    <p className="text-sm leading-6 text-white/78">{project.role}</p>
+                </div>
+            )}
+            {project.challenge && (
+                <div className="space-y-2">
+                    <h4 className="text-sm font-bold text-primary">{t("pages.projects.challenge")}</h4>
+                    <p className="text-sm leading-6 text-slate-300">{project.challenge}</p>
+                </div>
+            )}
+            {project.contributions && project.contributions.length > 0 && (
+                <div className="space-y-2">
+                    <h4 className="text-sm font-bold text-primary">{t("pages.projects.contributions")}</h4>
+                    <ul className="space-y-2">
+                        {project.contributions.map((contribution) => (
+                            <li key={contribution} className="flex gap-2 text-sm leading-6 text-slate-300">
+                                <span className="mt-3 h-px w-2 shrink-0 bg-primary" aria-hidden="true" />
+                                <span>{contribution}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+            {project.outcome && (
+                <div className="space-y-2">
+                    <h4 className="text-sm font-bold text-primary">{t("pages.projects.outcome")}</h4>
+                    <p className="text-sm leading-6 text-slate-300">{project.outcome}</p>
+                </div>
+            )}
             {/* 프로젝트 설명 섹션 */}
             <div className="w-full space-y-3">
                 <div className="flex items-center gap-2">

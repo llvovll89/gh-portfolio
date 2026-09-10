@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useCallback, useState } from "react";
+import { useContext, useEffect, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { LayoutContext } from "../../context/LayoutContext";
 import { NavigationContext } from "../../context/NavigationContext";
@@ -12,17 +12,17 @@ import { GitControl } from "./contents/gitControl/GitControl";
 import { Bookmarks } from "./contents/bookmarks/Bookmarks";
 import { Settings } from "./contents/settings/Settings";
 import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
-import { routesPath } from "../../routes/route";
+import { BLOG, CONTACT, DEFAULT, PROJECTS, RESUME } from "../../routes/route";
+import { useHandlePushPath } from "../../hooks/useHandlePushPath";
+import { LuBookOpen, LuFolderKanban, LuHouse, LuMail, LuMenu, LuScrollText } from "react-icons/lu";
 
-const BOOKMARKS_STORAGE_KEY = "portfolio-bookmarks";
-const BOOKMARKS_UPDATED_EVENT = "portfolio-bookmarks-updated";
-const GIT_SUMMARY_UPDATED_EVENT = "portfolio-git-summary-updated";
-const SETTINGS_BADGE_STORAGE_KEY = "portfolio-settings-has-updates";
-const SETTINGS_UPDATED_EVENT = "portfolio-settings-updated";
-const SEARCH_FOCUS_EVENT = "portfolio-search-focus";
-const GIT_ACTIVITY_OPEN_EVENT = "portfolio-git-open-activity";
-const MOBILE_LONG_PRESS_MS = 450;
-const QUICK_ACTION_HAPTIC_PATTERN = 12;
+const MOBILE_PRIMARY_NAV = [
+    { path: DEFAULT, labelKey: "routes.default", Icon: LuHouse },
+    { path: PROJECTS, labelKey: "routes.projects", Icon: LuFolderKanban },
+    { path: BLOG, labelKey: "routes.blog", Icon: LuBookOpen },
+    { path: RESUME, labelKey: "routes.resume", Icon: LuScrollText },
+    { path: CONTACT, labelKey: "routes.contact", Icon: LuMail },
+] as const;
 
 export const Aside = () => {
     const { layoutState, setLayoutState } = useContext(LayoutContext);
@@ -32,94 +32,9 @@ export const Aside = () => {
     const handleMouseDown = useDragging({ targetRef: asideRef, type: "sidebar" });
     const isMobileSize = useCheckedMobileSize();
     const { t } = useTranslation();
+    const handlePushPath = useHandlePushPath();
     const sheetRef = useRef<HTMLDivElement>(null);
     const dragState = useRef({ startY: 0, currentY: 0, dragging: false });
-    const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const longPressHandledRef = useRef(false);
-    const pressPulseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const quickActionPulseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const [bookmarkCount, setBookmarkCount] = useState(0);
-    const [gitOpenCount, setGitOpenCount] = useState(0);
-    const [hasSettingsUpdates, setHasSettingsUpdates] = useState(() => {
-        try {
-            return localStorage.getItem(SETTINGS_BADGE_STORAGE_KEY) === "1";
-        } catch {
-            return false;
-        }
-    });
-    const [quickActionNav, setQuickActionNav] = useState<NavType | null>(null);
-    const [pressedNav, setPressedNav] = useState<NavType | null>(null);
-    const [quickActionPulseKey, setQuickActionPulseKey] = useState<string | null>(null);
-
-    useEffect(() => {
-        const updateBookmarkCount = () => {
-            try {
-                const stored = localStorage.getItem(BOOKMARKS_STORAGE_KEY);
-                if (!stored) {
-                    setBookmarkCount(0);
-                    return;
-                }
-                const parsed = JSON.parse(stored);
-                setBookmarkCount(Array.isArray(parsed) ? parsed.length : 0);
-            } catch {
-                setBookmarkCount(0);
-            }
-        };
-
-        const handleStorage = (event: StorageEvent) => {
-            if (event.key === BOOKMARKS_STORAGE_KEY) {
-                updateBookmarkCount();
-            }
-            if (event.key === SETTINGS_BADGE_STORAGE_KEY) {
-                setHasSettingsUpdates(event.newValue === "1");
-            }
-        };
-
-        const handleGitSummary = (event: Event) => {
-            const customEvent = event as CustomEvent<{ openCount?: number }>;
-            const nextCount = customEvent.detail?.openCount;
-            setGitOpenCount(typeof nextCount === "number" ? nextCount : 0);
-        };
-
-        const handleSettingsUpdated = (event: Event) => {
-            const customEvent = event as CustomEvent<{ dirty?: boolean }>;
-            const dirty = customEvent.detail?.dirty;
-            if (typeof dirty === "boolean") {
-                setHasSettingsUpdates(dirty);
-                return;
-            }
-            setHasSettingsUpdates(true);
-        };
-
-        updateBookmarkCount();
-
-        window.addEventListener("storage", handleStorage);
-        window.addEventListener(BOOKMARKS_UPDATED_EVENT, updateBookmarkCount);
-        window.addEventListener(GIT_SUMMARY_UPDATED_EVENT, handleGitSummary);
-        window.addEventListener(SETTINGS_UPDATED_EVENT, handleSettingsUpdated);
-
-        return () => {
-            window.removeEventListener("storage", handleStorage);
-            window.removeEventListener(BOOKMARKS_UPDATED_EVENT, updateBookmarkCount);
-            window.removeEventListener(GIT_SUMMARY_UPDATED_EVENT, handleGitSummary);
-            window.removeEventListener(SETTINGS_UPDATED_EVENT, handleSettingsUpdated);
-        };
-    }, []);
-
-    useEffect(() => {
-        if (selectedNav !== NavType.SETTINGS) return;
-        if (!hasSettingsUpdates) return;
-
-        // 설정 탭으로 이동했을 때만 배지를 지우는 내비게이션 동기화이므로 effect가 적절함
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setHasSettingsUpdates(false);
-        try {
-            localStorage.setItem(SETTINGS_BADGE_STORAGE_KEY, "0");
-        } catch {
-            // ignore storage errors
-        }
-    }, [hasSettingsUpdates, selectedNav]);
-
     const handleSheetDragStart = useCallback((e: React.PointerEvent) => {
         dragState.current = { startY: e.clientY, currentY: 0, dragging: true };
         (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
@@ -177,135 +92,6 @@ export const Aside = () => {
         }
     };
 
-    const clearLongPressTimer = () => {
-        if (!longPressTimerRef.current) return;
-        clearTimeout(longPressTimerRef.current);
-        longPressTimerRef.current = null;
-    };
-
-    const handleMobileNavPointerDown = (nav: NavType) => {
-        longPressHandledRef.current = false;
-        clearLongPressTimer();
-        if (pressPulseTimerRef.current) {
-            clearTimeout(pressPulseTimerRef.current);
-        }
-        setPressedNav(nav);
-        pressPulseTimerRef.current = setTimeout(() => {
-            setPressedNav(null);
-            pressPulseTimerRef.current = null;
-        }, 240);
-
-        longPressTimerRef.current = setTimeout(() => {
-            longPressHandledRef.current = true;
-            if (typeof navigator !== "undefined" && "vibrate" in navigator) {
-                navigator.vibrate(QUICK_ACTION_HAPTIC_PATTERN);
-            }
-            setQuickActionNav(nav);
-        }, MOBILE_LONG_PRESS_MS);
-    };
-
-    const handleMobileNavPointerUp = () => {
-        clearLongPressTimer();
-    };
-
-    useEffect(() => {
-        return () => {
-            if (pressPulseTimerRef.current) {
-                clearTimeout(pressPulseTimerRef.current);
-            }
-            if (quickActionPulseTimerRef.current) {
-                clearTimeout(quickActionPulseTimerRef.current);
-            }
-        };
-    }, []);
-
-    const handleMobileNavClick = (nav: NavType) => {
-        if (longPressHandledRef.current) {
-            longPressHandledRef.current = false;
-            return;
-        }
-        handleClickNav(nav);
-    };
-
-    const handleQuickActionToggle = () => {
-        if (!quickActionNav) return;
-        handleClickNav(quickActionNav);
-        setQuickActionNav(null);
-    };
-
-    const triggerQuickActionPulse = (key: string) => {
-        if (quickActionPulseTimerRef.current) {
-            clearTimeout(quickActionPulseTimerRef.current);
-        }
-        setQuickActionPulseKey(key);
-        quickActionPulseTimerRef.current = setTimeout(() => {
-            setQuickActionPulseKey(null);
-            quickActionPulseTimerRef.current = null;
-        }, 220);
-    };
-
-    const addCurrentPathToBookmarks = () => {
-        const currentPath = selectedPathState.state;
-        if (!currentPath) return;
-
-        try {
-            const stored = localStorage.getItem(BOOKMARKS_STORAGE_KEY);
-            const currentBookmarks = Array.isArray(stored ? JSON.parse(stored) : [])
-                ? (stored ? JSON.parse(stored) : [])
-                : [];
-
-            const exists = currentBookmarks.some(
-                (bookmark: { path?: string }) => bookmark.path === currentPath,
-            );
-            if (exists) {
-                setSelectedNav(NavType.BOOKMARKS);
-                setQuickActionNav(null);
-                return;
-            }
-
-            const matchedRoute = routesPath.find((route) => route.path === currentPath);
-            const routeName = matchedRoute ? t(matchedRoute.name) : currentPath;
-
-            const nextBookmarks = [
-                ...currentBookmarks,
-                {
-                    id: Date.now().toString(),
-                    path: currentPath,
-                    name: routeName,
-                    addedAt: Date.now(),
-                },
-            ];
-
-            localStorage.setItem(BOOKMARKS_STORAGE_KEY, JSON.stringify(nextBookmarks));
-            window.dispatchEvent(new Event(BOOKMARKS_UPDATED_EVENT));
-            setSelectedNav(NavType.BOOKMARKS);
-            setQuickActionNav(null);
-        } catch {
-            // ignore storage errors
-        }
-    };
-
-    const openSearchAndFocus = () => {
-        setSelectedNav(NavType.SEARCH);
-        setQuickActionNav(null);
-        requestAnimationFrame(() => {
-            window.dispatchEvent(new Event(SEARCH_FOCUS_EVENT));
-        });
-    };
-
-    const openGitWithActivity = () => {
-        setSelectedNav(NavType.GIT_CONTROL);
-        setQuickActionNav(null);
-        requestAnimationFrame(() => {
-            window.dispatchEvent(new Event(GIT_ACTIVITY_OPEN_EVENT));
-        });
-    };
-
-    const quickActionTitle =
-        quickActionNav && NAV_ITEMS.find((item) => item.type === quickActionNav)
-            ? t(NAV_ITEMS.find((item) => item.type === quickActionNav)!.labelKey)
-            : "";
-
     const NAVBAR_WIDTH = 40;
     const CONTENT_WIDTH = 210;
 
@@ -331,40 +117,39 @@ export const Aside = () => {
         }));
     }, [selectedNav, isMobileSize, setLayoutState]);
 
+    useEffect(() => {
+        if (isMobileSize) {
+            setSelectedNav(null);
+        }
+    }, [isMobileSize, setSelectedNav]);
+
     // ── 모바일: 하단 네비 + 바텀시트 ──────────────────────────────
     if (isMobileSize) {
         return (
             <>
-                {/* 바텀시트 backdrop */}
-                <div
-                    aria-hidden="true"
-                    className={[
-                        "fixed inset-0 bg-black/50 z-40",
-                        "transition-opacity duration-300",
-                        selectedNav ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none",
-                    ].join(" ")}
-                    onClick={() => setSelectedNav(null)}
-                />
+                {selectedNav && (
+                    <>
+                        <div
+                            aria-hidden="true"
+                            className="fixed inset-0 z-40 bg-black/50"
+                            onClick={() => setSelectedNav(null)}
+                        />
 
-                {/* 바텀시트 패널 */}
-                <div
-                    ref={sheetRef}
-                    className={[
-                        "fixed left-0 right-0 bottom-18 z-50 flex flex-col",
-                        "transition-transform duration-300 ease-in-out",
-                        backgroundClass,
-                        "border-t border-sub-gary/30",
-                        "rounded-t-2xl",
-                        selectedNav ? "translate-y-0" : "translate-y-[200%]",
-                    ].join(" ")}
-                    style={{
-                        maxHeight: "65dvh",
-                        minHeight: "30dvh",
-                        ...backgroundStyle,
-                    }}
-                >
-                    {/* 핸들 바 — 열린 상태에서만 표시 */}
-                    {selectedNav && (
+                        <div
+                            ref={sheetRef}
+                            className={[
+                                "fixed bottom-18 left-0 right-0 z-50 flex flex-col",
+                                "transition-transform duration-300 ease-in-out",
+                                backgroundClass,
+                                "rounded-t-2xl border-t border-sub-gary/30",
+                            ].join(" ")}
+                            style={{
+                                maxHeight: "65dvh",
+                                minHeight: "30dvh",
+                                ...backgroundStyle,
+                            }}
+                        >
+                    {/* 열린 상태에서만 표시하는 핸들 바 */}
                         <div
                             className="flex justify-center pt-3 pb-2 shrink-0 cursor-grab active:cursor-grabbing touch-none select-none"
                             onPointerDown={handleSheetDragStart}
@@ -374,7 +159,23 @@ export const Aside = () => {
                         >
                             <div className="w-10 h-1 rounded-full bg-sub-gary/50" />
                         </div>
-                    )}
+
+                        <div className="flex gap-1 overflow-x-auto border-b border-sub-gary/20 px-3 pb-2 scrolls">
+                            {NAV_ITEMS.map((item) => (
+                                <button
+                                    key={item.type}
+                                    type="button"
+                                    onClick={() => setSelectedNav(item.type)}
+                                    className={`min-h-10 shrink-0 rounded-lg px-3 text-xs font-medium transition-colors ${
+                                        selectedNav === item.type
+                                            ? "bg-primary/15 text-primary"
+                                            : "text-white/60 hover:bg-white/5 hover:text-white"
+                                    }`}
+                                >
+                                    {t(item.labelKey)}
+                                </button>
+                            ))}
+                        </div>
 
                     {/* 콘텐츠 */}
                     <div className="flex-1 overflow-y-auto overflow-x-hidden">
@@ -384,140 +185,63 @@ export const Aside = () => {
                         {selectedNav === NavType.BOOKMARKS && <Bookmarks />}
                         {selectedNav === NavType.SETTINGS && <Settings />}
                     </div>
-                </div>
+                        </div>
+                    </>
+                )}
 
                 {/* 하단 네비게이션 바 */}
                 <nav
                     className={[
-                        "fixed bottom-4 left-0 right-0 h-14 z-50 w-[95%] mx-auto rounded-full flex items-center justify-around",
-                        "flex items-center justify-around",
+                        "fixed bottom-4 left-0 right-0 z-50 mx-auto grid h-14 w-[95%] grid-cols-6 items-center rounded-2xl",
                         "border-t border-sub-gary/30",
                         backgroundClass,
                     ].join(" ")}
                     style={backgroundStyle}
                     aria-label="모바일 하단 네비게이션"
                 >
-                    {NAV_ITEMS.map((item) => (
+                    {MOBILE_PRIMARY_NAV.map((item) => (
                         <button
-                            key={item.type}
-                            onClick={() => handleMobileNavClick(item.type)}
-                            onPointerDown={() => handleMobileNavPointerDown(item.type)}
-                            onPointerUp={handleMobileNavPointerUp}
-                            onPointerLeave={handleMobileNavPointerUp}
-                            onPointerCancel={handleMobileNavPointerUp}
+                            type="button"
+                            key={item.path}
+                            onClick={() => {
+                                setSelectedNav(null);
+                                handlePushPath(item.path);
+                            }}
                             className={[
-                                "flex flex-col items-center justify-center",
-                                "h-full flex-1 gap-1",
+                                "flex min-w-0 flex-col items-center justify-center",
+                                "min-h-11 h-full flex-1 gap-1",
                                 "transition-colors",
-                                selectedNav === item.type
+                                selectedPathState.state === item.path ||
+                                (item.path === BLOG && selectedPathState.state.startsWith("/blog/"))
                                     ? "text-primary"
                                     : "text-white/60 hover:text-white",
                             ].join(" ")}
                             aria-label={t(item.labelKey)}
-                            aria-pressed={selectedNav === item.type}
+                            aria-current={
+                                selectedPathState.state === item.path ||
+                                (item.path === BLOG && selectedPathState.state.startsWith("/blog/"))
+                                    ? "page"
+                                    : undefined
+                            }
                         >
-                            <span className="relative inline-flex">
-                                <item.icon
-                                    className={`w-5 h-5 ${pressedNav === item.type ? "animate-[nav-press-pulse_0.24s_ease-out]" : ""}`}
-                                />
-                                {item.type === NavType.BOOKMARKS && bookmarkCount > 0 && (
-                                    <span
-                                        aria-hidden="true"
-                                        className={`absolute -top-1.5 -right-2 min-w-3.5 h-3.5 px-1 rounded-full text-[9px] font-bold leading-3.5 text-center ${selectedNav === NavType.BOOKMARKS ? "bg-primary text-white" : "bg-amber-400 text-black"}`}
-                                    >
-                                        {bookmarkCount > 99 ? "99+" : bookmarkCount}
-                                    </span>
-                                )}
-                                {item.type === NavType.GIT_CONTROL && gitOpenCount > 0 && (
-                                    <span
-                                        aria-hidden="true"
-                                        className={`absolute -top-1.5 -right-2 min-w-3.5 h-3.5 px-1 rounded-full text-[9px] font-bold leading-3.5 text-center ${selectedNav === NavType.GIT_CONTROL ? "bg-primary text-white" : "bg-cyan-400 text-black"}`}
-                                    >
-                                        {gitOpenCount > 99 ? "99+" : gitOpenCount}
-                                    </span>
-                                )}
-                                {item.type === NavType.SETTINGS && hasSettingsUpdates && (
-                                    <span
-                                        aria-hidden="true"
-                                        className={`absolute -top-1 -right-1.5 h-2.5 w-2.5 rounded-full ${selectedNav === NavType.SETTINGS ? "bg-primary" : "bg-orange-400"}`}
-                                    />
-                                )}
-                            </span>
-                            <span className="text-[11px] leading-none">{t(item.labelKey)}</span>
+                            <item.Icon className="h-5 w-5" />
+                            <span className="text-[10px] leading-none">{t(item.labelKey)}</span>
                         </button>
                     ))}
+                    <button
+                        type="button"
+                        onClick={() => setSelectedNav((current) => current ?? NavType.FOLDER)}
+                        className={`flex min-h-11 h-full min-w-0 flex-col items-center justify-center gap-1 transition-colors ${
+                            selectedNav ? "text-primary" : "text-white/60 hover:text-white"
+                        }`}
+                        aria-label={t("routes.tools")}
+                        aria-expanded={Boolean(selectedNav)}
+                    >
+                        <LuMenu className="h-5 w-5" />
+                        <span className="text-[10px] leading-none">{t("routes.tools")}</span>
+                    </button>
                 </nav>
 
-                {quickActionNav && (
-                    <>
-                        <div
-                            className="fixed inset-0 z-55"
-                            onClick={() => setQuickActionNav(null)}
-                            aria-hidden="true"
-                        />
-                        <section
-                            className="fixed bottom-20 left-1/2 -translate-x-1/2 z-60 min-w-52 rounded-2xl border border-white/10 bg-[#1f1f24]/95 backdrop-blur-md shadow-2xl p-2 animate-[fadeIn_0.18s_ease-out]"
-                            role="dialog"
-                            aria-label="모바일 퀵 액션"
-                        >
-                            <div className="px-2 py-1.5 text-[11px] text-white/60 border-b border-white/10 mb-1">
-                                {quickActionTitle} Quick Action
-                            </div>
-                            <button
-                                onClick={() => {
-                                    triggerQuickActionPulse("toggle");
-                                    handleQuickActionToggle();
-                                }}
-                                className={`w-full text-left px-2 py-2 rounded-lg text-xs text-white hover:bg-white/10 transition-colors ${quickActionPulseKey === "toggle" ? "animate-[quick-action-pulse_0.22s_ease-out]" : ""}`}
-                            >
-                                {selectedNav === quickActionNav ? "패널 닫기" : "패널 열기"}
-                            </button>
-                            <button
-                                onClick={() => {
-                                    triggerQuickActionPulse("close-all");
-                                    setSelectedNav(null);
-                                    setQuickActionNav(null);
-                                }}
-                                className={`w-full text-left px-2 py-2 rounded-lg text-xs text-white/80 hover:bg-white/10 transition-colors ${quickActionPulseKey === "close-all" ? "animate-[quick-action-pulse_0.22s_ease-out]" : ""}`}
-                            >
-                                모든 패널 닫기
-                            </button>
-                            {quickActionNav === NavType.SEARCH && (
-                                <button
-                                    onClick={() => {
-                                        triggerQuickActionPulse("search-focus");
-                                        openSearchAndFocus();
-                                    }}
-                                    className={`w-full text-left px-2 py-2 rounded-lg text-xs text-white/90 hover:bg-white/10 transition-colors ${quickActionPulseKey === "search-focus" ? "animate-[quick-action-pulse_0.22s_ease-out]" : ""}`}
-                                >
-                                    검색창 포커스
-                                </button>
-                            )}
-                            {quickActionNav === NavType.GIT_CONTROL && (
-                                <button
-                                    onClick={() => {
-                                        triggerQuickActionPulse("git-activity");
-                                        openGitWithActivity();
-                                    }}
-                                    className={`w-full text-left px-2 py-2 rounded-lg text-xs text-white/90 hover:bg-white/10 transition-colors ${quickActionPulseKey === "git-activity" ? "animate-[quick-action-pulse_0.22s_ease-out]" : ""}`}
-                                >
-                                    Activity 바로 열기
-                                </button>
-                            )}
-                            {quickActionNav === NavType.BOOKMARKS && (
-                                <button
-                                    onClick={() => {
-                                        triggerQuickActionPulse("bookmark-add");
-                                        addCurrentPathToBookmarks();
-                                    }}
-                                    className={`w-full text-left px-2 py-2 rounded-lg text-xs text-white/90 hover:bg-white/10 transition-colors ${quickActionPulseKey === "bookmark-add" ? "animate-[quick-action-pulse_0.22s_ease-out]" : ""}`}
-                                >
-                                    현재 페이지 북마크 추가
-                                </button>
-                            )}
-                        </section>
-                    </>
-                )}
             </>
         );
     }

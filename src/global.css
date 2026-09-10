@@ -264,12 +264,6 @@ body {
     background: #0088dd;
 }
 
-/* ── 터치 기기 최적화 ─────────────────────────────────────
-   hover: 유틸리티를 실제 hover 가능한 기기(마우스)에서만 동작시킴.
-   터치 탭 후 hover 상태가 잔류하는 현상 방지.
-────────────────────────────────────────────────────────── */
-@custom-variant hover (@media (hover: hover) { &:hover });
-
 /* 터치 기기 탭 하이라이트 전역 제거 */
 @media (hover: none) and (pointer: coarse) {
     * {
@@ -278,7 +272,7 @@ body {
 }
 
 /* 모바일에서 input/textarea/select 폰트가 16px 미만이면 iOS/Android가
-   포커스 시 페이지를 강제로 확대해 레이아웃이 깨진다 — 16px로 고정해 방지 */
+   포커스 시 페이지를 강제로 확대하므로 16px로 고정해 레이아웃 깨짐을 방지 */
 @media (max-width: 639px) {
     input,
     textarea,
@@ -365,7 +359,13 @@ body {
 
 /* ── 페이지 전환 진입 애니메이션 ────────────────────────────── */
 .page-enter {
-    animation: pageEnter 0.22s ease-out both;
+    opacity: 1;
+}
+
+@media (min-width: 640px) {
+    .page-enter {
+        animation: pageEnter 0.22s ease-out both;
+    }
 }
 
 @keyframes pageEnter {

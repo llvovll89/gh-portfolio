@@ -20,6 +20,7 @@ import {StatusBar} from "./components/statusBar/StatusBar";
 function AppContent() {
     const isMobile = useCheckedMobileSize();
     const location = useLocation();
+    const scrollPositionKey = `v2:${isMobile ? "mobile" : "desktop"}:${location.pathname}`;
     usePageTracking();
     const scrollPositionsRef = useRef<Record<string, number>>({});
     const isBlogDetailPage =
@@ -51,7 +52,7 @@ function AppContent() {
         if (!container) return;
 
         const handleScroll = () => {
-            scrollPositionsRef.current[location.pathname] = container.scrollTop;
+            scrollPositionsRef.current[scrollPositionKey] = container.scrollTop;
             try {
                 localStorage.setItem(
                     "portfolio-scroll-positions",
@@ -62,18 +63,14 @@ function AppContent() {
             }
         };
 
-        const restore = () => {
-            const saved = scrollPositionsRef.current[location.pathname] ?? 0;
-            container.scrollTop = saved;
-        };
-
-        requestAnimationFrame(restore);
+        const saved = scrollPositionsRef.current[scrollPositionKey] ?? 0;
+        container.scrollTop = saved;
         container.addEventListener("scroll", handleScroll, {passive: true});
 
         return () => {
             container.removeEventListener("scroll", handleScroll);
         };
-    }, [location.pathname]);
+    }, [scrollPositionKey]);
 
     return (
         <section className="w-full min-h-dvh flex flex-col relative overflow-x-hidden overflow-y-auto">

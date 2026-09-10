@@ -1,184 +1,148 @@
 import { useState } from "react";
+import {
+    LuBriefcase,
+    LuCode,
+    LuDownload,
+    LuFileText,
+    LuGraduationCap,
+    LuUserRound,
+} from "react-icons/lu";
+import { useTranslation } from "react-i18next";
 import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
-import { LuDownload, LuFileText } from "react-icons/lu";
-import { logger } from "../../utils/logger";
-import { useTranslation } from "react-i18next";
 import { useSeoMeta } from "../../hooks/useSeoMeta";
+import { logger } from "../../utils/logger";
+
+const RESUME_URL = "/assets/resume/김건호_이력서.pdf";
 
 export const Resume = () => {
     const { t } = useTranslation();
-    const [downloading, setDownloading] = useState(false);
-    useSeoMeta({ title: "Resume", description: "웹 개발자 김건호의 이력서 — 경력, 기술 스택, 프로젝트 요약", url: "/resume" });
+    const [downloadState, setDownloadState] = useState<"idle" | "loading" | "error">("idle");
+
+    useSeoMeta({
+        title: "Resume",
+        description: "웹 개발자 김건호의 경력, 기술 스택, 학력과 프로젝트 경험",
+        url: "/resume",
+    });
+
+    const sections = [
+        {
+            title: t("pages.resume.profileTitle"),
+            Icon: LuUserRound,
+            items: [
+                { label: t("pages.resume.name"), value: "김건호 (Kim Geon Ho)" },
+                { label: t("pages.resume.email"), value: "svvvs5579@naver.com" },
+            ],
+        },
+        {
+            title: t("pages.resume.experienceTitle"),
+            Icon: LuBriefcase,
+            items: [
+                { label: t("pages.resume.period"), value: t("pages.resume.experiencePeriod") },
+                { label: t("pages.resume.position"), value: "Full-stack Developer" },
+            ],
+        },
+        {
+            title: t("pages.resume.educationTitle"),
+            Icon: LuGraduationCap,
+            items: [
+                { label: t("pages.resume.highSchool"), value: t("pages.resume.highSchoolValue") },
+                { label: t("pages.resume.university"), value: t("pages.resume.universityValue") },
+            ],
+        },
+        {
+            title: t("pages.resume.skillsTitle"),
+            Icon: LuCode,
+            items: [
+                { label: "Frontend", value: "React, TypeScript, Redux, Tailwind CSS" },
+                { label: "Backend", value: "Java, Spring Boot, PostgreSQL, Oracle, Firebase" },
+            ],
+        },
+    ];
 
     const handleDownloadResume = async () => {
-        if (downloading) return;
-        setDownloading(true);
+        if (downloadState === "loading") return;
+        setDownloadState("loading");
+
         let objectUrl: string | null = null;
         let link: HTMLAnchorElement | null = null;
+
         try {
-            const resumeUrl = "/assets/resume/김건호_이력서.pdf";
-            const response = await fetch(resumeUrl);
+            const response = await fetch(RESUME_URL);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            const blob = await response.blob();
-            objectUrl = window.URL.createObjectURL(blob);
+
+            objectUrl = URL.createObjectURL(await response.blob());
             link = document.createElement("a");
             link.href = objectUrl;
             link.download = "김건호_이력서.pdf";
             document.body.appendChild(link);
             link.click();
+            setDownloadState("idle");
         } catch (error) {
             logger.error("이력서 다운로드 실패", error);
-            alert("이력서 다운로드에 실패했습니다.");
+            setDownloadState("error");
         } finally {
-            if (link && document.body.contains(link)) document.body.removeChild(link);
-            if (objectUrl) window.URL.revokeObjectURL(objectUrl);
-            setDownloading(false);
+            if (link?.isConnected) link.remove();
+            if (objectUrl) URL.revokeObjectURL(objectUrl);
         }
     };
-
-    const sections = [
-        {
-            title: "기본 정보",
-            icon: "👤",
-            content: [
-                { label: "이름", value: "김건호 (Kim Geon Ho)" },
-                { label: "이메일", value: "svvvs5579@naver.com" },
-            ],
-        },
-        {
-            title: "경력",
-            icon: "💼",
-            content: [
-                { label: "기간", value: "2023.07 ~ 현재" },
-                { label: "직책", value: "FullStack Developer" },
-            ],
-        },
-        {
-            title: "학력",
-            icon: "🎓",
-            content: [
-                { label: "고등학교", value: "청구고등학교 졸업 (2013.02)" },
-                { label: "대학교", value: "대구대학교 졸업 (2020.02)" },
-            ],
-        },
-                {
-                    title: "기술 스택",
-                    icon: "⚡",
-                    content: [
-                        { label: "Frontend", value: "React, TypeScript, Redux, TailwindCSS" },
-                        { label: "Backend", value: "Java, SpringBoot, PostgreSQL/Oracle, Firebase" },
-                    ],
-                },
-    ];
 
     return (
         <>
             <Header />
             <Aside />
             <Contents className="select-none">
-                <section className="relative w-full max-w-6xl mx-auto overflow-auto scrolls px-2 md:px-6 py-4 md:py-8">
-                    {/* 헤더 */}
-                    <div className="relative mb-8 md:mb-12">
-                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                            <div>
-                                <div className="flex items-center gap-3 mb-3">
-                                    <div className="p-2 bg-primary/10 rounded-lg">
-                                        <LuFileText className="w-6 h-6 text-primary" />
-                                    </div>
-                                    <h1 className="text-[clamp(1.8rem,3vw,2.5rem)] font-extrabold tracking-tight text-white/90">
+                <section className="relative mx-auto w-full max-w-6xl px-2 pb-10 md:px-6">
+                    <header className="mb-8 border-b border-white/10 pb-7 sm:mb-10">
+                        <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+                            <div className="max-w-2xl">
+                                <div className="mb-3 flex items-center gap-3">
+                                    <span className="rounded-lg bg-primary/10 p-2" aria-hidden="true">
+                                        <LuFileText className="h-6 w-6 text-primary" />
+                                    </span>
+                                    <h1 className="text-[clamp(1.75rem,3vw,2.5rem)] font-extrabold tracking-tight text-white/92">
                                         {t("pages.resume.title")}
                                     </h1>
                                 </div>
-                                <p className="text-sm md:text-base text-white/70 max-w-2xl leading-relaxed">
+                                <p className="text-sm leading-6 text-white/64 sm:text-base">
                                     {t("pages.resume.description")}
                                 </p>
                             </div>
-
-                            {/* 다운로드 버튼 */}
                             <button
+                                type="button"
                                 onClick={handleDownloadResume}
-                                disabled={downloading}
-                                className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl px-6 py-3 text-sm md:text-base font-bold transition-all duration-300 bg-linear-to-r from-primary via-blue-500 to-cyan-400 text-white shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
+                                disabled={downloadState === "loading"}
+                                className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-slate-950 transition-transform hover:-translate-y-0.5 active:translate-y-px disabled:cursor-wait disabled:opacity-65 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#18181b]"
                             >
-                                {downloading ? (
-                                    <>
-                                        <span className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                                        <span>다운로드 중…</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <LuDownload className="w-5 h-5 transition-transform group-hover:-translate-y-0.5" />
-                                        <span>이력서 다운로드</span>
-                                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                                    </>
-                                )}
+                                <LuDownload className="h-4 w-4" aria-hidden="true" />
+                                {downloadState === "loading"
+                                    ? t("pages.resume.downloading")
+                                    : t("pages.resume.download")}
                             </button>
                         </div>
+                        <p className={`mt-3 min-h-5 text-sm ${downloadState === "error" ? "text-red-300" : "text-transparent"}`} role="status" aria-live="polite">
+                            {downloadState === "error" ? t("pages.resume.downloadError") : ""}
+                        </p>
+                    </header>
 
-                        {/* 구분선 */}
-                        <div className="mt-6 h-px w-full bg-linear-to-r from-transparent via-primary/30 to-transparent" />
-                    </div>
-
-                    {/* 이력서 미리보기 */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                        {sections.map((section, index) => (
-                            <div
-                                key={index}
-                                className="group relative overflow-hidden rounded-2xl p-5 md:p-6 bg-linear-to-br from-white/5 to-white/2 border border-white/10 backdrop-blur-sm transition-all duration-300 hover:from-white/8 hover:to-white/4 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1"
-                            >
-                                {/* 배경 효과 */}
-                                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div className="absolute -top-12 -right-12 w-40 h-40 bg-primary/10 rounded-full blur-3xl" />
+                    <div className="grid gap-4 md:grid-cols-2">
+                        {sections.map(({ title, Icon, items }) => (
+                            <section key={title} className="rounded-2xl border border-white/10 bg-white/4 p-5 sm:p-6">
+                                <div className="mb-5 flex items-center gap-3">
+                                    <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
+                                    <h2 className="text-lg font-bold text-white/90">{title}</h2>
                                 </div>
-
-                                {/* 헤더 */}
-                                <div className="relative flex items-center gap-3 mb-4">
-                                    <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-xl transition-transform group-hover:scale-110">
-                                        {section.icon}
-                                    </div>
-                                    <h2 className="text-lg md:text-xl font-bold text-white/90">
-                                        {section.title}
-                                    </h2>
-                                </div>
-
-                                {/* 내용 */}
-                                <div className="relative space-y-3">
-                                    {section.content.map((item, idx) => (
-                                        <div key={idx} className="flex flex-col gap-1">
-                                            <span className="text-xs md:text-sm text-primary font-semibold">
-                                                {item.label}
-                                            </span>
-                                            <span className="text-xs md:text-sm text-white/80">
-                                                {item.value}
-                                            </span>
+                                <dl className="grid gap-4">
+                                    {items.map((item) => (
+                                        <div key={item.label} className="grid gap-1 sm:grid-cols-[7rem_1fr] sm:gap-4">
+                                            <dt className="text-xs font-semibold text-white/42">{item.label}</dt>
+                                            <dd className="text-sm leading-6 text-white/78">{item.value}</dd>
                                         </div>
                                     ))}
-                                </div>
-
-                                {/* 하단 액센트 */}
-                                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-primary/0 to-transparent group-hover:via-primary/40 transition-all duration-300" />
-                            </div>
+                                </dl>
+                            </section>
                         ))}
-                    </div>
-
-                    {/* 추가 정보 */}
-                    <div className="mt-8 md:mt-12 p-5 md:p-6 rounded-2xl bg-linear-to-br from-primary/5 to-primary/2 border border-primary/20">
-                        <h3 className="text-base md:text-lg font-bold text-white/90 mb-3 flex items-center gap-2">
-                            <span>📌</span>
-                            참고사항
-                        </h3>
-                        <ul className="space-y-2 text-xs md:text-sm text-white/70">
-                            <li className="flex items-start gap-2">
-                                <span className="text-primary mt-0.5">▹</span>
-                                <span>프로젝트 포트폴리오는 Projects 페이지에서 확인하실 수 있습니다.</span>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <span className="text-primary mt-0.5">▹</span>
-                                <span>기술 블로그는 Blog 페이지에서 확인하실 수 있습니다.</span>
-                            </li>
-                        </ul>
                     </div>
                 </section>
             </Contents>

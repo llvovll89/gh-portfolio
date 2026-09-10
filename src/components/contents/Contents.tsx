@@ -65,13 +65,13 @@ export const Contents = ({children, className}: ContentsProps) => {
             tabIndex={-1}
             className={`absolute right-0 flex flex-col sm:pb-10 transition-width transition-transform ease-in-out overflow-x-hidden overflow-y-auto gap-4 scrolls
                 ${isMobileSize ? "top-16 h-[calc(100dvh-64px)] min-h-[calc(100dvh-64px)]" : "top-[68px] h-[calc(100dvh-92px)] min-h-[calc(100dvh-92px)]"}
-                py-2 sm:py-3 md:py-4 ${isMobileSize ? "px-2 pb-16" : "px-2 sm:px-3 md:px-4 pb-2"} ${isFullscreen ? "justify-center" : ""} ${className} ${backgroundClass} ${textColor}`}
+                py-2 sm:py-3 md:py-4 ${isMobileSize ? "px-2 pb-24" : "px-2 sm:px-3 md:px-4 pb-2"} ${isFullscreen ? "justify-center" : ""} ${className} ${backgroundClass} ${textColor}`}
             style={{
                 width: `calc(100% - ${isMobileSize ? LAYOUT_CONSTANTS.MOBILE_SIDEBAR_WIDTH : layoutState.resizeSidebarWidth}px)`,
                 ...backgroundStyle,
             }}
         >
-            {/* 읽기 진행도 바 — scrollHeight > clientHeight 일 때만 표시 */}
+            {/* scrollHeight > clientHeight 일 때만 읽기 진행도 바 표시 */}
             {readProgress > 0 && (
                 <div className="fixed top-0 left-0 right-0 h-[2px] z-40 pointer-events-none">
                     <div

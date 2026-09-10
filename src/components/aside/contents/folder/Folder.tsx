@@ -46,7 +46,7 @@ export const Folder = () => {
                                     } w-full h-8 flex items-center px-3 text-white cursor-pointer text-xs hover:bg-primary/20 user-select-none gap-1`}
                             >
                                 <Icon className={`w-4 h-4 flex-shrink-0 ${colorClass}`} />
-                                <span className="truncate">{t(r.name)}</span>
+                                <span className="truncate">{t(`routes.${r.name}`)}</span>
                             </li>
                         );
                     })}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { Project } from "../mocks/projectData";
 import { CardDescAndSkills } from "./CardDescAndSkills";
 import { useTranslation } from "react-i18next";
@@ -12,6 +12,11 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
     const { t } = useTranslation();
     const [isVisible, setIsVisible] = useState(false);
 
+    const handleClose = useCallback(() => {
+        setIsVisible(false);
+        setTimeout(() => setSelectedProject(null), 200);
+    }, [setSelectedProject]);
+
     useEffect(() => {
         const timer = setTimeout(() => setIsVisible(true), 10);
         return () => clearTimeout(timer);
@@ -21,12 +26,7 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
         const onKeyDown = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose(); };
         document.addEventListener('keydown', onKeyDown);
         return () => document.removeEventListener('keydown', onKeyDown);
-    }, []);
-
-    const handleClose = () => {
-        setIsVisible(false);
-        setTimeout(() => setSelectedProject(null), 200);
-    };
+    }, [handleClose]);
 
     return (
         <div
@@ -45,7 +45,7 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                 className={[
                     "relative w-full max-w-4xl max-h-[95dvh] sm:max-h-[90vh] overflow-y-auto scrolls",
                     "rounded-2xl border border-[#3e3e42]",
-                    "bg-[#000000] text-slate-100",
+                    "bg-[#111114] text-slate-100",
                     "shadow-[0_30px_90px_rgba(0,0,0,0.5)]",
                     "transition-all duration-300 ease-out",
                     isVisible
@@ -64,9 +64,7 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                     <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
 
                     {/* subtle highlight */}
-                    <div className="pointer-events-none absolute inset-0">
-                        <div className="absolute -top-24 left-1/2 h-48 w-[130%] -translate-x-1/2 rounded-full bg-linear-to-r from-primary/18 via-fuchsia-400/14 to-sky-400/18 blur-3xl" />
-                    </div>
+                    <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-primary/8 to-transparent" />
 
                     {/* 닫기 버튼 절대 위치 */}
                     <div className="absolute top-4 right-4">
