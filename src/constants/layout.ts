@@ -7,3 +7,6 @@ export const LAYOUT_CONSTANTS = {
     BREADCRUMB_HEIGHT: 28,
     STATUS_BAR_HEIGHT: 24,
 } as const;
+
+// Notices sit below navigation and blocking project dialogs.
+export const SURFACE_LAYERS = { notice: 40, projectDialog: 100 } as const;

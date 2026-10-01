@@ -3,15 +3,15 @@ import { useTranslation } from "react-i18next";
 import { LuArrowRight, LuArrowUpRight, LuMail } from "react-icons/lu";
 import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
 import { CONTACT, PROJECTS } from "../../../../routes/route";
-import { projects, type Project } from "../../../projects/mocks/projectData";
+import { projects, featuredProjects, type Project } from "../../../projects/mocks/projectData";
 import { CardDetail } from "../../../projects/common/CardDetail";
+import { ProjectPreview } from "../../../projects/common/ProjectPreview";
 
 export const MainContents = () => {
     const { t } = useTranslation();
     const handlePushPath = useHandlePushPath();
     const [selected, setSelected] = useState<Project | null>(null);
-    const [randomProjects] = useState(() => projects.map(project => ({ project, rank: Math.random() })).sort((a, b) => a.rank - b.rank).map(({ project }) => project));
-    const featuredProjects = randomProjects.slice(0, 3);
+    const supportingProjects = projects.filter(project => !project.featured).slice(0, 2);
     const [spotlightIndex, setSpotlightIndex] = useState(0);
     const spotlight = featuredProjects[spotlightIndex];
     return (
@@ -34,15 +34,15 @@ export const MainContents = () => {
                     </div>
                 </div>
                 <div className="home-spotlight">
-                    <div className="home-spotlight-tabs" aria-label={t("pages.projects.featuredProjects")}>
+                    <div className="home-spotlight-tabs" role="group" aria-label={t("pages.projects.featuredProjects")}>
                         {featuredProjects.map((project, index) => (
                             <button type="button" key={project.id} aria-pressed={spotlightIndex === index} onClick={() => setSpotlightIndex(index)}>{project.title}</button>
                         ))}
                     </div>
                     <button type="button" className="home-spotlight-project" onClick={() => setSelected(spotlight)}>
-                        <div className="home-spotlight-image"><img key={spotlight.id} src={spotlight.image} alt={spotlight.title} width="800" height="600" /></div>
+                        <div className="home-spotlight-image"><ProjectPreview project={spotlight} eager /></div>
                         <div className="home-spotlight-caption">
-                            <div><h2>{spotlight.title}</h2><p>{spotlight.skills.slice(0, 3).join(" / ")}</p></div>
+                            <div><h2>{spotlight.title}</h2><p className="home-project-summary">{spotlight.outcome ?? spotlight.description}</p><p>{spotlight.skills.slice(0, 3).join(" / ")}</p></div>
                             <LuArrowUpRight aria-hidden="true" />
                         </div>
                     </button>
@@ -51,10 +51,11 @@ export const MainContents = () => {
             <section className="home-work" aria-labelledby="home-work-title">
                 <h2 id="home-work-title">{t("pages.projects.featuredProjects")}</h2>
                 <div className="home-projects">
-                    {randomProjects.slice(3, 5).map(project => (
+                    {supportingProjects.map(project => (
                         <button key={project.id} type="button" className="home-project" onClick={() => setSelected(project)}>
-                            <div className="home-project-image"><img src={project.image} alt={project.title} width="800" height="450" /></div>
+                            <div className="home-project-image"><ProjectPreview project={project} /></div>
                             <div className="home-project-caption"><h3>{project.title}</h3><LuArrowUpRight aria-hidden="true" /></div>
+                            <p className="home-project-summary">{project.description}</p>
                             <p>{project.skills.slice(0, 3).join(" / ")}</p>
                         </button>
                     ))}

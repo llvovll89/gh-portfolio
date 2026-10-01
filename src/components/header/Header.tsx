@@ -155,6 +155,7 @@ export const Header = () => {
     return (
         <>
             <header
+                role="banner"
                 className={`${backgroundClass} absolute top-0 right-0 h-10 border-b border-sub-gary/10 flex items-center justify-between z-20 overflow-x-auto scrolls`}
                 style={{
                     width: `calc(100% - ${isMobileSize ? LAYOUT_CONSTANTS.MOBILE_SIDEBAR_WIDTH : layoutState.resizeSidebarWidth}px)`,
@@ -179,7 +180,6 @@ export const Header = () => {
                 <ul
                     id="header-tabs"
                     tabIndex={-1}
-                    role="tablist"
                     aria-label="File tabs"
                     className={`flex items-center h-full flex-1 overflow-x-auto`}
                 >
@@ -193,30 +193,18 @@ export const Header = () => {
                         const { Icon, colorClass } = getFileIcon(route.path);
                         return (
                             <li
-                                role="tab"
-                                aria-selected={selectedPathState.state === route.path}
-                                tabIndex={selectedPathState.state === route.path ? 0 : -1}
                                 onClick={() =>
                                     setSelectedPathState((prev) => ({
                                         ...prev,
                                         state: route.path,
                                     }))
                                 }
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter' || e.key === ' ') {
-                                        e.preventDefault();
-                                        setSelectedPathState((prev) => ({
-                                            ...prev,
-                                            state: route.path,
-                                        }));
-                                    }
-                                }}
                                 key={route.path}
                                 className={`${selectedStyle(route.path).bgColor
                                     } min-w-0 sm:min-w-24 md:min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[11px] sm:text-[12px] md:text-[13px] flex items-center cursor-pointer user-select-none gap-1 justify-center px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-inset`}
                             >
-                                <Icon className={`w-3.5 h-3.5 shrink-0 ${colorClass}`} />
-                                <Link to={route.path} className="h-full min-w-0 flex-1">
+                                <Icon aria-hidden="true" className={`w-3.5 h-3.5 shrink-0 ${colorClass}`} />
+                                <Link to={route.path} aria-current={selectedPathState.state === route.path ? "page" : undefined} className="h-full min-w-0 flex-1 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-[-2px]">
                                     <span className="h-full flex items-center whitespace-nowrap overflow-hidden text-ellipsis">
                                         {route.name}.tsx
                                     </span>

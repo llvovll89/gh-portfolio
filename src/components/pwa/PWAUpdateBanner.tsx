@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { usePWAUpdate } from "../../hooks/usePWAUpdate";
+import { SURFACE_LAYERS } from "../../constants/layout";
 
 /**
  * 새 SW 버전 감지 시 화면 하단에 표시되는 업데이트 배너
@@ -19,7 +20,8 @@ export const PWAUpdateBanner = () => {
         <div
             role="status"
             aria-live="polite"
-            className={`fixed bottom-20 sm:bottom-4 left-1/2 -translate-x-1/2 z-[9999] flex items-center gap-3
+            style={{ zIndex: SURFACE_LAYERS.notice }}
+            className={`fixed bottom-20 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3
                        px-5 py-3 rounded-xl shadow-2xl
                        bg-[#1e1e2e] border border-white/10 text-white text-sm
                        ${closing ? "animate-[fadeOut_0.25s_ease-in_forwards]" : "animate-[fadeIn_0.3s_ease-out]"}`}
@@ -27,7 +29,7 @@ export const PWAUpdateBanner = () => {
             <span className="text-white/80">새 버전이 있습니다.</span>
             <button
                 onClick={updateSW}
-                className="px-3 py-1 rounded-lg bg-primary text-white font-semibold
+                className="px-3 py-1 rounded-lg bg-primary text-slate-950 font-semibold
                            hover:bg-primary/80 transition-colors text-xs"
             >
                 업데이트

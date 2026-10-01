@@ -197,6 +197,8 @@ export const Aside = () => {
 
                 {/* 하단 네비게이션 바 */}
                 <nav
+                    id="main-navigation"
+                    tabIndex={-1}
                     className={[
                         "fixed bottom-4 left-0 right-0 z-50 mx-auto grid h-14 w-[95%] grid-cols-6 items-center rounded-2xl",
                         "border-t border-sub-gary/30",
@@ -255,7 +257,7 @@ export const Aside = () => {
     // ── 데스크톱: 기존 사이드바 ───────────────────────────────────
     return (
         <>
-        <aside
+        <nav
             id="main-navigation"
             role="navigation"
             aria-label="Main navigation"
@@ -310,7 +312,7 @@ export const Aside = () => {
                     </div>
                 </div>
             )}
-        </aside>
+        </nav>
         </>
     );
 };

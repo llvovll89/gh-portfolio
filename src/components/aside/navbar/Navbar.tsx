@@ -215,7 +215,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                     aria-label="Velog 블로그"
                     title="Velog"
                 >
-                    <SiVelog className="w-4 h-4" />
+                    <SiVelog aria-hidden="true" className="w-4 h-4" />
                 </a>
 
                 {/* Keyboard shortcuts button */}

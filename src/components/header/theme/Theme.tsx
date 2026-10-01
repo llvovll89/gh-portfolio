@@ -1,4 +1,5 @@
 import { useContext, useMemo, useRef } from "react";
+import { LuPalette } from "react-icons/lu";
 import { ThemeContext } from "../../../context/ThemeContext";
 import { ThemeMode, RECOMMENDED_COLORS } from "../../../context/constatns/Theme.type";
 import { useClosePopup } from "../../../hooks/useClosePopup";
@@ -93,7 +94,7 @@ export const Theme = () => {
                 onClick={toggle}
                 aria-haspopup="menu"
                 aria-expanded={open}
-                aria-controls="theme-menu"
+                aria-controls={open ? "theme-menu" : undefined}
                 aria-label={`테마 선택 (현재: ${currentThemeLabel})`}
                 className="group relative grid place-items-center h-10 w-10 rounded-xl cursor-pointer transition-all duration-300"
                 style={{
@@ -106,11 +107,7 @@ export const Theme = () => {
                 }}
             >
                 {/* 아이콘 */}
-                <img
-                    src="/assets/images/icons/png/theme.png"
-                    alt="테마 변경"
-                    className={`h-6 w-6 transition-all duration-200 group-hover:scale-110 ${light ? "brightness-0" : "brightness-200"}`}
-                />
+                <LuPalette aria-hidden="true" className={`h-6 w-6 ${light ? "text-slate-950" : "text-slate-100"}`} />
 
                 {/* 현재 테마 색상 표시 도트 */}
                 <span

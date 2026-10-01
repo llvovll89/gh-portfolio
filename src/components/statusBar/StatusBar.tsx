@@ -40,7 +40,7 @@ export const StatusBar = () => {
             className="fixed bottom-0 right-0 h-6 z-30 flex items-center justify-between px-3 text-[11px] font-mono select-none"
             style={{
                 width: `calc(100% - ${layoutState.resizeSidebarWidth}px)`,
-                backgroundColor: VSCODE_DARK.statusBarBg,
+                backgroundColor: "#17659a",
                 color: VSCODE_DARK.statusBarFg,
             }}
         >
@@ -53,7 +53,7 @@ export const StatusBar = () => {
                     <span className="opacity-90">⚠ {openCount} open</span>
                 )}
             </div>
-            <div className="flex items-center gap-3 opacity-90">
+            <div className="flex items-center gap-3">
                 <span>UTF-8</span>
                 <span>{languageLabel}</span>
                 <span>Pretendard</span>

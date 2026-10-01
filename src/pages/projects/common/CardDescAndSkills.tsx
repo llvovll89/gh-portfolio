@@ -1,115 +1,17 @@
 import type { Project } from "../mocks/projectData";
 import { useTranslation } from "react-i18next";
 
-interface CardDescAndSkillsProps {
-    project: Project;
-}
-
-export const CardDescAndSkills = ({ project }: CardDescAndSkillsProps) => {
+export const CardDescAndSkills = ({ project }: { project: Project }) => {
     const { t } = useTranslation();
-    const convertNewDetailedDescription = project.detailedDescription.split(".");
-
     return (
-        <div className="w-full flex flex-col gap-6">
-            {project.role && (
-                <div className="grid gap-3 rounded-xl border border-white/10 bg-white/4 p-4 sm:grid-cols-[110px_1fr]">
-                    <p className="text-xs font-semibold uppercase tracking-[0.12em] text-white/40">{t("pages.projects.role")}</p>
-                    <p className="text-sm leading-6 text-white/78">{project.role}</p>
-                </div>
-            )}
-            {project.challenge && (
-                <div className="space-y-2">
-                    <h4 className="text-sm font-bold text-primary">{t("pages.projects.challenge")}</h4>
-                    <p className="text-sm leading-6 text-slate-300">{project.challenge}</p>
-                </div>
-            )}
-            {project.contributions && project.contributions.length > 0 && (
-                <div className="space-y-2">
-                    <h4 className="text-sm font-bold text-primary">{t("pages.projects.contributions")}</h4>
-                    <ul className="space-y-2">
-                        {project.contributions.map((contribution) => (
-                            <li key={contribution} className="flex gap-2 text-sm leading-6 text-slate-300">
-                                <span className="mt-3 h-px w-2 shrink-0 bg-primary" aria-hidden="true" />
-                                <span>{contribution}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-            {project.outcome && (
-                <div className="space-y-2">
-                    <h4 className="text-sm font-bold text-primary">{t("pages.projects.outcome")}</h4>
-                    <p className="text-sm leading-6 text-slate-300">{project.outcome}</p>
-                </div>
-            )}
-            {/* 프로젝트 설명 섹션 */}
-            <div className="w-full space-y-3">
-                <div className="flex items-center gap-2">
-                    <div className="h-5 w-1 rounded-full bg-primary" />
-                    <h4 className="text-base font-semibold text-slate-100">{t("pages.projects.projectIntro")}</h4>
-                </div>
-                <div className="space-y-2 pl-3">
-                    {convertNewDetailedDescription.map((desc, descIndex) => {
-                        if (desc.trim() === "") return null;
-                        return (
-                            <p
-                                key={descIndex}
-                                className="text-sm leading-relaxed text-slate-300"
-                            >
-                                {desc.trim()}.
-                            </p>
-                        );
-                    })}
-                </div>
-            </div>
-
-            {/* 기술 스택 섹션 */}
-            <div className="flex flex-col gap-3">
-                <div className="flex items-center gap-2">
-                    <div className="h-5 w-1 rounded-full bg-primary" />
-                    <h4 className="text-base font-semibold text-slate-100">{t("pages.projects.techStack")}</h4>
-                </div>
-                <div className="flex flex-wrap gap-2 pl-3">
-                    {project.skills.map((skill, skillIndex) => (
-                        <span
-                            key={skillIndex}
-                            className={[
-                                "group relative inline-flex items-center gap-1.5 overflow-hidden",
-                                "rounded-lg border border-primary/30 bg-linear-to-br from-primary/10 to-primary/15",
-                                "px-3 py-1.5 text-sm font-medium text-slate-200",
-                                "transition-all duration-200",
-                                "hover:border-primary/50 hover:shadow-md hover:shadow-primary/20 hover:-translate-y-0.5",
-                            ].join(" ")}
-                        >
-                            <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                            {skill}
-                        </span>
-                    ))}
-                </div>
-            </div>
-
-            {/* 팀 멤버 섹션 */}
-            {project.projectMembers && project.projectMembers.length > 0 && (
-                <div className="flex flex-col gap-3">
-                    <div className="flex items-center gap-2">
-                        <div className="h-5 w-1 rounded-full bg-primary" />
-                        <h4 className="text-base font-semibold text-slate-100">{t("pages.projects.team")}</h4>
-                    </div>
-                    <div className="flex flex-wrap gap-2 pl-3">
-                        {project.projectMembers.map((member, index) => (
-                            <span
-                                key={index}
-                                className="inline-flex items-center gap-1.5 rounded-full border border-[#3e3e42] bg-[#2a2a2d] px-3 py-1 text-sm text-slate-300"
-                            >
-                                <svg className="h-3.5 w-3.5 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                                </svg>
-                                {member}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-            )}
+        <div className="project-detail-sections">
+            {project.role && <div className="project-detail-role"><h3>{t("pages.projects.role")}</h3><p>{project.role}</p></div>}
+            {project.challenge && <section><h3>{t("pages.projects.challenge")}</h3><p>{project.challenge}</p></section>}
+            {!!project.contributions?.length && <section><h3>{t("pages.projects.contributions")}</h3><ul>{project.contributions.map(item => <li key={item}>{item}</li>)}</ul></section>}
+            {project.outcome && <section><h3>{t("pages.projects.outcome")}</h3><p>{project.outcome}</p></section>}
+            <section><h3>{t("pages.projects.projectIntro")}</h3><p>{project.detailedDescription}</p></section>
+            <section><h3>{t("pages.projects.techStack")}</h3><div className="project-detail-tags">{project.skills.map(skill => <span key={skill}>{skill}</span>)}</div></section>
+            {!!project.projectMembers?.length && <section><h3>{t("pages.projects.team")}</h3><p>{project.projectMembers.join(", ")}</p></section>}
         </div>
     );
 };

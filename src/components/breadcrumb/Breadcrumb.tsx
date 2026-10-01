@@ -19,10 +19,12 @@ export const Breadcrumb = () => {
     if (isMobileSize) {
         return (
             <div
+                role="navigation"
+                aria-label="Breadcrumb"
                 className={`absolute top-10 right-0 h-6 flex items-center gap-1.5 px-3 text-[11px] font-mono text-white/50 border-b border-sub-gary/10 z-20 ${backgroundClass}`}
                 style={{width: "100%", ...backgroundStyle}}
             >
-                <Icon className={`w-3 h-3 shrink-0 ${colorClass}`} />
+                <Icon aria-hidden="true" className={`w-3 h-3 shrink-0 ${colorClass}`} />
                 <span className="text-white/70">{matchedRoute.name}</span>
             </div>
         );
@@ -30,7 +32,9 @@ export const Breadcrumb = () => {
 
     return (
         <div
-            className={`absolute top-10 right-0 h-7 flex items-center gap-1.5 px-3 text-[11px] font-mono text-white/40 border-b border-sub-gary/10 z-20 ${backgroundClass}`}
+            role="navigation"
+            aria-label="Breadcrumb"
+            className={`absolute top-10 right-0 h-7 flex items-center gap-1.5 px-3 text-[11px] font-mono text-white/60 border-b border-sub-gary/10 z-20 ${backgroundClass}`}
             style={{
                 width: `calc(100% - ${layoutState.resizeSidebarWidth}px)`,
                 ...backgroundStyle,
@@ -40,7 +44,7 @@ export const Breadcrumb = () => {
             <span className="text-white/20">›</span>
             <span>pages</span>
             <span className="text-white/20">›</span>
-            <Icon className={`w-3 h-3 shrink-0 ${colorClass}`} />
+            <Icon aria-hidden="true" className={`w-3 h-3 shrink-0 ${colorClass}`} />
             <span className="text-white/70">{matchedRoute.name}.tsx</span>
         </div>
     );

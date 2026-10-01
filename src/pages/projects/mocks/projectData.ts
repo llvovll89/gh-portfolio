@@ -2,6 +2,9 @@ export interface Project {
     id: number;
     title: string;
     image: string;
+    previewImage?: string;
+    previewLayout?: "mobile" | "meal";
+    featuredOrder?: number;
     scale: string;
     description: string;
     detailedDescription: string;
@@ -41,6 +44,7 @@ export const projects = [
         title: "Hovie",
         scale: "개인 프로젝트",
         image: "/assets/images/projects/hovie.png",
+        featuredOrder: 2,
         link: {
             repositoryUrl: "https://github.com/llvovll89/hovie",
             projectUrl: "https://hovie.vercel.app/",
@@ -62,6 +66,9 @@ export const projects = [
         title: "Run River",
         scale: "개인 프로젝트",
         image: "/assets/images/projects/run-river.png",
+        previewImage: "/assets/images/projects/run-river-mobile.png",
+        previewLayout: "mobile",
+        featuredOrder: 1,
         link: {
             repositoryUrl: "https://github.com/llvovll89/Run-River",
             projectUrl: "https://run-river.vercel.app/",
@@ -83,6 +90,7 @@ export const projects = [
         title: "kimgeonho.dev",
         scale: "개인 프로젝트",
         image: "/assets/images/projects/kimgeonho.png",
+        featuredOrder: 3,
         link: {
             repositoryUrl: "https://github.com/llvovll89/gh-portfolio",
             projectUrl: "https://kimgeonho.vercel.app/",
@@ -104,6 +112,7 @@ export const projects = [
         title: "MealLog",
         scale: "개인 프로젝트",
         image: "/assets/images/projects/meallog.png",
+        previewLayout: "meal",
         link: {
             repositoryUrl: "https://github.com/llvovll89/MealLog",
             projectUrl: "https://meallog-dev.vercel.app/",
@@ -148,3 +157,6 @@ export const projects = [
         projectMembers: ["김건호"],
     },
 ] as Project[];
+
+export const featuredProjects = projects.filter(project => project.featured)
+    .sort((a, b) => (a.featuredOrder ?? 99) - (b.featuredOrder ?? 99));

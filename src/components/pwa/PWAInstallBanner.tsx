@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { usePWAInstall } from "../../hooks/usePWAInstall";
 import { useCheckedMobile } from "../../hooks/useCheckedMobile";
+import { SURFACE_LAYERS } from "../../constants/layout";
 
 /**
  * 모바일에서 PWA 설치를 유도하는 배너
@@ -28,7 +29,8 @@ export const PWAInstallBanner = () => {
             role="dialog"
             aria-modal="false"
             aria-label="앱 설치 안내"
-            className={`fixed bottom-20 sm:bottom-4 left-1/2 -translate-x-1/2 z-[9998] w-[calc(100%-2rem)] max-w-sm
+            style={{ zIndex: SURFACE_LAYERS.notice }}
+            className={`fixed bottom-20 sm:bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-sm
                        rounded-2xl shadow-2xl border border-white/10
                        bg-[#1e1e2e] text-white text-sm
                        ${closing ? "animate-[fadeOut_0.25s_ease-in_forwards]" : "animate-[fadeIn_0.3s_ease-out]"}`}
@@ -62,7 +64,7 @@ export const PWAInstallBanner = () => {
                         </p>
                         <button
                             onClick={state.prompt}
-                            className="w-full py-2.5 rounded-xl bg-primary text-white font-semibold
+                            className="w-full py-2.5 rounded-xl bg-primary text-slate-950 font-semibold
                                        hover:bg-primary/80 active:scale-95 transition-all text-sm"
                         >
                             홈 화면에 추가
