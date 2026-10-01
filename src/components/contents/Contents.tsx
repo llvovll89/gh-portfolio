@@ -63,7 +63,7 @@ export const Contents = ({children, className}: ContentsProps) => {
             id="main-content"
             role="main"
             tabIndex={-1}
-            className={`absolute right-0 flex flex-col sm:pb-10 transition-width transition-transform ease-in-out overflow-x-hidden overflow-y-auto gap-4 scrolls
+            className={`absolute right-0 flex flex-col sm:pb-10 editor-content overflow-x-hidden overflow-y-auto gap-4 scrolls
                 ${isMobileSize ? "top-16 h-[calc(100dvh-64px)] min-h-[calc(100dvh-64px)]" : "top-[68px] h-[calc(100dvh-92px)] min-h-[calc(100dvh-92px)]"}
                 py-2 sm:py-3 md:py-4 ${isMobileSize ? "px-2 pb-24" : "px-2 sm:px-3 md:px-4 pb-2"} ${isFullscreen ? "justify-center" : ""} ${className} ${backgroundClass} ${textColor}`}
             style={{

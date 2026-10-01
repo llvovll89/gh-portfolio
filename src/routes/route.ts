@@ -8,7 +8,6 @@ const Resume = lazy(() => import("../pages/resume/Resume").then((m) => ({default
 const Uses = lazy(() => import("../pages/uses/Uses").then((m) => ({default: m.Uses})));
 const Contact = lazy(() => import("../pages/contact/Contact").then((m) => ({default: m.Contact})));
 const Profile = lazy(() => import("../pages/profile/Profile").then((m) => ({default: m.Profile})));
-const Guestbook = lazy(() => import("../pages/guestbook/Guestbook").then((m) => ({ default: m.Guestbook })));
 const NotFound = lazy(() => import("../pages/notfound/NotFound").then((m) => ({default: m.NotFound})));
 
 export const PATHS = {
@@ -18,7 +17,6 @@ export const PATHS = {
     PROFILE: "/profile",
     BLOG: "/blog",
     BLOG_DETAIL: "/blog/:slug",
-    GUESTBOOK: "/guestbook",
     RESUME: "/resume",
     USES: "/uses",
     NOT_FOUND: "*",
@@ -30,7 +28,6 @@ export const CONTACT = PATHS.CONTACT;
 export const PROFILE = PATHS.PROFILE;
 export const BLOG = PATHS.BLOG;
 export const BLOG_DETAIL = PATHS.BLOG_DETAIL;
-export const GUESTBOOK = PATHS.GUESTBOOK;
 export const RESUME = PATHS.RESUME;
 export const USES = PATHS.USES;
 export const NOT_FOUND = PATHS.NOT_FOUND;
@@ -52,7 +49,6 @@ export const routesPath = [
     {path: PATHS.BLOG_DETAIL, name: "blogDetail", icon: "", component: Detail},
     {path: PATHS.RESUME, name: "resume", icon: "", component: Resume},
     {path: PATHS.USES, name: "uses", icon: "", component: Uses},
-    {path: PATHS.GUESTBOOK, name: "guestbook", icon: "", component: Guestbook},
     {path: PATHS.CONTACT, name: "contact", icon: "", component: Contact},
     {path: PATHS.NOT_FOUND, name: "notFound", icon: "", component: NotFound},
 ] satisfies ReadonlyArray<AppRoute>;

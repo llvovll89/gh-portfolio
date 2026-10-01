@@ -55,7 +55,6 @@
 | `/projects` | 프로젝트 카드 & 상세 모달 |
 | `/blog` | 마크다운 블로그 (검색·태그·정렬) |
 | `/resume` | 이력서 |
-| `/guestbook` | 방명록 (Firebase) |
 | `/contact` | 연락처 & 메시지 전송 |
 | `/uses` | 사용 도구 & 장비 |
 
@@ -94,7 +93,6 @@ src/
 │   ├── blog/
 │   ├── projects/
 │   ├── profile/
-│   ├── guestbook/
 │   ├── resume/
 │   ├── contact/
 │   └── uses/

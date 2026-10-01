@@ -16,9 +16,11 @@ import {PWAInstallBanner} from "./components/pwa/PWAInstallBanner";
 import {PageErrorBoundary} from "./components/error/PageErrorBoundary";
 import {Toast} from "./components/toast/Toast";
 import {StatusBar} from "./components/statusBar/StatusBar";
+import {useThemeStyle} from "./hooks/useThemeStyle";
 
 function AppContent() {
     const isMobile = useCheckedMobileSize();
+    const {backgroundClass, backgroundStyle} = useThemeStyle();
     const location = useLocation();
     const scrollPositionKey = `v2:${isMobile ? "mobile" : "desktop"}:${location.pathname}`;
     usePageTracking();
@@ -73,7 +75,10 @@ function AppContent() {
     }, [scrollPositionKey]);
 
     return (
-        <section className="w-full min-h-dvh flex flex-col relative overflow-x-hidden overflow-y-auto">
+        <section
+            className={`w-full min-h-dvh flex flex-col relative overflow-x-hidden overflow-y-auto ${backgroundClass}`}
+            style={backgroundStyle}
+        >
             <SkipLinks />
             <AppChildContainer />
 

@@ -10,7 +10,8 @@ export const MainContents = () => {
     const { t } = useTranslation();
     const handlePushPath = useHandlePushPath();
     const [selected, setSelected] = useState<Project | null>(null);
-    const featuredProjects = projects.filter(project => project.featured);
+    const [randomProjects] = useState(() => projects.map(project => ({ project, rank: Math.random() })).sort((a, b) => a.rank - b.rank).map(({ project }) => project));
+    const featuredProjects = randomProjects.slice(0, 3);
     const [spotlightIndex, setSpotlightIndex] = useState(0);
     const spotlight = featuredProjects[spotlightIndex];
     return (
@@ -50,7 +51,7 @@ export const MainContents = () => {
             <section className="home-work" aria-labelledby="home-work-title">
                 <h2 id="home-work-title">{t("pages.projects.featuredProjects")}</h2>
                 <div className="home-projects">
-                    {projects.filter(project => !project.featured).slice(0, 2).map(project => (
+                    {randomProjects.slice(3, 5).map(project => (
                         <button key={project.id} type="button" className="home-project" onClick={() => setSelected(project)}>
                             <div className="home-project-image"><img src={project.image} alt={project.title} width="800" height="450" /></div>
                             <div className="home-project-caption"><h3>{project.title}</h3><LuArrowUpRight aria-hidden="true" /></div>

@@ -7,11 +7,18 @@ export const PersonalHistory = () => {
 
     const careerList = [
         {
+            period: "2026. 02 ~",
+            companyKey: "pages.profile.personalHistory.nanoCompany",
+            isActive: true,
+            position: "FullStack Developer",
+            descriptionKey: null,
+        },
+        {
             period: "2023. 07 ~ 2026. 02",
             companyKey: "pages.profile.personalHistory.company",
             position: "Frontend Developer",
             descriptionKey: "pages.profile.personalHistory.description",
-            isActive: true,
+            isActive: false,
         },
     ];
 
@@ -71,9 +78,9 @@ export const PersonalHistory = () => {
                                         <h3 className="text-base md:text-lg font-bold text-white/90">
                                             {t(career.companyKey)}
                                         </h3>
-                                        <p className="text-xs md:text-sm text-primary font-medium">
+                                        {career.position && <p className="text-xs md:text-sm text-primary font-medium">
                                             {career.position}
-                                        </p>
+                                        </p>}
                                     </div>
 
                                     <span className={`px-2.5 py-1 rounded-full bg-primary/10 border border-primary/30 text-[10px] md:text-xs text-primary font-semibold whitespace-nowrap ${career.isActive ? "visible" : "invisible"}`}>
@@ -90,9 +97,9 @@ export const PersonalHistory = () => {
                                 </div>
 
                                 {/* 설명 */}
-                                <p className="text-xs md:text-sm text-white/60 leading-relaxed">
+                                {career.descriptionKey && <p className="text-xs md:text-sm text-white/60 leading-relaxed">
                                     {t(career.descriptionKey)}
-                                </p>
+                                </p>}
 
                                 {/* 하단 액센트 */}
                                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-primary/0 to-transparent group-hover:via-primary/40 transition-all duration-300" />

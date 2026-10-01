@@ -16,9 +16,7 @@ import { useHandlePushPath } from "@/hooks/useHandlePushPath";
 import {
     BLOG,
     CONTACT,
-    DEFAULT,
-    GUESTBOOK,
-    PROJECTS,
+    DEFAULT,    PROJECTS,
     RESUME,
     USES,
 } from "@/routes/route";
@@ -460,15 +458,6 @@ export const CommandPalette = () => {
             category: "Navigation",
             keywords: ["uses", "stack", "tool", "도구"],
             action: () => handlePushPath(USES),
-        },
-        {
-            id: "nav-guestbook",
-            label: "페이지 이동: Guestbook",
-            description: "방명록 페이지로 이동합니다",
-            shortcut: "",
-            category: "Navigation",
-            keywords: ["guestbook", "message", "방명록"],
-            action: () => handlePushPath(GUESTBOOK),
         },
         {
             id: "nav-contact",

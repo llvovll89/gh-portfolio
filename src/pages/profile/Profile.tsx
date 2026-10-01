@@ -19,7 +19,7 @@ export const Profile = () => {
             <Header />
             <Aside />
             <Contents className="select-none">
-                <section className="w-full">
+                <section className="mx-auto w-full max-w-[1180px]">
                     {/* Hero 섹션 */}
                     <div className="profile-intro relative flex flex-col items-center justify-center px-4 pt-10 pb-8 overflow-hidden">
                         {/* 배경 그라디언트 */}

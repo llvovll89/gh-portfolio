@@ -3,7 +3,7 @@
 #main-content > section { max-width: 1180px; }
 #main-content h1 { font-weight: 650; letter-spacing: -.04em; }
 #main-content h2, #main-content h3 { letter-spacing: -.025em; }
-#main-content :is(button, a, input, textarea, select):focus-visible { outline: 2px solid var(--color-primary); outline-offset: 4px; }
+#main-content :is(button, a):focus-visible { outline: 2px solid var(--color-primary); outline-offset: 4px; }
 .portfolio-home { width: 100%; max-width: 1240px; margin: 0 auto; padding: 24px 36px 48px; color: #e4e7eb; }
 .home-intro { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 52px; align-items: center; padding: 12px 0 56px; }
 .home-byline { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; margin-bottom: 36px; }
@@ -104,4 +104,30 @@
 }
 @media (prefers-reduced-motion: reduce) {
     .home-spotlight-project:hover img { transform: none; }
+}
+
+/* Keep the editor and explorer moving together when the panel toggles. */
+.desktop-sidebar, .editor-content { transition: width 260ms cubic-bezier(.22, 1, .36, 1); }
+.desktop-sidebar { overflow: hidden; }
+.desktop-sidebar > :first-child { flex-shrink: 0; }
+html[data-sidebar-dragging] .desktop-sidebar, html[data-sidebar-dragging] .editor-content { transition: none; }
+.project-card:not(.project-card-featured) { grid-template-rows: auto 1fr; }
+@media (min-width: 1280px) {
+    .project-archive-grid .project-card-body { padding: 18px; }
+    .project-archive-grid .project-card h2 { font-size: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .desktop-sidebar, .editor-content, .sidebar-panel, .sidebar-sheet { transition: none; animation: none; }
+}
+
+@starting-style {
+    .sidebar-sheet { transform: translateY(100%); opacity: 0; }
+}
+
+/* One inset focus line across forms, search fields, and modal inputs. */
+#root :is(input:not([type="checkbox"]):not([type="radio"]), textarea, select):is(:focus, :focus-visible) {
+    outline: 1px solid #09f !important;
+    outline-offset: -1px !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
 }

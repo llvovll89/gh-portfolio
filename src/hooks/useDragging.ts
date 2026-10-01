@@ -55,6 +55,7 @@ export const useDragging = ({ targetRef, type }: UseDraggingProps) => {
         e: React.MouseEvent | React.TouchEvent | React.PointerEvent,
     ) => {
         isDragging.current = true;
+        if (type === "sidebar") document.documentElement.dataset.sidebarDragging = "true";
 
         // 어떤 입력으로 시작했는지 기록(중복 이벤트 방지)
         if (e.type === "pointerdown") activeInput.current = "pointer";
@@ -94,6 +95,7 @@ export const useDragging = ({ targetRef, type }: UseDraggingProps) => {
 
     const handleEndNative = () => {
         isDragging.current = false;
+        if (type === "sidebar") delete document.documentElement.dataset.sidebarDragging;
         activeInput.current = null;
         setCursor("");
     };
@@ -116,6 +118,7 @@ export const useDragging = ({ targetRef, type }: UseDraggingProps) => {
         window.addEventListener("mouseup", handleEndNative);
 
         return () => {
+            if (type === "sidebar") delete document.documentElement.dataset.sidebarDragging;
             window.removeEventListener("pointermove", handleMoveNative);
             window.removeEventListener("pointerup", handleEndNative);
             window.removeEventListener("pointercancel", handleEndNative);

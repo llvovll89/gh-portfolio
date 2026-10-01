@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useCallback } from "react";
+import { useContext, useEffect, useRef, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LayoutContext } from "../../context/LayoutContext";
 import { NavigationContext } from "../../context/NavigationContext";
@@ -28,6 +28,11 @@ export const Aside = () => {
     const { layoutState, setLayoutState } = useContext(LayoutContext);
     const { selectedNav, setSelectedNav, selectedPathState } = useContext(NavigationContext);
     const { backgroundStyle, backgroundClass } = useThemeStyle();
+    const [displayedNav, setDisplayedNav] = useState(selectedNav);
+    useEffect(() => {
+        const timer = setTimeout(() => setDisplayedNav(selectedNav), selectedNav ? 0 : 260);
+        return () => clearTimeout(timer);
+    }, [selectedNav]);
     const asideRef = useRef<HTMLDivElement>(null);
     const handleMouseDown = useDragging({ targetRef: asideRef, type: "sidebar" });
     const isMobileSize = useCheckedMobileSize();
@@ -127,11 +132,11 @@ export const Aside = () => {
     if (isMobileSize) {
         return (
             <>
-                {selectedNav && (
+                {displayedNav && (
                     <>
                         <div
                             aria-hidden="true"
-                            className="fixed inset-0 z-40 bg-black/50"
+                            className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-250 ${selectedNav ? "opacity-100" : "pointer-events-none opacity-0"}`}
                             onClick={() => setSelectedNav(null)}
                         />
 
@@ -139,7 +144,8 @@ export const Aside = () => {
                             ref={sheetRef}
                             className={[
                                 "fixed bottom-18 left-0 right-0 z-50 flex flex-col",
-                                "transition-transform duration-300 ease-in-out",
+                                "sidebar-sheet transition-[transform,opacity] duration-250 ease-out",
+                                selectedNav ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none",
                                 backgroundClass,
                                 "rounded-t-2xl border-t border-sub-gary/30",
                             ].join(" ")}
@@ -179,11 +185,11 @@ export const Aside = () => {
 
                     {/* 콘텐츠 */}
                     <div className="flex-1 overflow-y-auto overflow-x-hidden">
-                        {selectedNav === NavType.FOLDER && <Folder />}
-                        {selectedNav === NavType.GIT_CONTROL && <GitControl />}
-                        {selectedNav === NavType.SEARCH && <Search />}
-                        {selectedNav === NavType.BOOKMARKS && <Bookmarks />}
-                        {selectedNav === NavType.SETTINGS && <Settings />}
+                        {displayedNav === NavType.FOLDER && <Folder />}
+                        {displayedNav === NavType.GIT_CONTROL && <GitControl />}
+                        {displayedNav === NavType.SEARCH && <Search />}
+                        {displayedNav === NavType.BOOKMARKS && <Bookmarks />}
+                        {displayedNav === NavType.SETTINGS && <Settings />}
                     </div>
                         </div>
                     </>
@@ -259,17 +265,17 @@ export const Aside = () => {
                 width: layoutState.resizeSidebarWidth,
                 ...backgroundStyle,
             }}
-            className={`translate-x-0 absolute left-0 top-0 h-dvh transition-transform ease-in-out ${backgroundClass} flex z-20`}
+            className={`desktop-sidebar translate-x-0 absolute left-0 top-0 h-dvh ${backgroundClass} flex z-20`}
         >
             <Navbar selectedNav={selectedNav} onClickNav={handleClickNav} />
 
-            {selectedNav && (
-                <div className="flex-1 overflow-hidden">
-                    {selectedNav === NavType.FOLDER && <Folder />}
-                    {selectedNav === NavType.GIT_CONTROL && <GitControl />}
-                    {selectedNav === NavType.SEARCH && <Search />}
-                    {selectedNav === NavType.BOOKMARKS && <Bookmarks />}
-                    {selectedNav === NavType.SETTINGS && <Settings />}
+            {displayedNav && (
+                <div aria-hidden={!selectedNav} inert={!selectedNav} className={`sidebar-panel min-w-[210px] flex-1 overflow-hidden transition-opacity duration-200 ${selectedNav ? "opacity-100" : "opacity-0"}`}>
+                    {displayedNav === NavType.FOLDER && <Folder />}
+                    {displayedNav === NavType.GIT_CONTROL && <GitControl />}
+                    {displayedNav === NavType.SEARCH && <Search />}
+                    {displayedNav === NavType.BOOKMARKS && <Bookmarks />}
+                    {displayedNav === NavType.SETTINGS && <Settings />}
                 </div>
             )}
 

@@ -84,6 +84,7 @@
                 "university": "大邱大学"
             },
             "personalHistory": {
+                "nanoCompany": "ナノIT",
                 "title": "職歴",
                 "company": "IGIS",
                 "description": "Webアプリケーション開発・保守",
@@ -214,14 +215,6 @@
         "uses": {
             "title": "使用ツール",
             "description": "日常的に使用している開発ツール、技術スタック、コラボツールを紹介します。"
-        },
-        "guestbook": {
-            "title": "ゲストブック",
-            "description": "ゲストブックにメッセージを残して交流しましょう！",
-            "subtitle": "訪問者の皆様へ、大切なメッセージをお残しください 💌",
-            "write": "書く",
-            "close": "閉じる",
-            "entryCount": "{{count}}件"
         },
         "home": {
         "badge": "Web Developer",

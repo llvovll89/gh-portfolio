@@ -1,4 +1,4 @@
-export type RepoName = "gh-portfolio" | "modart" | "blacktie" | "MealLog" | "wedding-plan";
+export type RepoName = typeof REPOS[number];
 
 export type RepoStats = {
     stars: number;
@@ -78,4 +78,4 @@ export type RepoState = {
 
 export type TabType = "branches" | "issues" | "pullRequests";
 
-export const REPOS = ["gh-portfolio", "modart", "blacktie", "MealLog", "wedding-plan"] as const;
+export const REPOS = ["gh-portfolio", "modart", "blacktie", "MealLog", "wedding-plan", "Variety_Gaming_Platform"] as const;

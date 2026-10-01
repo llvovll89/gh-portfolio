@@ -364,21 +364,15 @@ body {
     opacity: 1;
 }
 
-@media (min-width: 640px) {
-    .page-enter {
-        animation: pageEnter 0.22s ease-out both;
-    }
+.page-enter #main-content > :first-child {
+    animation: pageEnter 320ms cubic-bezier(.22, 1, .36, 1) both;
 }
-
 @keyframes pageEnter {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: none;
-    }
+    from { transform: translateY(8px); }
+    to { transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .page-enter #main-content > :first-child { animation: none; }
 }
 
 @keyframes fadeOut {

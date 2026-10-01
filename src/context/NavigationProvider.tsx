@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { DEFAULT } from "../routes/route";
+import { matchPath } from "react-router-dom";
+import { DEFAULT, routesPath } from "../routes/route";
 import { NavType } from "../components/aside/constants/Nav.type";
 import { NavigationContext, type SelectedPathState } from "./NavigationContext";
 
@@ -7,6 +8,9 @@ const NAV_STORAGE_KEY = "portfolio-selected-nav";
 const NAV_PATH_STATE_STORAGE_KEY = "portfolio-selected-path-state";
 const CLOSED_TABS_STORAGE_KEY = "portfolio-closed-tabs";
 const PINNED_TABS_STORAGE_KEY = "portfolio-pinned-tabs";
+
+const isAvailablePath = (path: unknown): path is string =>
+    typeof path === "string" && routesPath.some(route => route.path !== "*" && matchPath({ path: route.path, end: true }, path));
 
 function loadSelectedNav(): NavType | null {
     try {
@@ -36,7 +40,7 @@ function loadSelectedPathState(): SelectedPathState {
                 : undefined;
 
         const list = Array.isArray(parsedState?.list)
-            ? parsedState.list.filter((path: unknown): path is string => typeof path === "string")
+            ? parsedState.list.filter((path: unknown): path is string => isAvailablePath(path))
             : [];
         const state = typeof parsedState?.state === "string" ? parsedState.state : "";
 
@@ -60,7 +64,7 @@ function loadClosedTabs(): string[] {
         const parsed = JSON.parse(stored);
         if (!Array.isArray(parsed)) return [];
 
-        return parsed.filter((path: unknown): path is string => typeof path === "string");
+        return parsed.filter((path: unknown): path is string => isAvailablePath(path));
     } catch {
         return [];
     }
@@ -74,7 +78,7 @@ function loadPinnedTabs(): string[] {
         const parsed = JSON.parse(stored);
         if (!Array.isArray(parsed)) return [];
 
-        return [...new Set(parsed.filter((path: unknown): path is string => typeof path === "string"))];
+        return [...new Set(parsed.filter((path: unknown): path is string => isAvailablePath(path)))];
     } catch {
         return [];
     }

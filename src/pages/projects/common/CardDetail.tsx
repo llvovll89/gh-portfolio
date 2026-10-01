@@ -75,16 +75,16 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* 프로젝트 이미지 헤더 */}
-                <div className="relative h-40 sm:h-56 md:h-64 w-full overflow-hidden bg-[#252526]">
+                <div className="relative w-full bg-[#18181b] p-3 sm:p-5">
                     <img
                         src={selected.image}
                         alt={selected.title}
-                        className="h-full w-full object-cover"
+                        className="mx-auto max-h-[50dvh] w-full rounded-lg object-contain"
                     />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
+                    <div className="pointer-events-none absolute inset-0" />
 
                     {/* subtle highlight */}
-                    <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-primary/8 to-transparent" />
+                    <div className="pointer-events-none absolute inset-0" />
 
                     {/* 닫기 버튼 절대 위치 */}
                     <div className="absolute top-4 right-4">

@@ -18,21 +18,21 @@ const ProjectCard = ({ project, onOpen, featured = false }: { project: Project; 
         onClick={onOpen}
         className={`project-card group grid h-full min-w-0 w-full overflow-hidden rounded-2xl border border-white/10 bg-[#18181b] text-left transition-colors hover:border-primary/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${featured ? "project-card-featured md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]" : ""}`}
     >
-        <div className={`relative overflow-hidden bg-[#202024] ${featured ? "aspect-video md:aspect-auto md:min-h-72" : "aspect-video"}`}>
+        <div className={`relative overflow-hidden bg-[#202024] ${featured ? "aspect-video md:aspect-auto md:min-h-56" : "aspect-video"}`}>
             <img src={project.image} alt="" loading={featured ? "eager" : "lazy"} className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-500 motion-reduce:transition-none motion-reduce:group-hover:scale-100 group-hover:scale-[1.03]" />
 
         </div>
-        <div className="project-card-body flex min-w-0 flex-col p-5 sm:p-6">
+        <div className="project-card-body flex min-w-0 flex-col p-4 sm:p-5">
             <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/42">{project.scale}</p>
-                    <h2 className="mt-1 break-words text-xl font-bold tracking-tight text-white sm:text-2xl">{project.title}</h2>
+                    <h2 className="mt-1 break-words text-lg font-bold tracking-tight text-white sm:text-xl">{project.title}</h2>
                 </div>
                 <LuArrowUpRight className="h-5 w-5 shrink-0 text-white/38 transition-colors group-hover:text-primary" aria-hidden="true" />
             </div>
-            <p className="mt-4 min-h-18 line-clamp-3 text-sm leading-6 text-white/62">{project.description}</p>
-            <div className="mt-5 min-h-10">{project.role && <p className="line-clamp-2 border-l-2 border-primary/55 pl-3 text-xs leading-5 text-white/72"><span className="text-white/38">{t("pages.projects.role")} </span>{project.role}</p>}</div>
-            <div className="mt-auto flex flex-wrap gap-1.5 pt-5">
+            <p className="mt-3 min-h-18 line-clamp-3 text-sm leading-6 text-white/62">{project.description}</p>
+            <div className="mt-3 min-h-10">{project.role && <p className="line-clamp-2 border-l-2 border-primary/55 pl-3 text-xs leading-5 text-white/72"><span className="text-white/38">{t("pages.projects.role")} </span>{project.role}</p>}</div>
+            <div className="mt-auto flex flex-wrap gap-1.5 pt-3">
                 {project.skills.slice(0, featured ? 5 : 4).map((skill) => (
                     <span key={skill} className="rounded-md border border-white/9 bg-white/4 px-2 py-1 text-[10px] font-medium text-white/55">{skill}</span>
                 ))}
@@ -89,7 +89,7 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                     {archiveProjects.length > 0 && (
                         <section aria-labelledby="project-archive">
                             <h2 id="project-archive" className="mb-4 text-sm font-bold text-white/58">{t("pages.projects.archive")}</h2>
-                            <div className="project-archive-grid grid auto-rows-fr gap-6 md:grid-cols-2">
+                            <div className="project-archive-grid grid auto-rows-fr gap-4 md:grid-cols-2 xl:grid-cols-3">
                                 {archiveProjects.map((project) => <ProjectCard key={project.id} project={project} onOpen={() => setSelectedProjectId(project.id)} />)}
                             </div>
                         </section>
