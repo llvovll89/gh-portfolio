@@ -21,6 +21,22 @@ export interface Project {
 
 export const projects = [
     {
+        id: 7,
+        title: "GH ARCADE",
+        scale: "개인 프로젝트",
+        image: "/assets/images/projects/variety-gaming-platform.png",
+        link: {
+            repositoryUrl: "https://github.com/llvovll89/Variety_Gaming_Platform",
+            projectUrl: "https://variety-gaming-platform.vercel.app/",
+        },
+        description: "전략, 액션, 캐주얼 게임을 한곳에서 탐색하고 바로 플레이하는 웹 게임 플랫폼입니다.",
+        detailedDescription: "삼국 영지, 삼국지 패업 PK, 메아리 미로, 슬리더 등 다양한 게임을 브라우저에서 즐길 수 있는 웹 게임 플랫폼입니다. 게임 이름과 태그 검색, 장르별 필터로 원하는 게임을 찾고 바로 실행할 수 있습니다. React와 TypeScript로 플랫폼을 구성하고 Three.js를 활용한 3D 게임을 제공합니다.",
+        skills: ["React", "TypeScript", "Vite", "Tailwind CSS", "Three.js", "Zod", "Vercel"],
+        projectMembers: ["김건호"],
+        role: "플랫폼 기획, UI 설계, 게임 개발, 배포",
+        contributions: ["게임 검색과 장르별 탐색 화면 구성", "전략·액션·캐주얼 게임 구현", "Three.js를 활용한 3D 게임 개발"],
+    },
+    {
         id: 1,
         title: "Hovie",
         scale: "개인 프로젝트",
