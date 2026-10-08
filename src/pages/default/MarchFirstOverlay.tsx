@@ -105,7 +105,7 @@ export const MarchFirstOverlay = () => {
             {!dismissed && (
                 <div
                     role="status"
-                    className="fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-50 flex items-center gap-3 rounded-2xl border border-white/15 bg-black/75 backdrop-blur-md px-4 sm:px-5 py-3 sm:py-3.5 shadow-2xl"
+                    className="fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-50 flex items-center gap-3 rounded-2xl border border-foreground/15 bg-inverse/75 backdrop-blur-md px-4 sm:px-5 py-3 sm:py-3.5 shadow-2xl"
                     style={{ animation: "marchBadgeIn 0.5s ease-out" }}
                 >
                     <TaegeukgiSVG
@@ -118,12 +118,12 @@ export const MarchFirstOverlay = () => {
                         }}
                     />
                     <div className="flex flex-col min-w-0">
-                        <div className="text-[10px] text-white/50 font-medium tracking-wide">제 107주년</div>
-                        <div className="text-sm font-bold text-white whitespace-nowrap">3·1절을 기념합니다</div>
+                        <div className="text-[10px] text-muted font-medium tracking-wide">제 107주년</div>
+                        <div className="text-sm font-bold text-foreground whitespace-nowrap">3·1절을 기념합니다</div>
                     </div>
                     <button
                         onClick={() => setDismissed(true)}
-                        className="ml-1 flex items-center justify-center w-5 h-5 rounded-full text-white/40 hover:text-white/90 hover:bg-white/10 transition-all duration-150 text-base leading-none shrink-0"
+                        className="ml-1 flex items-center justify-center w-5 h-5 rounded-full text-muted hover:text-foreground hover:bg-foreground/10 transition-all duration-150 text-base leading-none shrink-0"
                         aria-label="닫기"
                     >
                         ×

@@ -37,13 +37,13 @@ export const GitControl = () => {
     }, [setShowActivity]);
 
     return (
-        <section className={`w-full h-full flex flex-col ${backgroundClass} overflow-y-auto scrolls text-white`} style={backgroundStyle}>
+        <section className={`w-full h-full flex flex-col ${backgroundClass} overflow-y-auto scrolls text-foreground`} style={backgroundStyle}>
             <header className="h-10 flex items-center px-3 border-b border-sub-gary/30 text-xs justify-between">
                 <div>{t("gitControl.title")}</div>
                 <div className="flex items-center gap-2">
                     <button
                         onClick={() => setShowActivity((s) => !s)}
-                        className="text-[10px] px-3 py-2 rounded bg-white/10 hover:bg-white/10"
+                        className="text-[10px] px-3 py-2 rounded bg-foreground/10 hover:bg-foreground/10"
                     >
                         Activity
                     </button>
@@ -60,17 +60,17 @@ export const GitControl = () => {
                     <section key={repo} className="w-full border-b border-sub-gary/20">
                         <div
                             onClick={() => handleRepoClick(repo)}
-                            className="px-3 py-2 bg-white/5 border-b border-sub-gary/20 cursor-pointer hover:bg-white/10 transition-colors"
+                            className="px-3 py-2 bg-foreground/5 border-b border-sub-gary/20 cursor-pointer hover:bg-foreground/10 transition-colors"
                         >
                             <div className="flex items-center justify-between gap-2">
                                 <span className="text-xs font-semibold truncate">{repo}</span>
-                                <span className="text-[10px] text-white/50 shrink-0">
+                                <span className="text-[10px] text-muted shrink-0">
                                     {selectedRepo === repo ? "▼" : "▶"}
                                 </span>
                             </div>
 
                             {gitStates[repo].stats && (
-                                <div className="flex items-center gap-3 mt-2 text-[10px] text-white/70">
+                                <div className="flex items-center gap-3 mt-2 text-[10px] text-muted">
                                     <span className="flex items-center gap-1">⭐ {gitStates[repo].stats!.stars}</span>
                                     <span className="flex items-center gap-1">🔀 {gitStates[repo].stats!.forks}</span>
                                     <span className="flex items-center gap-1">👁️ {gitStates[repo].stats!.watchers}</span>
@@ -81,15 +81,15 @@ export const GitControl = () => {
 
                         {selectedRepo === repo && (
                             <>
-                                <div className="flex border-b border-sub-gary/20 bg-white/5">
+                                <div className="flex border-b border-sub-gary/20 bg-foreground/5">
                                     {(["branches", "issues", "pullRequests"] as TabType[]).map((tab) => (
                                         <button
                                             key={tab}
                                             onClick={() => setActiveTab(tab)}
                                             className={`flex-1 px-3 py-2 text-[11px] transition-colors ${
                                                 activeTab === tab
-                                                    ? "bg-white/10 text-white border-b-2 border-primary"
-                                                    : "text-white/60 hover:text-white hover:bg-white/5"
+                                                    ? "bg-foreground/10 text-foreground border-b-2 border-primary"
+                                                    : "text-muted hover:text-foreground hover:bg-foreground/5"
                                             }`}
                                         >
                                             {tab === "branches" && `Branches (${gitStates[repo].branches.length})`}
@@ -129,7 +129,7 @@ export const GitControl = () => {
                                                     {isSelected(repo, branch) && gitStates[repo].commits.length > 0 && (
                                                         <section
                                                             onClick={(e) => e.stopPropagation()}
-                                                            className={`w-full max-h-100 ${backgroundClass} overflow-auto scrolls select-none text-white mt-2`}
+                                                            className={`w-full max-h-100 ${backgroundClass} overflow-auto scrolls select-none text-foreground mt-2`}
                                                             style={backgroundStyle}
                                                         >
                                                             {gitStates[repo].commits.map((commit) => {
@@ -174,7 +174,7 @@ export const GitControl = () => {
                                     {activeTab === "issues" && (
                                         <div>
                                             {gitStates[repo].issues.length === 0 ? (
-                                                <div className="px-3 py-4 text-xs text-white/50 text-center">No issues found</div>
+                                                <div className="px-3 py-4 text-xs text-muted text-center">No issues found</div>
                                             ) : (
                                                 gitStates[repo].issues.map((issue) => (
                                                     <Link
@@ -196,7 +196,7 @@ export const GitControl = () => {
                                                                     }`}>
                                                                         {issue.state}
                                                                     </span>
-                                                                    <span className="text-[10px] text-white/50 shrink-0">#{issue.number}</span>
+                                                                    <span className="text-[10px] text-muted shrink-0">#{issue.number}</span>
                                                                 </div>
                                                                 <p className="text-xs font-medium mb-1 line-clamp-2">{issue.title}</p>
                                                                 {issue.labels.length > 0 && (
@@ -212,7 +212,7 @@ export const GitControl = () => {
                                                                         ))}
                                                                     </div>
                                                                 )}
-                                                                <p className="text-[10px] text-white/50 mt-1">
+                                                                <p className="text-[10px] text-muted mt-1">
                                                                     {new Date(issue.created_at).toLocaleDateString()}
                                                                 </p>
                                                             </div>
@@ -226,7 +226,7 @@ export const GitControl = () => {
                                     {activeTab === "pullRequests" && (
                                         <div>
                                             {gitStates[repo].pullRequests.length === 0 ? (
-                                                <div className="px-3 py-4 text-xs text-white/50 text-center">No pull requests found</div>
+                                                <div className="px-3 py-4 text-xs text-muted text-center">No pull requests found</div>
                                             ) : (
                                                 gitStates[repo].pullRequests.map((pr) => (
                                                     <Link
@@ -253,10 +253,10 @@ export const GitControl = () => {
                                                                     {pr.draft && (
                                                                         <span className="text-[10px] px-2 py-0.5 rounded bg-gray-500/20 text-gray-400">draft</span>
                                                                     )}
-                                                                    <span className="text-[10px] text-white/50">#{pr.number}</span>
+                                                                    <span className="text-[10px] text-muted">#{pr.number}</span>
                                                                 </div>
                                                                 <p className="text-xs font-medium mb-1">{pr.title}</p>
-                                                                <p className="text-[10px] text-white/50">
+                                                                <p className="text-[10px] text-muted">
                                                                     {new Date(pr.created_at).toLocaleDateString()}
                                                                 </p>
                                                             </div>

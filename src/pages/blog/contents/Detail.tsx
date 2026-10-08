@@ -120,7 +120,7 @@ export const Detail = () => {
     if (!slug) {
         return (
             <div className="py-6">
-                <p className="text-zinc-700 dark:text-zinc-300">
+                <p className="text-muted dark:text-muted">
                     잘못된 접근입니다.
                 </p>
                 <Link
@@ -136,7 +136,7 @@ export const Detail = () => {
     if (!post) {
         return (
             <div className="py-6">
-                <p className="text-zinc-700 dark:text-zinc-300">
+                <p className="text-muted dark:text-muted">
                     글을 찾을 수 없습니다: {slug}
                 </p>
                 <Link
@@ -172,7 +172,7 @@ export const Detail = () => {
                 <div className="mb-4">
                     <Link
                         to="/blog"
-                        className="text-sm underline underline-offset-4 text-zinc-400 hover:text-zinc-200 transition-colors"
+                        className="text-sm underline underline-offset-4 text-muted hover:text-foreground transition-colors"
                     >
                         ← Posts
                     </Link>
@@ -180,7 +180,7 @@ export const Detail = () => {
 
                 <header className="mb-6">
                     <div className="flex items-start justify-between gap-3 sm:gap-4">
-                        <h1 className="text-[clamp(1.5rem,5vw,2.25rem)] font-extrabold tracking-tight text-zinc-100">
+                        <h1 className="text-[clamp(1.5rem,5vw,2.25rem)] font-extrabold tracking-tight text-foreground">
                             {post.title}
                         </h1>
                         <div className="shrink-0 pt-1">
@@ -192,13 +192,13 @@ export const Detail = () => {
                         </div>
                     </div>
 
-                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm select-none text-zinc-400">
+                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm select-none text-muted">
                         <span className="text-[clamp(0.75rem,1.5vw,0.9rem)]">
                             {post.date || "날짜 없음"}
                         </span>
                         {post.readingTime && (
                             <>
-                                <span className="text-zinc-600">•</span>
+                                <span className="text-muted">•</span>
                                 <span className="text-[clamp(0.75rem,1.5vw,0.9rem)]">
                                     {post.readingTime}
                                 </span>
@@ -206,7 +206,7 @@ export const Detail = () => {
                         )}
                         {viewCount !== null && (
                             <>
-                                <span className="text-zinc-600">•</span>
+                                <span className="text-muted">•</span>
                                 <span className="flex items-center gap-1 text-[clamp(0.75rem,1.5vw,0.9rem)]">
                                     <LuEye className="w-3 h-3" />
                                     {viewCount.toLocaleString()}
@@ -216,7 +216,7 @@ export const Detail = () => {
                         {post.tags?.map((t) => (
                             <span
                                 key={t}
-                                className="rounded-full border border-zinc-700 bg-zinc-800/80 text-zinc-200 px-2 py-0.5 text-xs"
+                                className="rounded-full border border-line bg-panel text-foreground px-2 py-0.5 text-xs"
                             >
                                 {t}
                             </span>
@@ -225,7 +225,7 @@ export const Detail = () => {
 
                     {post.summary ? (
                         <p
-                            className={`mt-2 text-zinc-300 ${post.type === "html" ? "leading-tight" : "leading-7"}`}
+                            className={`mt-2 text-muted ${post.type === "html" ? "leading-tight" : "leading-7"}`}
                         >
                             {post.summary}
                         </p>
@@ -237,15 +237,15 @@ export const Detail = () => {
                     <iframe
                         srcDoc={post.body}
                         loading="lazy"
-                        className="w-full rounded-lg border border-zinc-200 dark:border-zinc-700 h-[70vh] sm:h-[80vh]"
+                        className="w-full rounded-lg border border-line dark:border-line h-[70vh] sm:h-[80vh]"
                         title={post.title}
                         sandbox=""
                     />
                 ) : (
                     <>
                         {tocItems.length > 0 && (
-                            <details className="xl:hidden mb-5 group rounded-lg border border-zinc-700 bg-zinc-800/40">
-                                <summary className="cursor-pointer select-none marker:content-none [&::-webkit-details-marker]:hidden px-4 py-2.5 text-sm font-semibold text-zinc-300 flex items-center justify-between">
+                            <details className="xl:hidden mb-5 group rounded-lg border border-line bg-panel">
+                                <summary className="cursor-pointer select-none marker:content-none [&::-webkit-details-marker]:hidden px-4 py-2.5 text-sm font-semibold text-muted flex items-center justify-between">
                                     목차
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -262,7 +262,7 @@ export const Detail = () => {
                                         />
                                     </svg>
                                 </summary>
-                                <ul className="px-4 pb-3 pt-1 space-y-1 max-h-64 overflow-y-auto scrolls border-t border-zinc-700/60">
+                                <ul className="px-4 pb-3 pt-1 space-y-1 max-h-64 overflow-y-auto scrolls border-t border-line/60">
                                     {tocItems.map((item) => (
                                         <li key={item.id}>
                                             <a
@@ -274,7 +274,7 @@ export const Detail = () => {
                                                         DETAIL_SCROLL_ID,
                                                     );
                                                 }}
-                                                className={`block text-sm leading-snug py-1.5 text-zinc-400 hover:text-zinc-200 transition-colors ${
+                                                className={`block text-sm leading-snug py-1.5 text-muted hover:text-foreground transition-colors ${
                                                     item.level === 3
                                                         ? "pl-4"
                                                         : "pl-0"
@@ -295,18 +295,18 @@ export const Detail = () => {
                                 {(prevPost || nextPost) && (
                                     <nav
                                         aria-label="포스트 네비게이션"
-                                        className="mt-10 pt-8 border-t border-zinc-800 grid grid-cols-2 gap-4"
+                                        className="mt-10 pt-8 border-t border-line grid grid-cols-2 gap-4"
                                     >
                                         {prevPost ? (
                                             <Link
                                                 to={`/blog/${prevPost.slug}`}
-                                                className="group flex flex-col gap-1 p-4 rounded-xl border border-zinc-800 hover:border-zinc-600 bg-zinc-900/40 hover:bg-zinc-800/50 transition-all"
+                                                className="group flex flex-col gap-1 p-4 rounded-xl border border-line hover:border-line bg-panel hover:bg-panel transition-all"
                                             >
-                                                <span className="flex items-center gap-1 text-xs text-zinc-500 group-hover:text-zinc-400">
+                                                <span className="flex items-center gap-1 text-xs text-muted group-hover:text-muted">
                                                     <LuChevronLeft className="w-3 h-3" />{" "}
                                                     이전 글
                                                 </span>
-                                                <span className="text-sm text-zinc-300 group-hover:text-white line-clamp-2 transition-colors">
+                                                <span className="text-sm text-muted group-hover:text-foreground line-clamp-2 transition-colors">
                                                     {prevPost.title}
                                                 </span>
                                             </Link>
@@ -316,13 +316,13 @@ export const Detail = () => {
                                         {nextPost ? (
                                             <Link
                                                 to={`/blog/${nextPost.slug}`}
-                                                className="group flex flex-col gap-1 p-4 rounded-xl border border-zinc-800 hover:border-zinc-600 bg-zinc-900/40 hover:bg-zinc-800/50 transition-all text-right"
+                                                className="group flex flex-col gap-1 p-4 rounded-xl border border-line hover:border-line bg-panel hover:bg-panel transition-all text-right"
                                             >
-                                                <span className="flex items-center justify-end gap-1 text-xs text-zinc-500 group-hover:text-zinc-400">
+                                                <span className="flex items-center justify-end gap-1 text-xs text-muted group-hover:text-muted">
                                                     다음 글{" "}
                                                     <LuChevronRight className="w-3 h-3" />
                                                 </span>
-                                                <span className="text-sm text-zinc-300 group-hover:text-white line-clamp-2 transition-colors">
+                                                <span className="text-sm text-muted group-hover:text-foreground line-clamp-2 transition-colors">
                                                     {nextPost.title}
                                                 </span>
                                             </Link>
@@ -348,7 +348,7 @@ export const Detail = () => {
                     <>
                         <button
                             onClick={goBack}
-                            className="fixed left-4 sm:left-6 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-50 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-zinc-800 text-white shadow-lg hover:bg-zinc-700 transition-all duration-300 ease-in-out opacity-90 hover:opacity-100"
+                            className="fixed left-4 sm:left-6 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-50 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-panel text-foreground shadow-lg hover:bg-panel transition-all duration-300 ease-in-out opacity-90 hover:opacity-100"
                             aria-label="뒤로가기"
                         >
                             <svg
@@ -369,7 +369,7 @@ export const Detail = () => {
 
                         <button
                             onClick={scrollToTop}
-                            className="fixed right-4 sm:right-6 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-50 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-zinc-800 text-white shadow-lg hover:bg-zinc-700 transition-all duration-300 ease-in-out opacity-90 hover:opacity-100"
+                            className="fixed right-4 sm:right-6 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-50 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-panel text-foreground shadow-lg hover:bg-panel transition-all duration-300 ease-in-out opacity-90 hover:opacity-100"
                             aria-label="위로가기"
                         >
                             <svg

@@ -15,7 +15,7 @@ export const Contact = () => {
         <>
             <Header />
             <Aside />
-            <Contents className="select-none">
+            <Contents>
                 <section className="contact-page relative w-full max-w-6xl mx-auto overflow-auto scrolls px-2 md:px-6">
                     <div className="relative mb-6 sm:mb-10">
                         <div className="flex items-center gap-3 sm:mb-3 mb-1.5">
@@ -26,12 +26,12 @@ export const Contact = () => {
                                 {t("pages.contact.title")}
                             </h1>
                         </div>
-                        <p className="text-[clamp(0.78rem,1vw,0.875rem)] md:text-base text-white/70 max-w-2xl leading-relaxed">
+                        <p className="text-[clamp(0.78rem,1vw,0.875rem)] md:text-base text-muted max-w-2xl leading-relaxed">
                             {t("pages.contact.subtitle")}
                         </p>
                     </div>
 
-                    <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-6 items-start pb-8">
+                    <div className="contact-layout">
                         {/* 왼쪽: 연락 카드 */}
                         <CommunicationCard />
 

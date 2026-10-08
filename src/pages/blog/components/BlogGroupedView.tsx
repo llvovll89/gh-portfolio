@@ -32,12 +32,12 @@ export const BlogGroupedView = ({ posts }: BlogGroupedViewProps) => {
                             >
                                 #{tag}
                             </span>
-                            <span className="text-sm text-zinc-500 blog-dark:text-zinc-300">
+                            <span className="text-sm text-muted blog-dark:text-muted">
                                 {groupPosts.length}{" "}
                                 {groupPosts.length === 1 ? "post" : "posts"}
                             </span>
                         </div>
-                        <div className="flex-1 h-px bg-zinc-200 blog-dark:bg-zinc-800" />
+                        <div className="flex-1 h-px bg-panel blog-dark:bg-panel" />
                     </div>
 
                     <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -132,12 +132,12 @@ export const Uses = () => {
                             <article key={idx} className="space-y-4 md:space-y-6">
                                 {/* 카테고리 헤더 */}
                                 <div className="flex items-center gap-3 md:gap-5">
-                                    <h2 className="text-[clamp(1.2rem,2.5vw,1.8rem)] shrink-0 whitespace-nowrap font-bold text-white/90 pr-2 flex items-center gap-2">
+                                    <h2 className="text-[clamp(1.2rem,2.5vw,1.8rem)] shrink-0 whitespace-nowrap font-bold text-foreground pr-2 flex items-center gap-2">
                                         {category.title}
                                     </h2>
                                 </div>
 
-                                <p className="text-xs md:text-sm text-white/60 pl-4">
+                                <p className="text-xs md:text-sm text-muted pl-4">
                                     {category.description}
                                 </p>
 
@@ -172,16 +172,16 @@ export const Uses = () => {
                                             {/* 내용 */}
                                             <div className="relative flex items-start gap-4">
                                                 {/* 아이콘 */}
-                                                <div className="shrink-0 w-12 h-12 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-transform group-hover:scale-110 group-hover:rotate-3">
-                                                    <tool.icon className="w-6 h-6 text-white/80" />
+                                                <div className="shrink-0 w-12 h-12 rounded-lg bg-foreground/5 border border-foreground/10 flex items-center justify-center transition-transform group-hover:scale-110 group-hover:rotate-3">
+                                                    <tool.icon className="w-6 h-6 text-foreground" />
                                                 </div>
 
                                                 {/* 텍스트 */}
                                                 <div className="flex-1 space-y-1.5">
-                                                    <h3 className="text-sm md:text-base font-bold text-white/90 group-hover:text-primary transition-colors">
+                                                    <h3 className="text-sm md:text-base font-bold text-foreground group-hover:text-primary transition-colors">
                                                         {tool.name}
                                                     </h3>
-                                                    <p className="text-xs md:text-sm text-white/60 leading-relaxed">
+                                                    <p className="text-xs md:text-sm text-muted leading-relaxed">
                                                         {tool.description}
                                                     </p>
 
@@ -206,10 +206,10 @@ export const Uses = () => {
 
                     {/* 추가 정보 */}
                     <div className="mt-8 md:mt-12 p-5 md:p-6 rounded-2xl bg-linear-to-br from-primary/5 to-primary/2 border border-primary/20">
-                        <h3 className="text-base md:text-lg font-bold text-white/90 mb-3 flex items-center gap-2">
+                        <h3 className="text-base md:text-lg font-bold text-foreground mb-3 flex items-center gap-2">
                             참고
                         </h3>
-                        <p className="text-xs md:text-sm text-white/70 leading-relaxed">
+                        <p className="text-xs md:text-sm text-muted leading-relaxed">
                             이 목록은 현재 활발히 사용 중인 도구들입니다. 프로젝트와 상황에 따라 다른 도구들도 유연하게 사용합니다.
                         </p>
                     </div>

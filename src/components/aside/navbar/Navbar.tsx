@@ -130,7 +130,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
     }, [hasSettingsUpdates, selectedNav]);
 
     return (
-        <nav className="relative w-10 flex flex-col items-center h-full z-10 border-r border-sub-gary/30 text-white select-none">
+        <nav className="relative w-10 flex flex-col items-center h-full z-10 border-r border-sub-gary/30 text-foreground select-none">
             {/* Main navigation items */}
             <div className="flex-1 flex flex-col w-full">
                 {NAV_ITEMS.map((item) => (
@@ -147,7 +147,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                         className={`cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center transition-colors ${
                             selectedNav === item.type
                                 ? "bg-sub-gary/20 text-primary"
-                                : "text-white hover:bg-sub-gary/10"
+                                : "text-foreground hover:bg-sub-gary/10"
                         }`}
                         aria-label={item.label}
                     >
@@ -156,7 +156,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                             {item.type === NavType.BOOKMARKS && bookmarkCount > 0 && (
                                 <span
                                     aria-hidden="true"
-                                    className={`absolute -top-1.5 -right-2 min-w-3.5 h-3.5 px-1 rounded-full text-[9px] font-bold leading-3.5 text-center ${selectedNav === NavType.BOOKMARKS ? "bg-primary text-white" : "bg-amber-400 text-black"}`}
+                                    className={`absolute -top-1.5 -right-2 min-w-3.5 h-3.5 px-1 rounded-full text-[9px] font-bold leading-3.5 text-center ${selectedNav === NavType.BOOKMARKS ? "bg-primary text-foreground" : "bg-amber-400 text-foreground"}`}
                                 >
                                     {bookmarkCount > 99 ? "99+" : bookmarkCount}
                                 </span>
@@ -164,7 +164,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                             {item.type === NavType.GIT_CONTROL && gitOpenCount > 0 && (
                                 <span
                                     aria-hidden="true"
-                                    className={`absolute -top-1.5 -right-2 min-w-3.5 h-3.5 px-1 rounded-full text-[9px] font-bold leading-3.5 text-center ${selectedNav === NavType.GIT_CONTROL ? "bg-primary text-white" : "bg-cyan-400 text-black"}`}
+                                    className={`absolute -top-1.5 -right-2 min-w-3.5 h-3.5 px-1 rounded-full text-[9px] font-bold leading-3.5 text-center ${selectedNav === NavType.GIT_CONTROL ? "bg-primary text-foreground" : "bg-cyan-400 text-foreground"}`}
                                 >
                                     {gitOpenCount > 99 ? "99+" : gitOpenCount}
                                 </span>
@@ -186,7 +186,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                 {!isMobileSize && (
                 <button
                     onClick={toggleTerminal}
-                    className="cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center text-white hover:bg-sub-gary/10 transition-colors"
+                    className="cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center text-foreground hover:bg-sub-gary/10 transition-colors"
                     aria-label="터미널 토글"
                     title="터미널 열기/닫기"
                 >
@@ -199,7 +199,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                     href="https://github.com/llvovll89"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center text-white hover:bg-sub-gary/10 transition-colors"
+                    className="cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center text-foreground hover:bg-sub-gary/10 transition-colors"
                     aria-label="GitHub 프로필"
                     title="GitHub"
                 >
@@ -211,7 +211,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                     href="https://velog.io/@llvovll89/posts"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center text-white hover:bg-sub-gary/10 transition-colors"
+                    className="cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center text-foreground hover:bg-sub-gary/10 transition-colors"
                     aria-label="Velog 블로그"
                     title="Velog"
                 >
@@ -221,7 +221,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                 {/* Keyboard shortcuts button */}
                 <button
                     onClick={toggleKeyboardInfo}
-                    className="focus:outline-none cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center text-white hover:bg-sub-gary/10 transition-colors"
+                    className="focus:outline-none cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center text-foreground hover:bg-sub-gary/10 transition-colors"
                     aria-label="키보드 단축키 안내"
                     title="키보드 단축키"
                 >

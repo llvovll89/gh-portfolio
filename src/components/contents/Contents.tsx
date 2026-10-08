@@ -91,7 +91,7 @@ export const Contents = ({children, className}: ContentsProps) => {
                             behavior: "smooth",
                         })
                     }
-                    className="fixed bottom-14 right-4 z-20 p-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 text-white/70 hover:text-white backdrop-blur-sm transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg"
+                    className="fixed bottom-14 right-4 z-20 p-2.5 rounded-full bg-foreground/10 hover:bg-foreground/20 border border-foreground/10 text-muted hover:text-foreground backdrop-blur-sm transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg"
                 >
                     <LuArrowUp className="w-4 h-4" />
                 </button>

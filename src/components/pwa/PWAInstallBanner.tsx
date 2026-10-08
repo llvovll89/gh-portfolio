@@ -31,8 +31,8 @@ export const PWAInstallBanner = () => {
             aria-label="앱 설치 안내"
             style={{ zIndex: SURFACE_LAYERS.notice }}
             className={`fixed bottom-20 sm:bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-sm
-                       rounded-2xl shadow-2xl border border-white/10
-                       bg-[#1e1e2e] text-white text-sm
+                       rounded-2xl shadow-2xl border border-foreground/10
+                       bg-[#1e1e2e] text-foreground text-sm
                        ${closing ? "animate-[fadeOut_0.25s_ease-in_forwards]" : "animate-[fadeIn_0.3s_ease-out]"}`}
         >
             {/* 헤더 */}
@@ -43,12 +43,12 @@ export const PWAInstallBanner = () => {
                         alt="로고"
                         className="w-7 h-7 rounded-lg"
                     />
-                    <span className="font-semibold text-white/90">GH Portfolio</span>
+                    <span className="font-semibold text-foreground">GH Portfolio</span>
                 </div>
                 <button
                     onClick={handleDismiss}
                     aria-label="닫기"
-                    className="text-white/40 hover:text-white/70 transition-colors text-xl leading-none px-1"
+                    className="text-muted hover:text-muted transition-colors text-xl leading-none px-1"
                 >
                     ×
                 </button>
@@ -59,7 +59,7 @@ export const PWAInstallBanner = () => {
                 {/* ── Android Chrome/Edge/Samsung: 네이티브 버튼 ── */}
                 {state.status === "android" && (
                     <>
-                        <p className="text-white/60 text-xs mb-3">
+                        <p className="text-muted text-xs mb-3">
                             홈 화면에 추가하면 앱처럼 빠르게 접속할 수 있어요.
                         </p>
                         <button
@@ -75,27 +75,27 @@ export const PWAInstallBanner = () => {
                 {/* ── Android Firefox 등: 수동 안내 ── */}
                 {state.status === "android-manual" && (
                     <>
-                        <p className="text-white/60 text-xs mb-3">
+                        <p className="text-muted text-xs mb-3">
                             브라우저 메뉴를 통해 홈 화면에 추가할 수 있어요.
                         </p>
-                        <ol className="space-y-2 text-white/70 text-xs">
+                        <ol className="space-y-2 text-muted text-xs">
                             <li className="flex items-start gap-2">
-                                <span className="shrink-0 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center font-bold text-[10px]">1</span>
-                                <span>브라우저 우측 상단 <strong className="text-white/90">⋮ 메뉴</strong>를 탭하세요</span>
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-foreground/10 flex items-center justify-center font-bold text-[10px]">1</span>
+                                <span>브라우저 우측 상단 <strong className="text-foreground">⋮ 메뉴</strong>를 탭하세요</span>
                             </li>
                             <li className="flex items-start gap-2">
-                                <span className="shrink-0 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center font-bold text-[10px]">2</span>
-                                <span><strong className="text-white/90">홈 화면에 추가</strong> 또는 <strong className="text-white/90">앱 설치</strong>를 선택하세요</span>
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-foreground/10 flex items-center justify-center font-bold text-[10px]">2</span>
+                                <span><strong className="text-foreground">홈 화면에 추가</strong> 또는 <strong className="text-foreground">앱 설치</strong>를 선택하세요</span>
                             </li>
                             <li className="flex items-start gap-2">
-                                <span className="shrink-0 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center font-bold text-[10px]">3</span>
-                                <span><strong className="text-white/90">추가</strong>를 탭해 완료하세요</span>
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-foreground/10 flex items-center justify-center font-bold text-[10px]">3</span>
+                                <span><strong className="text-foreground">추가</strong>를 탭해 완료하세요</span>
                             </li>
                         </ol>
                         <button
                             onClick={dismiss}
-                            className="mt-3 w-full py-2 rounded-xl border border-white/10 text-white/50
-                                       hover:text-white/70 hover:border-white/20 transition-all text-xs"
+                            className="mt-3 w-full py-2 rounded-xl border border-foreground/10 text-muted
+                                       hover:text-muted hover:border-foreground/20 transition-all text-xs"
                         >
                             닫기
                         </button>
@@ -105,31 +105,31 @@ export const PWAInstallBanner = () => {
                 {/* ── iOS Safari: 공유 → 홈 화면에 추가 ── */}
                 {state.status === "ios-safari" && (
                     <>
-                        <p className="text-white/60 text-xs mb-3">
+                        <p className="text-muted text-xs mb-3">
                             홈 화면에 추가하면 앱처럼 사용할 수 있어요.
                         </p>
-                        <ol className="space-y-2 text-white/70 text-xs">
+                        <ol className="space-y-2 text-muted text-xs">
                             <li className="flex items-start gap-2">
-                                <span className="shrink-0 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center font-bold text-[10px]">1</span>
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-foreground/10 flex items-center justify-center font-bold text-[10px]">1</span>
                                 <span>
                                     하단 공유 버튼{" "}
-                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-white/10 align-middle text-[11px]">⎋</span>
+                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-foreground/10 align-middle text-[11px]">⎋</span>
                                     {" "}을 탭하세요
                                 </span>
                             </li>
                             <li className="flex items-start gap-2">
-                                <span className="shrink-0 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center font-bold text-[10px]">2</span>
-                                <span><strong className="text-white/90">홈 화면에 추가</strong>를 선택하세요</span>
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-foreground/10 flex items-center justify-center font-bold text-[10px]">2</span>
+                                <span><strong className="text-foreground">홈 화면에 추가</strong>를 선택하세요</span>
                             </li>
                             <li className="flex items-start gap-2">
-                                <span className="shrink-0 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center font-bold text-[10px]">3</span>
-                                <span>오른쪽 상단 <strong className="text-white/90">추가</strong>를 탭하세요</span>
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-foreground/10 flex items-center justify-center font-bold text-[10px]">3</span>
+                                <span>오른쪽 상단 <strong className="text-foreground">추가</strong>를 탭하세요</span>
                             </li>
                         </ol>
                         <button
                             onClick={dismiss}
-                            className="mt-3 w-full py-2 rounded-xl border border-white/10 text-white/50
-                                       hover:text-white/70 hover:border-white/20 transition-all text-xs"
+                            className="mt-3 w-full py-2 rounded-xl border border-foreground/10 text-muted
+                                       hover:text-muted hover:border-foreground/20 transition-all text-xs"
                         >
                             닫기
                         </button>
@@ -139,31 +139,31 @@ export const PWAInstallBanner = () => {
                 {/* ── iOS Chrome: 공유 버튼 → 홈 화면에 추가 ── */}
                 {state.status === "ios-chrome" && (
                     <>
-                        <p className="text-white/60 text-xs mb-3">
+                        <p className="text-muted text-xs mb-3">
                             홈 화면에 추가하면 앱처럼 사용할 수 있어요.
                         </p>
-                        <ol className="space-y-2 text-white/70 text-xs">
+                        <ol className="space-y-2 text-muted text-xs">
                             <li className="flex items-start gap-2">
-                                <span className="shrink-0 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center font-bold text-[10px]">1</span>
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-foreground/10 flex items-center justify-center font-bold text-[10px]">1</span>
                                 <span>
                                     하단 공유 버튼{" "}
-                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-white/10 align-middle text-[11px]">⎋</span>
+                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-foreground/10 align-middle text-[11px]">⎋</span>
                                     {" "}을 탭하세요
                                 </span>
                             </li>
                             <li className="flex items-start gap-2">
-                                <span className="shrink-0 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center font-bold text-[10px]">2</span>
-                                <span>스크롤해서 <strong className="text-white/90">홈 화면에 추가</strong>를 선택하세요</span>
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-foreground/10 flex items-center justify-center font-bold text-[10px]">2</span>
+                                <span>스크롤해서 <strong className="text-foreground">홈 화면에 추가</strong>를 선택하세요</span>
                             </li>
                             <li className="flex items-start gap-2">
-                                <span className="shrink-0 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center font-bold text-[10px]">3</span>
-                                <span>오른쪽 상단 <strong className="text-white/90">추가</strong>를 탭하세요</span>
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-foreground/10 flex items-center justify-center font-bold text-[10px]">3</span>
+                                <span>오른쪽 상단 <strong className="text-foreground">추가</strong>를 탭하세요</span>
                             </li>
                         </ol>
                         <button
                             onClick={dismiss}
-                            className="mt-3 w-full py-2 rounded-xl border border-white/10 text-white/50
-                                       hover:text-white/70 hover:border-white/20 transition-all text-xs"
+                            className="mt-3 w-full py-2 rounded-xl border border-foreground/10 text-muted
+                                       hover:text-muted hover:border-foreground/20 transition-all text-xs"
                         >
                             닫기
                         </button>
@@ -173,27 +173,27 @@ export const PWAInstallBanner = () => {
                 {/* ── iOS Firefox 등: Safari로 유도 ── */}
                 {state.status === "ios-other" && (
                     <>
-                        <p className="text-white/60 text-xs mb-3">
-                            iOS에서는 <strong className="text-white/80">Safari</strong>에서만 홈 화면 추가가 가능해요.
+                        <p className="text-muted text-xs mb-3">
+                            iOS에서는 <strong className="text-foreground">Safari</strong>에서만 홈 화면 추가가 가능해요.
                         </p>
-                        <ol className="space-y-2 text-white/70 text-xs">
+                        <ol className="space-y-2 text-muted text-xs">
                             <li className="flex items-start gap-2">
-                                <span className="shrink-0 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center font-bold text-[10px]">1</span>
-                                <span>이 페이지 주소를 <strong className="text-white/90">Safari</strong>에서 열어주세요</span>
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-foreground/10 flex items-center justify-center font-bold text-[10px]">1</span>
+                                <span>이 페이지 주소를 <strong className="text-foreground">Safari</strong>에서 열어주세요</span>
                             </li>
                             <li className="flex items-start gap-2">
-                                <span className="shrink-0 w-5 h-5 rounded-full bg-white/10 flex items-center justify-center font-bold text-[10px]">2</span>
+                                <span className="shrink-0 w-5 h-5 rounded-full bg-foreground/10 flex items-center justify-center font-bold text-[10px]">2</span>
                                 <span>
                                     하단 공유 버튼{" "}
-                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-white/10 align-middle text-[11px]">⎋</span>
-                                    {" "}→ <strong className="text-white/90">홈 화면에 추가</strong>
+                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-foreground/10 align-middle text-[11px]">⎋</span>
+                                    {" "}→ <strong className="text-foreground">홈 화면에 추가</strong>
                                 </span>
                             </li>
                         </ol>
                         <button
                             onClick={dismiss}
-                            className="mt-3 w-full py-2 rounded-xl border border-white/10 text-white/50
-                                       hover:text-white/70 hover:border-white/20 transition-all text-xs"
+                            className="mt-3 w-full py-2 rounded-xl border border-foreground/10 text-muted
+                                       hover:text-muted hover:border-foreground/20 transition-all text-xs"
                         >
                             닫기
                         </button>

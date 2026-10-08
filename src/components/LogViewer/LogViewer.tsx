@@ -14,7 +14,7 @@ const renderWithLinks = (line: string) => {
                     href={p}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-sky-300 underline underline-offset-2 hover:text-sky-200"
+                    className="text-primary underline underline-offset-2 hover:text-foreground"
                 >
                     {p}
                 </a>
@@ -61,7 +61,7 @@ export const LogViewer = () => {
     return (
         <Portal>
             <section
-                className="select-none fixed inset-0 z-999 flex items-center justify-center p-4 bg-slate-950/55 backdrop-blur-md"
+                className="select-none fixed inset-0 z-999 flex items-center justify-center p-4 bg-[#0c1018]/50 backdrop-blur-md"
                 onClick={close}
                 role="dialog"
                 aria-modal="true"
@@ -70,7 +70,7 @@ export const LogViewer = () => {
                 <div
                     className={[
                         "relative w-full max-w-sm sm:max-w-lg md:max-w-2xl lg:max-w-3xl overflow-hidden rounded-2xl",
-                        "border border-slate-200/80 bg-white text-slate-900",
+                        "border border-line bg-panel text-foreground",
                         "shadow-[0_30px_90px_rgba(2,6,23,0.35)]",
                     ].join(" ")}
                     onClick={(e) => e.stopPropagation()}
@@ -81,12 +81,12 @@ export const LogViewer = () => {
                         <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/35 to-transparent" />
                     </div>
 
-                    <header className="relative flex items-center justify-between px-3 sm:px-5 py-3 sm:py-4 border-b border-slate-200/70 gap-2">
+                    <header className="relative flex items-center justify-between px-3 sm:px-5 py-3 sm:py-4 border-b border-line gap-2">
                         <div className="min-w-0 flex-1">
                             <p className="text-xs sm:text-sm font-semibold tracking-tight">
                                 CLI Command Output
                             </p>
-                            <p className="text-[10px] sm:text-xs text-slate-500 truncate">
+                            <p className="text-[10px] sm:text-xs text-muted truncate">
                                 텍스트 / 링크 자동 인식 / 복사 / 다운로드
                             </p>
                         </div>
@@ -94,21 +94,21 @@ export const LogViewer = () => {
                         <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                             <button
                                 onClick={copy}
-                                className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-medium border border-slate-200 bg-white hover:bg-slate-50"
+                                className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-medium border border-line bg-panel hover:bg-panel"
                                 type="button"
                             >
                                 복사
                             </button>
                             <button
                                 onClick={download}
-                                className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-medium border border-slate-200 bg-white hover:bg-slate-50"
+                                className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-medium border border-line bg-panel hover:bg-panel"
                                 type="button"
                             >
                                 다운로드
                             </button>
                             <button
                                 onClick={close}
-                                className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-medium bg-primary text-white hover:bg-primary/90"
+                                className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-medium bg-primary text-foreground hover:bg-primary/90"
                                 type="button"
                             >
                                 닫기
@@ -117,8 +117,8 @@ export const LogViewer = () => {
                     </header>
 
                     <div className="relative max-h-[60vh] sm:max-h-[70vh] overflow-auto p-3 sm:p-4">
-                        <div className="rounded-xl border border-slate-200 bg-slate-950 text-slate-100 overflow-hidden">
-                            <div className="flex items-center gap-2 px-3 sm:px-4 py-2 border-b border-white/10 text-[10px] sm:text-[11px] text-white/70">
+                        <div className="rounded-xl border border-line bg-panel text-foreground overflow-hidden">
+                            <div className="flex items-center gap-2 px-3 sm:px-4 py-2 border-b border-foreground/10 text-[10px] sm:text-[11px] text-muted">
                                 <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-red-400/80" />
                                 <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-yellow-300/80" />
                                 <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-green-400/80" />

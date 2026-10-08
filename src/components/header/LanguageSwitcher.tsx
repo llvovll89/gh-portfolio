@@ -38,7 +38,7 @@ export const LanguageSwitcher = () => {
             onClick={toggle}
             title={`Switch to ${nextLabel}`}
             aria-label={`현재 언어: ${LANG_LABEL[current] ?? "KO"}, ${nextLabel}로 전환`}
-            className="h-full px-2.5 sm:px-3 cursor-pointer hover:bg-sub-gary/20 text-white/60 hover:text-white transition-colors border-l border-sub-gary/10 select-none flex items-center gap-1"
+            className="h-full px-2.5 sm:px-3 cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors border-l border-sub-gary/10 select-none flex items-center gap-1"
         >
             <svg
                 width="13"

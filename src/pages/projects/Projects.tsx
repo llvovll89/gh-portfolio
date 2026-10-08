@@ -29,7 +29,7 @@ export const Projects = () => {
                                 {t("pages.projects.title")}
                             </h1>
                         </div>
-                        <p className="max-w-2xl text-sm leading-6 text-white/52 sm:text-base">
+                        <p className="max-w-2xl text-sm leading-6 text-muted sm:text-base">
                             {t("pages.projects.subtitle")}
                         </p>
                     </div>

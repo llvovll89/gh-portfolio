@@ -58,10 +58,10 @@ export const TableOfContents = ({ items }: Props) => {
             aria-label="목차"
             className="hidden xl:block sticky top-6 self-start w-52 shrink-0"
         >
-            <p className="text-xs font-semibold text-zinc-400 uppercase mb-3 tracking-widest">
+            <p className="text-xs font-semibold text-muted uppercase mb-3 tracking-widest">
                 목차
             </p>
-            <ul className="space-y-1 border-l border-zinc-800">
+            <ul className="space-y-1 border-l border-line">
                 {items.map((item) => (
                     <li key={item.id}>
                         <a
@@ -72,7 +72,7 @@ export const TableOfContents = ({ items }: Props) => {
                                 ${
                                     activeId === item.id
                                         ? "border-primary text-primary font-semibold"
-                                        : "border-transparent text-zinc-400 hover:text-zinc-200 hover:border-zinc-600"
+                                        : "border-transparent text-muted hover:text-foreground hover:border-line"
                                 }`}
                         >
                             {item.text}

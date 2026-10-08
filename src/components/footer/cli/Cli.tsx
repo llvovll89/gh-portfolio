@@ -281,7 +281,7 @@ export const Cli = () => {
             </div>
 
             {/* 입력 영역 */}
-            <div className="shrink-0 border-t border-white/10 px-3 py-1.5 flex items-center gap-1.5 bg-zinc-950">
+            <div className="shrink-0 border-t border-foreground/10 px-3 py-1.5 flex items-center gap-1.5 bg-zinc-950">
                 <span className="text-green-400 select-none shrink-0">llvovll89@DESKTOP</span>
                 <span className="text-yellow-300 select-none shrink-0">/d/gh-portfolio</span>
                 <span className="text-blue-300 select-none shrink-0">(main)</span>
@@ -301,7 +301,7 @@ export const Cli = () => {
             </div>
 
             {suggestions.length > 0 && inputValue.trim().length > 0 && (
-                <div className="shrink-0 border-t border-white/10 px-3 py-1 text-[10px] text-zinc-500 bg-zinc-950">
+                <div className="shrink-0 border-t border-foreground/10 px-3 py-1 text-[10px] text-zinc-500 bg-zinc-950">
                     Tab 자동완성: {suggestions.slice(0, 4).join(" | ")}
                 </div>
             )}

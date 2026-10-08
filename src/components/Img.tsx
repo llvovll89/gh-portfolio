@@ -25,7 +25,7 @@ export const Img = ({
             {showSkeleton && !loaded && (
                 <span
                     aria-hidden="true"
-                    className="absolute inset-0 rounded-[inherit] bg-white/5 animate-[skeleton-shimmer_1.5s_ease-in-out_infinite]"
+                    className="absolute inset-0 rounded-[inherit] bg-foreground/5 animate-[skeleton-shimmer_1.5s_ease-in-out_infinite]"
                 />
             )}
             <img

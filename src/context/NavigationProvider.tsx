@@ -23,7 +23,7 @@ function loadSelectedNav(): NavType | null {
     } catch {
         // ignore
     }
-    return null;
+    return window.innerWidth < 640 ? null : NavType.FOLDER;
 }
 
 function loadSelectedPathState(): SelectedPathState {

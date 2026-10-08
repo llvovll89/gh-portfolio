@@ -2,6 +2,8 @@ import { memo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter";
+import oneLight from "react-syntax-highlighter/dist/esm/styles/prism/one-light";
+import { useThemeStyle } from "../../../hooks/useThemeStyle";
 import vscDarkPlus from "react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus";
 import tsxLang from "react-syntax-highlighter/dist/esm/languages/prism/tsx";
 import typescriptLang from "react-syntax-highlighter/dist/esm/languages/prism/typescript";
@@ -50,6 +52,7 @@ function extractText(children: unknown): string {
 
 function CodeBlock({ language, codeString }: { language: string; codeString: string }) {
     const [copied, setCopied] = useState(false);
+    const { isDark } = useThemeStyle();
 
     const handleCopy = () => {
         navigator.clipboard.writeText(codeString).then(() => {
@@ -62,7 +65,7 @@ function CodeBlock({ language, codeString }: { language: string; codeString: str
         <div className="relative group my-4 max-w-full overflow-hidden rounded-lg">
             <SyntaxHighlighter
                 language={language}
-                style={vscDarkPlus}
+                style={isDark ? vscDarkPlus : oneLight}
                 showLineNumbers={false}
                 customStyle={{
                     margin: 0,
@@ -81,9 +84,9 @@ function CodeBlock({ language, codeString }: { language: string; codeString: str
                 onClick={handleCopy}
                 className="absolute top-2 right-2 px-2 py-1 rounded text-xs font-mono transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
                 style={{
-                    background: copied ? "rgba(34,197,94,0.2)" : "rgba(255,255,255,0.1)",
-                    color: copied ? "#86efac" : "rgba(255,255,255,0.6)",
-                    border: `1px solid ${copied ? "rgba(34,197,94,0.4)" : "rgba(255,255,255,0.15)"}`,
+                    background: "var(--surface-panel)",
+                    color: copied ? "var(--success)" : "var(--text-muted)",
+                    border: "1px solid var(--line)",
                 }}
                 aria-label="코드 복사"
             >
@@ -98,11 +101,11 @@ type Props = {
 };
 
 export const MarkdownRenderer = memo(({ content }: Props) => {
-    const overflowXStyle = `max-w-full overflow-x-auto whitespace-nowrap`;
+    const overflowXStyle = `max-w-full break-words`;
     const idCounts = new Map<string, number>();
 
     return (
-        <article className="w-full h-full flex flex-col bg-[#F5F7F8] md:p-4 p-3 rounded-[5px]">
+        <article className="w-full h-full flex flex-col bg-panel text-foreground md:p-4 p-3 rounded-[5px]">
             <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
@@ -142,7 +145,7 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                     },
                     p: (props) => (
                         <p
-                            className="my-3 leading-7 text-zinc-800 text-[clamp(0.95rem,1.5vw,1.1rem)]"
+                            className="my-3 leading-7 text-foreground text-[clamp(0.95rem,1.5vw,1.1rem)]"
                             {...props}
                         />
                     ),
@@ -152,7 +155,7 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                             return (
                                 <a
                                     href={href}
-                                    className="text-blue-600 underline underline-offset-4 text-[clamp(0.95rem,1.5vw,1.1rem)]"
+                                    className="text-primary underline underline-offset-4 text-[clamp(0.95rem,1.5vw,1.1rem)]"
                                     onClick={(e) => {
                                         e.preventDefault();
                                         const id = decodeURIComponent(href!.slice(1));
@@ -167,7 +170,7 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                         return (
                             <a
                                 href={href}
-                                className="text-blue-600 underline underline-offset-4 text-[clamp(0.95rem,1.5vw,1.1rem)]"
+                                className="text-primary underline underline-offset-4 text-[clamp(0.95rem,1.5vw,1.1rem)]"
                                 target="_blank"
                                 rel="noreferrer"
                                 {...props}
@@ -185,7 +188,7 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                     li: (props) => <li className="my-1" {...props} />,
                     blockquote: (props) => (
                         <blockquote
-                            className="my-4 border-l-4 border-zinc-300 pl-4 text-zinc-700 text-[clamp(0.95rem,1.5vw,1.1rem)] italic"
+                            className="my-4 border-l-4 border-line pl-4 text-foreground text-[clamp(0.95rem,1.5vw,1.1rem)] italic"
                             {...props}
                         />
                     ),
@@ -200,14 +203,14 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                         }
 
                         return (
-                            <code className="rounded bg-zinc-200 px-1.5 py-0.5 text-zinc-900 text-[clamp(0.9rem,1.5vw,1rem)]">
+                            <code className="rounded bg-inset px-1.5 py-0.5 text-foreground text-[clamp(0.9rem,1.5vw,1rem)]">
                                 {children}
                             </code>
                         );
                     },
                     hr: (props) => (
                         <hr
-                            className="my-6 border-zinc-200"
+                            className="my-6 border-line"
                             {...props}
                         />
                     ),
@@ -225,13 +228,13 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                     ),
                     th: (props) => (
                         <th
-                            className="border border-zinc-300 bg-zinc-100 text-zinc-900 px-3 py-2 text-left font-semibold whitespace-nowrap"
+                            className="border border-line bg-inset text-foreground px-3 py-2 text-left font-semibold whitespace-nowrap"
                             {...props}
                         />
                     ),
                     td: (props) => (
                         <td
-                            className="border border-zinc-300 px-3 py-2 align-top text-zinc-800"
+                            className="border border-line px-3 py-2 align-top text-foreground"
                             {...props}
                         />
                     ),

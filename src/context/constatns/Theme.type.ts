@@ -1,4 +1,6 @@
 export enum ThemeMode {
+    SYSTEM = "system",
+    LIGHT = "light",
     DARK = "bg-black",
     BASE_NAVY = "bg-base-navy",
     SUB_BLUE = "bg-sub-blue",
@@ -8,6 +10,19 @@ export enum ThemeMode {
     SUB_TEAL = "bg-sub-teal",
     CUSTOM = "bg-custom",
 }
+
+export const THEME_COLORS: Record<ThemeMode, string> = {
+    [ThemeMode.SYSTEM]: "#181b20",
+    [ThemeMode.LIGHT]: "#f3f6fa",
+    [ThemeMode.DARK]: "#10151d",
+    [ThemeMode.BASE_NAVY]: "#181b20",
+    [ThemeMode.SUB_BLUE]: "#1e52e3",
+    [ThemeMode.SUB_PINK]: "#d46876",
+    [ThemeMode.SUB_GREEN]: "#43b54e",
+    [ThemeMode.MAIN_TEAL]: "#009d85",
+    [ThemeMode.SUB_TEAL]: "#8bc783",
+    [ThemeMode.CUSTOM]: "#181b20",
+};
 
 export const returnWhiteText = [
     ThemeMode.DARK,

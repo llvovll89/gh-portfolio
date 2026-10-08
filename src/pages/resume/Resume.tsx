@@ -94,18 +94,18 @@ export const Resume = () => {
             <Aside />
             <Contents className="select-none">
                 <section className="relative mx-auto w-full max-w-6xl px-2 pb-10 md:px-6">
-                    <header className="mb-8 border-b border-white/10 pb-7 sm:mb-10">
+                    <header className="mb-8 border-b border-foreground/10 pb-7 sm:mb-10">
                         <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
                             <div className="max-w-2xl">
                                 <div className="mb-3 flex items-center gap-3">
                                     <span className="rounded-lg bg-primary/10 p-2" aria-hidden="true">
                                         <LuFileText className="h-6 w-6 text-primary" />
                                     </span>
-                                    <h1 className="text-[clamp(1.75rem,3vw,2.5rem)] font-extrabold tracking-tight text-white/92">
+                                    <h1 className="text-[clamp(1.75rem,3vw,2.5rem)] font-extrabold tracking-tight text-foreground">
                                         {t("pages.resume.title")}
                                     </h1>
                                 </div>
-                                <p className="text-sm leading-6 text-white/64 sm:text-base">
+                                <p className="text-sm leading-6 text-muted sm:text-base">
                                     {t("pages.resume.description")}
                                 </p>
                             </div>
@@ -113,7 +113,7 @@ export const Resume = () => {
                                 type="button"
                                 onClick={handleDownloadResume}
                                 disabled={downloadState === "loading"}
-                                className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-slate-950 transition-transform hover:-translate-y-0.5 active:translate-y-px disabled:cursor-wait disabled:opacity-65 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#18181b]"
+                                className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-on-accent transition-transform hover:-translate-y-0.5 active:translate-y-px disabled:cursor-wait disabled:opacity-65 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
                             >
                                 <LuDownload className="h-4 w-4" aria-hidden="true" />
                                 {downloadState === "loading"
@@ -131,13 +131,13 @@ export const Resume = () => {
                             <section key={title} className="resume-section">
                                 <div className="mb-5 flex items-center gap-3">
                                     <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
-                                    <h2 className="text-lg font-bold text-white/90">{title}</h2>
+                                    <h2 className="text-lg font-bold text-foreground">{title}</h2>
                                 </div>
                                 <dl className="grid gap-4">
                                     {items.map((item) => (
                                         <div key={item.label} className="grid gap-1 sm:grid-cols-[7rem_1fr] sm:gap-4">
-                                            <dt className="text-xs font-semibold text-white/42">{item.label}</dt>
-                                            <dd className="text-sm leading-6 text-white/78">{item.value}</dd>
+                                            <dt className="text-xs font-semibold text-muted">{item.label}</dt>
+                                            <dd className="text-sm leading-6 text-foreground">{item.value}</dd>
                                         </div>
                                     ))}
                                 </dl>

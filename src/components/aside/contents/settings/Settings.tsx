@@ -78,7 +78,7 @@ export const Settings = () => {
             className={`w-full flex flex-col ${backgroundClass} overflow-hidden`}
             style={backgroundStyle}
         >
-            <header className="w-full h-10 px-3 flex items-center text-xs text-white overflow-hidden tracking-[1px]">
+            <header className="w-full h-10 px-3 flex items-center text-xs text-foreground overflow-hidden tracking-[1px]">
                 {t("settings.title")}
             </header>
 
@@ -86,8 +86,8 @@ export const Settings = () => {
                 <button
                     onClick={() => setActiveTab("shortcuts")}
                     className={`flex-1 px-3 py-2 text-[10px] transition-colors ${activeTab === "shortcuts"
-                        ? "bg-primary/20 text-white border-b-2 border-primary"
-                        : "text-white/70 hover:bg-sub-gary/20"
+                        ? "bg-primary/20 text-foreground border-b-2 border-primary"
+                        : "text-muted hover:bg-sub-gary/20"
                         }`}
                 >
                     <VscKey className="inline w-3 h-3 mr-1" />
@@ -96,8 +96,8 @@ export const Settings = () => {
                 <button
                     onClick={() => setActiveTab("general")}
                     className={`flex-1 px-3 py-2 text-[10px] transition-colors ${activeTab === "general"
-                        ? "bg-primary/20 text-white border-b-2 border-primary"
-                        : "text-white/70 hover:bg-sub-gary/20"
+                        ? "bg-primary/20 text-foreground border-b-2 border-primary"
+                        : "text-muted hover:bg-sub-gary/20"
                         }`}
                 >
                     <VscSettingsGear className="inline w-3 h-3 mr-1" />
@@ -109,12 +109,12 @@ export const Settings = () => {
                 {activeTab === "shortcuts" ? (
                     <div className="p-3">
                         <div className="flex items-center justify-between mb-3">
-                            <p className="text-[10px] text-white/70">
+                            <p className="text-[10px] text-muted">
                                 {t("settings.keyboardShortcuts")}
                             </p>
                             <button
                                 onClick={resetAllShortcuts}
-                                className="flex items-center gap-1 px-2 py-1 text-[10px] text-white/70 hover:text-white hover:bg-sub-gary/20 rounded transition-colors"
+                                className="flex items-center gap-1 px-2 py-1 text-[10px] text-muted hover:text-foreground hover:bg-sub-gary/20 rounded transition-colors"
                                 title="모두 초기화"
                             >
                                 <VscRefresh className="w-3 h-3" />
@@ -127,12 +127,12 @@ export const Settings = () => {
                                     key={id}
                                     className="flex items-center justify-between p-2 bg-sub-gary/20 rounded hover:bg-sub-gary/30 transition-colors group"
                                 >
-                                    <span className="text-[10px] text-white/70 flex-1">
+                                    <span className="text-[10px] text-muted flex-1">
                                         {getShortcutDescription(id)}
                                     </span>
                                     <div className="flex items-center gap-2">
                                         <kbd
-                                            className={`px-2 py-1 text-[10px] bg-sub-gary/40 text-white rounded border ${isCustomized(id)
+                                            className={`px-2 py-1 text-[10px] bg-sub-gary/40 text-foreground rounded border ${isCustomized(id)
                                                     ? "border-primary/50"
                                                     : "border-sub-gary/30"
                                                 }`}
@@ -142,7 +142,7 @@ export const Settings = () => {
                                         {isCustomized(id) && (
                                             <button
                                                 onClick={() => resetShortcut(id)}
-                                                className="opacity-0 group-hover:opacity-100 p-1 text-white/50 hover:text-white rounded transition-all"
+                                                className="opacity-0 group-hover:opacity-100 p-1 text-muted hover:text-foreground rounded transition-all"
                                                 title="기본값으로 복원"
                                             >
                                                 <VscRefresh className="w-3 h-3" />
@@ -152,7 +152,7 @@ export const Settings = () => {
                                 </li>
                             ))}
                         </ul>
-                        <p className="mt-4 text-[9px] text-white/50 italic">
+                        <p className="mt-4 text-[9px] text-muted italic">
                             {t("settings.shortcutsNote") ||
                                 "* 단축키는 localStorage에 저장됩니다"}
                         </p>
@@ -160,7 +160,7 @@ export const Settings = () => {
                 ) : (
                     <div className="p-3 space-y-4">
                         <div>
-                            <label className="block text-[10px] text-white/70 mb-2">
+                            <label className="block text-[10px] text-muted mb-2">
                                 {t("settings.language")}
                             </label>
                             <select
@@ -168,7 +168,7 @@ export const Settings = () => {
                                 onChange={(e) =>
                                     handleChangeLanguage(e.target.value)
                                 }
-                                className="w-full px-2 py-1.5 text-xs bg-sub-gary/20 text-white border border-sub-gary/30 rounded focus:outline-none focus:border-primary [&>option]:text-black [&>option]:bg-white"
+                                className="w-full px-2 py-1.5 text-xs bg-sub-gary/20 text-foreground border border-sub-gary/30 rounded focus:outline-none focus:border-primary [&>option]:text-foreground [&>option]:bg-panel"
                             >
                                 <option value="ko">한국어</option>
                                 <option value="en">English</option>
@@ -177,7 +177,7 @@ export const Settings = () => {
                         </div>
 
                         <div>
-                            <label className="block text-[10px] text-white/70 mb-2">
+                            <label className="block text-[10px] text-muted mb-2">
                                 {t("settings.animationSpeed")}
                             </label>
                             <select
@@ -185,7 +185,7 @@ export const Settings = () => {
                                 onChange={(e) =>
                                     handleChangeAnimationSpeed(e.target.value)
                                 }
-                                className="w-full px-2 py-1.5 text-xs bg-sub-gary/20 text-white border border-sub-gary/30 rounded focus:outline-none focus:border-primary [&>option]:text-black [&>option]:bg-white"
+                                className="w-full px-2 py-1.5 text-xs bg-sub-gary/20 text-foreground border border-sub-gary/30 rounded focus:outline-none focus:border-primary [&>option]:text-foreground [&>option]:bg-panel"
                             >
                                 <option value="slow">{t("settings.slow")}</option>
                                 <option value="normal">{t("settings.normal")}</option>
@@ -194,7 +194,7 @@ export const Settings = () => {
                         </div>
 
                         <div className="pt-3 border-t border-sub-gary/30">
-                            <p className="text-[10px] text-white/50">
+                            <p className="text-[10px] text-muted">
                                 {t("settings.storedInLocalStorage")}
                             </p>
                         </div>

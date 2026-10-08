@@ -89,6 +89,13 @@
                 "company": "IGIS",
                 "description": "Webアプリケーション開発・保守",
                 "currentlyEmployed": "在職中"
+            },
+            "photoAlt": "キム・ゴンホのプロフィール写真",
+            "skillEvidence": {
+                "frontend": "ReactとTypeScriptで画面、ナビゲーション、レスポンシブUIを実装します。",
+                "frontendExamples": "実装例: Hovieのコンテンツ検索、このポートフォリオのタブとショートカット、GH ARCADEのゲーム検索。",
+                "backend": "Java、Spring Boot、リレーショナルデータベースを使用技術として紹介しています。",
+                "backendExamples": "Webアプリケーションの開発と保守の経験は履歴書で確認できます。"
             }
         },
         "projects": {
@@ -141,11 +148,12 @@
                 "sendAction": "送る →",
                 "openAction": "開く →",
                 "interests": "興味分野",
-                "welcomeMessage": "コラボ・採用・サイドプロジェクトのご相談、大歓迎です。"
+                "welcomeMessage": "コラボ・採用・サイドプロジェクトのご相談、大歓迎です。",
+                "copyError": "コピーできませんでした。メールアドレスを選択してコピーしてください。"
             },
             "messageForm": {
                 "title": "メッセージを残す",
-                "description": "入力後「メールアプリで送る」を押すと、デフォルトのメールアプリが開きます。",
+                "description": "入力内容を標準のメールアプリに渡します。メールアプリで確認して送信してください。",
                 "name": "お名前",
                 "namePlaceholder": "山田太郎",
                 "email": "返信用メール",
@@ -153,8 +161,20 @@
                 "message": "メッセージ",
                 "messagePlaceholder": "プロジェクト・コラボについてお問い合わせします...",
                 "reset": "リセット",
-                "send": "メールアプリで送る",
-                "infoNotice": "フォームの送信はサーバーに保存されず、メールアプリを通じて送信されます。"
+                "send": "メールアプリで送信",
+                "infoNotice": "入力内容はこのサイトに保存されません。メールアプリが開かない場合は、メールアドレスをコピーして直接送信してください。",
+                "directDescription": "入力したメッセージをキム・ゴンホのメールに送信します。",
+                "directSend": "メッセージを送信",
+                "directNotice": "このサイトはメッセージを保存せず、メール配信サービスを通じて届けます。",
+                "nameRequired": "名前を入力してください。",
+                "emailInvalid": "返信先のメールアドレスを確認してください。",
+                "messageRequired": "メッセージを入力してください。",
+                "mailSubject": "{{name}}様からのお問い合わせ",
+                "success": "メッセージを送信しました。",
+                "error": "送信できませんでした。再試行するか、メールでご連絡ください。",
+                "mailOpened": "メールアプリを開くように要求しました。メールアプリで送信を完了してください。入力内容は残っています。",
+                "messageHint": "最大500文字。CtrlまたはCommandとEnterで送信できます。",
+                "sending": "送信中"
             }
         },
         "blog": {
@@ -221,14 +241,14 @@
             "description": "日常的に使用している開発ツール、技術スタック、コラボツールを紹介します。"
         },
         "home": {
-        "badge": "Web Developer",
-        "headlineLine1": "使いやすい導線と",
-        "headlineLine2": "保守性を設計します。",
-        "summary": "ReactとTypeScriptを中心に、速く一貫したWeb体験を作り、安定した運用まで担うフルスタックWeb開発者、キム・ゴンホです。",
-        "metricExperience": "開発経験",
-        "metricProjects": "紹介プロジェクト",
-        "metricPosts": "技術記録",
-        "terminalPreview": "開発者情報のターミナルプレビュー",
+            "badge": "Web Developer",
+            "headlineLine1": "使いやすい導線と",
+            "headlineLine2": "保守性を設計します。",
+            "summary": "ReactとTypeScriptを中心に、速く一貫したWeb体験を作り、安定した運用まで担うフルスタックWeb開発者、キム・ゴンホです。",
+            "metricExperience": "開発経験",
+            "metricProjects": "紹介プロジェクト",
+            "metricPosts": "技術記録",
+            "terminalPreview": "開発者情報のターミナルプレビュー",
             "tagline": "ユーザーが<0>「快適」</0>に感じる体験を目指し、",
             "taglineSub": "高速で一貫したUIを構築する、保守性の高いWeb開発者を目指しています。",
             "bullet1": "私のウェブサイトへようこそ。",
@@ -257,5 +277,20 @@
         "save": "保存",
         "delete": "削除",
         "edit": "編集"
+    },
+    "theme": {
+        "title": "テーマ",
+        "system": "システム設定",
+        "light": "ライト",
+        "dark": "ダーク",
+        "navy": "ネイビー",
+        "blue": "青",
+        "pink": "ピンク",
+        "green": "緑",
+        "teal": "青緑",
+        "sage": "薄緑",
+        "custom": "カスタムカラー",
+        "select": "テーマを選択（現在: {{current}}）",
+        "selectColor": "色 {{color}} を選択"
     }
 }

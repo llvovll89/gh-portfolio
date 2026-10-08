@@ -4,12 +4,12 @@ export const BlogCardSkeleton = () => (
         <div
             className={[
                 "relative flex flex-col sm:flex-row sm:items-center overflow-hidden rounded-xl border",
-                "border-zinc-200/80 blog-dark:border-zinc-800/50",
+                "border-line blog-dark:border-line",
                 "px-4 py-4 sm:px-6 sm:py-5",
             ].join(" ")}
         >
             {/* 왼쪽 메타 영역 */}
-            <div className="flex flex-col gap-2.5 sm:min-w-35 pb-3 sm:pb-0 sm:pr-6 border-b sm:border-b-0 sm:border-r border-zinc-200/60 blog-dark:border-zinc-700/60">
+            <div className="flex flex-col gap-2.5 sm:min-w-35 pb-3 sm:pb-0 sm:pr-6 border-b sm:border-b-0 sm:border-r border-line blog-dark:border-line">
                 <div className="skeleton h-3 w-20 rounded" />
                 <div className="skeleton h-2.5 w-14 rounded" />
                 <div className="skeleton h-2.5 w-10 rounded" />

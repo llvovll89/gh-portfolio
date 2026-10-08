@@ -11,8 +11,6 @@ import { BlogCard } from "./contents/BlogCard";
 import { BlogFilterBar } from "./components/BlogFilterBar";
 import { useTranslation } from "react-i18next";
 import { useThemeStyle } from "../../hooks/useThemeStyle";
-import { ThemeMode } from "../../context/constatns/Theme.type";
-import { convertThemeTextColor, getTextColorFromBg } from "../../utils/convertThemeTextColor";
 import {
     extractAllCategories,
     extractAllTags,
@@ -35,11 +33,8 @@ const STORAGE_KEYS = {
 
 export const Blog = () => {
     const { t } = useTranslation();
-    const { selectedTheme } = useThemeStyle();
-    const themeText = selectedTheme.mode === ThemeMode.CUSTOM && selectedTheme.customColor
-        ? getTextColorFromBg(selectedTheme.customColor)
-        : convertThemeTextColor(selectedTheme.mode);
-    const blogTheme = themeText === "text-white" ? "dark" : "light";
+    const { isDark } = useThemeStyle();
+    const blogTheme = isDark ? "dark" : "light";
     const allPosts = ALL_POSTS;
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -106,7 +101,7 @@ export const Blog = () => {
             <Contents>
                 <div data-blog-theme={blogTheme} style={{ colorScheme: blogTheme }} className="blog-page flex flex-col h-[calc(100vh-8rem)] sm:py-4 py-1 md:px-0 px-2">
                     <div className="flex-none mb-6">
-                        <h2 className="text-[clamp(0.85rem,1.5vw,1.25rem)] font-bold text-zinc-900 blog-dark:text-zinc-100 mb-4">
+                        <h2 className="text-[clamp(0.85rem,1.5vw,1.25rem)] font-bold text-foreground blog-dark:text-foreground mb-4">
                             {t("pages.blog.posts")}
                         </h2>
 
@@ -132,7 +127,7 @@ export const Blog = () => {
 
                     <div className="flex-1 overflow-y-auto pr-2 scrolls">
                         {allPosts.length === 0 ? (
-                            <p className="text-zinc-700 blog-dark:text-zinc-300">
+                            <p className="text-muted blog-dark:text-muted">
                                 {t("pages.blog.noPosts")}{" "}
                                 {t("pages.blog.addPostsHint")}{" "}
                                 <span className="font-mono">src/content/posts</span>{" "}
@@ -140,14 +135,14 @@ export const Blog = () => {
                             </p>
                         ) : sortedPosts.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
-                                <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center text-2xl">
+                                <div className="w-12 h-12 rounded-full bg-panel flex items-center justify-center text-2xl">
                                     🔍
                                 </div>
                                 <div>
-                                    <p className="text-base font-medium text-zinc-300 mb-1">
+                                    <p className="text-base font-medium text-muted mb-1">
                                         {t("pages.blog.noResults")}
                                     </p>
-                                    <p className="text-sm text-zinc-500">
+                                    <p className="text-sm text-muted">
                                         {t("pages.blog.noResultsHint")}
                                     </p>
                                 </div>

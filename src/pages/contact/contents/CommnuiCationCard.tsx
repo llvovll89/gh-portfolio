@@ -1,198 +1,43 @@
-import { useEffect, useMemo, useState } from "react";
-import { LuMail, LuUser, LuMapPin, LuBriefcase, LuCircleCheck } from "react-icons/lu";
+import { useEffect, useState } from "react";
+import { LuArrowUpRight, LuCheck, LuCopy, LuMail } from "react-icons/lu";
 import { FaGithub } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
-
-const INTEREST_TAGS = ["React", "TypeScript", "UI/UX", "Performance"] as const;
-const CAREER_START = new Date(2023, 6, 1);
+import { CONTACT_EMAIL, CONTACT_GITHUB } from "../../../constants/contact";
 
 export const CommunicationCard = () => {
     const { t } = useTranslation();
-    const EMAIL = import.meta.env.VITE_EMAIL;
-    const GITHUB = import.meta.env.VITE_GITHUB;
-
-    const [copied, setCopied] = useState(false);
-
-    const careerLabel = useMemo(() => {
-        const today = new Date();
-        let years = today.getFullYear() - CAREER_START.getFullYear();
-        let months = today.getMonth() - CAREER_START.getMonth();
-        if (months < 0) { years--; months += 12; }
-        if (years > 0) return t("pages.contact.communicationCard.careerYearsMonths", { years, months });
-        return t("pages.contact.communicationCard.careerMonths", { months });
-    }, [t]);
-
+    const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "error">("idle");
     useEffect(() => {
-        if (!copied) return;
-        const timerId = window.setTimeout(() => setCopied(false), 1500);
-        return () => window.clearTimeout(timerId);
-    }, [copied]);
-
-    const legacyCopy = (text: string) => {
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        ta.setAttribute("readonly", "");
-        ta.style.position = "fixed";
-        ta.style.top = "0";
-        ta.style.left = "0";
-        ta.style.opacity = "0";
-        document.body.appendChild(ta);
+        if (copyStatus === "idle") return;
+        const timer = window.setTimeout(() => setCopyStatus("idle"), 4000);
+        return () => window.clearTimeout(timer);
+    }, [copyStatus]);
+    const copyEmail = async () => {
         try {
-            ta.select();
-            return document.execCommand("copy");
-        } finally {
-            document.body.removeChild(ta);
-        }
-    };
-
-    const handleCopyEmail = async () => {
-        const text = String(EMAIL ?? "");
-        if (!text) return;
-
-        try {
-            if (navigator.clipboard?.writeText) {
-                await navigator.clipboard.writeText(text);
-                setCopied(true);
-                return;
-            }
+            await navigator.clipboard.writeText(CONTACT_EMAIL);
+            setCopyStatus("copied");
         } catch {
-            // 아래 폴백으로 진행
+            setCopyStatus("error");
         }
-
-        // 폴백: 일부 로컬/브라우저에서도 동작
-        const ok = legacyCopy(text);
-        setCopied(ok);
     };
-    return (
-        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-3 md:p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.06),0_18px_60px_rgba(0,0,0,0.45)] space-y-5">
-            {/* 헤더 */}
-            <div className="flex items-start justify-between gap-3 sm:pb-4 pb-3 border-b border-white/10">
-                <div>
-                    <h2 className="text-[clamp(1rem,2vw,1.5rem)] md:text-2xl font-bold flex items-center gap-2">
-                        <LuUser className="w-5 h-5 text-primary" />
-                        {t("pages.contact.communicationCard.quickContact")}
-                    </h2>
-                    <p className="mt-2 text-[clamp(0.75rem,1vw,0.875rem)] text-white/70">
-                        {t("pages.contact.communicationCard.contactPrompt")}
-                    </p>
-                </div>
-
-                <button
-                    type="button"
-                    onClick={handleCopyEmail}
-                    className="relative shrink-0 rounded-lg border border-primary/30 bg-primary/10 px-3 py-2 text-xs font-medium text-primary hover:bg-primary/20 transition-all active:scale-95"
-                    title={t("pages.contact.communicationCard.copyEmail")}
-                >
-                    {t("pages.contact.communicationCard.copyEmail")}
-                </button>
-
-                {copied && (
-                    <div className="fixed top-20 right-4 md:right-8 rounded-lg bg-primary/90 px-4 py-2.5 text-sm font-medium text-white shadow-lg flex items-center gap-2 animate-[fadeIn_0.2s_ease-out]">
-                        <LuCircleCheck className="w-4 h-4" />
-                        {t("pages.contact.communicationCard.emailCopied")}
-                    </div>
-                )}
-            </div>
-
-            {/* 프로필 요약 */}
-            <div className="rounded-xl border border-white/10 bg-linear-to-br from-black/30 to-black/10 p-4">
-                <dl className="grid grid-cols-2 gap-4">
-                    <div className="flex items-start gap-2">
-                        <LuUser className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
-                        <div>
-                            <dt className="text-[clamp(0.7rem,1vw,0.8rem)] text-white/50">{t("pages.contact.communicationCard.name")}</dt>
-                            <dd className="mt-1 font-semibold text-white text-[clamp(0.75rem,1vw,0.8rem)]">{t("pages.contact.communicationCard.nameValue")}</dd>
-                        </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                        <LuBriefcase className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
-                        <div>
-                            <dt className="text-[clamp(0.7rem,1vw,0.8rem)] text-white/50">{t("pages.contact.communicationCard.career")}</dt>
-                            <dd className="mt-1 font-semibold text-white text-[clamp(0.75rem,1vw,0.8rem)]">{careerLabel}</dd>
-                        </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                        <LuMapPin className="w-4 h-4 text-primary/70 mt-0.5 shrink-0" />
-                        <div>
-                            <dt className="text-[clamp(0.7rem,1vw,0.8rem)] text-white/50">{t("pages.contact.communicationCard.residence")}</dt>
-                            <dd className="mt-1 font-semibold text-white text-[clamp(0.75rem,1vw,0.8rem)]">{t("pages.contact.communicationCard.residenceValue")}</dd>
-                        </div>
-                    </div>
-                </dl>
-            </div>
-
-            {/* 채널 카드 */}
-            <div className="grid gap-3">
-                <a
-                    href={`mailto:${EMAIL}`}
-                    className="group rounded-xl border border-white/10 bg-linear-to-r from-black/30 to-black/10 sm:p-4 p-2 hover:border-primary/30 hover:bg-primary/5 transition-all active:scale-[0.99]"
-                >
-                    <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors shrink-0">
-                            <LuMail className="w-5 h-5 text-primary" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                            <p className="text-xs text-white/50 font-medium">Email</p>
-                            <p className="mt-0.5 font-semibold text-white text-xs sm:text-sm truncate">
-                                {EMAIL}
-                            </p>
-                        </div>
-                        <span className="hidden sm:inline text-xs text-white/60 group-hover:text-primary transition-colors shrink-0">
-                            {t("pages.contact.communicationCard.sendAction")}
-                        </span>
-                    </div>
-                </a>
-
-                <a
-                    href={GITHUB}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group rounded-xl border border-white/10 bg-linear-to-r from-black/30 to-black/10 sm:p-4 p-2 hover:border-primary/30 hover:bg-primary/5 transition-all active:scale-[0.99]"
-                >
-                    <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors shrink-0">
-                            <FaGithub className="w-5 h-5 text-primary" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                            <p className="text-xs text-white/50 font-medium">GitHub</p>
-                            <p className="mt-0.5 font-semibold text-white text-xs sm:text-sm truncate">
-                                {GITHUB}
-                            </p>
-                        </div>
-                        <span className="hidden sm:inline text-xs text-white/60 group-hover:text-primary transition-colors shrink-0">
-                            {t("pages.contact.communicationCard.openAction")}
-                        </span>
-                    </div>
-                </a>
-            </div>
-
-            {/* 관심/태그 */}
-            <div className="rounded-xl border border-white/10 bg-linear-to-br from-black/30 to-black/10 sm:p-4 p-3 space-y-3">
-                <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                    <p className="text-sm text-white/70">
-                        {t("pages.contact.communicationCard.interests")}{" "}
-                        <span className="text-white font-semibold ml-1">
-                            Frontend / Full-stack
-                        </span>
-                    </p>
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                    {INTEREST_TAGS.map((tag) => (
-                        <span
-                            key={tag}
-                            className="text-xs font-medium text-primary/90 bg-primary/10 border border-primary/30 px-3 py-1.5 rounded-full hover:bg-primary/20 transition-colors"
-                        >
-                            {tag}
-                        </span>
-                    ))}
-                </div>
-
-                <p className="text-sm text-white/60 pt-2 border-t border-white/5">
-                    {t("pages.contact.communicationCard.welcomeMessage")}
-                </p>
-            </div>
+    return <section className="contact-channels" aria-labelledby="quick-contact">
+        <header><h2 id="quick-contact">{t("pages.contact.communicationCard.quickContact")}</h2>
+            <p>{t("pages.contact.communicationCard.contactPrompt")}</p>
+        </header>
+        <div className="contact-email">
+            <LuMail aria-hidden="true" size={24} />
+            <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+            <button type="button" className="workbench-button" onClick={copyEmail}>
+                {copyStatus === "copied" ? <LuCheck aria-hidden="true" /> : <LuCopy aria-hidden="true" />}
+                {t("pages.contact.communicationCard.copyEmail")}
+            </button>
         </div>
-    );
+        <p className={`contact-copy-status ${copyStatus === "error" ? "form-error" : ""}`} role="status">
+            {copyStatus === "copied" ? t("pages.contact.communicationCard.emailCopied") : copyStatus === "error" ? t("pages.contact.communicationCard.copyError") : ""}
+        </p>
+        <a className="contact-github" href={CONTACT_GITHUB} target="_blank" rel="noopener noreferrer"><FaGithub aria-hidden="true" size={20} /><span>GitHub<span>{CONTACT_GITHUB.replace(/^https?:\/\//, "")}</span></span><LuArrowUpRight aria-hidden="true" /></a>
+        <div className="contact-availability"><h3>{t("pages.contact.communicationCard.interests")}</h3><p>Frontend / Full-stack</p>
+            <ul className="skill-tags">{["React", "TypeScript", "UI/UX", "Performance"].map(tag => <li key={tag}>{tag}</li>)}</ul>
+        </div>
+    </section>;
 };

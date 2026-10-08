@@ -138,7 +138,7 @@ export const Modal: React.FC<ModalProps> = ({
                     role="dialog"
                     aria-modal="true"
                     aria-label={ariaLabel}
-                    className={`bg-main border border-white/10 rounded-xl shadow-2xl p-4 w-full max-w-md mx-4 transform transition-all duration-${animationDuration} ${
+                    className={`bg-main border border-foreground/10 rounded-xl shadow-2xl p-4 w-full max-w-md mx-4 transform transition-all duration-${animationDuration} ${
                         isClosing
                             ? "opacity-0 translate-y-2 scale-95"
                             : "opacity-100 translate-y-0 scale-100"

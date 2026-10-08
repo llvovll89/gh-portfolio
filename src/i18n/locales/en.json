@@ -89,6 +89,13 @@
                 "company": "IGIS",
                 "description": "Web application development and maintenance",
                 "currentlyEmployed": "Current"
+            },
+            "photoAlt": "Portrait of Geon Ho Kim",
+            "skillEvidence": {
+                "frontend": "I build screens, navigation flows, and responsive interfaces with React and TypeScript.",
+                "frontendExamples": "Examples: content discovery in Hovie, tabs and shortcuts in this portfolio, and game search in GH ARCADE.",
+                "backend": "My backend toolkit includes Java, Spring Boot, and relational databases.",
+                "backendExamples": "See my resume for web application development and maintenance experience."
             }
         },
         "projects": {
@@ -141,11 +148,12 @@
                 "sendAction": "Send →",
                 "openAction": "Open →",
                 "interests": "Interests",
-                "welcomeMessage": "Open to collaboration, job opportunities, and side projects."
+                "welcomeMessage": "Open to collaboration, job opportunities, and side projects.",
+                "copyError": "Could not copy. Select the email address and copy it manually."
             },
             "messageForm": {
                 "title": "Leave a Message",
-                "description": "Click 'Send via Email App' after filling out the form to open your default email client.",
+                "description": "Open your default mail app with this message. Review and send it in your mail app.",
                 "name": "Name",
                 "namePlaceholder": "John Doe",
                 "email": "Reply Email",
@@ -153,8 +161,20 @@
                 "message": "Message",
                 "messagePlaceholder": "I'd like to discuss project/collaboration...",
                 "reset": "Reset",
-                "send": "Send via Email App",
-                "infoNotice": "Form submission is not stored on the server and will be sent via your email client."
+                "send": "Open mail app",
+                "infoNotice": "This site does not store your message. If your mail app does not open, copy the email address and send it directly.",
+                "directDescription": "Send your message to Geon Ho Kim by email.",
+                "directSend": "Send message",
+                "directNotice": "This site does not store messages. An email delivery service forwards your message.",
+                "nameRequired": "Enter your name.",
+                "emailInvalid": "Enter a valid reply email address.",
+                "messageRequired": "Enter your message.",
+                "mailSubject": "Enquiry from {{name}}",
+                "success": "Your message was sent.",
+                "error": "Your message could not be sent. Try again or contact me by email.",
+                "mailOpened": "Requested your mail app to open. Complete sending there. Your message remains in this form.",
+                "messageHint": "Up to 500 characters. Press Ctrl or Command and Enter to send.",
+                "sending": "Sending"
             }
         },
         "blog": {
@@ -221,14 +241,14 @@
             "description": "Here are the development tools, tech stacks, and collaboration tools I use daily."
         },
         "home": {
-        "badge": "Web Developer",
-        "headlineLine1": "I design user flows",
-        "headlineLine2": "built to stay maintainable.",
-        "summary": "I'm Geonho Kim, a full-stack web developer building fast, consistent experiences with React and TypeScript, then keeping them reliable in production.",
-        "metricExperience": "Years building",
-        "metricProjects": "Featured projects",
-        "metricPosts": "Technical notes",
-        "terminalPreview": "Developer profile terminal preview",
+            "badge": "Web Developer",
+            "headlineLine1": "I design user flows",
+            "headlineLine2": "built to stay maintainable.",
+            "summary": "I'm Geonho Kim, a full-stack web developer building fast, consistent experiences with React and TypeScript, then keeping them reliable in production.",
+            "metricExperience": "Years building",
+            "metricProjects": "Featured projects",
+            "metricPosts": "Technical notes",
+            "terminalPreview": "Developer profile terminal preview",
             "tagline": "Focused on creating experiences that feel <0>\"effortless\"</0> to users,",
             "taglineSub": "I aim to build fast, consistent UIs as a maintainable web developer.",
             "bullet1": "Welcome to my website.",
@@ -257,5 +277,20 @@
         "save": "Save",
         "delete": "Delete",
         "edit": "Edit"
+    },
+    "theme": {
+        "title": "Theme",
+        "system": "System preference",
+        "light": "Light",
+        "dark": "Dark",
+        "navy": "Navy",
+        "blue": "Blue",
+        "pink": "Pink",
+        "green": "Green",
+        "teal": "Teal",
+        "sage": "Sage",
+        "custom": "Custom color",
+        "select": "Choose theme (current: {{current}})",
+        "selectColor": "Choose color {{color}}"
     }
 }

@@ -58,7 +58,7 @@ export const Search = () => {
             className={`w-full flex flex-col ${backgroundClass} overflow-hidden`}
             style={backgroundStyle}
         >
-            <header className="w-full h-10 px-3 flex items-center text-xs text-white overflow-hidden tracking-[1px]">
+            <header className="w-full h-10 px-3 flex items-center text-xs text-foreground overflow-hidden tracking-[1px]">
                 {t("search.title")}
             </header>
 
@@ -79,7 +79,7 @@ export const Search = () => {
                         onBlur={() => { setTimeout(() => setShowSearchHistory(false), 200); }}
                         type="text"
                         placeholder={t("search.placeholder")}
-                        className="focus:border-primary transition-all w-full h-7 bg-base-navy border border-sub-gary/30 rounded-sm px-2 pr-7 tracking-wide text-white outline-none text-xs"
+                        className="focus:border-primary transition-all w-full h-7 bg-base-navy border border-sub-gary/30 rounded-sm px-2 pr-7 tracking-wide text-foreground outline-none text-xs"
                         autoFocus
                         role="combobox"
                         aria-expanded={showResults}
@@ -89,7 +89,7 @@ export const Search = () => {
                     {query && (
                         <button
                             onClick={() => { setQuery(""); setDebouncedQuery(""); inputRef.current?.focus(); }}
-                            className="absolute right-1.5 text-white/40 hover:text-white transition-colors"
+                            className="absolute right-1.5 text-muted hover:text-foreground transition-colors"
                             aria-label="검색어 지우기"
                         >
                             <CiSquareRemove className="w-4 h-4" />
@@ -98,7 +98,7 @@ export const Search = () => {
                 </div>
 
                 {showResults && (
-                    <div className="text-[10px] text-white/40 px-0.5 flex items-center gap-1">
+                    <div className="text-[10px] text-muted px-0.5 flex items-center gap-1">
                         {isDebouncing ? (
                             <span className="animate-pulse">검색 중…</span>
                         ) : hasAnyResults ? (
@@ -106,7 +106,7 @@ export const Search = () => {
                                 <span className="text-primary/70">{totalCount}</span>
                                 <span>개 결과</span>
                                 {blogResults.length > 0 && (
-                                    <span className="text-white/30">
+                                    <span className="text-muted">
                                         · 페이지 {results.length} · 블로그 {blogResults.length}
                                     </span>
                                 )}
@@ -120,8 +120,8 @@ export const Search = () => {
 
             {/* 검색어 히스토리 */}
             {shouldShowSearchHistory && (
-                <div className="w-full flex-1 p-2 text-white overflow-y-auto">
-                    <div className="px-2 py-1 text-[11px] text-white/50 flex items-center gap-1">
+                <div className="w-full flex-1 p-2 text-foreground overflow-y-auto">
+                    <div className="px-2 py-1 text-[11px] text-muted flex items-center gap-1">
                         <MdHistory />
                         {t("search.recentSearches")}
                     </div>
@@ -132,7 +132,7 @@ export const Search = () => {
                                 onMouseEnter={() => setActiveIndex(idx)}
                                 onClick={() => { setQuery(term); setShowSearchHistory(false); }}
                                 className={[
-                                    "w-full h-8 flex items-center px-3 text-white text-xs cursor-pointer gap-2 rounded-sm",
+                                    "w-full h-8 flex items-center px-3 text-foreground text-xs cursor-pointer gap-2 rounded-sm",
                                     "hover:bg-primary/20",
                                     idx === activeIndex ? "ring-1 ring-primary/40" : "",
                                 ].join(" ")}
@@ -147,8 +147,8 @@ export const Search = () => {
 
             {/* 최근 방문 */}
             {showRecents && (
-                <div className="w-full flex-1 p-2 text-white overflow-y-auto">
-                    <div className="px-2 py-1 text-[11px] text-white/50 flex items-center justify-between">
+                <div className="w-full flex-1 p-2 text-foreground overflow-y-auto">
+                    <div className="px-2 py-1 text-[11px] text-muted flex items-center justify-between">
                         <span>{t("search.recentVisits")}</span>
                         <button
                             onClick={() => persistRecents([])}
@@ -170,7 +170,7 @@ export const Search = () => {
                                         key={r!.path}
                                         onClick={() => openRoute(r!.path)}
                                         className={[
-                                            "w-full h-8 flex items-center px-3 text-white text-xs cursor-pointer gap-2 rounded-sm relative",
+                                            "w-full h-8 flex items-center px-3 text-foreground text-xs cursor-pointer gap-2 rounded-sm relative",
                                             "hover:bg-primary/20",
                                             selectedPathState.state === r!.path ? "bg-sub-gary/20" : "",
                                         ].join(" ")}
@@ -182,7 +182,7 @@ export const Search = () => {
                                                 e.stopPropagation();
                                                 persistRecents(recentPaths.filter((p) => p !== r!.path));
                                             }}
-                                            className="text-white/30 hover:text-white/70 transition-colors"
+                                            className="text-muted hover:text-muted transition-colors"
                                             aria-label="최근 방문 삭제"
                                         >
                                             <CiSquareRemove className="w-4 h-4" />
@@ -198,22 +198,22 @@ export const Search = () => {
             {showResults && (
                 <div
                     id={LISTBOX_ID}
-                    className="w-full flex-1 p-2 text-white overflow-y-auto"
+                    className="w-full flex-1 p-2 text-foreground overflow-y-auto"
                 >
                     {!hasAnyResults && !isDebouncing ? (
-                        <div className="px-3 py-4 text-sm text-white/50 text-center">
+                        <div className="px-3 py-4 text-sm text-muted text-center">
                             <div className="text-2xl mb-1">🔍</div>
                             <div>{t("search.noResults")}</div>
-                            <div className="text-[11px] mt-1 text-white/30">다른 키워드로 검색해 보세요</div>
+                            <div className="text-[11px] mt-1 text-muted">다른 키워드로 검색해 보세요</div>
                         </div>
                     ) : (
                         <>
                             {results.length > 0 && (
                                 <section>
-                                    <div className="px-2 py-1 mb-1 text-[10px] text-white/40 uppercase tracking-widest flex items-center gap-1">
+                                    <div className="px-2 py-1 mb-1 text-[10px] text-muted uppercase tracking-widest flex items-center gap-1">
                                         <FcOpenedFolder className="w-3 h-3" />
                                         Pages
-                                        <span className="ml-auto text-white/25 normal-case tracking-normal">{results.length}</span>
+                                        <span className="ml-auto text-muted normal-case tracking-normal">{results.length}</span>
                                     </div>
                                     <ul role="listbox" aria-label={t("search.searchResults")} className="flex flex-col gap-0.5">
                                         {results.map((r, idx) => {
@@ -228,7 +228,7 @@ export const Search = () => {
                                                     onClick={() => openRoute(r.path)}
                                                     key={r.path}
                                                     className={[
-                                                        "w-full h-8 flex items-center px-3 text-white text-xs cursor-pointer gap-2 rounded-sm",
+                                                        "w-full h-8 flex items-center px-3 text-foreground text-xs cursor-pointer gap-2 rounded-sm",
                                                         "hover:bg-primary/20",
                                                         selectedPathState.state === r.path ? "bg-sub-gary/20" : "",
                                                         isActive ? "ring-1 ring-primary/40" : "",
@@ -247,10 +247,10 @@ export const Search = () => {
 
                             {blogResults.length > 0 && (
                                 <section className={results.length > 0 ? "mt-3" : ""}>
-                                    <div className="px-2 py-1 mb-1 text-[10px] text-white/40 uppercase tracking-widest flex items-center gap-1">
+                                    <div className="px-2 py-1 mb-1 text-[10px] text-muted uppercase tracking-widest flex items-center gap-1">
                                         <FiFileText className="w-3 h-3" />
                                         Blog Posts
-                                        <span className="ml-auto text-white/25 normal-case tracking-normal">{blogResults.length}</span>
+                                        <span className="ml-auto text-muted normal-case tracking-normal">{blogResults.length}</span>
                                     </div>
                                     <ul className="flex flex-col gap-0.5">
                                         {blogResults.map((post, idx) => {
@@ -265,7 +265,7 @@ export const Search = () => {
                                                     key={post.slug}
                                                     onClick={() => openBlogPost(post.slug)}
                                                     className={[
-                                                        "w-full flex flex-col px-3 py-2 text-white text-xs cursor-pointer rounded-sm",
+                                                        "w-full flex flex-col px-3 py-2 text-foreground text-xs cursor-pointer rounded-sm",
                                                         "hover:bg-primary/20",
                                                         isActive ? "ring-1 ring-primary/40" : "",
                                                     ].join(" ")}
@@ -278,13 +278,13 @@ export const Search = () => {
                                                     </div>
 
                                                     {post.snippet && (
-                                                        <p className="pl-5 mt-0.5 text-[10px] text-white/45 leading-relaxed line-clamp-2">
+                                                        <p className="pl-5 mt-0.5 text-[10px] text-muted leading-relaxed line-clamp-2">
                                                             <HighlightedText text={post.snippet} keywords={keywords} />
                                                         </p>
                                                     )}
 
                                                     {(post.date || (post.tags?.length ?? 0) > 0) && (
-                                                        <div className="flex items-center gap-2 pl-5 mt-0.5 text-[10px] text-white/30">
+                                                        <div className="flex items-center gap-2 pl-5 mt-0.5 text-[10px] text-muted">
                                                             {post.date && <span>{post.date}</span>}
                                                             {post.tags?.slice(0, 3).map((tag) => (
                                                                 <span key={tag} className="text-primary/50">#{tag}</span>

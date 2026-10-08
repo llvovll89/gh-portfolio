@@ -97,7 +97,7 @@ export const Bookmarks = () => {
             className={`w-full flex flex-col ${backgroundClass} overflow-hidden`}
             style={backgroundStyle}
         >
-            <header className="w-full h-10 px-3 flex items-center justify-between text-xs text-white overflow-hidden tracking-[1px]">
+            <header className="w-full h-10 px-3 flex items-center justify-between text-xs text-foreground overflow-hidden tracking-[1px]">
                 <span>{t("bookmarks.title")}</span>
                 <button
                     onClick={() => setShowAddForm(!showAddForm)}
@@ -111,7 +111,7 @@ export const Bookmarks = () => {
             <div className="w-full h-[calc(100%-40px)] overflow-y-auto">
                 {showAddForm && (
                     <div className="p-3 border-b border-sub-gary/30 space-y-3">
-                        <p className="text-[10px] text-white/70 mb-2">
+                        <p className="text-[10px] text-muted mb-2">
                             {t("bookmarks.selectPage")}
                         </p>
 
@@ -122,14 +122,14 @@ export const Bookmarks = () => {
                                 placeholder="북마크 이름 (예: React 블로그)"
                                 value={customName}
                                 onChange={(e) => setCustomName(e.target.value)}
-                                className="w-full px-2 py-1.5 text-xs bg-sub-gary/20 text-white rounded border border-white/10 focus:border-primary/50 focus:outline-none placeholder:text-white/40"
+                                className="w-full px-2 py-1.5 text-xs bg-sub-gary/20 text-foreground rounded border border-foreground/10 focus:border-primary/50 focus:outline-none placeholder:text-muted"
                             />
                             <input
                                 type="text"
                                 placeholder="경로 (예: /blog/react-hooks)"
                                 value={customPath}
                                 onChange={(e) => setCustomPath(e.target.value)}
-                                className="w-full px-2 py-1.5 text-xs bg-sub-gary/20 text-white rounded border border-white/10 focus:border-primary/50 focus:outline-none placeholder:text-white/40"
+                                className="w-full px-2 py-1.5 text-xs bg-sub-gary/20 text-foreground rounded border border-foreground/10 focus:border-primary/50 focus:outline-none placeholder:text-muted"
                             />
                             <button
                                 onClick={() => {
@@ -139,14 +139,14 @@ export const Bookmarks = () => {
                                         alert("이름과 경로를 모두 입력해주세요.");
                                     }
                                 }}
-                                className="w-full px-2 py-1.5 text-xs bg-primary/80 text-white rounded hover:bg-primary transition-colors"
+                                className="w-full px-2 py-1.5 text-xs bg-primary/80 text-foreground rounded hover:bg-primary transition-colors"
                             >
                                 커스텀 북마크 추가
                             </button>
                         </div>
 
                         {/* 기존 페이지 목록 */}
-                        <p className="text-[10px] text-white/70">또는 페이지에서 선택:</p>
+                        <p className="text-[10px] text-muted">또는 페이지에서 선택:</p>
                         <ul className="space-y-1">
                             {availablePages.map((page) => (
                                 <li key={page.path}>
@@ -154,7 +154,7 @@ export const Bookmarks = () => {
                                         onClick={() =>
                                             handleAddBookmark(page.path, t(page.name))
                                         }
-                                        className="w-full text-left px-2 py-1.5 text-xs bg-sub-gary/20 text-white rounded hover:bg-primary/20 transition-colors"
+                                        className="w-full text-left px-2 py-1.5 text-xs bg-sub-gary/20 text-foreground rounded hover:bg-primary/20 transition-colors"
                                     >
                                         {t(page.name)}
                                     </button>
@@ -167,7 +167,7 @@ export const Bookmarks = () => {
                                 setCustomPath("");
                                 setCustomName("");
                             }}
-                            className="w-full mt-2 px-2 py-1 text-xs bg-sub-gary/20 text-white rounded hover:bg-sub-gary/30 transition-colors"
+                            className="w-full mt-2 px-2 py-1 text-xs bg-sub-gary/20 text-foreground rounded hover:bg-sub-gary/30 transition-colors"
                         >
                             {t("common.cancel")}
                         </button>
@@ -175,7 +175,7 @@ export const Bookmarks = () => {
                 )}
 
                 {bookmarks.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full text-white/50 text-xs p-3">
+                    <div className="flex flex-col items-center justify-center h-full text-muted text-xs p-3">
                         <VscBookmark className="w-12 h-12 mb-2 opacity-30" />
                         <p>{t("bookmarks.noBookmarks")}</p>
                         <p className="text-[10px] mt-1">{t("bookmarks.addPrompt")}</p>
@@ -188,7 +188,7 @@ export const Bookmarks = () => {
                                 className={`${selectedPathState.state === bookmark.path
                                         ? "bg-sub-gary/20"
                                         : ""
-                                    } w-full flex items-center gap-2 px-3 py-2 text-white cursor-pointer text-xs hover:bg-primary/20 border-b border-sub-gary/30`}
+                                    } w-full flex items-center gap-2 px-3 py-2 text-foreground cursor-pointer text-xs hover:bg-primary/20 border-b border-sub-gary/30`}
                             >
                                 <VscStarFull className="w-4 h-4 text-yellow-400 shrink-0" />
                                 <span
@@ -205,7 +205,7 @@ export const Bookmarks = () => {
                                     className="hover:bg-primary/20 p-1 rounded transition-colors shrink-0"
                                     aria-label={t("common.delete")}
                                 >
-                                    <VscTrash className="w-3 h-3 text-white/70 hover:text-white" />
+                                    <VscTrash className="w-3 h-3 text-muted hover:text-foreground" />
                                 </button>
                             </li>
                         ))}

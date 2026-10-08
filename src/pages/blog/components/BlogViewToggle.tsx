@@ -18,8 +18,8 @@ export const BlogViewToggle = ({
             className={[
                 "inline-flex items-center gap-1 sm:h-11 h-9 p-1",
                 "rounded-2xl border",
-                "border-zinc-200/80 blog-dark:border-zinc-800/50",
-                "bg-zinc-100/50 blog-dark:bg-zinc-900/50",
+                "border-line blog-dark:border-line",
+                "bg-panel blog-dark:bg-panel",
             ].join(" ")}
         >
             <button
@@ -32,8 +32,8 @@ export const BlogViewToggle = ({
                     "rounded-xl text-sm font-medium",
                     "transition-all duration-200",
                     viewMode === "list"
-                        ? "bg-white blog-dark:bg-zinc-800 text-zinc-900 blog-dark:text-zinc-100 shadow-sm"
-                        : "text-zinc-600 blog-dark:text-zinc-300 hover:text-zinc-900 blog-dark:hover:text-zinc-200",
+                        ? "bg-panel blog-dark:bg-panel text-foreground blog-dark:text-foreground shadow-sm"
+                        : "text-muted blog-dark:text-muted hover:text-foreground blog-dark:hover:text-foreground",
                 ].join(" ")}
             >
                 <LuList className="w-4 h-4" />
@@ -50,8 +50,8 @@ export const BlogViewToggle = ({
                     "rounded-xl text-sm font-medium",
                     "transition-all duration-200",
                     viewMode === "grid"
-                        ? "bg-white blog-dark:bg-zinc-800 text-zinc-900 blog-dark:text-zinc-100 shadow-sm"
-                        : "text-zinc-600 blog-dark:text-zinc-300 hover:text-zinc-900 blog-dark:hover:text-zinc-200",
+                        ? "bg-panel blog-dark:bg-panel text-foreground blog-dark:text-foreground shadow-sm"
+                        : "text-muted blog-dark:text-muted hover:text-foreground blog-dark:hover:text-foreground",
                 ].join(" ")}
             >
                 <LuGrid3X3 className="w-4 h-4" />
@@ -68,8 +68,8 @@ export const BlogViewToggle = ({
                     "rounded-xl text-sm font-medium",
                     "transition-all duration-200",
                     viewMode === "grouped"
-                        ? "bg-white blog-dark:bg-zinc-800 text-zinc-900 blog-dark:text-zinc-100 shadow-sm"
-                        : "text-zinc-600 blog-dark:text-zinc-300 hover:text-zinc-900 blog-dark:hover:text-zinc-200",
+                        ? "bg-panel blog-dark:bg-panel text-foreground blog-dark:text-foreground shadow-sm"
+                        : "text-muted blog-dark:text-muted hover:text-foreground blog-dark:hover:text-foreground",
                 ].join(" ")}
             >
                 <LuLayoutGrid className="w-4 h-4" />

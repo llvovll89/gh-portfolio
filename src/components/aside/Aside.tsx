@@ -136,7 +136,7 @@ export const Aside = () => {
                     <>
                         <div
                             aria-hidden="true"
-                            className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-250 ${selectedNav ? "opacity-100" : "pointer-events-none opacity-0"}`}
+                            className={`fixed inset-0 z-40 bg-[#0c1018]/50 transition-opacity duration-250 ${selectedNav ? "opacity-100" : "pointer-events-none opacity-0"}`}
                             onClick={() => setSelectedNav(null)}
                         />
 
@@ -175,7 +175,7 @@ export const Aside = () => {
                                     className={`min-h-10 shrink-0 rounded-lg px-3 text-xs font-medium transition-colors ${
                                         selectedNav === item.type
                                             ? "bg-primary/15 text-primary"
-                                            : "text-white/60 hover:bg-white/5 hover:text-white"
+                                            : "text-muted hover:bg-foreground/5 hover:text-foreground"
                                     }`}
                                 >
                                     {t(item.labelKey)}
@@ -222,7 +222,7 @@ export const Aside = () => {
                                 selectedPathState.state === item.path ||
                                 (item.path === BLOG && selectedPathState.state.startsWith("/blog/"))
                                     ? "text-primary"
-                                    : "text-white/60 hover:text-white",
+                                    : "text-muted hover:text-foreground",
                             ].join(" ")}
                             aria-label={t(item.labelKey)}
                             aria-current={
@@ -240,7 +240,7 @@ export const Aside = () => {
                         type="button"
                         onClick={() => setSelectedNav((current) => current ?? NavType.FOLDER)}
                         className={`flex min-h-11 h-full min-w-0 flex-col items-center justify-center gap-1 transition-colors ${
-                            selectedNav ? "text-primary" : "text-white/60 hover:text-white"
+                            selectedNav ? "text-primary" : "text-muted hover:text-foreground"
                         }`}
                         aria-label={t("routes.tools")}
                         aria-expanded={Boolean(selectedNav)}

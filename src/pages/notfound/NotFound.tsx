@@ -86,19 +86,19 @@ export const NotFound = () => {
                 <div className="flex items-center gap-2 h-full px-4 bg-[#1e1e1e] border-t border-t-red-500 border-r border-sub-gary/20 text-[#d4d4d4] text-xs font-mono">
                     <span className="text-red-400">●</span>
                     <span>404.tsx</span>
-                    <span className="text-white/30 hover:text-white/60 cursor-pointer ml-1">✕</span>
+                    <span className="text-muted hover:text-muted cursor-pointer ml-1">✕</span>
                 </div>
-                <div className="flex items-center gap-2 h-full px-4 border-r border-sub-gary/20 text-white/30 text-xs font-mono hover:text-white/50 cursor-pointer bg-transparent">
+                <div className="flex items-center gap-2 h-full px-4 border-r border-sub-gary/20 text-muted text-xs font-mono hover:text-muted cursor-pointer bg-transparent">
                     <span>index.tsx</span>
                 </div>
             </div>
 
             {/* ── 브레드크럼 ────────────────────────────── */}
-            <div className="flex items-center gap-1 px-4 py-1.5 text-[11px] text-white/40 font-mono border-b border-sub-gary/10 bg-[#1e1e1e] shrink-0">
+            <div className="flex items-center gap-1 px-4 py-1.5 text-[11px] text-muted font-mono border-b border-sub-gary/10 bg-[#1e1e1e] shrink-0">
                 <span>src</span>
-                <span className="text-white/20">›</span>
+                <span className="text-muted">›</span>
                 <span>pages</span>
-                <span className="text-white/20">›</span>
+                <span className="text-muted">›</span>
                 <span className="text-red-400">{path.replace(/^\//, "") || "unknown"}.tsx</span>
                 <span className="ml-2 px-1.5 py-0.5 bg-red-500/20 text-red-400 rounded text-[10px]">
                     Cannot resolve module
@@ -111,7 +111,7 @@ export const NotFound = () => {
                 {/* 코드 에디터 */}
                 <div className="flex flex-1 overflow-hidden bg-[#1e1e1e]">
                     {/* 라인 넘버 */}
-                    <div className="flex flex-col items-end pr-4 pl-3 py-4 text-white/20 font-mono text-xs select-none border-r border-sub-gary/10 shrink-0">
+                    <div className="flex flex-col items-end pr-4 pl-3 py-4 text-muted font-mono text-xs select-none border-r border-sub-gary/10 shrink-0">
                         {codeLines.map((l) => (
                             <div key={l.num} className={`leading-6 ${l.num === 4 ? "text-red-500/50" : ""}`}>
                                 {l.num}
@@ -140,12 +140,12 @@ export const NotFound = () => {
 
                         {/* 404 큰 표시 */}
                         <div className="mt-8 ml-4 flex items-baseline gap-4">
-                            <span className="text-[80px] sm:text-[120px] font-black leading-none text-white/5 select-none font-mono">
+                            <span className="text-[80px] sm:text-[120px] font-black leading-none text-muted select-none font-mono">
                                 404
                             </span>
                             <div className="flex flex-col gap-3">
-                                <p className="text-white/60 text-sm font-sans">페이지를 찾을 수 없어요.</p>
-                                <p className="text-white/30 text-xs font-sans max-w-xs">
+                                <p className="text-muted text-sm font-sans">페이지를 찾을 수 없어요.</p>
+                                <p className="text-muted text-xs font-sans max-w-xs">
                                     요청하신 경로 <code className="text-primary/80 bg-primary/10 px-1 rounded">{path}</code>가 존재하지 않거나 이동되었습니다.
                                 </p>
                                 <div className="flex gap-2 mt-1">
@@ -157,7 +157,7 @@ export const NotFound = () => {
                                     </Link>
                                     <button
                                         onClick={() => navigate(-1)}
-                                        className="px-4 py-1.5 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white border border-sub-gary/20 rounded text-xs font-sans transition-colors"
+                                        className="px-4 py-1.5 bg-foreground/5 hover:bg-foreground/10 text-muted hover:text-foreground border border-sub-gary/20 rounded text-xs font-sans transition-colors"
                                     >
                                         이전 페이지
                                     </button>
@@ -176,8 +176,8 @@ export const NotFound = () => {
                                 key={tab}
                                 className={`px-3 py-1.5 text-[10px] font-mono border-r border-sub-gary/10 transition-colors ${
                                     i === 2
-                                        ? "text-white/80 bg-white/5 border-t border-t-primary/60"
-                                        : "text-white/30 hover:text-white/50"
+                                        ? "text-foreground bg-foreground/5 border-t border-t-primary/60"
+                                        : "text-muted hover:text-muted"
                                 }`}
                             >
                                 {i === 0 && (
@@ -201,7 +201,7 @@ export const NotFound = () => {
                                     ? "text-[#4ec9b0]"
                                     : line.startsWith("$")
                                     ? "text-primary/80"
-                                    : "text-white/40"
+                                    : "text-muted"
                             }`}>
                                 {line || <>&nbsp;</>}
                             </div>
@@ -212,7 +212,7 @@ export const NotFound = () => {
                                     ? "text-red-400"
                                     : currentLine.startsWith("$")
                                     ? "text-primary/80"
-                                    : "text-white/40"
+                                    : "text-muted"
                             }`}>
                                 {currentLine}
                                 <span className="animate-pulse">▌</span>
@@ -223,7 +223,7 @@ export const NotFound = () => {
             </div>
 
             {/* ── 상태 바 ──────────────────────────────── */}
-            <div className="flex items-center justify-between px-3 h-6 bg-red-600/80 text-white/90 text-[10px] font-mono shrink-0">
+            <div className="flex items-center justify-between px-3 h-6 bg-red-600/80 text-foreground text-[10px] font-mono shrink-0">
                 <div className="flex items-center gap-3">
                     <span>⚠ 1 error</span>
                     <span className="opacity-60">Ln 4, Col 1</span>

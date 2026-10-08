@@ -10,13 +10,13 @@ export type FileIconInfo = {
 
 const DEFAULT_FILE_ICON: FileIconInfo = {
     Icon: SiReact,
-    colorClass: "text-[#61dafb]",
+    colorClass: "text-primary",
     languageLabel: "TypeScript React",
 };
 
 const FILE_ICON_MAP: Partial<Record<string, FileIconInfo>> = {
-    [PATHS.BLOG]: { Icon: SiMarkdown, colorClass: "text-white/70", languageLabel: "Markdown" },
-    [PATHS.BLOG_DETAIL]: { Icon: SiMarkdown, colorClass: "text-white/70", languageLabel: "Markdown" },
+    [PATHS.BLOG]: { Icon: SiMarkdown, colorClass: "text-muted", languageLabel: "Markdown" },
+    [PATHS.BLOG_DETAIL]: { Icon: SiMarkdown, colorClass: "text-muted", languageLabel: "Markdown" },
 };
 
 export const getFileIcon = (path: string): FileIconInfo => FILE_ICON_MAP[path] ?? DEFAULT_FILE_ICON;

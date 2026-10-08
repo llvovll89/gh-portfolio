@@ -57,6 +57,8 @@ const CATEGORY_ORDER: Command["category"][] = [
 ];
 
 const THEME_LABELS: Record<Exclude<ThemeMode, ThemeMode.CUSTOM>, string> = {
+    [ThemeMode.SYSTEM]: "테마: 시스템 설정",
+    [ThemeMode.LIGHT]: "테마: 밝은 화면",
     [ThemeMode.DARK]: "테마: 검은배경",
     [ThemeMode.BASE_NAVY]: "테마: 짙은 남색",
     [ThemeMode.SUB_BLUE]: "테마: 파란하늘",
@@ -850,7 +852,7 @@ export const CommandPalette = () => {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 pt-12 sm:pt-16 md:pt-24 px-4"
+            className="fixed inset-0 z-50 flex items-start justify-center bg-inverse/50 pt-12 sm:pt-16 md:pt-24 px-4"
             onClick={closeCommandPalette}
             role="dialog"
             aria-modal="true"
@@ -858,11 +860,11 @@ export const CommandPalette = () => {
         >
             <div
                 ref={containerRef}
-                className="w-full max-w-sm sm:max-w-lg md:max-w-2xl rounded-lg bg-[#252526] shadow-2xl"
+                className="w-full max-w-sm sm:max-w-lg md:max-w-2xl rounded-lg bg-panel shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* 검색 입력 */}
-                <div className="border-b border-[#3e3e42] p-4">
+                <div className="border-b border-line p-4">
                     <input
                         ref={inputRef}
                         type="text"
@@ -873,7 +875,7 @@ export const CommandPalette = () => {
                         }}
                         onKeyDown={handleKeyDown}
                         placeholder="명령을 입력하세요..."
-                        className="w-full bg-transparent text-[#cccccc] outline-none placeholder:text-[#6e6e6e]"
+                        className="w-full bg-transparent text-foreground outline-none placeholder:text-muted"
                         role="combobox"
                         aria-expanded="true"
                         aria-controls="command-list"
@@ -893,7 +895,7 @@ export const CommandPalette = () => {
                     role="listbox"
                 >
                     {filteredCommands.length === 0 ? (
-                        <div className="p-4 text-center text-[#6e6e6e]">
+                        <div className="p-4 text-center text-muted">
                             명령을 찾을 수 없습니다
                         </div>
                     ) : (
@@ -902,7 +904,7 @@ export const CommandPalette = () => {
                                 return (
                                     <div
                                         key={row.id}
-                                        className="px-4 py-2 text-[10px] uppercase tracking-[0.08em] text-[#8f8f8f] bg-[#1f1f20] border-y border-[#343438]"
+                                        className="px-4 py-2 text-[10px] uppercase tracking-[0.08em] text-muted bg-panel border-y border-line"
                                     >
                                         {row.label}
                                     </div>
@@ -920,8 +922,8 @@ export const CommandPalette = () => {
                                     onClick={() => executeCommand(command)}
                                     onMouseEnter={() => setSelectedIndex(index)}
                                     className={`flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors ${isSelected
-                                        ? "bg-[#094771] text-white"
-                                        : "text-[#cccccc] hover:bg-[#2a2d2e]"
+                                        ? "bg-primary/12 text-foreground"
+                                        : "text-foreground hover:bg-panel"
                                         }`}
                                     role="option"
                                     aria-selected={isSelected}
@@ -929,11 +931,11 @@ export const CommandPalette = () => {
                                     <span className="flex flex-col gap-0.5 min-w-0">
                                         <span className="text-sm flex items-center gap-2">
                                             <Highlight text={command.label} query={searchQuery} />
-                                            <span className="rounded px-1.5 py-0.5 text-[10px] leading-none bg-white/10 text-white/65">
+                                            <span className="rounded px-1.5 py-0.5 text-[10px] leading-none bg-foreground/10 text-muted">
                                                 {CATEGORY_LABELS[command.category]}
                                             </span>
                                         </span>
-                                        <span className={`text-xs truncate ${isSelected ? "text-white/60" : "text-[#6e6e6e]"}`}>
+                                        <span className={`text-xs truncate ${isSelected ? "text-muted" : "text-muted"}`}>
                                             <Highlight text={command.description} query={searchQuery} />
                                         </span>
                                     </span>
@@ -957,12 +959,12 @@ export const CommandPalette = () => {
                                             title={isPinned ? "고정 해제" : "명령 고정"}
                                             className={`cursor-pointer rounded px-1.5 py-0.5 text-[11px] transition-colors ${isPinned
                                                 ? "text-amber-300 bg-amber-400/15"
-                                                : "text-[#8a8a8a] hover:text-[#d1d1d1] hover:bg-white/10"
+                                                : "text-muted hover:text-muted hover:bg-foreground/10"
                                                 }`}
                                         >
                                             {isPinned ? "★" : "☆"}
                                         </span>
-                                        <span className="text-xs text-[#858585]">
+                                        <span className="text-xs text-muted">
                                             {command.shortcut || command.quickHint || ""}
                                         </span>
                                     </span>
@@ -973,7 +975,7 @@ export const CommandPalette = () => {
                 </div>
 
                 {/* 하단 정보 */}
-                <div className="border-t border-[#3e3e42] px-4 py-2 text-xs text-[#858585]">
+                <div className="border-t border-line px-4 py-2 text-xs text-muted">
                     ↑↓로 이동 • Enter로 실행 • Ctrl/Cmd+K로 Pin • Alt+P로 Pinned 필터 • ESC로 닫기
                 </div>
             </div>

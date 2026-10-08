@@ -10,10 +10,10 @@ const icons: Record<ToastType, React.ReactNode> = {
 };
 
 const colors: Record<ToastType, string> = {
-    success: "bg-primary text-white shadow-primary/20",
-    error: "bg-rose-500 text-white shadow-rose-500/20",
-    warning: "bg-amber-500 text-white shadow-amber-500/20",
-    info: "bg-blue-500 text-white shadow-blue-500/20",
+    success: "bg-primary text-foreground shadow-primary/20",
+    error: "bg-rose-500 text-foreground shadow-rose-500/20",
+    warning: "bg-amber-500 text-foreground shadow-amber-500/20",
+    info: "bg-blue-500 text-foreground shadow-blue-500/20",
 };
 
 export const Toast = () => {

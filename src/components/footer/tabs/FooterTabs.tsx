@@ -11,7 +11,7 @@ export const FooterTabs = ({ activeTab, onTabChange }: FooterTabsProps) => {
         <div
             role="tablist"
             aria-label="Footer tabs"
-            className="flex items-center gap-0.5 border-b border-white/10"
+            className="flex items-center gap-0.5 border-b border-foreground/10"
         >
             {FOOTER_TABS.map((tab) => (
                 <TabButton

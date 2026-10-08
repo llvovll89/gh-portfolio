@@ -79,7 +79,7 @@ const ContributionHeatmap = ({
   }
 
   if (!weeks || weeks.length === 0) {
-    return <div className="text-[12px] text-white/50">No contributions</div>;
+    return <div className="text-[12px] text-muted">No contributions</div>;
   }
 
   const visibleWeeks = isExpanded ? weeks : weeks.slice(-COLLAPSED_WEEKS);
@@ -105,7 +105,7 @@ const ContributionHeatmap = ({
       {hasMore && (
         <button
           onClick={() => setIsExpanded((s) => !s)}
-          className="mt-2 text-[10px] text-white/50 hover:text-white/80 transition-colors"
+          className="mt-2 text-[10px] text-muted hover:text-foreground transition-colors"
         >
           {isExpanded ? "접기" : "더보기"}
         </button>

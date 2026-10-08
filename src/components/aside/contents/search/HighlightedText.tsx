@@ -13,7 +13,7 @@ export function HighlightedText({ text, keywords }: { text: string; keywords: st
             {parts.map((part, idx) => {
                 const isHit = sorted.some((k) => k.toLowerCase() === part.toLowerCase());
                 return isHit ? (
-                    <mark key={idx} className="bg-primary/30 text-white px-0.5 rounded-sm">
+                    <mark key={idx} className="bg-primary/30 text-foreground px-0.5 rounded-sm">
                         {part}
                     </mark>
                 ) : (

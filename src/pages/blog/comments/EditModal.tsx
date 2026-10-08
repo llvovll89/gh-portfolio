@@ -33,13 +33,13 @@ export function EditModal({ slug, comment, onClose, onSuccess }: Props) {
 
     return (
         <>
-            <div className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm" onClick={onClose} />
+            <div className="fixed inset-0 bg-inverse/50 z-40 backdrop-blur-sm" onClick={onClose} />
             <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center md:p-4">
                 <div className="w-full md:max-w-md max-h-[85dvh] overflow-y-auto scrolls animate-in slide-in-from-bottom md:zoom-in-95 duration-200">
-                    <div className="rounded-t-2xl md:rounded-2xl border border-white/10 bg-zinc-950/98 backdrop-blur-xl p-5 shadow-2xl">
+                    <div className="rounded-t-2xl md:rounded-2xl border border-foreground/10 bg-zinc-950/98 backdrop-blur-xl p-5 shadow-2xl">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-sm font-bold text-white">댓글 수정</h3>
-                            <button type="button" onClick={onClose} className="p-1 rounded-lg text-white/35 hover:text-white/70 cursor-pointer transition-colors">
+                            <h3 className="text-sm font-bold text-foreground">댓글 수정</h3>
+                            <button type="button" onClick={onClose} className="p-1 rounded-lg text-muted hover:text-muted cursor-pointer transition-colors">
                                 <LuX className="w-4 h-4" />
                             </button>
                         </div>
@@ -52,7 +52,7 @@ export function EditModal({ slug, comment, onClose, onSuccess }: Props) {
                                 autoFocus
                                 value={password}
                                 onChange={(e) => { setPassword(e.target.value); setError('') }}
-                                className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-white/10 bg-white/5 text-white text-sm outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-white/30 transition-all"
+                                className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-foreground/10 bg-foreground/5 text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-muted transition-all"
                                 placeholder="비밀번호 확인"
                             />
                         </div>
@@ -60,12 +60,12 @@ export function EditModal({ slug, comment, onClose, onSuccess }: Props) {
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             rows={4}
-                            className="w-full px-3 py-2.5 rounded-xl border border-white/10 bg-white/5 text-white text-sm outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-white/30 resize-none transition-all"
+                            className="w-full px-3 py-2.5 rounded-xl border border-foreground/10 bg-foreground/5 text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-muted resize-none transition-all"
                         />
                         {error && <p className="text-xs text-rose-400 mt-2">{error}</p>}
                         <div className="flex gap-2 mt-4">
-                            <button type="button" onClick={onClose} className="flex-1 py-2.5 text-sm text-white/60 hover:text-white/80 rounded-xl bg-white/6 hover:bg-white/10 cursor-pointer transition-all">취소</button>
-                            <button type="button" onClick={handleSave} disabled={saving} className="flex-1 py-2.5 text-sm font-semibold text-white rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 cursor-pointer transition-all">
+                            <button type="button" onClick={onClose} className="flex-1 py-2.5 text-sm text-muted hover:text-foreground rounded-xl bg-foreground/6 hover:bg-foreground/10 cursor-pointer transition-all">취소</button>
+                            <button type="button" onClick={handleSave} disabled={saving} className="flex-1 py-2.5 text-sm font-semibold text-foreground rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 cursor-pointer transition-all">
                                 {saving ? '저장 중...' : '저장'}
                             </button>
                         </div>

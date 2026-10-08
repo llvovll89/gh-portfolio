@@ -23,10 +23,10 @@ export const PWAUpdateBanner = () => {
             style={{ zIndex: SURFACE_LAYERS.notice }}
             className={`fixed bottom-20 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3
                        px-5 py-3 rounded-xl shadow-2xl
-                       bg-[#1e1e2e] border border-white/10 text-white text-sm
+                       bg-[#1e1e2e] border border-foreground/10 text-foreground text-sm
                        ${closing ? "animate-[fadeOut_0.25s_ease-in_forwards]" : "animate-[fadeIn_0.3s_ease-out]"}`}
         >
-            <span className="text-white/80">새 버전이 있습니다.</span>
+            <span className="text-foreground">새 버전이 있습니다.</span>
             <button
                 onClick={updateSW}
                 className="px-3 py-1 rounded-lg bg-primary text-slate-950 font-semibold
@@ -37,7 +37,7 @@ export const PWAUpdateBanner = () => {
             <button
                 onClick={handleDismiss}
                 aria-label="닫기"
-                className="text-white/50 hover:text-white/80 transition-colors text-lg leading-none"
+                className="text-muted hover:text-foreground transition-colors text-lg leading-none"
             >
                 ×
             </button>

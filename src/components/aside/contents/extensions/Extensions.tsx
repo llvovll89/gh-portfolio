@@ -60,7 +60,7 @@ export const Extensions = () => {
             className={`w-full flex flex-col ${backgroundClass} overflow-hidden`}
             style={backgroundStyle}
         >
-            <header className="w-full h-10 px-3 flex items-center justify-between text-xs text-white overflow-hidden tracking-[1px]">
+            <header className="w-full h-10 px-3 flex items-center justify-between text-xs text-foreground overflow-hidden tracking-[1px]">
                 <span>{t("extensions.title")}</span>
                 <button
                     onClick={() => setShowAddForm(!showAddForm)}
@@ -84,7 +84,7 @@ export const Extensions = () => {
                                     name: e.target.value,
                                 })
                             }
-                            className="w-full px-2 py-1 mb-2 text-xs bg-sub-gary/20 text-white border border-sub-gary/30 rounded focus:outline-none focus:border-primary"
+                            className="w-full px-2 py-1 mb-2 text-xs bg-sub-gary/20 text-foreground border border-sub-gary/30 rounded focus:outline-none focus:border-primary"
                         />
                         <input
                             type="text"
@@ -96,12 +96,12 @@ export const Extensions = () => {
                                     description: e.target.value,
                                 })
                             }
-                            className="w-full px-2 py-1 mb-2 text-xs bg-sub-gary/20 text-white border border-sub-gary/30 rounded focus:outline-none focus:border-primary"
+                            className="w-full px-2 py-1 mb-2 text-xs bg-sub-gary/20 text-foreground border border-sub-gary/30 rounded focus:outline-none focus:border-primary"
                         />
                         <div className="flex gap-2">
                             <button
                                 onClick={handleAddExtension}
-                                className="flex-1 px-2 py-1 text-xs bg-primary text-white rounded hover:bg-primary/80 transition-colors"
+                                className="flex-1 px-2 py-1 text-xs bg-primary text-foreground rounded hover:bg-primary/80 transition-colors"
                             >
                                 {t("extensions.add")}
                             </button>
@@ -110,7 +110,7 @@ export const Extensions = () => {
                                     setShowAddForm(false);
                                     setNewExtension({ name: "", description: "" });
                                 }}
-                                className="flex-1 px-2 py-1 text-xs bg-sub-gary/20 text-white rounded hover:bg-sub-gary/30 transition-colors"
+                                className="flex-1 px-2 py-1 text-xs bg-sub-gary/20 text-foreground rounded hover:bg-sub-gary/30 transition-colors"
                             >
                                 {t("extensions.cancel")}
                             </button>
@@ -119,7 +119,7 @@ export const Extensions = () => {
                 )}
 
                 {extensions.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full text-white/50 text-xs p-3">
+                    <div className="flex flex-col items-center justify-center h-full text-muted text-xs p-3">
                         <VscExtensions className="w-12 h-12 mb-2 opacity-30" />
                         <p>{t("extensions.noExtensions")}</p>
                     </div>
@@ -134,12 +134,12 @@ export const Extensions = () => {
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2 mb-1">
                                         <VscExtensions className="w-4 h-4 text-primary flex-shrink-0" />
-                                        <h3 className="text-xs font-medium text-white truncate">
+                                        <h3 className="text-xs font-medium text-foreground truncate">
                                             {ext.name}
                                         </h3>
                                     </div>
                                     {ext.description && (
-                                        <p className="text-[10px] text-white/70 line-clamp-2 ml-6">
+                                        <p className="text-[10px] text-muted line-clamp-2 ml-6">
                                             {ext.description}
                                         </p>
                                     )}
@@ -153,7 +153,7 @@ export const Extensions = () => {
                                                 }
                                                 className="w-3 h-3"
                                             />
-                                            <span className="text-[10px] text-white/70">
+                                            <span className="text-[10px] text-muted">
                                                 {ext.enabled ? t("extensions.enabled") : t("extensions.disabled")}
                                             </span>
                                         </label>
@@ -164,7 +164,7 @@ export const Extensions = () => {
                                     className="hover:bg-primary/20 p-1 rounded transition-colors flex-shrink-0"
                                     aria-label={t("common.delete")}
                                 >
-                                    <VscTrash className="w-4 h-4 text-white/70 hover:text-white" />
+                                    <VscTrash className="w-4 h-4 text-muted hover:text-foreground" />
                                 </button>
                             </li>
                         ))}

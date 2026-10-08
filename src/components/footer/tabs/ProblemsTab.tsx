@@ -25,7 +25,7 @@ export const ProblemsTab = () => {
 
     if (items.length === 0) {
         return (
-            <div className="h-full flex items-center justify-center text-xs text-white/30 font-mono">
+            <div className="h-full flex items-center justify-center text-xs text-muted font-mono">
                 문제가 없습니다
             </div>
         );
@@ -39,14 +39,14 @@ export const ProblemsTab = () => {
                     href={item.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-2 px-3 py-1.5 border-b border-white/5 hover:bg-white/5 transition-colors text-white/70"
+                    className="flex items-center gap-2 px-3 py-1.5 border-b border-foreground/5 hover:bg-foreground/5 transition-colors text-muted"
                 >
                     {item.type === "issue" ? (
                         <LuCircleAlert className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                     ) : (
                         <LuGitPullRequest className="w-3.5 h-3.5 text-primary shrink-0" />
                     )}
-                    <span className="text-white/40 shrink-0">{item.repo}</span>
+                    <span className="text-muted shrink-0">{item.repo}</span>
                     <span className="truncate">
                         #{item.number} {item.title}
                     </span>

@@ -21,11 +21,11 @@ export const Breadcrumb = () => {
             <div
                 role="navigation"
                 aria-label="Breadcrumb"
-                className={`absolute top-10 right-0 h-6 flex items-center gap-1.5 px-3 text-[11px] font-mono text-white/50 border-b border-sub-gary/10 z-20 ${backgroundClass}`}
+                className={`absolute top-10 right-0 h-6 flex items-center gap-1.5 px-3 text-[11px] font-mono text-muted border-b border-sub-gary/10 z-20 ${backgroundClass}`}
                 style={{width: "100%", ...backgroundStyle}}
             >
                 <Icon aria-hidden="true" className={`w-3 h-3 shrink-0 ${colorClass}`} />
-                <span className="text-white/70">{matchedRoute.name}</span>
+                <span className="text-muted">{matchedRoute.name}</span>
             </div>
         );
     }
@@ -34,18 +34,18 @@ export const Breadcrumb = () => {
         <div
             role="navigation"
             aria-label="Breadcrumb"
-            className={`absolute top-10 right-0 h-7 flex items-center gap-1.5 px-3 text-[11px] font-mono text-white/60 border-b border-sub-gary/10 z-20 ${backgroundClass}`}
+            className={`absolute top-10 right-0 h-7 flex items-center gap-1.5 px-3 text-[11px] font-mono text-muted border-b border-sub-gary/10 z-20 ${backgroundClass}`}
             style={{
                 width: `calc(100% - ${layoutState.resizeSidebarWidth}px)`,
                 ...backgroundStyle,
             }}
         >
             <span>src</span>
-            <span className="text-white/20">›</span>
+            <span className="text-muted">›</span>
             <span>pages</span>
-            <span className="text-white/20">›</span>
+            <span className="text-muted">›</span>
             <Icon aria-hidden="true" className={`w-3 h-3 shrink-0 ${colorClass}`} />
-            <span className="text-white/70">{matchedRoute.name}.tsx</span>
+            <span className="text-muted">{matchedRoute.name}.tsx</span>
         </div>
     );
 };

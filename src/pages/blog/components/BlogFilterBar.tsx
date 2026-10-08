@@ -129,7 +129,7 @@ export const BlogFilterBar = ({
                 {/* 결과 카운트 및 필터 초기화 */}
                 <div className="flex items-center gap-3 ml-auto">
                     <span
-                        className="text-[clamp(0.75rem,1vw,0.875rem)] text-zinc-600 blog-dark:text-zinc-300 tabular-nums"
+                        className="text-[clamp(0.75rem,1vw,0.875rem)] text-muted blog-dark:text-muted tabular-nums"
                         role="status"
                         aria-live="polite"
                     >
@@ -145,9 +145,9 @@ export const BlogFilterBar = ({
                             className={[
                                 "text-xs font-medium px-3 py-1.5",
                                 "rounded-lg",
-                                "text-zinc-600 blog-dark:text-zinc-300",
-                                "hover:text-zinc-900 blog-dark:hover:text-zinc-100",
-                                "hover:bg-zinc-100 blog-dark:hover:bg-zinc-800",
+                                "text-muted blog-dark:text-muted",
+                                "hover:text-foreground blog-dark:hover:text-foreground",
+                                "hover:bg-panel blog-dark:hover:bg-panel",
                                 "transition-all duration-200",
                             ].join(" ")}
                         >

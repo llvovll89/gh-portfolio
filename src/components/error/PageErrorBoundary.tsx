@@ -59,13 +59,13 @@ export class PageErrorBoundary extends Component<Props, State> {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <h2 className="text-2xl font-bold text-white/90">
+                        <h2 className="text-2xl font-bold text-foreground">
                             {this.props.pageName
                                 ? `${this.props.pageName} 페이지`
                                 : "페이지"}
                             에서 오류가 발생했습니다
                         </h2>
-                        <p className="text-sm text-white/50">
+                        <p className="text-sm text-muted">
                             예상치 못한 오류가 발생했습니다. 다시 시도하거나
                             홈으로 이동해주세요.
                         </p>
@@ -79,14 +79,14 @@ export class PageErrorBoundary extends Component<Props, State> {
                     <div className="flex items-center gap-3 flex-wrap justify-center">
                         <button
                             onClick={this.handleReset}
-                            className="cursor-pointer px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-white/80 font-semibold rounded-xl text-sm transition-all duration-200"
+                            className="cursor-pointer px-5 py-2.5 bg-foreground/5 hover:bg-foreground/10 border border-foreground/10 hover:border-foreground/20 text-foreground font-semibold rounded-xl text-sm transition-all duration-200"
                         >
                             다시 시도
                         </button>
                         <Link
                             to="/"
                             onClick={this.handleReset}
-                            className="px-5 py-2.5 bg-primary hover:bg-primary/80 text-white font-semibold rounded-xl text-sm transition-all duration-200 shadow-lg shadow-primary/20"
+                            className="px-5 py-2.5 bg-primary hover:bg-primary/80 text-foreground font-semibold rounded-xl text-sm transition-all duration-200 shadow-lg shadow-primary/20"
                         >
                             홈으로 이동
                         </Link>

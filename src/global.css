@@ -3,14 +3,23 @@
 
 /* Blog colors follow the selected portfolio theme, not the OS preference. */
 @custom-variant blog-dark (&:where([data-blog-theme="dark"], [data-blog-theme="dark"] *));
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
-    --color-primary: #75b8e8;
-    --color-main: #1c1b1b;
-    --color-navy: #0c0b10;
-    --color-sub-gary: #cecece73;
-    --color-sub-navy: #1f1e25;
-    --color-base-navy: #181b20;
+    --color-primary: var(--accent);
+    --color-foreground: var(--text-primary);
+    --color-muted: var(--text-muted);
+    --color-inverse: var(--text-inverse);
+    --color-surface: var(--surface);
+    --color-panel: var(--surface-panel);
+    --color-inset: var(--surface-inset);
+    --color-line: var(--line);
+    --color-on-accent: var(--on-accent);
+    --color-main: var(--surface);
+    --color-navy: var(--surface-inset);
+    --color-sub-gary: var(--text-muted);
+    --color-sub-navy: var(--surface-panel);
+    --color-base-navy: var(--surface);
     --color-sub-blue: #1e52e3;
     --color-sub-green: #43b54e;
     --color-sub-pink: #d46876;
@@ -248,7 +257,7 @@ body {
     top: 0;
     padding: 0.75rem 1.5rem;
     background: var(--color-primary);
-    color: white;
+    color: var(--on-accent);
     font-weight: 600;
     text-decoration: none;
     border-radius: 0 0 0.375rem 0;
@@ -263,7 +272,7 @@ body {
 }
 
 .skip-link:hover {
-    background: #0088dd;
+    background: var(--accent);
 }
 
 /* 터치 기기 탭 하이라이트 전역 제거 */

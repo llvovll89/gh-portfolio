@@ -84,8 +84,8 @@ export const ConsoleTab = () => {
     return (
         <div className="h-full flex flex-col bg-slate-950 text-slate-100 font-mono text-[11px]">
             {/* 헤더 */}
-            <div className="flex items-center justify-between px-3 py-1.5 border-b border-white/10 shrink-0">
-                <div className="flex items-center gap-2 text-[10px] text-white/50">
+            <div className="flex items-center justify-between px-3 py-1.5 border-b border-foreground/10 shrink-0">
+                <div className="flex items-center gap-2 text-[10px] text-muted">
                     <span className="h-2 w-2 rounded-full bg-red-400/80" />
                     <span className="h-2 w-2 rounded-full bg-yellow-300/80" />
                     <span className="h-2 w-2 rounded-full bg-green-400/80" />
@@ -93,10 +93,10 @@ export const ConsoleTab = () => {
                 </div>
                 <div className="flex items-center gap-1">
                     <button onClick={copy} disabled={!hasOutput} type="button"
-                        className="rounded px-2 py-0.5 text-[10px] font-medium border border-white/15 bg-white/5 hover:bg-white/10 text-white/70 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                        className="rounded px-2 py-0.5 text-[10px] font-medium border border-foreground/15 bg-foreground/5 hover:bg-foreground/10 text-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                     >복사</button>
                     <button onClick={download} disabled={!hasOutput} type="button"
-                        className="rounded px-2 py-0.5 text-[10px] font-medium border border-white/15 bg-white/5 hover:bg-white/10 text-white/70 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                        className="rounded px-2 py-0.5 text-[10px] font-medium border border-foreground/15 bg-foreground/5 hover:bg-foreground/10 text-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                     >다운로드</button>
                     <button onClick={clear} disabled={!hasOutput} type="button"
                         className="rounded px-2 py-0.5 text-[10px] font-medium border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
@@ -107,12 +107,12 @@ export const ConsoleTab = () => {
             {/* 출력 영역 */}
             <div ref={outputRef} className="flex-1 overflow-auto p-3 scrolls">
                 {!hasOutput ? (
-                    <div className="flex flex-col items-center justify-center h-full gap-1.5 text-white/25 select-none">
+                    <div className="flex flex-col items-center justify-center h-full gap-1.5 text-muted select-none">
                         <span className="text-xs">아직 출력이 없습니다</span>
                         <span className="text-[10px]">아래 입력창에서 명령어를 실행하세요</span>
                     </div>
                 ) : (
-                    <pre className="m-0 text-[10px] leading-relaxed whitespace-pre-wrap text-white/85">
+                    <pre className="m-0 text-[10px] leading-relaxed whitespace-pre-wrap text-foreground">
                         {lines.map((line, idx) => (
                             <div key={idx}>{renderWithLinks(line)}</div>
                         ))}
@@ -121,7 +121,7 @@ export const ConsoleTab = () => {
             </div>
 
             {/* 입력 영역 — 콘솔 탭에서도 명령어 실행 가능 */}
-            <div className="shrink-0 border-t border-white/10 px-3 py-1.5 flex items-center gap-1.5 bg-zinc-950">
+            <div className="shrink-0 border-t border-foreground/10 px-3 py-1.5 flex items-center gap-1.5 bg-zinc-950">
                 <span className="text-green-400 select-none shrink-0">llvovll89@DESKTOP</span>
                 <span className="text-yellow-300 select-none shrink-0">/d/gh-portfolio</span>
                 <span className="text-blue-300 select-none shrink-0">(main)</span>

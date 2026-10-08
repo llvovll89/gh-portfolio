@@ -80,7 +80,7 @@ export const Bottom = () => {
                 <button
                     type="button"
                     onClick={() => (isOpen ? closeFooter() : openFooter())}
-                    className="px-3 h-full text-white/70 text-[1.25rem] hover:bg-white/5"
+                    className="px-3 h-full text-muted text-[1.25rem] hover:bg-foreground/5"
                     aria-label="터미널 열기/닫기"
                 >
                     {isOpen ? "▾" : "▴"}

@@ -58,10 +58,10 @@ const GhActivityDashboard = ({ username }: { username?: string }) => {
     }, [fetchContributions]);
 
     return (
-        <div className="w-full text-white">
+        <div className="w-full text-foreground">
             <div className="mb-2 flex items-center justify-between">
                 <div className="text-sm font-semibold">{user} activity</div>
-                <div className="text-[12px] text-white/60">
+                <div className="text-[12px] text-muted">
                     {loading
                         ? <span className="skeleton inline-block h-3 w-24 rounded align-middle" />
                         : error
@@ -72,7 +72,7 @@ const GhActivityDashboard = ({ username }: { username?: string }) => {
             </div>
 
             {error === "contributions" && !loading && (
-                <div className="mb-3 flex items-center gap-2 text-[12px] text-white/40">
+                <div className="mb-3 flex items-center gap-2 text-[12px] text-muted">
                     <span>contribution 데이터를 불러오지 못했습니다.</span>
                     <button
                         onClick={fetchContributions}

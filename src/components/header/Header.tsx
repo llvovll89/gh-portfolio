@@ -24,7 +24,7 @@ const HeaderClock = () => {
     const minutes = currentTime.getMinutes().toString().padStart(2, "0");
 
     return (
-        <div className="h-full px-2 sm:px-3 md:px-4 flex items-center text-white/90 font-bold text-xs sm:text-sm select-none border-l border-sub-gary/10 user-select-none">
+        <div className="h-full px-2 sm:px-3 md:px-4 flex items-center text-foreground font-bold text-xs sm:text-sm select-none border-l border-sub-gary/10 user-select-none">
             {hours}:{minutes}
         </div>
     );
@@ -33,7 +33,7 @@ const HeaderClock = () => {
 export const Header = () => {
     const { layoutState } = useContext(LayoutContext);
     const { selectedPathState, setSelectedPathState, setClosedTabs, pinnedTabs, setPinnedTabs } = useContext(NavigationContext);
-    const { backgroundStyle, backgroundClass } = useThemeStyle();
+    const { backgroundStyle, backgroundClass, isDark } = useThemeStyle();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -170,7 +170,7 @@ export const Header = () => {
                         aria-label="홈으로"
                     >
                         <img
-                            src="/assets/logo/GH_logo_small_white.png"
+                            src={`/assets/logo/GH_logo_small_${isDark ? "white" : "black"}.png`}
                             alt="logo"
                             className="h-5 w-auto object-contain"
                         />
@@ -201,7 +201,7 @@ export const Header = () => {
                                 }
                                 key={route.path}
                                 className={`${selectedStyle(route.path).bgColor
-                                    } min-w-0 sm:min-w-24 md:min-w-30 w-max h-full border-r text-white border-sub-gary/30 text-[11px] sm:text-[12px] md:text-[13px] flex items-center cursor-pointer user-select-none gap-1 justify-center px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-inset`}
+                                    } min-w-0 sm:min-w-24 md:min-w-30 w-max h-full border-r text-foreground border-sub-gary/30 text-[11px] sm:text-[12px] md:text-[13px] flex items-center cursor-pointer user-select-none gap-1 justify-center px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-inset`}
                             >
                                 <Icon aria-hidden="true" className={`w-3.5 h-3.5 shrink-0 ${colorClass}`} />
                                 <Link to={route.path} aria-current={selectedPathState.state === route.path ? "page" : undefined} className="h-full min-w-0 flex-1 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-[-2px]">
@@ -217,7 +217,7 @@ export const Header = () => {
                                         togglePinPath(route.path);
                                     }}
                                     aria-label={isPinned ? `Unpin ${route.name} tab` : `Pin ${route.name} tab`}
-                                    className={`hidden sm:flex h-full px-1 items-center justify-center cursor-pointer rounded transition-colors shrink-0 ${isPinned ? "text-amber-300" : "text-white/50 hover:text-white/80"}`}
+                                    className={`hidden sm:flex h-full px-1 items-center justify-center cursor-pointer rounded transition-colors shrink-0 ${isPinned ? "text-amber-300" : "text-muted hover:text-foreground"}`}
                                     title={isPinned ? "고정 해제" : "탭 고정"}
                                 >
                                     <span className="text-[11px] sm:text-xs">
@@ -261,7 +261,7 @@ export const Header = () => {
                     {/* 뒤로 가기 버튼 */}
                     <button
                         onClick={() => navigate(-1)}
-                        className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors"
+                        className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors"
                         title="뒤로 가기"
                     >
                         <svg
@@ -285,7 +285,7 @@ export const Header = () => {
                     {/* 앞으로 가기 버튼 - 모바일에서 숨김 */}
                     <button
                         onClick={() => navigate(1)}
-                        className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
+                        className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors border-l border-sub-gary/10"
                         title="앞으로 가기"
                     >
                         <svg
@@ -309,7 +309,7 @@ export const Header = () => {
                     {/* 새로고침 버튼 */}
                     <button
                         onClick={() => navigate(0)}
-                        className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
+                        className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors border-l border-sub-gary/10"
                         title="새로고침"
                     >
                         <svg
@@ -333,7 +333,7 @@ export const Header = () => {
                     {/* 풀스크린 토글 버튼 - 모바일에서 숨김 */}
                     <button
                         onClick={toggleFullscreen}
-                        className="hidden md:flex h-full items-center justify-center px-1.5 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-white/70 hover:text-white transition-colors border-l border-sub-gary/10"
+                        className="hidden md:flex h-full items-center justify-center px-1.5 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors border-l border-sub-gary/10"
                         title={isFullscreen ? "전체 화면 종료 (F11)" : "전체 화면 (F11)"}
                     >
                         {isFullscreen ? (
