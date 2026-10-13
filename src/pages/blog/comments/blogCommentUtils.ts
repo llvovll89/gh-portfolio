@@ -15,14 +15,12 @@ export function getGradient(name: string): string {
     return GRADIENTS[Math.abs(hash) % GRADIENTS.length]
 }
 
-export function relativeTime(date: Date): string {
-    const diff = Date.now() - date.getTime()
-    const min = Math.floor(diff / 60000)
-    const hr = Math.floor(diff / 3600000)
-    const day = Math.floor(diff / 86400000)
-    if (min < 1) return '방금 전'
-    if (hr < 1) return `${min}분 전`
-    if (day < 1) return `${hr}시간 전`
-    if (day < 7) return `${day}일 전`
-    return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })
+export function relativeTime(date: Date, language = "ko"): string {
+    const minutes = Math.max(0, Math.floor((Date.now() - date.getTime()) / 60000));
+    const formatter = new Intl.RelativeTimeFormat(language, { numeric: "auto" });
+    if (minutes < 1) return formatter.format(0, "minute");
+    if (minutes < 60) return formatter.format(-minutes, "minute");
+    if (minutes < 1440) return formatter.format(-Math.floor(minutes / 60), "hour");
+    if (minutes < 10080) return formatter.format(-Math.floor(minutes / 1440), "day");
+    return date.toLocaleDateString(language, { year: "numeric", month: "short", day: "numeric" });
 }

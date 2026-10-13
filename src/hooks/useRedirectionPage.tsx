@@ -11,5 +11,5 @@ export const useRedirectionPage = () => {
         if (selectedPathState.list.length === 0) {
             navigation(DEFAULT);
         }
-    }, [selectedPathState]);
+    }, [selectedPathState, navigation]);
 };

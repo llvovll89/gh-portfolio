@@ -30,5 +30,5 @@ export const useClosePopup = ({ elementRef, callBack }: UseClosePopupProps) => {
             document.removeEventListener("mousedown", handler);
             document.removeEventListener("touchstart", handler);
         };
-    }, []); // elementRef는 ref 객체라 안정적, callBack은 위 ref로 처리
+    }, [elementRef]); // elementRef는 ref 객체라 안정적, callBack은 위 ref로 처리
 };

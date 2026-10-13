@@ -1,5 +1,7 @@
+import { useModalBackground } from "../../hooks/useModalBackground";
+import { uiText } from "../../utils/uiText";
 import { useContext } from "react";
-import { KeyboardContext } from "../../context/KeyboardState.context";
+import { KeyboardContext } from "../../context/KeyboardState";
 import { keyboardKeyAndStateMock } from "./constants/mock";
 import { Portal } from "../Portal";
 import { useFocusTrap } from "../../hooks/useKeyboardNavigation";
@@ -8,6 +10,7 @@ export const KeyboardInfo = () => {
     const { setIsVisibleKeyboardInfo, isVisibleKeyboardInfo } =
         useContext(KeyboardContext);
     const containerRef = useFocusTrap(isVisibleKeyboardInfo);
+    useModalBackground(isVisibleKeyboardInfo);
 
     return (
         <Portal>
@@ -15,7 +18,7 @@ export const KeyboardInfo = () => {
                 className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0c1018]/50 backdrop-blur-md"
                 role="dialog"
                 aria-modal="true"
-                aria-label="키보드 단축키 안내"
+                aria-label={uiText("키보드 단축키 안내")}
                 onClick={() => setIsVisibleKeyboardInfo(false)}
             >
                 <div
@@ -40,11 +43,9 @@ export const KeyboardInfo = () => {
                             </span>
                             <div className="leading-tight">
                                 <p className="text-xs sm:text-sm font-semibold tracking-tight">
-                                    키보드 단축키
-                                </p>
+                                    {uiText("키보드 단축키")}</p>
                                 <p className="text-[10px] sm:text-xs text-muted">
-                                    자주 쓰는 키 조합 모음
-                                </p>
+                                    {uiText("자주 쓰는 키 조합 모음")}</p>
                             </div>
                         </div>
 
@@ -58,16 +59,15 @@ export const KeyboardInfo = () => {
                                 "hover:bg-panel",
                                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2",
                             ].join(" ")}
-                            aria-label="닫기"
+                            aria-label={uiText("닫기")}
                         >
-                            닫기
-                        </button>
+                            {uiText("닫기")}</button>
                     </header>
 
                     <ul className="relative max-h-[60vh] sm:max-h-[70vh] overflow-y-auto px-3 sm:px-5 py-3 sm:py-4">
                         {keyboardKeyAndStateMock.map((item) => (
                             <li
-                                key={item.key}
+                                key={uiText(item.key)}
                                 className={[
                                     "group flex items-center justify-between gap-4",
                                     "py-2",
@@ -75,7 +75,7 @@ export const KeyboardInfo = () => {
                                 ].join(" ")}
                             >
                                 <span className="text-[clamp(0.7rem,1.2vw,0.9rem)] text-muted">
-                                    {item.label}
+                                    {uiText(item.label)}
                                 </span>
 
                                 {/* keycap */}
@@ -100,9 +100,7 @@ export const KeyboardInfo = () => {
 
                     <div className="relative px-3 sm:px-5 py-3 sm:py-4 border-t border-line flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                         <p className="text-[10px] sm:text-xs text-muted">
-                            팁: <span className="font-medium">ESC</span>를 두 번
-                            누르면 열려있는 UI를 한 번에 닫을 수 있어요.
-                        </p>
+                            {uiText("팁:")}<span className="font-medium">ESC</span>{uiText("를 두 번 누르면 열려있는 UI를 한 번에 닫을 수 있어요.")}</p>
 
                         <button
                             type="button"
@@ -112,8 +110,7 @@ export const KeyboardInfo = () => {
                                 "hover:text-foreground transition-colors",
                             ].join(" ")}
                         >
-                            확인
-                        </button>
+                            {uiText("확인")}</button>
                     </div>
                 </div>
             </section>

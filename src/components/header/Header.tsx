@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+import { uiText } from "../../utils/uiText";
 import { Link, useNavigate, useLocation, matchPath } from "react-router-dom";
 import { routesPath } from "../../routes/route";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
@@ -31,6 +33,7 @@ const HeaderClock = () => {
 };
 
 export const Header = () => {
+    const { t } = useTranslation();
     const { layoutState } = useContext(LayoutContext);
     const { selectedPathState, setSelectedPathState, setClosedTabs, pinnedTabs, setPinnedTabs } = useContext(NavigationContext);
     const { backgroundStyle, backgroundClass, isDark } = useThemeStyle();
@@ -79,7 +82,7 @@ export const Header = () => {
                 Boolean(matchPath({ path: route.path, end: true }, location.pathname)),
         );
 
-        const nextPath = matchedRoute?.path;
+        const nextPath = matchedRoute ? location.pathname : undefined;
         if (!nextPath) return;
 
         setSelectedPathState((prev) => {
@@ -120,6 +123,11 @@ export const Header = () => {
     };
 
     const handleClosePAth = (path: string) => {
+        if (location.pathname === path) {
+            const remaining = selectedPathState.list.filter(item => item !== path);
+            const index = selectedPathState.list.indexOf(path);
+            navigate(remaining[Math.max(0, index - 1)] ?? "/");
+        }
         setClosedTabs((prev) => [...prev, path]);
         setPinnedTabs((prev) => prev.filter((p) => p !== path));
 
@@ -167,7 +175,7 @@ export const Header = () => {
                     <Link
                         to="/"
                         className="flex items-center h-full px-3 shrink-0 border-r border-sub-gary/20"
-                        aria-label="홈으로"
+                        aria-label={uiText("홈으로")}
                     >
                         <img
                             src={`/assets/logo/GH_logo_small_${isDark ? "white" : "black"}.png`}
@@ -180,14 +188,15 @@ export const Header = () => {
                 <ul
                     id="header-tabs"
                     tabIndex={-1}
-                    aria-label="File tabs"
+                    aria-label={t("accessibility.tabs")}
                     className={`flex items-center h-full flex-1 overflow-x-auto`}
                 >
                     {(isMobileSize
                         ? orderedTabs.filter((path) => path === selectedPathState.state)
                         : orderedTabs
                     ).map((path) => {
-                        const route = routesPath.find((r) => r.path === path);
+                        const matched = routesPath.find((r) => r.path !== "*" && matchPath({ path: r.path, end: true }, path));
+                        const route = matched ? { ...matched, path, name: matched.path.includes(":") ? path.split("/").pop() ?? matched.name : matched.name } : undefined;
                         if (!route) return null;
                         const isPinned = pinnedTabs.includes(route.path);
                         const { Icon, colorClass } = getFileIcon(route.path);
@@ -216,9 +225,9 @@ export const Header = () => {
                                         e.stopPropagation();
                                         togglePinPath(route.path);
                                     }}
-                                    aria-label={isPinned ? `Unpin ${route.name} tab` : `Pin ${route.name} tab`}
+                                    aria-label={t(isPinned ? "tabs.unpin" : "tabs.pin", { name: route.name })}
                                     className={`hidden sm:flex h-full px-1 items-center justify-center cursor-pointer rounded transition-colors shrink-0 ${isPinned ? "text-amber-300" : "text-muted hover:text-foreground"}`}
-                                    title={isPinned ? "고정 해제" : "탭 고정"}
+                                    title={isPinned ? uiText("고정 해제") : uiText("탭 고정")}
                                 >
                                     <span className="text-[11px] sm:text-xs">
                                         {isPinned ? "★" : "☆"}
@@ -231,9 +240,9 @@ export const Header = () => {
                                         e.stopPropagation();
                                         handleClosePAth(route.path);
                                     }}
-                                    aria-label={`Close ${route.name} tab`}
+                                    aria-label={t("tabs.close", { name: route.name })}
                                     className="hidden sm:flex h-full px-1.5 items-center justify-center cursor-pointer hover:bg-sub-gary/30 rounded transition-colors shrink-0"
-                                    title="닫기"
+                                    title={uiText("닫기")}
                                 >
                                     <svg
                                         width="10"
@@ -262,7 +271,7 @@ export const Header = () => {
                     <button
                         onClick={() => navigate(-1)}
                         className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors"
-                        title="뒤로 가기"
+                        title={uiText("뒤로 가기")}
                     >
                         <svg
                             width="14"
@@ -286,7 +295,7 @@ export const Header = () => {
                     <button
                         onClick={() => navigate(1)}
                         className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors border-l border-sub-gary/10"
-                        title="앞으로 가기"
+                        title={uiText("앞으로 가기")}
                     >
                         <svg
                             width="14"
@@ -310,7 +319,7 @@ export const Header = () => {
                     <button
                         onClick={() => navigate(0)}
                         className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors border-l border-sub-gary/10"
-                        title="새로고침"
+                        title={uiText("새로고침")}
                     >
                         <svg
                             width="14"
@@ -334,7 +343,7 @@ export const Header = () => {
                     <button
                         onClick={toggleFullscreen}
                         className="hidden md:flex h-full items-center justify-center px-1.5 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors border-l border-sub-gary/10"
-                        title={isFullscreen ? "전체 화면 종료 (F11)" : "전체 화면 (F11)"}
+                        title={isFullscreen ? uiText("전체 화면 종료 (F11)") : uiText("전체 화면 (F11)")}
                     >
                         {isFullscreen ? (
                             <svg

@@ -1,5 +1,5 @@
-import { useToast } from "@/context/ToastContext";
-import type { ToastType } from "@/context/ToastContext";
+import { useToast } from "@/context/ToastState";
+import type { ToastType } from "@/context/ToastState";
 import { LuCircleCheck, LuCircleX, LuTriangleAlert, LuInfo } from "react-icons/lu";
 
 const icons: Record<ToastType, React.ReactNode> = {

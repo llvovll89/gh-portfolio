@@ -1,3 +1,4 @@
+import { uiText } from "../utils/uiText";
 import { useState, useRef, useEffect } from "react";
 import { LuShare2, LuLink, LuCheck, LuTwitter } from "react-icons/lu";
 import { RiKakaoTalkFill } from "react-icons/ri";
@@ -83,7 +84,7 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
         return (
             <button
                 onClick={handleNativeShare}
-                aria-label="포스트 공유"
+                aria-label={uiText("포스트 공유")}
                 className={[
                     "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium",
                     "text-zinc-400",
@@ -95,7 +96,7 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                 ].join(" ")}
             >
                 <LuShare2 className="w-3.5 h-3.5" />
-                <span>공유</span>
+                <span>{uiText("공유")}</span>
             </button>
         );
     }
@@ -105,7 +106,7 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
         <div ref={dropdownRef} className="relative">
             <button
                 onClick={() => setOpen((v) => !v)}
-                aria-label="공유 옵션"
+                aria-label={uiText("공유 옵션")}
                 aria-expanded={open}
                 className={[
                     "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium",
@@ -119,7 +120,7 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                 ].join(" ")}
             >
                 <LuShare2 className="w-3.5 h-3.5" />
-                <span>공유</span>
+                <span>{uiText("공유")}</span>
             </button>
 
             {open && (
@@ -148,7 +149,7 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                             ? <LuCheck className="w-4 h-4 text-green-500" />
                             : <LuLink className="w-4 h-4" />
                         }
-                        <span>{copied ? "복사됨!" : "링크 복사"}</span>
+                        <span>{copied ? uiText("복사됨!") : uiText("링크 복사")}</span>
                     </button>
 
                     <div className="h-px bg-zinc-800" />
@@ -164,7 +165,7 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                         ].join(" ")}
                     >
                         <LuTwitter className="w-4 h-4" />
-                        <span>X (트위터)</span>
+                        <span>{uiText("X (트위터)")}</span>
                     </button>
 
                     <div className="h-px bg-zinc-800" />
@@ -180,7 +181,7 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                         ].join(" ")}
                     >
                         <RiKakaoTalkFill className="w-4 h-4 text-yellow-500" />
-                        <span>카카오톡</span>
+                        <span>{uiText("카카오톡")}</span>
                     </button>
                 </div>
             )}

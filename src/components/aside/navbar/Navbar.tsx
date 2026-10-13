@@ -1,11 +1,13 @@
+import { uiText } from "../../../utils/uiText";
+import { useTranslation } from "react-i18next";
 import { CiKeyboard } from "react-icons/ci";
 import { VscGithub, VscTerminal } from "react-icons/vsc";
 import { SiVelog } from "react-icons/si";
 import { NAV_ITEMS, NavType } from "../constants/Nav.type";
 import { useContext, useEffect, useState } from "react";
-import { KeyboardContext } from "../../../context/KeyboardState.context";
+import { KeyboardContext } from "../../../context/KeyboardState";
 import { LayoutContext } from "../../../context/LayoutContext";
-import { TerminalContext } from "../../../context/TerminalContext";
+import { TerminalContext } from "../../../context/TerminalState";
 import { KeyboardInfo } from "../../keyboardInfo/KeyboardInfo";
 import { useCheckedMobileSize } from "../../../hooks/useCheckedMobileSize";
 
@@ -21,6 +23,7 @@ interface NavbarProps {
 }
 
 export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
+    const { t } = useTranslation();
     const { toggleKeyboardInfo, isVisibleKeyboardInfo } =
         useContext(KeyboardContext);
     const { setLayoutState } = useContext(LayoutContext);
@@ -139,17 +142,17 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                         onClick={() => onClickNav(item.type)}
                         title={
                             item.type === NavType.BOOKMARKS && bookmarkCount > 0
-                                ? `${item.label} (${bookmarkCount})`
+                                ? `${t(item.labelKey)} (${bookmarkCount})`
                                 : item.type === NavType.GIT_CONTROL && gitOpenCount > 0
-                                ? `${item.label} (${gitOpenCount})`
-                                : item.label
+                                ? `${t(item.labelKey)} (${gitOpenCount})`
+                                : t(item.labelKey)
                         }
                         className={`cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center transition-colors ${
                             selectedNav === item.type
                                 ? "bg-sub-gary/20 text-primary"
                                 : "text-foreground hover:bg-sub-gary/10"
                         }`}
-                        aria-label={item.label}
+                        aria-label={t(item.labelKey)}
                     >
                         <span className="relative inline-flex">
                             <item.icon className="w-5 h-5" />
@@ -187,8 +190,8 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                 <button
                     onClick={toggleTerminal}
                     className="cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center text-foreground hover:bg-sub-gary/10 transition-colors"
-                    aria-label="터미널 토글"
-                    title="터미널 열기/닫기"
+                    aria-label={uiText("터미널 토글")}
+                    title={uiText("터미널 열기/닫기")}
                 >
                     <VscTerminal className="w-5 h-5" />
                 </button>
@@ -200,7 +203,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center text-foreground hover:bg-sub-gary/10 transition-colors"
-                    aria-label="GitHub 프로필"
+                    aria-label={uiText("GitHub 프로필")}
                     title="GitHub"
                 >
                     <VscGithub className="w-5 h-5" />
@@ -212,7 +215,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center text-foreground hover:bg-sub-gary/10 transition-colors"
-                    aria-label="Velog 블로그"
+                    aria-label={uiText("Velog 블로그")}
                     title="Velog"
                 >
                     <SiVelog aria-hidden="true" className="w-4 h-4" />
@@ -222,8 +225,8 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                 <button
                     onClick={toggleKeyboardInfo}
                     className="focus:outline-none cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center text-foreground hover:bg-sub-gary/10 transition-colors"
-                    aria-label="키보드 단축키 안내"
-                    title="키보드 단축키"
+                    aria-label={uiText("키보드 단축키 안내")}
+                    title={uiText("키보드 단축키")}
                 >
                     <CiKeyboard className="w-6 h-6" />
                 </button>

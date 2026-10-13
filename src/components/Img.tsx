@@ -1,3 +1,4 @@
+import { OptimizedImage } from "./OptimizedImage";
 import {useState} from "react";
 
 interface ImgProps {
@@ -28,10 +29,10 @@ export const Img = ({
                     className="absolute inset-0 rounded-[inherit] bg-foreground/5 animate-[skeleton-shimmer_1.5s_ease-in-out_infinite]"
                 />
             )}
-            <img
+            <OptimizedImage
                 onDragStart={(e) => e.preventDefault()}
                 src={currentSrc}
-                alt={alt}
+                alt={alt ?? ""}
                 className={`${className ?? ""} ${showSkeleton && !loaded ? "opacity-0" : "opacity-100"} transition-opacity duration-300`}
                 loading="lazy"
                 decoding="async"

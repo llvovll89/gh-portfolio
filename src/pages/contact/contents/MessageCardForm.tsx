@@ -24,9 +24,9 @@ export const MessageCardForm = () => {
         event.preventDefault();
         if (sending.current) return;
         const nextErrors = {
-            name: name.trim() ? "" : t("pages.contact.messageForm.nameRequired"),
-            email: EMAIL_REGEX.test(fromEmail.trim()) ? "" : t("pages.contact.messageForm.emailInvalid"),
-            message: message.trim() ? "" : t("pages.contact.messageForm.messageRequired"),
+            name: name.trim() ? "" : "pages.contact.messageForm.nameRequired",
+            email: EMAIL_REGEX.test(fromEmail.trim()) ? "" : "pages.contact.messageForm.emailInvalid",
+            message: message.trim() ? "" : "pages.contact.messageForm.messageRequired",
         };
         setErrors(nextErrors);
         if (Object.values(nextErrors).some(Boolean)) {
@@ -75,7 +75,7 @@ export const MessageCardForm = () => {
                     aria-invalid={!!errors.name} aria-describedby={errors.name ? "contact-name-error" : undefined}
                     onChange={event => { setName(event.target.value); setErrors(current => ({ ...current, name: "" })); }}
                     placeholder={t("pages.contact.messageForm.namePlaceholder")} />
-                {errors.name && <p id="contact-name-error" className="form-error">{errors.name}</p>}
+                {errors.name && <p id="contact-name-error" className="form-error">{t(errors.name)}</p>}
             </div>
             <div className="contact-field">
                 <label htmlFor="contact-email">{t("pages.contact.messageForm.email")}</label>
@@ -83,7 +83,7 @@ export const MessageCardForm = () => {
                     aria-invalid={!!errors.email} aria-describedby={errors.email ? "contact-email-error" : undefined}
                     onChange={event => { setFromEmail(event.target.value); setErrors(current => ({ ...current, email: "" })); }}
                     placeholder={t("pages.contact.messageForm.emailPlaceholder")} />
-                {errors.email && <p id="contact-email-error" className="form-error">{errors.email}</p>}
+                {errors.email && <p id="contact-email-error" className="form-error">{t(errors.email)}</p>}
             </div>
             <div className="contact-field">
                 <div className="contact-message-label"><label htmlFor="contact-message">{t("pages.contact.messageForm.message")}</label><span>{message.length} / 500</span></div>
@@ -91,9 +91,9 @@ export const MessageCardForm = () => {
                     aria-invalid={!!errors.message} aria-describedby={errors.message ? "contact-message-error" : "contact-message-hint"}
                     onChange={event => { setMessage(event.target.value); setErrors(current => ({ ...current, message: "" })); }}
                     placeholder={t("pages.contact.messageForm.messagePlaceholder")}
-                    onKeyDown={event => { if ((event.ctrlKey || event.metaKey) && event.key === "Enter") event.currentTarget.form?.requestSubmit(); }} />
+                    onKeyDown={event => { if (!event.nativeEvent.isComposing && (event.ctrlKey || event.metaKey) && event.key === "Enter") { event.preventDefault(); event.stopPropagation(); event.currentTarget.form?.requestSubmit(); } }} />
                 <span id="contact-message-hint" className="sr-only">{t("pages.contact.messageForm.messageHint")}</span>
-                {errors.message && <p id="contact-message-error" className="form-error">{errors.message}</p>}
+                {errors.message && <p id="contact-message-error" className="form-error">{t(errors.message)}</p>}
             </div>
             <div className="contact-form-actions">
                 <button type="button" className="workbench-button" onClick={reset}>{t("pages.contact.messageForm.reset")}</button>

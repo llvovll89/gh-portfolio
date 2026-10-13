@@ -1,3 +1,4 @@
+import { uiText } from "../../../utils/uiText";
 import { FaGithub } from "react-icons/fa";
 import { SiVelog } from "react-icons/si";
 import { LuHouse } from "react-icons/lu";
@@ -45,7 +46,7 @@ export const CommonPageHeader = ({ title }: CommonPageHeaderProps) => {
                     className="flex items-center justify-center p-2 rounded-md
                         hover:bg-sub-gary/20 transition-all duration-200
                         group"
-                    aria-label="홈으로 이동"
+                    aria-label={uiText("홈으로 이동")}
                 >
                     <LuHouse className="w-5 h-5 group-hover:scale-110 transition-transform" />
                 </Link>

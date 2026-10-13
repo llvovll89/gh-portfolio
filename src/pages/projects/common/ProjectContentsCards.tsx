@@ -2,21 +2,20 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LuArrowUpRight, LuFolderOpen } from "react-icons/lu";
 import type { Project } from "../mocks/projectData";
-import { projects, featuredProjects } from "../mocks/projectData";
-import { CardDetail } from "./CardDetail";
+import { Link } from "react-router-dom";
+import { projectPath, useProjects } from "../useProjects";
 import { ProjectPreview } from "./ProjectPreview";
 
 type SortKey = "default" | "name";
 
 interface CardProps { className?: string }
 
-const ProjectCard = ({ project, onOpen, featured = false }: { project: Project; onOpen: () => void; featured?: boolean }) => {
+const ProjectCard = ({ project, featured = false }: { project: Project; featured?: boolean }) => {
     const { t } = useTranslation();
 
     return (
-        <button
-        type="button"
-        onClick={onOpen}
+        <Link
+        to={projectPath(project)}
         className={`project-card group grid h-full min-w-0 w-full overflow-hidden rounded-2xl border border-foreground/10 bg-panel text-left transition-colors hover:border-primary/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${featured ? "project-card-featured md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]" : ""}`}
     >
         <div className={`relative overflow-hidden bg-inset ${featured ? "aspect-video md:aspect-auto md:min-h-72" : "aspect-video"}`}>
@@ -39,25 +38,25 @@ const ProjectCard = ({ project, onOpen, featured = false }: { project: Project; 
                 ))}
             </div>
         </div>
-        </button>
+        </Link>
     );
 };
 
 export const ProjectContentsCards = ({ className }: CardProps) => {
     const { t } = useTranslation();
-    const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
+    const projects = useProjects();
+    const featuredProjects = useMemo(() => projects.filter(project => project.featured).sort((a, b) => (a.featuredOrder ?? 99) - (b.featuredOrder ?? 99)), [projects]);
     const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
     const [showAllSkills, setShowAllSkills] = useState(false);
     const [sortKey, setSortKey] = useState<SortKey>("default");
 
-    const allSkills = useMemo(() => [...new Set(projects.flatMap((project) => project.skills))].sort(), []);
+    const allSkills = useMemo(() => [...new Set(projects.flatMap((project) => project.skills))].sort(), [projects]);
     const primarySkills = ["React", "TypeScript", "Next.js", "PWA"];
     const visibleSkills = showAllSkills ? allSkills : [...new Set([...primarySkills, ...(selectedSkill ? [selectedSkill] : [])])];
     const filteredProjects = useMemo(() => {
         const base = selectedSkill ? projects.filter((project) => project.skills.includes(selectedSkill)) : projects;
         return sortKey === "name" ? [...base].sort((a, b) => a.title.localeCompare(b.title, "ko")) : base;
-    }, [selectedSkill, sortKey]);
-    const selected = projects.find((project) => project.id === selectedProjectId) ?? null;
+    }, [projects, selectedSkill, sortKey]);
     const featuredProject = sortKey === "default" ? featuredProjects.find(project => filteredProjects.includes(project)) : undefined;
     const archiveProjects = filteredProjects.filter(project => project.id !== featuredProject?.id);
 
@@ -87,20 +86,19 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                     {featuredProject && (
                         <section aria-labelledby="featured-projects">
                             <h2 id="featured-projects" className="mb-4 text-sm font-bold text-muted">{t("pages.projects.featuredProjects")}</h2>
-                            <ProjectCard project={featuredProject} featured onOpen={() => setSelectedProjectId(featuredProject.id)} />
+                            <ProjectCard project={featuredProject} featured />
                         </section>
                     )}
                     {archiveProjects.length > 0 && (
                         <section aria-labelledby="project-archive">
                             <h2 id="project-archive" className="mb-4 text-sm font-bold text-muted">{t("pages.projects.archive")}</h2>
                             <div className="project-archive-grid grid auto-rows-fr gap-4 md:grid-cols-2 xl:grid-cols-3">
-                                {archiveProjects.map((project) => <ProjectCard key={project.id} project={project} onOpen={() => setSelectedProjectId(project.id)} />)}
+                                {archiveProjects.map((project) => <ProjectCard key={project.id} project={project} />)}
                             </div>
                         </section>
                     )}
                 </div>
             )}
-            {selected && <CardDetail selected={selected} setSelectedProject={() => setSelectedProjectId(null)} />}
         </>
     );
 };

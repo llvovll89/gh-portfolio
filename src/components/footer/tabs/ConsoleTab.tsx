@@ -1,4 +1,5 @@
-import { KeyboardContext } from "@/context/KeyboardState.context";
+import { uiText } from "../../../utils/uiText";
+import { KeyboardContext } from "@/context/KeyboardState";
 import { useContext, useEffect, useMemo, useRef } from "react";
 import { runCliCommand } from "@/utils/runCliCommand";
 
@@ -39,7 +40,7 @@ export const ConsoleTab = () => {
     }, [submitCliCommand.value]);
 
     const copy = async () => {
-        try { await navigator.clipboard.writeText(submitCliCommand.value ?? ""); } catch { }
+        try { await navigator.clipboard.writeText(submitCliCommand.value ?? ""); } catch { /* clipboard may be unavailable */ }
     };
 
     const download = () => {
@@ -94,13 +95,13 @@ export const ConsoleTab = () => {
                 <div className="flex items-center gap-1">
                     <button onClick={copy} disabled={!hasOutput} type="button"
                         className="rounded px-2 py-0.5 text-[10px] font-medium border border-foreground/15 bg-foreground/5 hover:bg-foreground/10 text-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                    >복사</button>
+                    >{uiText("복사")}</button>
                     <button onClick={download} disabled={!hasOutput} type="button"
                         className="rounded px-2 py-0.5 text-[10px] font-medium border border-foreground/15 bg-foreground/5 hover:bg-foreground/10 text-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                    >다운로드</button>
+                    >{uiText("다운로드")}</button>
                     <button onClick={clear} disabled={!hasOutput} type="button"
                         className="rounded px-2 py-0.5 text-[10px] font-medium border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                    >초기화</button>
+                    >{uiText("초기화")}</button>
                 </div>
             </div>
 
@@ -108,8 +109,8 @@ export const ConsoleTab = () => {
             <div ref={outputRef} className="flex-1 overflow-auto p-3 scrolls">
                 {!hasOutput ? (
                     <div className="flex flex-col items-center justify-center h-full gap-1.5 text-muted select-none">
-                        <span className="text-xs">아직 출력이 없습니다</span>
-                        <span className="text-[10px]">아래 입력창에서 명령어를 실행하세요</span>
+                        <span className="text-xs">{uiText("아직 출력이 없습니다")}</span>
+                        <span className="text-[10px]">{uiText("아래 입력창에서 명령어를 실행하세요")}</span>
                     </div>
                 ) : (
                     <pre className="m-0 text-[10px] leading-relaxed whitespace-pre-wrap text-foreground">

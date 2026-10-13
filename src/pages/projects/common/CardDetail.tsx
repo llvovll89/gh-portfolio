@@ -1,3 +1,4 @@
+import { OptimizedImage } from "../../../components/OptimizedImage";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LuArrowUpRight, LuX } from "react-icons/lu";
 import { SiGithub } from "react-icons/si";
@@ -71,7 +72,7 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
                         <button ref={closeButtonRef} type="button" className="project-dialog-close" onClick={handleClose} aria-label={t("pages.projects.close")}><LuX aria-hidden="true" /></button>
                     </header>
                     <div className={`project-dialog-image${selected.previewLayout === "mobile" ? " project-dialog-image-mobile" : ""}`}>
-                        <img src={selected.previewLayout === "mobile" ? selected.previewImage : selected.image} alt={selected.title} />
+                        <OptimizedImage src={selected.previewLayout === "mobile" ? selected.previewImage ?? selected.image : selected.image} alt={selected.title} />
                     </div>
                     <div className="project-dialog-body"><CardDescAndSkills project={selected} /></div>
                     <footer className="project-dialog-actions">

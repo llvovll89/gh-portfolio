@@ -1,3 +1,4 @@
+import { uiText } from "../../../utils/uiText";
 import { LuLayoutGrid, LuList, LuGrid3X3 } from "react-icons/lu";
 import { useTranslation } from "react-i18next";
 
@@ -55,7 +56,7 @@ export const BlogViewToggle = ({
                 ].join(" ")}
             >
                 <LuGrid3X3 className="w-4 h-4" />
-                <span className="whitespace-nowrap">{t("pages.blog.view.grid") ?? "카드"}</span>
+                <span className="whitespace-nowrap">{t("pages.blog.view.grid") ?? uiText("카드")}</span>
             </button>
 
             <button

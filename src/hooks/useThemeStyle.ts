@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ThemeContext } from "../context/ThemeContext";
+import { ThemeContext } from "../context/ThemeState";
 
 /**
  * 테마에 따른 배경 스타일/클래스를 반환하는 훅

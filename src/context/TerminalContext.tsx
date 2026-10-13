@@ -1,14 +1,5 @@
-import { createContext, useState, useContext } from "react";
-
-interface TerminalContextProps {
-    isTerminalVisible: boolean;
-    setIsTerminalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export const TerminalContext = createContext<TerminalContextProps>({
-    isTerminalVisible: false,
-    setIsTerminalVisible: () => {},
-});
+import { useState } from "react";
+import { TerminalContext } from "./TerminalState";
 
 export const TerminalProvider = ({ children }: { children: React.ReactNode }) => {
     const [isTerminalVisible, setIsTerminalVisible] = useState<boolean>(false);
@@ -19,5 +10,3 @@ export const TerminalProvider = ({ children }: { children: React.ReactNode }) =>
         </TerminalContext.Provider>
     );
 };
-
-export const useTerminalContext = () => useContext(TerminalContext);

@@ -1,3 +1,5 @@
+import { uiText } from "../../../utils/uiText";
+import { useTranslation } from 'react-i18next'
 import { useState, useEffect } from 'react'
 import { LuMessageSquare, LuPencil, LuTrash2 } from 'react-icons/lu'
 import { subscribeBlogComments, type BlogComment } from '@/utils/blogComments'
@@ -9,6 +11,9 @@ import { DeleteModal } from './DeleteModal'
 type Props = { slug: string }
 
 export function BlogComments({ slug }: Props) {
+    const { t, i18n } = useTranslation()
+    const [failed, setFailed] = useState(false)
+    const [attempt, setAttempt] = useState(0)
     const [comments, setComments] = useState<BlogComment[]>([])
     const [loading, setLoading] = useState(true)
     const [showForm, setShowForm] = useState(false)
@@ -20,11 +25,12 @@ export function BlogComments({ slug }: Props) {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setLoading(true)
         const unsub = subscribeBlogComments(slug, (list) => {
+            setFailed(false)
             setComments(list)
             setLoading(false)
-        })
+        }, () => { setFailed(true); setLoading(false) })
         return unsub
-    }, [slug])
+    }, [slug, attempt])
 
     return (
         <section className="mt-12 pt-8 border-t border-foreground/15">
@@ -32,8 +38,7 @@ export function BlogComments({ slug }: Props) {
                 <div className="flex items-center gap-2">
                     <LuMessageSquare className="w-5 h-5 text-muted" />
                     <h2 className="text-base font-bold text-foreground">
-                        댓글
-                        {!loading && comments.length > 0 && (
+                        {uiText("댓글")}{!loading && comments.length > 0 && (
                             <span className="ml-2 text-sm font-normal text-muted">{comments.length}</span>
                         )}
                     </h2>
@@ -45,12 +50,11 @@ export function BlogComments({ slug }: Props) {
                         className="inline-flex items-center gap-1.5 cursor-pointer text-xs font-medium px-3 py-1.5 rounded-lg bg-foreground/6 hover:bg-foreground/10 text-muted transition-all"
                     >
                         <LuMessageSquare className="w-3.5 h-3.5" />
-                        댓글 작성
-                    </button>
+                        {uiText("댓글 작성")}</button>
                 )}
             </div>
 
-            {loading ? (
+            {failed ? <p role="alert" className="py-5 text-sm text-muted">{t("comments.loadError")} <button type="button" className="workbench-button" onClick={() => { setFailed(false); setAttempt(value => value + 1); }}>{t("feedback.retry")}</button></p> : loading ? (
                 <div className="space-y-4">
                     {[1, 2].map((i) => (
                         <div key={i} className="flex gap-3 animate-pulse">
@@ -68,14 +72,14 @@ export function BlogComments({ slug }: Props) {
                     <div className="p-4 rounded-2xl bg-foreground/5 border border-foreground/10">
                         <LuMessageSquare className="w-8 h-8 text-muted" />
                     </div>
-                    <p className="text-sm text-muted">첫 번째 댓글을 남겨보세요!</p>
+                    <p className="text-sm text-muted">{uiText("첫 번째 댓글을 남겨보세요!")}</p>
                 </div>
             ) : (
                 <ul className="space-y-5">
                     {comments.map((c) => {
                         const gradient = getGradient(c.name)
                         const initial = c.name[0]?.toUpperCase() || '?'
-                        const dateStr = c.createdAt?.toDate ? relativeTime(c.createdAt.toDate()) : ''
+                        const dateStr = c.createdAt?.toDate ? relativeTime(c.createdAt.toDate(), i18n.language) : ''
 
                         return (
                             <li key={c.id} className="group flex gap-3">
@@ -93,7 +97,7 @@ export function BlogComments({ slug }: Props) {
                                                 type="button"
                                                 onClick={() => setEditTarget(c)}
                                                 className="p-1.5 rounded-lg text-muted hover:text-primary hover:bg-primary/10 cursor-pointer transition-all"
-                                                title="수정"
+                                                aria-label={uiText("수정")} title={uiText("수정")}
                                             >
                                                 <LuPencil className="w-3 h-3" />
                                             </button>
@@ -101,7 +105,7 @@ export function BlogComments({ slug }: Props) {
                                                 type="button"
                                                 onClick={() => setDeleteTarget(c)}
                                                 className="p-1.5 rounded-lg text-muted hover:text-rose-400 hover:bg-rose-400/10 cursor-pointer transition-all"
-                                                title="삭제"
+                                                aria-label={uiText("삭제")} title={uiText("삭제")}
                                             >
                                                 <LuTrash2 className="w-3.5 h-3.5" />
                                             </button>

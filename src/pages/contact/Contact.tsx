@@ -1,3 +1,4 @@
+import { uiText } from "../../utils/uiText";
 import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
@@ -9,7 +10,7 @@ import { useSeoMeta } from "../../hooks/useSeoMeta";
 
 export const Contact = () => {
     const { t } = useTranslation();
-    useSeoMeta({ title: "Contact", description: "김건호에게 메시지를 보내세요. 이메일 또는 폼으로 연락할 수 있습니다.", url: "/contact" });
+    useSeoMeta({ title: "Contact", description: uiText("김건호에게 메시지를 보내세요. 이메일 또는 폼으로 연락할 수 있습니다."), url: "/contact" });
 
     return (
         <>

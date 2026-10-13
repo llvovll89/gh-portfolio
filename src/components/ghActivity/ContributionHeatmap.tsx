@@ -1,3 +1,4 @@
+import { uiText } from "../../utils/uiText";
 import { useState } from "react";
 
 type Day = {
@@ -107,7 +108,7 @@ const ContributionHeatmap = ({
           onClick={() => setIsExpanded((s) => !s)}
           className="mt-2 text-[10px] text-muted hover:text-foreground transition-colors"
         >
-          {isExpanded ? "접기" : "더보기"}
+          {isExpanded ? uiText("접기") : uiText("더보기")}
         </button>
       )}
     </div>

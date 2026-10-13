@@ -1,6 +1,5 @@
 import {
     BLOG_DETAIL,
-    DEFAULT,
     NOT_FOUND,
     routesPath,
 } from "../../../../routes/route";
@@ -33,8 +32,7 @@ export const Folder = () => {
                     .filter(
                         (r) =>
                             r.path !== NOT_FOUND &&
-                            r.path !== DEFAULT &&
-                            r.path !== BLOG_DETAIL,
+                            r.path !== BLOG_DETAIL && !r.path.includes(":"),
                     )
                     .map((r) => {
                         const { Icon, colorClass } = getFileIcon(r.path);
@@ -42,7 +40,7 @@ export const Folder = () => {
                             <li key={r.path}>
                                 <button type="button"
                                 onClick={() => { handlePushPath(r.path); if (isMobile) setSelectedNav(null); }}
-                                aria-current={selectedPathState.state === r.path ? "page" : undefined}
+                                aria-current={selectedPathState.state === r.path || (r.path !== "/" && selectedPathState.state.startsWith(`${r.path}/`)) ? "page" : undefined}
                                 className={`${selectedPathState.state === r.path
                                         ? "bg-sub-gary/20"
                                         : ""

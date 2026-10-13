@@ -1,3 +1,4 @@
+import { uiText } from "../../utils/uiText";
 import { useState } from "react";
 import {
     LuBriefcase,
@@ -22,7 +23,7 @@ export const Resume = () => {
 
     useSeoMeta({
         title: "Resume",
-        description: "웹 개발자 김건호의 경력, 기술 스택, 학력과 프로젝트 경험",
+        description: uiText("웹 개발자 김건호의 경력, 기술 스택, 학력과 프로젝트 경험"),
         url: "/resume",
     });
 
@@ -31,7 +32,7 @@ export const Resume = () => {
             title: t("pages.resume.profileTitle"),
             Icon: LuUserRound,
             items: [
-                { label: t("pages.resume.name"), value: "김건호 (Kim Geon Ho)" },
+                { label: t("pages.resume.name"), value: uiText("김건호 (Kim Geon Ho)") },
                 { label: t("pages.resume.email"), value: "svvvs5579@naver.com" },
             ],
         },

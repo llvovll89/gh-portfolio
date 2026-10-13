@@ -1,3 +1,5 @@
+import { uiText } from "../../utils/uiText";
+import { OptimizedImage } from "../../components/OptimizedImage";
 import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
@@ -12,13 +14,13 @@ import { CONTACT_EMAIL, CONTACT_GITHUB } from "../../constants/contact";
 
 export const Profile = () => {
     const { t } = useTranslation();
-    useSeoMeta({ title: "Profile", description: "풀스택 웹 개발자 김건호의 프로필, 기술 스택, 학력, 경력 소개", url: "/profile" });
+    useSeoMeta({ title: "Profile", description: uiText("풀스택 웹 개발자 김건호의 프로필, 기술 스택, 학력, 경력 소개"), url: "/profile" });
     return <>
         <Header /><Aside />
         <Contents>
             <section className="profile-page">
                 <header className="profile-intro">
-                    <img src="/assets/images/kimgeonho/증명사진.png" alt={t("pages.profile.photoAlt")} width={112} height={112} />
+                    <OptimizedImage src="/assets/images/kimgeonho/증명사진.png" alt={t("pages.profile.photoAlt")} sizes="112px" width={112} height={112} />
                     <div>
                         <h1>김건호 <span>Geon Ho Kim</span></h1>
                         <p className="profile-role">Full-stack Web Developer</p>

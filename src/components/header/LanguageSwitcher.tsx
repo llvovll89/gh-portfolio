@@ -11,12 +11,13 @@ const SETTINGS_UPDATED_EVENT = "portfolio-settings-updated";
  * i18n.changeLanguage() 호출 + localStorage 'portfolio-settings' 에 저장
  */
 export const LanguageSwitcher = () => {
-    const {i18n} = useTranslation();
+    const {i18n, t} = useTranslation();
     const current = i18n.language.slice(0, 2);
 
     const toggle = () => {
         const next = LANG_CYCLE[current] ?? "en";
         i18n.changeLanguage(next);
+        try {
         const existing = JSON.parse(
             localStorage.getItem(SETTINGS_STORAGE_KEY) ?? "{}",
         );
@@ -28,6 +29,7 @@ export const LanguageSwitcher = () => {
         window.dispatchEvent(
             new CustomEvent(SETTINGS_UPDATED_EVENT, {detail: {dirty: true}}),
         );
+        } catch { /* language switching still works when storage is unavailable */ }
     };
 
     const nextLabel = LANG_LABEL[LANG_CYCLE[current] ?? "en"];
@@ -37,7 +39,7 @@ export const LanguageSwitcher = () => {
             type="button"
             onClick={toggle}
             title={`Switch to ${nextLabel}`}
-            aria-label={`현재 언어: ${LANG_LABEL[current] ?? "KO"}, ${nextLabel}로 전환`}
+            aria-label={t("accessibility.languageSwitch", { current: LANG_LABEL[current] ?? "KO", next: nextLabel })}
             className="h-full px-2.5 sm:px-3 cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors border-l border-sub-gary/10 select-none flex items-center gap-1"
         >
             <svg

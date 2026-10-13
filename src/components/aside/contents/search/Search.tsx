@@ -1,3 +1,4 @@
+import { uiText } from "../../../../utils/uiText";
 import { useThemeStyle } from "../../../../hooks/useThemeStyle";
 import { FcOpenedFolder } from "react-icons/fc";
 import { FiFileText } from "react-icons/fi";
@@ -20,6 +21,8 @@ export const Search = () => {
         setQuery,
         setDebouncedQuery,
         isDebouncing,
+        searchError,
+        retrySearch,
         activeIndex,
         setActiveIndex,
         searchHistory,
@@ -84,13 +87,14 @@ export const Search = () => {
                         role="combobox"
                         aria-expanded={showResults}
                         aria-controls={LISTBOX_ID}
-                        aria-activedescendant={showResults ? `search-option-${activeIndex}` : undefined}
+                        aria-label={t("search.title")}
+                        aria-activedescendant={showResults && hasAnyResults ? `search-option-${activeIndex}` : undefined}
                     />
                     {query && (
                         <button
                             onClick={() => { setQuery(""); setDebouncedQuery(""); inputRef.current?.focus(); }}
                             className="absolute right-1.5 text-muted hover:text-foreground transition-colors"
-                            aria-label="검색어 지우기"
+                            aria-label={uiText("검색어 지우기")}
                         >
                             <CiSquareRemove className="w-4 h-4" />
                         </button>
@@ -100,19 +104,19 @@ export const Search = () => {
                 {showResults && (
                     <div className="text-[10px] text-muted px-0.5 flex items-center gap-1">
                         {isDebouncing ? (
-                            <span className="animate-pulse">검색 중…</span>
+                            <span className="animate-pulse">{uiText("검색 중…")}</span>
                         ) : hasAnyResults ? (
                             <>
                                 <span className="text-primary/70">{totalCount}</span>
-                                <span>개 결과</span>
+                                <span>{uiText("개 결과")}</span>
                                 {blogResults.length > 0 && (
                                     <span className="text-muted">
-                                        · 페이지 {results.length} · 블로그 {blogResults.length}
+                                        {uiText("· 페이지")}{results.length} {uiText("· 블로그")}{blogResults.length}
                                     </span>
                                 )}
                             </>
                         ) : (
-                            <span>결과 없음</span>
+                            <span>{uiText("결과 없음")}</span>
                         )}
                     </div>
                 )}
@@ -183,7 +187,7 @@ export const Search = () => {
                                                 persistRecents(recentPaths.filter((p) => p !== r!.path));
                                             }}
                                             className="text-muted hover:text-muted transition-colors"
-                                            aria-label="최근 방문 삭제"
+                                            aria-label={uiText("최근 방문 삭제")}
                                         >
                                             <CiSquareRemove className="w-4 h-4" />
                                         </button>
@@ -198,13 +202,16 @@ export const Search = () => {
             {showResults && (
                 <div
                     id={LISTBOX_ID}
+                    role="listbox" aria-label={t("search.searchResults")}
                     className="w-full flex-1 p-2 text-foreground overflow-y-auto"
                 >
-                    {!hasAnyResults && !isDebouncing ? (
+                    {isDebouncing && <p className="p-3 text-xs text-muted" role="status">{t("pages.blog.searching")}</p>}
+                    {searchError && <p className="p-3 text-xs text-muted" role="alert">{t("pages.blog.searchError")} <button type="button" className="underline" onClick={retrySearch}>{t("pages.blog.retry")}</button></p>}
+                    {!hasAnyResults && !isDebouncing && !searchError ? (
                         <div className="px-3 py-4 text-sm text-muted text-center">
                             <div className="text-2xl mb-1">🔍</div>
                             <div>{t("search.noResults")}</div>
-                            <div className="text-[11px] mt-1 text-muted">다른 키워드로 검색해 보세요</div>
+                            <div className="text-[11px] mt-1 text-muted">{uiText("다른 키워드로 검색해 보세요")}</div>
                         </div>
                     ) : (
                         <>
@@ -215,7 +222,7 @@ export const Search = () => {
                                         Pages
                                         <span className="ml-auto text-muted normal-case tracking-normal">{results.length}</span>
                                     </div>
-                                    <ul role="listbox" aria-label={t("search.searchResults")} className="flex flex-col gap-0.5">
+                                    <ul role="group" aria-label={t("search.searchResults")} className="flex flex-col gap-0.5">
                                         {results.map((r, idx) => {
                                             const isActive = idx === activeIndex;
                                             const { Icon, colorClass } = getFileIcon(r.path);
@@ -252,7 +259,7 @@ export const Search = () => {
                                         Blog Posts
                                         <span className="ml-auto text-muted normal-case tracking-normal">{blogResults.length}</span>
                                     </div>
-                                    <ul className="flex flex-col gap-0.5">
+                                    <ul role="group" className="flex flex-col gap-0.5">
                                         {blogResults.map((post, idx) => {
                                             const globalIdx = results.length + idx;
                                             const isActive = globalIdx === activeIndex;

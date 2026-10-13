@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
 import { LuEye } from "react-icons/lu";
@@ -12,6 +13,7 @@ interface BlogCardProps {
 }
 
 export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
+    const { t } = useTranslation();
     const [viewCount, setViewCount] = useState<number | null>(null);
 
     const prefersReducedMotion = useMemo(
@@ -54,7 +56,7 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
                     </time>
                     {p.readingTime && (
                         <span className="text-[10px] font-medium text-muted blog-dark:text-muted">
-                            {p.readingTime}
+                            {t("pages.blog.readingMinutes", { count: parseInt(p.readingTime, 10) })}
                         </span>
                     )}
                     {viewCount !== null && viewCount > 0 && (

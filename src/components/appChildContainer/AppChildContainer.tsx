@@ -1,5 +1,5 @@
 import { Suspense, lazy, useContext, useEffect } from "react";
-import { KeyboardContext } from "../../context/KeyboardState.context";
+import { KeyboardContext } from "../../context/KeyboardState";
 import { useKeyboardEvent } from "../../hooks/useKeyboardEvent";
 
 const LogViewer = lazy(() =>
@@ -10,7 +10,7 @@ const CommandPalette = lazy(() =>
 );
 
 export const AppChildContainer = () => {
-    const { submitCliCommand, setSubmitCliCommand } = useContext(KeyboardContext);
+    const { submitCliCommand, setSubmitCliCommand, isVisibleCommandPalette } = useContext(KeyboardContext);
     useKeyboardEvent();
 
     useEffect(() => {
@@ -20,13 +20,13 @@ export const AppChildContainer = () => {
                 isVisibleCommandUi: false,
             }));
         };
-    }, []);
+    }, [setSubmitCliCommand]);
 
     return (
         <>
             <Suspense fallback={null}>
                 {submitCliCommand.isVisibleCommandUi && <LogViewer />}
-                <CommandPalette />
+                {isVisibleCommandPalette && <CommandPalette />}
             </Suspense>
         </>
     );

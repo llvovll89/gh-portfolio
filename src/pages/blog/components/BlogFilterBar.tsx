@@ -74,11 +74,11 @@ export const BlogFilterBar = ({
                         tagCounts={tagCounts}
                     />
 
-                    <BlogCategoryFilter
+                    {availableCategories.length > 0 && <BlogCategoryFilter
                         availableCategories={availableCategories}
                         selectedCategory={selectedCategory}
                         onCategoryChange={onCategoryChange}
-                    />
+                    />}
 
                     <BlogSortToggle
                         sortOrder={sortOrder}

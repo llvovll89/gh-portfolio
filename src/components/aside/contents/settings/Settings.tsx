@@ -1,3 +1,4 @@
+import { uiText } from "../../../../utils/uiText";
 import { useState } from "react";
 import { useThemeStyle } from "../../../../hooks/useThemeStyle";
 import { useLocalStorage } from "../../../../hooks/useLocalStorage";
@@ -115,10 +116,10 @@ export const Settings = () => {
                             <button
                                 onClick={resetAllShortcuts}
                                 className="flex items-center gap-1 px-2 py-1 text-[10px] text-muted hover:text-foreground hover:bg-sub-gary/20 rounded transition-colors"
-                                title="모두 초기화"
+                                title={uiText("모두 초기화")}
                             >
                                 <VscRefresh className="w-3 h-3" />
-                                {t("settings.resetAll") || "초기화"}
+                                {t("settings.resetAll") || uiText("초기화")}
                             </button>
                         </div>
                         <ul className="space-y-2">
@@ -143,7 +144,7 @@ export const Settings = () => {
                                             <button
                                                 onClick={() => resetShortcut(id)}
                                                 className="opacity-0 group-hover:opacity-100 p-1 text-muted hover:text-foreground rounded transition-all"
-                                                title="기본값으로 복원"
+                                                title={uiText("기본값으로 복원")}
                                             >
                                                 <VscRefresh className="w-3 h-3" />
                                             </button>
@@ -154,7 +155,7 @@ export const Settings = () => {
                         </ul>
                         <p className="mt-4 text-[9px] text-muted italic">
                             {t("settings.shortcutsNote") ||
-                                "* 단축키는 localStorage에 저장됩니다"}
+                                uiText("* 단축키는 localStorage에 저장됩니다")}
                         </p>
                     </div>
                 ) : (
@@ -164,13 +165,13 @@ export const Settings = () => {
                                 {t("settings.language")}
                             </label>
                             <select
-                                value={generalSettings.language}
+                                value={i18n.language.slice(0, 2)}
                                 onChange={(e) =>
                                     handleChangeLanguage(e.target.value)
                                 }
                                 className="w-full px-2 py-1.5 text-xs bg-sub-gary/20 text-foreground border border-sub-gary/30 rounded focus:outline-none focus:border-primary [&>option]:text-foreground [&>option]:bg-panel"
                             >
-                                <option value="ko">한국어</option>
+                                <option value="ko">{uiText("한국어")}</option>
                                 <option value="en">English</option>
                                 <option value="ja">日本語</option>
                             </select>

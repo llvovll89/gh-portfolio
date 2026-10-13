@@ -39,7 +39,7 @@
   GitHub API(Octokit)를 활용한 기여 히트맵 및 최근 활동 표시
 
 - 🌐 **다국어 지원 (i18n)**
-  i18next 기반 한국어 / 영어 전환 지원
+  i18next 기반 한국어 / 영어 / 일본어 전환 및 프로젝트 설명 번역 지원
 
 - 🎨 **테마 색상 지원**
   다크 테마 기반, 유저가 선택하는 커스텀 테마 적용
@@ -52,7 +52,8 @@
 | --- | --- |
 | `/` | 메인 홈 |
 | `/profile` | 소개, 기술 스택, 학력, 이력 |
-| `/projects` | 프로젝트 카드 & 상세 모달 |
+| `/projects` | 프로젝트 카드 & 기술 스택 필터 |
+| `/projects/:slug` | 공유 가능한 프로젝트 상세 페이지 |
 | `/blog` | 마크다운 블로그 (검색·태그·정렬) |
 | `/resume` | 이력서 |
 | `/contact` | 연락처 & 메시지 전송 |
@@ -101,3 +102,18 @@ src/
 ├── http/             # API 모듈
 └── utils/            # 유틸리티 함수
 ```
+
+## 콘텐츠 로딩
+
+블로그 목록은 빌드 시 생성한 메타데이터만 사용합니다. 본문은 글을 열 때, 전문 검색 데이터는 검색을 시작할 때 불러옵니다. `build/blogContent.ts`가 메타데이터와 검색용 모듈을 생성하며, PWA는 본문과 전문 검색 파일을 사전 다운로드하지 않습니다. 새 글은 기존처럼 `src/content/posts` 또는 `src/content/organizingfiles`에 추가하면 됩니다.
+
+프로젝트 고유 주소는 `projectData.ts`의 `slug`를 사용합니다. 프로젝트 설명 번역은 각 언어 파일의 `projectContent`에서 관리합니다.
+
+## 품질 검증과 최적화
+
+- `npm run verify`: lint, 테스트, 프로덕션 빌드, 검색 노출·이미지·폰트 결과 검증
+- `npm run optimize:images`: 원본 PNG에서 WebP와 반응형 크기 변형을 만들고 `src/generated/images.json` 갱신
+- `build/seo.ts`: 주요 페이지와 모든 글·프로젝트의 정적 HTML, canonical, JSON-LD, sitemap.xml, robots.txt, RSS, 404.html 생성
+- Pretendard Variable은 npm 패키지의 공식 글자 범위별 서브셋을 Vite로 자체 호스팅합니다. 폰트와 글 본문은 PWA가 전체 사전 다운로드하지 않습니다.
+- Vercel은 생성된 정적 경로를 제공하고, 알 수 없는 경로는 404로 처리합니다. 새 글과 프로젝트는 빌드 시 자동 반영됩니다.
+- 공통 오류 화면은 홈·목록·재시도를 제공하고, 대화상자는 포커스 제한과 복원을 지원합니다. UI 문구는 `uiText` 또는 i18next 키로 한국어·영어·일본어를 지원합니다. 블로그 본문은 원문 언어를 유지합니다.

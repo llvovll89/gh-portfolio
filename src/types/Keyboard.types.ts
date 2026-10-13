@@ -4,7 +4,7 @@
 
 import type { NavType } from "@/components/aside/constants/Nav.type";
 import type { LayoutState } from "@/context/LayoutContext";
-import type { submitCliCommandType } from "@/context/KeyboardState.context";
+import type { submitCliCommandType } from "@/context/KeyboardState";
 
 /**
  * 키 조합 정의

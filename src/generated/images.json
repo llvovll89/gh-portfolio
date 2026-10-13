@@ -1,0 +1,68 @@
+{
+  "/assets/images/projects/hovie.png": {
+    "src": "/assets/optimized/hovie-914cf2b977-1600.webp",
+    "srcSet": "/assets/optimized/hovie-914cf2b977-320.webp 320w, /assets/optimized/hovie-914cf2b977-640.webp 640w, /assets/optimized/hovie-914cf2b977-960.webp 960w, /assets/optimized/hovie-914cf2b977-1600.webp 1600w",
+    "width": 1920,
+    "height": 1080
+  },
+  "/assets/images/projects/kimgeonho.png": {
+    "src": "/assets/optimized/kimgeonho-b5be1c91fc-1600.webp",
+    "srcSet": "/assets/optimized/kimgeonho-b5be1c91fc-320.webp 320w, /assets/optimized/kimgeonho-b5be1c91fc-640.webp 640w, /assets/optimized/kimgeonho-b5be1c91fc-960.webp 960w, /assets/optimized/kimgeonho-b5be1c91fc-1600.webp 1600w",
+    "width": 1920,
+    "height": 1080
+  },
+  "/assets/images/projects/meallog.png": {
+    "src": "/assets/optimized/meallog-90f80e8255-1440.webp",
+    "srcSet": "/assets/optimized/meallog-90f80e8255-320.webp 320w, /assets/optimized/meallog-90f80e8255-640.webp 640w, /assets/optimized/meallog-90f80e8255-960.webp 960w, /assets/optimized/meallog-90f80e8255-1440.webp 1440w",
+    "width": 1440,
+    "height": 810
+  },
+  "/assets/images/projects/modArt.png": {
+    "src": "/assets/optimized/modArt-3a5293f97d-1600.webp",
+    "srcSet": "/assets/optimized/modArt-3a5293f97d-320.webp 320w, /assets/optimized/modArt-3a5293f97d-640.webp 640w, /assets/optimized/modArt-3a5293f97d-960.webp 960w, /assets/optimized/modArt-3a5293f97d-1600.webp 1600w",
+    "width": 1920,
+    "height": 1080
+  },
+  "/assets/images/projects/run-river-mobile.png": {
+    "src": "/assets/optimized/run-river-mobile-013672362f-430.webp",
+    "srcSet": "/assets/optimized/run-river-mobile-013672362f-320.webp 320w, /assets/optimized/run-river-mobile-013672362f-430.webp 430w",
+    "width": 430,
+    "height": 540
+  },
+  "/assets/images/projects/run-river.png": {
+    "src": "/assets/optimized/run-river-afed4210a2-960.webp",
+    "srcSet": "/assets/optimized/run-river-afed4210a2-320.webp 320w, /assets/optimized/run-river-afed4210a2-640.webp 640w, /assets/optimized/run-river-afed4210a2-960.webp 960w",
+    "width": 960,
+    "height": 540
+  },
+  "/assets/images/projects/variety-gaming-platform.png": {
+    "src": "/assets/optimized/variety-gaming-platform-bf9966eee5-1440.webp",
+    "srcSet": "/assets/optimized/variety-gaming-platform-bf9966eee5-320.webp 320w, /assets/optimized/variety-gaming-platform-bf9966eee5-640.webp 640w, /assets/optimized/variety-gaming-platform-bf9966eee5-960.webp 960w, /assets/optimized/variety-gaming-platform-bf9966eee5-1440.webp 1440w",
+    "width": 1440,
+    "height": 900
+  },
+  "/assets/images/projects/weddingPlan.png": {
+    "src": "/assets/optimized/weddingPlan-127ef733e3-1600.webp",
+    "srcSet": "/assets/optimized/weddingPlan-127ef733e3-320.webp 320w, /assets/optimized/weddingPlan-127ef733e3-640.webp 640w, /assets/optimized/weddingPlan-127ef733e3-960.webp 960w, /assets/optimized/weddingPlan-127ef733e3-1600.webp 1600w",
+    "width": 1920,
+    "height": 1080
+  },
+  "/assets/images/projects/잔고플랜.png": {
+    "src": "/assets/optimized/잔고플랜-817b4d53ce-373.webp",
+    "srcSet": "/assets/optimized/잔고플랜-817b4d53ce-320.webp 320w, /assets/optimized/잔고플랜-817b4d53ce-373.webp 373w",
+    "width": 373,
+    "height": 666
+  },
+  "/assets/images/kimgeonho/증명사진.png": {
+    "src": "/assets/optimized/증명사진-b5a1be3a57-320.webp",
+    "srcSet": "/assets/optimized/증명사진-b5a1be3a57-320.webp 320w",
+    "width": 600,
+    "height": 624
+  },
+  "/assets/images/icons/png/theme.png": {
+    "src": "/assets/optimized/theme-bf2de4899f-1024.webp",
+    "srcSet": "/assets/optimized/theme-bf2de4899f-320.webp 320w, /assets/optimized/theme-bf2de4899f-640.webp 640w, /assets/optimized/theme-bf2de4899f-960.webp 960w, /assets/optimized/theme-bf2de4899f-1024.webp 1024w",
+    "width": 1024,
+    "height": 1024
+  }
+}

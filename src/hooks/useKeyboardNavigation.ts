@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * 포커스 트랩 훅
@@ -12,14 +12,17 @@ export const useFocusTrap = (isActive: boolean) => {
         if (!isActive || !containerRef.current) return;
 
         const container = containerRef.current;
-        const focusableElements = container.querySelectorAll<HTMLElement>(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-        );
-        const firstElement = focusableElements[0];
-        const lastElement = focusableElements[focusableElements.length - 1];
+        const previousFocus = document.activeElement as HTMLElement | null;
+        const getControls = () => Array.from(container.querySelectorAll<HTMLElement>(
+            'button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])',
+        )).filter(element => element.getClientRects().length > 0);
 
         const handleTabKey = (e: KeyboardEvent) => {
             if (e.key !== "Tab") return;
+            const controls = getControls();
+            const firstElement = controls[0];
+            const lastElement = controls[controls.length - 1];
+            if (!firstElement) { e.preventDefault(); container.focus(); return; }
 
             if (e.shiftKey) {
                 // Shift + Tab
@@ -31,7 +34,7 @@ export const useFocusTrap = (isActive: boolean) => {
                 // Tab
                 if (document.activeElement === lastElement) {
                     e.preventDefault();
-                    firstElement?.focus();
+                    getControls()[0]?.focus();
                 }
             }
         };
@@ -39,10 +42,11 @@ export const useFocusTrap = (isActive: boolean) => {
         container.addEventListener("keydown", handleTabKey);
 
         // 모달이 열릴 때 첫 번째 요소에 포커스
-        firstElement?.focus();
+        getControls()[0]?.focus();
 
         return () => {
             container.removeEventListener("keydown", handleTabKey);
+            queueMicrotask(() => { if (previousFocus?.isConnected) previousFocus.focus(); });
         };
     }, [isActive]);
 
@@ -68,10 +72,11 @@ export const useArrowNavigation = (
     options: UseArrowNavigationOptions = {},
 ) => {
     const { loop = false, orientation = "vertical", onEscape } = options;
-    const selectedIndexRef = useRef(0);
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
-        const currentIndex = selectedIndexRef.current;
+        if (itemCount === 0) return;
+        const currentIndex = Math.min(selectedIndex, itemCount - 1);
 
         // 방향 키 처리
         const isUp =
@@ -84,32 +89,29 @@ export const useArrowNavigation = (
         if (isUp) {
             e.preventDefault();
             if (currentIndex > 0) {
-                selectedIndexRef.current = currentIndex - 1;
+                setSelectedIndex(currentIndex - 1);
             } else if (loop) {
-                selectedIndexRef.current = itemCount - 1;
+                setSelectedIndex(itemCount - 1);
             }
         } else if (isDown) {
             e.preventDefault();
             if (currentIndex < itemCount - 1) {
-                selectedIndexRef.current = currentIndex + 1;
+                setSelectedIndex(currentIndex + 1);
             } else if (loop) {
-                selectedIndexRef.current = 0;
+                setSelectedIndex(0);
             }
         } else if (e.key === "Enter" && onSelect) {
             e.preventDefault();
-            onSelect(selectedIndexRef.current);
+            onSelect(currentIndex);
         } else if (e.key === "Escape" && onEscape) {
             e.preventDefault();
             onEscape();
         }
     };
 
-    const setSelectedIndex = (index: number) => {
-        selectedIndexRef.current = index;
-    };
 
     return {
-        selectedIndex: selectedIndexRef.current,
+        selectedIndex: Math.min(selectedIndex, Math.max(0, itemCount - 1)),
         setSelectedIndex,
         handleKeyDown,
     };

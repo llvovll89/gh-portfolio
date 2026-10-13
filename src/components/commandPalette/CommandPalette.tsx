@@ -1,14 +1,19 @@
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { KeyboardContext } from "@/context/KeyboardState.context";
+import { Portal } from "../Portal";
+import { useModalBackground } from "../../hooks/useModalBackground";
+import { uiText } from "../../utils/uiText";
+import { useContext, useEffect, useRef, useState } from "react";
+import { KeyboardContext } from "@/context/KeyboardState";
 import { LayoutContext } from "@/context/LayoutContext";
 import { NavigationContext } from "@/context/NavigationContext";
-import { ThemeContext } from "@/context/ThemeContext";
+import { ThemeContext } from "@/context/ThemeState";
 import { NavType } from "@/components/aside/constants/Nav.type";
 import {
     DEFAULT_KEY_COMBINATIONS,
     formatKeyCombo,
     LAYOUT_HEIGHTS,
     SHORTCUT_DESCRIPTIONS_KO,
+    SHORTCUT_DESCRIPTIONS_EN,
+    SHORTCUT_DESCRIPTIONS_JA,
 } from "@/constants/keyboardConstants";
 import { KeyboardShortcutId } from "@/types/Keyboard.types";
 import { useFocusTrap } from "@/hooks/useKeyboardNavigation";
@@ -40,13 +45,6 @@ type CommandUsageStorage = {
     stats: CommandUsageStats;
 };
 
-const CATEGORY_LABELS: Record<Command["category"], string> = {
-    Layout: "Layout",
-    Navigation: "Navigation",
-    Theme: "Theme",
-    Language: "Language",
-    System: "System",
-};
 
 const CATEGORY_ORDER: Command["category"][] = [
     "Navigation",
@@ -101,6 +99,21 @@ interface CommandItemRow {
 
 type CommandRow = CommandSectionRow | CommandItemRow;
 
+function readStoredList(key: string): string[] {
+    try { const value: unknown = JSON.parse(localStorage.getItem(key) ?? "[]"); return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []; } catch { return []; }
+}
+function readUsageStats(): CommandUsageStats {
+    try {
+        const stored = JSON.parse(localStorage.getItem(COMMAND_USAGE_STATS_STORAGE_KEY) ?? "{}");
+        const stats = stored.stats ?? stored;
+        return Object.fromEntries(Object.entries(stats).filter(([, value]) => {
+            if (!value || typeof value !== "object") return false;
+            const entry = value as { count?: unknown; lastUsedAt?: unknown };
+            return typeof entry.count === "number" && Number.isFinite(entry.count) && entry.count >= 0 && typeof entry.lastUsedAt === "number" && Number.isFinite(entry.lastUsedAt);
+        })) as CommandUsageStats;
+    } catch { return {}; }
+}
+
 function Highlight({ text, query }: { text: string; query: string }) {
     if (!query) return <>{text}</>
     const idx = text.toLowerCase().indexOf(query.toLowerCase())
@@ -119,7 +132,8 @@ function Highlight({ text, query }: { text: string; query: string }) {
  * @description Ctrl+Shift+P로 호출되는 VS Code 스타일 명령 팔레트
  */
 export const CommandPalette = () => {
-    const { i18n } = useTranslation();
+    const { i18n, t } = useTranslation();
+    const shortcutDescriptions = i18n.language.startsWith("en") ? SHORTCUT_DESCRIPTIONS_EN : i18n.language.startsWith("ja") ? SHORTCUT_DESCRIPTIONS_JA : SHORTCUT_DESCRIPTIONS_KO;
     const {
         isVisibleCommandPalette,
         setIsVisibleCommandPalette,
@@ -132,71 +146,14 @@ export const CommandPalette = () => {
 
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const [recentCommandIds, setRecentCommandIds] = useState<string[]>([]);
-    const [pinnedCommandIds, setPinnedCommandIds] = useState<string[]>([]);
+    const [recentCommandIds, setRecentCommandIds] = useState<string[]>(() => readStoredList(RECENT_COMMANDS_STORAGE_KEY));
+    const [pinnedCommandIds, setPinnedCommandIds] = useState<string[]>(() => readStoredList(PINNED_COMMANDS_STORAGE_KEY));
     const [showPinnedOnly, setShowPinnedOnly] = useState(false);
-    const [usageStats, setUsageStats] = useState<CommandUsageStats>({});
+    const [rankingTime] = useState(() => Date.now());
+    const [usageStats, setUsageStats] = useState<CommandUsageStats>(readUsageStats);
     const inputRef = useRef<HTMLInputElement>(null);
     const containerRef = useFocusTrap(isVisibleCommandPalette);
-
-    useEffect(() => {
-        try {
-            const stored = localStorage.getItem(RECENT_COMMANDS_STORAGE_KEY);
-            if (!stored) return;
-            const parsed = JSON.parse(stored);
-            if (Array.isArray(parsed)) {
-                setRecentCommandIds(parsed.filter((v) => typeof v === "string"));
-            }
-        } catch {
-            // ignore storage parsing errors
-        }
-    }, []);
-
-    useEffect(() => {
-        try {
-            const stored = localStorage.getItem(PINNED_COMMANDS_STORAGE_KEY);
-            if (!stored) return;
-            const parsed = JSON.parse(stored);
-            if (Array.isArray(parsed)) {
-                setPinnedCommandIds(parsed.filter((v) => typeof v === "string"));
-            }
-        } catch {
-            // ignore storage parsing errors
-        }
-    }, []);
-
-    useEffect(() => {
-        try {
-            const stored = localStorage.getItem(COMMAND_USAGE_STATS_STORAGE_KEY);
-            if (!stored) return;
-            const parsed = JSON.parse(stored) as CommandUsageStats | CommandUsageStorage;
-            if (!parsed || typeof parsed !== "object") return;
-
-            const rawStats = "stats" in parsed
-                ? parsed.stats
-                : parsed;
-
-            if (!rawStats || typeof rawStats !== "object") return;
-
-            const sanitized = Object.fromEntries(
-                Object.entries(rawStats).filter(([, value]) => {
-                    if (!value || typeof value !== "object") return false;
-                    const count = (value as { count?: unknown }).count;
-                    const lastUsedAt = (value as { lastUsedAt?: unknown }).lastUsedAt;
-                    return (
-                        typeof count === "number" &&
-                        count >= 0 &&
-                        typeof lastUsedAt === "number" &&
-                        Number.isFinite(lastUsedAt)
-                    );
-                }),
-            ) as CommandUsageStats;
-
-            setUsageStats(sanitized);
-        } catch {
-            // ignore storage parsing errors
-        }
-    }, []);
+    useModalBackground(isVisibleCommandPalette);
 
     const setLanguage = (next: "ko" | "en" | "ja") => {
         i18n.changeLanguage(next);
@@ -219,8 +176,8 @@ export const CommandPalette = () => {
     const commands: Command[] = [
         {
             id: KeyboardShortcutId.TOGGLE_KEYBOARD_INFO,
-            label: SHORTCUT_DESCRIPTIONS_KO[KeyboardShortcutId.TOGGLE_KEYBOARD_INFO],
-            description: "사용 가능한 키보드 단축키 전체 목록을 확인합니다",
+            label: uiText(shortcutDescriptions[KeyboardShortcutId.TOGGLE_KEYBOARD_INFO]),
+            description: uiText("사용 가능한 키보드 단축키 전체 목록을 확인합니다"),
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_KEYBOARD_INFO],
             ),
@@ -230,8 +187,8 @@ export const CommandPalette = () => {
         },
         {
             id: KeyboardShortcutId.TOGGLE_FOOTER,
-            label: SHORTCUT_DESCRIPTIONS_KO[KeyboardShortcutId.TOGGLE_FOOTER],
-            description: "하단 터미널 패널을 열거나 닫습니다",
+            label: shortcutDescriptions[KeyboardShortcutId.TOGGLE_FOOTER],
+            description: uiText("하단 터미널 패널을 열거나 닫습니다"),
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_FOOTER],
             ),
@@ -252,8 +209,8 @@ export const CommandPalette = () => {
         },
         {
             id: KeyboardShortcutId.TOGGLE_FOLDER,
-            label: SHORTCUT_DESCRIPTIONS_KO[KeyboardShortcutId.TOGGLE_FOLDER],
-            description: "좌측 파일 탐색기 패널을 토글합니다",
+            label: shortcutDescriptions[KeyboardShortcutId.TOGGLE_FOLDER],
+            description: uiText("좌측 파일 탐색기 패널을 토글합니다"),
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_FOLDER],
             ),
@@ -267,8 +224,8 @@ export const CommandPalette = () => {
         },
         {
             id: KeyboardShortcutId.TOGGLE_SEARCH,
-            label: SHORTCUT_DESCRIPTIONS_KO[KeyboardShortcutId.TOGGLE_SEARCH],
-            description: "파일 및 콘텐츠 검색 패널을 열거나 닫습니다",
+            label: shortcutDescriptions[KeyboardShortcutId.TOGGLE_SEARCH],
+            description: uiText("파일 및 콘텐츠 검색 패널을 열거나 닫습니다"),
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_SEARCH],
             ),
@@ -282,8 +239,8 @@ export const CommandPalette = () => {
         },
         {
             id: KeyboardShortcutId.TOGGLE_SIDEBAR,
-            label: SHORTCUT_DESCRIPTIONS_KO[KeyboardShortcutId.TOGGLE_SIDEBAR],
-            description: "사이드바 전체를 숨기거나 표시합니다",
+            label: shortcutDescriptions[KeyboardShortcutId.TOGGLE_SIDEBAR],
+            description: uiText("사이드바 전체를 숨기거나 표시합니다"),
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_SIDEBAR],
             ),
@@ -298,8 +255,8 @@ export const CommandPalette = () => {
         },
         {
             id: KeyboardShortcutId.TOGGLE_PANEL,
-            label: SHORTCUT_DESCRIPTIONS_KO[KeyboardShortcutId.TOGGLE_PANEL],
-            description: "하단 패널을 열거나 닫습니다",
+            label: shortcutDescriptions[KeyboardShortcutId.TOGGLE_PANEL],
+            description: uiText("하단 패널을 열거나 닫습니다"),
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_PANEL],
             ),
@@ -320,8 +277,8 @@ export const CommandPalette = () => {
         },
         {
             id: KeyboardShortcutId.REOPEN_CLOSED_TAB,
-            label: SHORTCUT_DESCRIPTIONS_KO[KeyboardShortcutId.REOPEN_CLOSED_TAB],
-            description: "가장 최근에 닫은 탭을 다시 엽니다",
+            label: shortcutDescriptions[KeyboardShortcutId.REOPEN_CLOSED_TAB],
+            description: uiText("가장 최근에 닫은 탭을 다시 엽니다"),
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.REOPEN_CLOSED_TAB],
             ),
@@ -336,8 +293,8 @@ export const CommandPalette = () => {
         },
         {
             id: KeyboardShortcutId.TOGGLE_PIN_CURRENT_TAB,
-            label: SHORTCUT_DESCRIPTIONS_KO[KeyboardShortcutId.TOGGLE_PIN_CURRENT_TAB],
-            description: "현재 활성 탭을 고정하거나 해제합니다",
+            label: shortcutDescriptions[KeyboardShortcutId.TOGGLE_PIN_CURRENT_TAB],
+            description: uiText("현재 활성 탭을 고정하거나 해제합니다"),
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_PIN_CURRENT_TAB],
             ),
@@ -356,8 +313,8 @@ export const CommandPalette = () => {
         },
         {
             id: "theme-cycle-next",
-            label: "테마 순환: 다음",
-            description: "현재 테마 기준으로 다음 테마로 전환합니다",
+            label: uiText("테마 순환: 다음"),
+            description: uiText("현재 테마 기준으로 다음 테마로 전환합니다"),
             shortcut: "",
             category: "Theme",
             keywords: ["theme", "next", "cycle", "테마"],
@@ -378,8 +335,8 @@ export const CommandPalette = () => {
         },
         {
             id: "theme-cycle-prev",
-            label: "테마 순환: 이전",
-            description: "현재 테마 기준으로 이전 테마로 전환합니다",
+            label: uiText("테마 순환: 이전"),
+            description: uiText("현재 테마 기준으로 이전 테마로 전환합니다"),
             shortcut: "",
             category: "Theme",
             keywords: ["theme", "prev", "cycle", "테마"],
@@ -400,8 +357,8 @@ export const CommandPalette = () => {
         },
         {
             id: "system-clear-command-history",
-            label: "명령 팔레트: 최근/사용 통계 초기화",
-            description: "최근 실행 명령과 추천 계산용 사용 통계를 지웁니다",
+            label: uiText("명령 팔레트: 최근/사용 통계 초기화"),
+            description: uiText("최근 실행 명령과 추천 계산용 사용 통계를 지웁니다"),
             shortcut: "",
             category: "System",
             keywords: ["palette", "recent", "history", "reset"],
@@ -418,8 +375,8 @@ export const CommandPalette = () => {
         },
         {
             id: "nav-default",
-            label: "페이지 이동: Home",
-            description: "메인 홈 페이지로 이동합니다",
+            label: uiText("페이지 이동: Home"),
+            description: uiText("메인 홈 페이지로 이동합니다"),
             shortcut: "",
             category: "Navigation",
             keywords: ["home", "main", "default", "홈"],
@@ -427,8 +384,8 @@ export const CommandPalette = () => {
         },
         {
             id: "nav-projects",
-            label: "페이지 이동: Projects",
-            description: "프로젝트 페이지로 이동합니다",
+            label: uiText("페이지 이동: Projects"),
+            description: uiText("프로젝트 페이지로 이동합니다"),
             shortcut: "",
             category: "Navigation",
             keywords: ["project", "work", "portfolio", "프로젝트"],
@@ -436,8 +393,8 @@ export const CommandPalette = () => {
         },
         {
             id: "nav-resume",
-            label: "페이지 이동: Resume",
-            description: "이력서 페이지로 이동합니다",
+            label: uiText("페이지 이동: Resume"),
+            description: uiText("이력서 페이지로 이동합니다"),
             shortcut: "",
             category: "Navigation",
             keywords: ["resume", "cv", "이력서"],
@@ -445,8 +402,8 @@ export const CommandPalette = () => {
         },
         {
             id: "nav-blog",
-            label: "페이지 이동: Blog",
-            description: "블로그 목록 페이지로 이동합니다",
+            label: uiText("페이지 이동: Blog"),
+            description: uiText("블로그 목록 페이지로 이동합니다"),
             shortcut: "",
             category: "Navigation",
             keywords: ["blog", "post", "article", "블로그"],
@@ -454,8 +411,8 @@ export const CommandPalette = () => {
         },
         {
             id: "nav-uses",
-            label: "페이지 이동: Uses",
-            description: "사용 도구/환경 페이지로 이동합니다",
+            label: uiText("페이지 이동: Uses"),
+            description: uiText("사용 도구/환경 페이지로 이동합니다"),
             shortcut: "",
             category: "Navigation",
             keywords: ["uses", "stack", "tool", "도구"],
@@ -463,8 +420,8 @@ export const CommandPalette = () => {
         },
         {
             id: "nav-contact",
-            label: "페이지 이동: Contact",
-            description: "연락처 페이지로 이동합니다",
+            label: uiText("페이지 이동: Contact"),
+            description: uiText("연락처 페이지로 이동합니다"),
             shortcut: "",
             category: "Navigation",
             keywords: ["contact", "email", "mail", "연락"],
@@ -472,8 +429,8 @@ export const CommandPalette = () => {
         },
         {
             id: "nav-git-control",
-            label: "사이드 패널: Git Control",
-            description: "Git Control 패널을 열거나 닫습니다",
+            label: uiText("사이드 패널: Git Control"),
+            description: uiText("Git Control 패널을 열거나 닫습니다"),
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_GIT_CONTROL],
             ),
@@ -487,8 +444,8 @@ export const CommandPalette = () => {
         },
         {
             id: "nav-bookmarks",
-            label: "사이드 패널: Bookmarks",
-            description: "북마크 패널을 열거나 닫습니다",
+            label: uiText("사이드 패널: Bookmarks"),
+            description: uiText("북마크 패널을 열거나 닫습니다"),
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_BOOKMARKS],
             ),
@@ -502,8 +459,8 @@ export const CommandPalette = () => {
         },
         {
             id: "nav-settings",
-            label: "사이드 패널: Settings",
-            description: "설정 패널을 열거나 닫습니다",
+            label: uiText("사이드 패널: Settings"),
+            description: uiText("설정 패널을 열거나 닫습니다"),
             shortcut: formatKeyCombo(
                 DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_SETTINGS],
             ),
@@ -517,8 +474,8 @@ export const CommandPalette = () => {
         },
         ...Object.entries(THEME_LABELS).map(([mode, label]) => ({
             id: `theme-${mode}`,
-            label,
-            description: "앱 배경 테마를 즉시 전환합니다",
+            label: uiText(label),
+            description: uiText("앱 배경 테마를 즉시 전환합니다"),
             shortcut: "",
             category: "Theme" as const,
             keywords: ["theme", "color", "appearance", "테마"],
@@ -532,8 +489,8 @@ export const CommandPalette = () => {
         })),
         ...Object.entries(LANGUAGE_LABELS).map(([lang, label]) => ({
             id: `lang-${lang}`,
-            label,
-            description: "사이트 표시 언어를 전환합니다",
+            label: uiText(label),
+            description: uiText("사이트 표시 언어를 전환합니다"),
             shortcut: "",
             category: "Language" as const,
             keywords: ["language", "locale", "i18n", "언어"],
@@ -546,8 +503,7 @@ export const CommandPalette = () => {
         const usage = usageStats[commandId];
         if (!usage) return 0;
 
-        const now = Date.now();
-        const elapsedDays = (now - usage.lastUsedAt) / (1000 * 60 * 60 * 24);
+        const elapsedDays = (rankingTime - usage.lastUsedAt) / (1000 * 60 * 60 * 24);
         const recencyScore = Math.max(0, 40 - elapsedDays * 4);
         const frequencyScore = Math.min(usage.count * 6, 60);
 
@@ -577,7 +533,7 @@ export const CommandPalette = () => {
         return score;
     };
 
-    const filteredCommands = useMemo(() => {
+    const filteredCommands = (() => {
         const q = searchQuery.trim().toLowerCase();
 
         const searched = commands.filter((cmd) => {
@@ -625,9 +581,9 @@ export const CommandPalette = () => {
         }
 
         return [...pinned, ...recent, ...rest];
-    }, [commands, pinnedCommandIds, recentCommandIds, searchQuery, showPinnedOnly, usageStats]);
+    })();
 
-    const visibleRows = useMemo<CommandRow[]>(() => {
+    const visibleRows: CommandRow[] = (() => {
         const q = searchQuery.trim();
         const pinnedSet = new Set(pinnedCommandIds);
         const recentSet = new Set(recentCommandIds);
@@ -642,7 +598,7 @@ export const CommandPalette = () => {
                 rows.push({
                     type: "section",
                     id: `section-category-${category}`,
-                    label: CATEGORY_LABELS[category],
+                    label: t("palette." + category),
                 });
                 rows.push(
                     ...items.map((command) => ({
@@ -681,7 +637,7 @@ export const CommandPalette = () => {
         const allWithoutRecommended = all.filter((command) => !recommendedIds.has(command.id));
 
         if (pinned.length > 0) {
-            rows.push({ type: "section", id: "section-pinned", label: "Pinned" });
+            rows.push({ type: "section", id: "section-pinned", label: t("palette.pinned") });
             rows.push(
                 ...pinned.map((command) => ({
                     type: "command" as const,
@@ -692,7 +648,7 @@ export const CommandPalette = () => {
         }
 
         if (!showPinnedOnly && recent.length > 0) {
-            rows.push({ type: "section", id: "section-recent", label: "Recent" });
+            rows.push({ type: "section", id: "section-recent", label: t("palette.recent") });
             rows.push(
                 ...recent.map((command) => ({
                     type: "command" as const,
@@ -703,7 +659,7 @@ export const CommandPalette = () => {
         }
 
         if (!showPinnedOnly && recommended.length > 0) {
-            rows.push({ type: "section", id: "section-recommended", label: "Recommended" });
+            rows.push({ type: "section", id: "section-recommended", label: t("palette.recommended") });
             rows.push(
                 ...recommended.map((command) => ({
                     type: "command" as const,
@@ -714,7 +670,7 @@ export const CommandPalette = () => {
         }
 
         if (!showPinnedOnly && allWithoutRecommended.length > 0) {
-            rows.push({ type: "section", id: "section-all", label: "All Commands" });
+            rows.push({ type: "section", id: "section-all", label: t("palette.all") });
             rows.push(
                 ...allWithoutRecommended.map((command) => ({
                     type: "command" as const,
@@ -725,15 +681,9 @@ export const CommandPalette = () => {
         }
 
         return rows;
-    }, [filteredCommands, pinnedCommandIds, recentCommandIds, searchQuery, showPinnedOnly]);
+    })();
 
-    useEffect(() => {
-        if (filteredCommands.length === 0) {
-            setSelectedIndex(0);
-            return;
-        }
-        setSelectedIndex((prev) => Math.min(prev, filteredCommands.length - 1));
-    }, [filteredCommands]);
+    const activeIndex = Math.min(selectedIndex, Math.max(0, filteredCommands.length - 1));
 
     // 팔레트가 열릴 때 입력창 포커스
     useEffect(() => {
@@ -753,7 +703,7 @@ export const CommandPalette = () => {
 
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
             e.preventDefault();
-            const selectedCommand = filteredCommands[selectedIndex];
+            const selectedCommand = filteredCommands[activeIndex];
             if (!selectedCommand) return;
             togglePinnedCommand(selectedCommand.id);
             return;
@@ -769,17 +719,16 @@ export const CommandPalette = () => {
             setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
         } else if (e.key === "Enter") {
             e.preventDefault();
-            executeCommand(filteredCommands[selectedIndex]);
+            executeCommand(filteredCommands[activeIndex], performance.timeOrigin + e.timeStamp);
         } else if (e.key === "Escape") {
             e.preventDefault();
             closeCommandPalette();
         }
     };
 
-    const executeCommand = (command: Command | undefined) => {
+    const executeCommand = (command: Command | undefined, now: number) => {
         if (command && command.action) {
             command.action();
-            const now = Date.now();
 
             setUsageStats((prev) => {
                 const current = prev[command.id];
@@ -851,12 +800,12 @@ export const CommandPalette = () => {
     if (!isVisibleCommandPalette) return null;
 
     return (
-        <div
+        <Portal><div
             className="fixed inset-0 z-50 flex items-start justify-center bg-inverse/50 pt-12 sm:pt-16 md:pt-24 px-4"
             onClick={closeCommandPalette}
             role="dialog"
             aria-modal="true"
-            aria-label="명령 팔레트"
+            aria-label={uiText("명령 팔레트")}
         >
             <div
                 ref={containerRef}
@@ -874,16 +823,17 @@ export const CommandPalette = () => {
                             setSelectedIndex(0);
                         }}
                         onKeyDown={handleKeyDown}
-                        placeholder="명령을 입력하세요..."
+                        placeholder={uiText("명령을 입력하세요...")}
                         className="w-full bg-transparent text-foreground outline-none placeholder:text-muted"
-                        role="combobox"
+                        role="combobox" aria-haspopup="grid"
                         aria-expanded="true"
                         aria-controls="command-list"
-                        aria-activedescendant={`command-${selectedIndex}`}
+                        aria-activedescendant={filteredCommands.length ? `command-${activeIndex}` : undefined}
+                        aria-label={uiText("명령 팔레트")}
                     />
                     {showPinnedOnly && (
                         <div className="mt-2 inline-flex items-center rounded bg-amber-400/15 px-2 py-1 text-[11px] text-amber-200">
-                            Pinned only mode
+                            {t("palette.pinnedOnly")}
                         </div>
                     )}
                 </div>
@@ -892,12 +842,11 @@ export const CommandPalette = () => {
                 <div
                     id="command-list"
                     className="max-h-96 overflow-y-auto"
-                    role="listbox"
+                    role={filteredCommands.length ? "grid" : undefined} aria-label={uiText("명령 팔레트")}
                 >
                     {filteredCommands.length === 0 ? (
                         <div className="p-4 text-center text-muted">
-                            명령을 찾을 수 없습니다
-                        </div>
+                            {uiText("명령을 찾을 수 없습니다")}</div>
                     ) : (
                         visibleRows.map((row) => {
                             if (row.type === "section") {
@@ -912,27 +861,27 @@ export const CommandPalette = () => {
                             }
 
                             const { command, index } = row;
-                            const isSelected = index === selectedIndex;
+                            const isSelected = index === activeIndex;
                             const isPinned = pinnedCommandIds.includes(command.id);
 
                             return (
-                                <button
+                                <div
                                     key={command.id}
                                     id={`command-${index}`}
-                                    onClick={() => executeCommand(command)}
+                                    onClick={(event) => executeCommand(command, performance.timeOrigin + event.timeStamp)}
                                     onMouseEnter={() => setSelectedIndex(index)}
                                     className={`flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors ${isSelected
                                         ? "bg-primary/12 text-foreground"
                                         : "text-foreground hover:bg-panel"
                                         }`}
-                                    role="option"
+                                    role="row"
                                     aria-selected={isSelected}
                                 >
-                                    <span className="flex flex-col gap-0.5 min-w-0">
+                                    <span role="gridcell" className="flex flex-col gap-0.5 min-w-0">
                                         <span className="text-sm flex items-center gap-2">
                                             <Highlight text={command.label} query={searchQuery} />
-                                            <span className="rounded px-1.5 py-0.5 text-[10px] leading-none bg-foreground/10 text-muted">
-                                                {CATEGORY_LABELS[command.category]}
+                                            <span className="rounded px-1.5 py-0.5 text-[10px] leading-none bg-foreground/10 text-foreground">
+                                                {t("palette." + command.category)}
                                             </span>
                                         </span>
                                         <span className={`text-xs truncate ${isSelected ? "text-muted" : "text-muted"}`}>
@@ -940,35 +889,27 @@ export const CommandPalette = () => {
                                         </span>
                                     </span>
 
-                                    <span className="flex items-center gap-2 shrink-0 ml-4">
-                                        <span
-                                            role="button"
-                                            tabIndex={-1}
+                                    <span role="gridcell" className="flex items-center gap-2 shrink-0 ml-4">
+                                        <button type="button"
                                             onClick={(event) => {
                                                 event.preventDefault();
                                                 event.stopPropagation();
                                                 togglePinnedCommand(command.id);
                                             }}
-                                            onKeyDown={(event) => {
-                                                if (event.key !== "Enter" && event.key !== " ") return;
-                                                event.preventDefault();
-                                                event.stopPropagation();
-                                                togglePinnedCommand(command.id);
-                                            }}
-                                            aria-label={isPinned ? "Unpin command" : "Pin command"}
-                                            title={isPinned ? "고정 해제" : "명령 고정"}
+                                            aria-label={uiText(isPinned ? "고정 해제" : "명령 고정")}
+                                            title={isPinned ? uiText("고정 해제") : uiText("명령 고정")}
                                             className={`cursor-pointer rounded px-1.5 py-0.5 text-[11px] transition-colors ${isPinned
                                                 ? "text-amber-300 bg-amber-400/15"
                                                 : "text-muted hover:text-muted hover:bg-foreground/10"
                                                 }`}
                                         >
                                             {isPinned ? "★" : "☆"}
-                                        </span>
+                                        </button>
                                         <span className="text-xs text-muted">
                                             {command.shortcut || command.quickHint || ""}
                                         </span>
                                     </span>
-                                </button>
+                                </div>
                             );
                         })
                     )}
@@ -976,9 +917,8 @@ export const CommandPalette = () => {
 
                 {/* 하단 정보 */}
                 <div className="border-t border-line px-4 py-2 text-xs text-muted">
-                    ↑↓로 이동 • Enter로 실행 • Ctrl/Cmd+K로 Pin • Alt+P로 Pinned 필터 • ESC로 닫기
-                </div>
+                    {uiText("↑↓로 이동 • Enter로 실행 • Ctrl/Cmd+K로 Pin • Alt+P로 Pinned 필터 • ESC로 닫기")}</div>
             </div>
-        </div>
+        </div></Portal>
     );
 };

@@ -1,3 +1,4 @@
+import { uiText } from "../../../../utils/uiText";
 import { FaGithub } from "react-icons/fa";
 
 export const Footer = () => {
@@ -11,7 +12,7 @@ export const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted hover:text-foreground transition-colors duration-200"
-                aria-label="GitHub 프로필"
+                aria-label={uiText("GitHub 프로필")}
             >
                 <FaGithub className="w-4 h-4" />
             </a>

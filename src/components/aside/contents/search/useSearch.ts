@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { NOT_FOUND, routesPath } from "../../../../routes/route";
 import { NavigationContext } from "../../../../context/NavigationContext";
 import { useHandlePushPath } from "../../../../hooks/useHandlePushPath";
-import { loadPosts } from "../../../../utils/loadPosts";
+import { useBlogSearch } from "../../../../hooks/useBlogSearch";
 import type { BlogPost } from "../../../../utils/loadPosts";
 import {
     normalizeQuery,
@@ -29,7 +29,7 @@ export function useSearch() {
     const [query, setQuery] = useState("");
     const [debouncedQuery, setDebouncedQuery] = useState("");
     const [isDebouncing, setIsDebouncing] = useState(false);
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [selectedIndex, setActiveIndex] = useState(0);
     const [frequencyMap, setFrequencyMap] = useState<Record<string, number>>(() => loadFrequency());
     const [searchHistory, setSearchHistory] = useState<string[]>(() => loadSearchHistory());
     const [showSearchHistory, setShowSearchHistory] = useState(false);
@@ -80,8 +80,9 @@ export function useSearch() {
     }, [query]);
 
     const keywords = useMemo(() => getKeywords(debouncedQuery), [debouncedQuery]);
-    const searchableRoutes = useMemo(() => routesPath.filter((r) => r.path !== NOT_FOUND), []);
-    const allPosts = useMemo(() => loadPosts(), []);
+    const searchableRoutes = useMemo(() => routesPath.filter((r) => r.path !== NOT_FOUND && !r.path.includes(":")), []);
+    const fullText = useBlogSearch(debouncedQuery);
+    const allPosts = fullText.posts;
 
     const results: RouteItem[] = useMemo(() => {
         if (!keywords.length) return [];
@@ -120,6 +121,9 @@ export function useSearch() {
         handlePushPath(`/blog/${slug}`);
         setSelectedNav(null);
     };
+
+    const activeLimit = showSearchHistory && searchHistory.length > 0 ? searchHistory.length : results.length + blogResults.length;
+    const activeIndex = Math.min(selectedIndex, Math.max(0, activeLimit - 1));
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (showSearchHistory && searchHistory.length > 0) {
@@ -169,7 +173,9 @@ export function useSearch() {
         setQuery,
         debouncedQuery,
         setDebouncedQuery,
-        isDebouncing,
+        isDebouncing: isDebouncing || fullText.loading,
+        searchError: fullText.error,
+        retrySearch: fullText.retry,
         activeIndex,
         setActiveIndex,
         searchHistory,

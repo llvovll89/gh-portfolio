@@ -1,3 +1,4 @@
+import { uiText } from "../../utils/uiText";
 import { useState } from "react";
 import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
 
@@ -124,7 +125,7 @@ export const MarchFirstOverlay = () => {
                     <button
                         onClick={() => setDismissed(true)}
                         className="ml-1 flex items-center justify-center w-5 h-5 rounded-full text-muted hover:text-foreground hover:bg-foreground/10 transition-all duration-150 text-base leading-none shrink-0"
-                        aria-label="닫기"
+                        aria-label={uiText("닫기")}
                     >
                         ×
                     </button>

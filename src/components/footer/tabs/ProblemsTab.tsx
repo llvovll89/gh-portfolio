@@ -1,3 +1,4 @@
+import { uiText } from "../../../utils/uiText";
 import { useEffect, useState } from "react";
 import { LuCircleAlert, LuGitPullRequest } from "react-icons/lu";
 
@@ -26,8 +27,7 @@ export const ProblemsTab = () => {
     if (items.length === 0) {
         return (
             <div className="h-full flex items-center justify-center text-xs text-muted font-mono">
-                문제가 없습니다
-            </div>
+                {uiText("문제가 없습니다")}</div>
         );
     }
 

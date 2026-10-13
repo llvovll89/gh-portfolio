@@ -19,6 +19,7 @@ function entriesRef(slug: string) {
 export function subscribeBlogComments(
     slug: string,
     callback: (comments: BlogComment[]) => void,
+    onError?: () => void,
 ): () => void {
     const q = query(entriesRef(slug), orderBy('createdAt', 'desc'))
     return onSnapshot(q, (snap) => {
@@ -36,7 +37,7 @@ export function subscribeBlogComments(
         callback(list)
     }, (err) => {
         console.error('[BlogComments] 구독 실패:', err)
-        callback([])
+        onError?.()
     })
 }
 

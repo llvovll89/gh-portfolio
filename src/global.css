@@ -53,7 +53,7 @@
 }
 
 * {
-    font-family: "Pretendard", sans-serif;
+    font-family: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif;
 }
 
 html,
@@ -394,3 +394,7 @@ body {
         transform: translateY(6px);
     }
 }
+
+.image-fallback { display: grid; place-items: center; min-height: 64px; width: 100%; height: 100%; padding: 16px; background: var(--surface-inset); color: var(--text-muted); font-size: 12px; }
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }

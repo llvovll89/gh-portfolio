@@ -1,3 +1,4 @@
+import { uiText } from "../../../../utils/uiText";
 import { useContext, useState, useEffect, useRef } from "react";
 import { NavigationContext } from "../../../../context/NavigationContext";
 import { useThemeStyle } from "../../../../hooks/useThemeStyle";
@@ -45,7 +46,7 @@ export const Bookmarks = () => {
         (r) =>
             r.path !== NOT_FOUND &&
             r.path !== DEFAULT &&
-            r.path !== BLOG_DETAIL,
+            r.path !== BLOG_DETAIL && !r.path.includes(":"),
     );
 
     const isFirstRender = useRef(true);
@@ -66,7 +67,7 @@ export const Bookmarks = () => {
     const handleAddBookmark = (path: string, name: string) => {
         const exists = bookmarks.some((bk) => bk.path === path);
         if (exists) {
-            alert("이미 추가된 북마크입니다.");
+            alert(uiText("이미 추가된 북마크입니다."));
             return;
         }
 
@@ -119,14 +120,14 @@ export const Bookmarks = () => {
                         <div className="space-y-2 pb-2 border-b border-sub-gary/20">
                             <input
                                 type="text"
-                                placeholder="북마크 이름 (예: React 블로그)"
+                                placeholder={uiText("북마크 이름 (예: React 블로그)")}
                                 value={customName}
                                 onChange={(e) => setCustomName(e.target.value)}
                                 className="w-full px-2 py-1.5 text-xs bg-sub-gary/20 text-foreground rounded border border-foreground/10 focus:border-primary/50 focus:outline-none placeholder:text-muted"
                             />
                             <input
                                 type="text"
-                                placeholder="경로 (예: /blog/react-hooks)"
+                                placeholder={uiText("경로 (예: /blog/react-hooks)")}
                                 value={customPath}
                                 onChange={(e) => setCustomPath(e.target.value)}
                                 className="w-full px-2 py-1.5 text-xs bg-sub-gary/20 text-foreground rounded border border-foreground/10 focus:border-primary/50 focus:outline-none placeholder:text-muted"
@@ -136,23 +137,22 @@ export const Bookmarks = () => {
                                     if (customName.trim() && customPath.trim()) {
                                         handleAddBookmark(customPath.trim(), customName.trim());
                                     } else {
-                                        alert("이름과 경로를 모두 입력해주세요.");
+                                        alert(uiText("이름과 경로를 모두 입력해주세요."));
                                     }
                                 }}
                                 className="w-full px-2 py-1.5 text-xs bg-primary/80 text-foreground rounded hover:bg-primary transition-colors"
                             >
-                                커스텀 북마크 추가
-                            </button>
+                                {uiText("커스텀 북마크 추가")}</button>
                         </div>
 
                         {/* 기존 페이지 목록 */}
-                        <p className="text-[10px] text-muted">또는 페이지에서 선택:</p>
+                        <p className="text-[10px] text-muted">{uiText("또는 페이지에서 선택:")}</p>
                         <ul className="space-y-1">
                             {availablePages.map((page) => (
                                 <li key={page.path}>
                                     <button
                                         onClick={() =>
-                                            handleAddBookmark(page.path, t(page.name))
+                                            handleAddBookmark(page.path, t(`routes.${page.name}`))
                                         }
                                         className="w-full text-left px-2 py-1.5 text-xs bg-sub-gary/20 text-foreground rounded hover:bg-primary/20 transition-colors"
                                     >

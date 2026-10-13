@@ -1,3 +1,4 @@
+import { uiText } from "../../utils/uiText";
 import {useContext, useEffect, useState} from "react";
 import {LuGitBranch} from "react-icons/lu";
 import {LayoutContext} from "../../context/LayoutContext";
@@ -36,7 +37,7 @@ export const StatusBar = () => {
     return (
         <div
             role="status"
-            aria-label="상태 표시줄"
+            aria-label={uiText("상태 표시줄")}
             className="fixed bottom-0 right-0 h-6 z-30 flex items-center justify-between px-3 text-[11px] font-mono select-none"
             style={{
                 width: `calc(100% - ${layoutState.resizeSidebarWidth}px)`,

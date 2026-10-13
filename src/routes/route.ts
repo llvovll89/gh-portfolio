@@ -2,6 +2,7 @@ import {lazy, type ComponentType, type LazyExoticComponent} from "react";
 
 const Default = lazy(() => import("../pages/default/Default").then((m) => ({default: m.Default})));
 const Projects = lazy(() => import("../pages/projects/Projects").then((m) => ({default: m.Projects})));
+const ProjectDetail = lazy(() => import("../pages/projects/ProjectDetail").then((m) => ({default: m.ProjectDetail})));
 const Blog = lazy(() => import("../pages/blog/Blog").then((m) => ({default: m.Blog})));
 const Detail = lazy(() => import("../pages/blog/contents/Detail").then((m) => ({default: m.Detail})));
 const Resume = lazy(() => import("../pages/resume/Resume").then((m) => ({default: m.Resume})));
@@ -13,6 +14,7 @@ const NotFound = lazy(() => import("../pages/notfound/NotFound").then((m) => ({d
 export const PATHS = {
     DEFAULT: "/",
     PROJECTS: "/projects",
+    PROJECT_DETAIL: "/projects/:slug",
     CONTACT: "/contact",
     PROFILE: "/profile",
     BLOG: "/blog",
@@ -42,8 +44,9 @@ export type AppRoute = {
 };
 
 export const routesPath = [
-    {path: PATHS.DEFAULT, name: "default", icon: "", component: Default},
+    {path: PATHS.DEFAULT, name: "home", icon: "", component: Default},
     {path: PATHS.PROJECTS, name: "projects", icon: "", component: Projects},
+    {path: PATHS.PROJECT_DETAIL, name: "projectDetail", icon: "", component: ProjectDetail},
     {path: PATHS.PROFILE, name: "profile", icon: "", component: Profile},
     {path: PATHS.BLOG, name: "blog", icon: "", component: Blog},
     {path: PATHS.BLOG_DETAIL, name: "blogDetail", icon: "", component: Detail},

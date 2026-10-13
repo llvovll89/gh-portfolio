@@ -1,3 +1,4 @@
+import { uiText } from "../../utils/uiText";
 import { Suspense, lazy, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useSeoMeta } from "../../hooks/useSeoMeta";
@@ -7,6 +8,7 @@ import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
 import { loadAllPosts } from "../../utils/loadAllPosts";
+import { useBlogSearch } from "../../hooks/useBlogSearch";
 import { BlogCard } from "./contents/BlogCard";
 import { BlogFilterBar } from "./components/BlogFilterBar";
 import { useTranslation } from "react-i18next";
@@ -39,7 +41,7 @@ export const Blog = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     useSeoMeta({
-        title: '블로그',
+        title: uiText("블로그"),
         description: `웹 개발자 김건호의 기술 블로그 — 총 ${allPosts.length}개의 포스트`,
         url: '/blog',
     });
@@ -75,13 +77,14 @@ export const Blog = () => {
     }, [debouncedQuery, selectedTags, selectedCategory, setSearchParams]);
 
     // ── 필터링 / 정렬 ────────────────────────────────────────
+    const fullText = useBlogSearch(debouncedQuery);
     const availableTags = useMemo(() => extractAllTags(allPosts), [allPosts]);
     const availableCategories = useMemo(() => extractAllCategories(allPosts), [allPosts]);
     const tagCounts = useMemo(() => getTagCounts(allPosts), [allPosts]);
 
     const filteredPosts = useMemo(
-        () => filterPosts(allPosts, debouncedQuery, selectedTags, selectedCategory),
-        [allPosts, debouncedQuery, selectedTags, selectedCategory],
+        () => filterPosts(fullText.posts, debouncedQuery, selectedTags, selectedCategory),
+        [fullText.posts, debouncedQuery, selectedTags, selectedCategory],
     );
 
     const sortedPosts = useMemo(() => {
@@ -99,11 +102,11 @@ export const Blog = () => {
             <Header />
             <Aside />
             <Contents>
-                <div data-blog-theme={blogTheme} style={{ colorScheme: blogTheme }} className="blog-page flex flex-col h-[calc(100vh-8rem)] sm:py-4 py-1 md:px-0 px-2">
+                <div data-blog-theme={blogTheme} style={{ colorScheme: blogTheme }} className="blog-page flex flex-col min-h-0 flex-1 sm:py-4 py-1 md:px-0 px-2">
                     <div className="flex-none mb-6">
-                        <h2 className="text-[clamp(0.85rem,1.5vw,1.25rem)] font-bold text-foreground blog-dark:text-foreground mb-4">
+                        <h1 className="text-[clamp(0.85rem,1.5vw,1.25rem)] font-bold text-foreground blog-dark:text-foreground mb-4">
                             {t("pages.blog.posts")}
-                        </h2>
+                        </h1>
 
                         <BlogFilterBar
                             searchQuery={searchQuery}
@@ -125,7 +128,9 @@ export const Blog = () => {
                         />
                     </div>
 
-                    <div className="flex-1 overflow-y-auto pr-2 scrolls">
+                    <div className="flex-1 overflow-y-auto pr-2 scrolls" aria-busy={fullText.loading}>
+                        {fullText.loading && <p className="mb-3 text-sm text-muted" role="status">{t("pages.blog.searching")}</p>}
+                        {fullText.error && <p className="mb-3 text-sm text-muted" role="alert">{t("pages.blog.searchError")} <button type="button" className="underline" onClick={fullText.retry}>{t("pages.blog.retry")}</button></p>}
                         {allPosts.length === 0 ? (
                             <p className="text-muted blog-dark:text-muted">
                                 {t("pages.blog.noPosts")}{" "}
@@ -133,6 +138,8 @@ export const Blog = () => {
                                 <span className="font-mono">src/content/posts</span>{" "}
                                 <span className="font-mono">.md</span>.
                             </p>
+                        ) : fullText.loading ? (
+                            <BlogListSkeleton />
                         ) : sortedPosts.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
                                 <div className="w-12 h-12 rounded-full bg-panel flex items-center justify-center text-2xl">

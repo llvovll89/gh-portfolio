@@ -1,16 +1,7 @@
+import { useTranslation } from "react-i18next";
 export const RouteLoading = () => {
-    return (
-        <div
-            role="progressbar"
-            aria-label="페이지 로딩 중"
-            aria-valuemin={0}
-            aria-valuemax={100}
-            className="fixed top-0 left-0 right-0 z-[9999] h-[2px] overflow-hidden"
-        >
-            <div
-                className="h-full bg-linear-to-r from-primary via-blue-400 to-primary"
-                style={{animation: "loading-bar 1.2s ease-in-out infinite"}}
-            />
-        </div>
-    );
+    const { t } = useTranslation();
+    return <div role="status" aria-live="polite" className="fixed inset-0 z-50 grid place-items-center bg-base-navy text-foreground">
+        <div className="flex items-center gap-3 text-sm"><span aria-hidden="true" className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />{t("feedback.loading")}</div>
+    </div>;
 };

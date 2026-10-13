@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from "react";
+import { useCallback, useContext, useEffect, useRef } from "react";
 import { LayoutContext } from "../context/LayoutContext";
 
 interface UseDraggingProps {
@@ -14,9 +14,9 @@ export const useDragging = ({ targetRef, type }: UseDraggingProps) => {
     const isDragging = useRef(false);
     const activeInput = useRef<InputKind>(null);
 
-    const setCursor = (value: string) => {
+    const setCursor = useCallback((value: string) => {
         if (targetRef?.current) targetRef.current.style.cursor = value;
-    };
+    }, [targetRef]);
 
     const getClient = (
         e: MouseEvent | PointerEvent | TouchEvent,
@@ -31,12 +31,12 @@ export const useDragging = ({ targetRef, type }: UseDraggingProps) => {
         return { clientX: e.clientX, clientY: e.clientY };
     };
 
-    const applyDrag = (clientX: number, clientY: number) => {
+    const applyDrag = useCallback((clientX: number, clientY: number) => {
         if (type === "sidebar") {
             if (clientX > 600) return; // 최대 너비 600px
             setLayoutState((prev) => ({
                 ...prev,
-                resizeSidebarWidth: Math.max(125, clientX), // 최소 너비 125px
+                resizeSidebarWidth: Math.max(250, Math.min(clientX, window.innerWidth - 320)), // 최소 너비 125px
             }));
             return;
         }
@@ -49,7 +49,7 @@ export const useDragging = ({ targetRef, type }: UseDraggingProps) => {
             ...prev,
             resizeFooterHeight: Math.max(0, newHeight), // 최소 높이 100px
         }));
-    };
+    }, [type, setLayoutState]);
 
     const handleStart = (
         e: React.MouseEvent | React.TouchEvent | React.PointerEvent,
@@ -75,7 +75,7 @@ export const useDragging = ({ targetRef, type }: UseDraggingProps) => {
         }
     };
 
-    const handleMoveNative = (e: MouseEvent | PointerEvent | TouchEvent) => {
+    const handleMoveNative = useCallback((e: MouseEvent | PointerEvent | TouchEvent) => {
         if (!isDragging.current) return;
 
         // 입력 타입 섞여서 들어오는 중복 move 방지
@@ -91,14 +91,14 @@ export const useDragging = ({ targetRef, type }: UseDraggingProps) => {
         if (!pos) return;
 
         applyDrag(pos.clientX, pos.clientY);
-    };
+    }, [applyDrag]);
 
-    const handleEndNative = () => {
+    const handleEndNative = useCallback(() => {
         isDragging.current = false;
         if (type === "sidebar") delete document.documentElement.dataset.sidebarDragging;
         activeInput.current = null;
         setCursor("");
-    };
+    }, [type, setCursor]);
 
     useEffect(() => {
         // Pointer Events (권장)
@@ -130,7 +130,7 @@ export const useDragging = ({ targetRef, type }: UseDraggingProps) => {
             window.removeEventListener("mousemove", handleMoveNative);
             window.removeEventListener("mouseup", handleEndNative);
         };
-    }, []);
+    }, [handleMoveNative, handleEndNative, type]);
 
     return handleStart;
 };

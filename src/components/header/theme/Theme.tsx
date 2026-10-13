@@ -1,6 +1,6 @@
 import { useContext, useRef } from "react";
 import { LuCheck, LuPalette } from "react-icons/lu";
-import { ThemeContext } from "../../../context/ThemeContext";
+import { ThemeContext } from "../../../context/ThemeState";
 import { ThemeMode, THEME_COLORS, RECOMMENDED_COLORS } from "../../../context/constatns/Theme.type";
 import { useClosePopup } from "../../../hooks/useClosePopup";
 import { useCheckedMobileSize } from "../../../hooks/useCheckedMobileSize";

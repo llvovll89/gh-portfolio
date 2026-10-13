@@ -1,29 +1,8 @@
-import { createContext, useState, useEffect, useLayoutEffect, useContext, useMemo } from "react";
+import { useState, useEffect, useLayoutEffect, useMemo } from "react";
+import { ThemeContext, type SelectedThemeState } from "./ThemeState";
 import { ThemeMode } from "./constatns/Theme.type";
 import { getThemePalette } from "../utils/themePalette";
-
-export interface SelectedThemeState {
-    mode: ThemeMode;
-    isVisibleThemeDropdown: boolean;
-    customColor?: string;
-}
-
-interface ThemeContextProps {
-    resolvedDark: boolean;
-    selectedTheme: SelectedThemeState;
-    setSelectedTheme: React.Dispatch<React.SetStateAction<SelectedThemeState>>;
-}
-
 const THEME_STORAGE_KEY = "portfolio-theme-settings";
-
-export const ThemeContext = createContext<ThemeContextProps>({
-    resolvedDark: true,
-    selectedTheme: {
-        mode: ThemeMode.BASE_NAVY,
-        isVisibleThemeDropdown: false,
-    },
-    setSelectedTheme: () => {},
-});
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     const [selectedTheme, setSelectedTheme] = useState<SelectedThemeState>(() => {
@@ -79,5 +58,3 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
         </ThemeContext.Provider>
     );
 };
-
-export const useThemeContext = () => useContext(ThemeContext);

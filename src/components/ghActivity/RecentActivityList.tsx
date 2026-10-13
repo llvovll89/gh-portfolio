@@ -1,3 +1,4 @@
+import { uiText } from "../../utils/uiText";
 import { useCallback, useEffect, useState } from "react";
 import { GITHUB_OWNER } from "../../http/api";
 
@@ -61,13 +62,12 @@ const RecentActivityList = ({ username }: { username: string }) => {
     if (error) {
         return (
             <div className="flex items-center gap-2 text-[12px] text-muted">
-                <span>activity 데이터를 불러오지 못했습니다.</span>
+                <span>{uiText("activity 데이터를 불러오지 못했습니다.")}</span>
                 <button
                     onClick={fetchEvents}
                     className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
                 >
-                    재시도
-                </button>
+                    {uiText("재시도")}</button>
             </div>
         );
     }
@@ -104,7 +104,7 @@ const RecentActivityList = ({ username }: { username: string }) => {
                     onClick={() => setIsExpanded((s) => !s)}
                     className="text-[10px] text-muted hover:text-foreground transition-colors text-left"
                 >
-                    {isExpanded ? "접기" : `더보기 (${events.length - COLLAPSED_COUNT}개)`}
+                    {isExpanded ? uiText("접기") : `더보기 (${events.length - COLLAPSED_COUNT}개)`}
                 </button>
             )}
         </div>

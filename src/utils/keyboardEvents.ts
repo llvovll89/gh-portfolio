@@ -1,5 +1,5 @@
 import { NavType } from "@/components/aside/constants/Nav.type";
-import type { submitCliCommandType } from "@/context/KeyboardState.context";
+import type { submitCliCommandType } from "@/context/KeyboardState";
 import {
     DEFAULT_KEY_COMBINATIONS,
     ESC_DOUBLE_PRESS_TIMEOUT,

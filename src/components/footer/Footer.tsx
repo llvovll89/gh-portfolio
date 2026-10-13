@@ -1,3 +1,4 @@
+import { uiText } from "../../utils/uiText";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { LayoutContext } from "../../context/LayoutContext";
 import { useThemeStyle } from "../../hooks/useThemeStyle";
@@ -10,7 +11,7 @@ import { ConsoleTab } from "./tabs/ConsoleTab";
 import { ProblemsTab } from "./tabs/ProblemsTab";
 import { OutputTab } from "./tabs/OutputTab";
 import type { FooterTabType } from "./types";
-import { KeyboardContext } from "../../context/KeyboardState.context";
+import { KeyboardContext } from "../../context/KeyboardState";
 
 const COLLAPSED_HEIGHT = 32; // 헤더 바 높이(h-8)
 const OPEN_HEIGHT = 220; // 열렸을 때 최소 높이
@@ -74,14 +75,14 @@ export const Bottom = () => {
             <header
                 className="select-none text-sub-gary text-xs w-full h-8 flex items-center justify-between px-0 shrink-0"
                 onDoubleClick={() => (isOpen ? closeFooter() : openFooter())}
-                title="더블클릭 시 터미널 열기/닫기"
+                title={uiText("더블클릭 시 터미널 열기/닫기")}
             >
                 <FooterTabs activeTab={activeTab} onTabChange={handleTabChange} />
                 <button
                     type="button"
                     onClick={() => (isOpen ? closeFooter() : openFooter())}
                     className="px-3 h-full text-muted text-[1.25rem] hover:bg-foreground/5"
-                    aria-label="터미널 열기/닫기"
+                    aria-label={uiText("터미널 열기/닫기")}
                 >
                     {isOpen ? "▾" : "▴"}
                 </button>

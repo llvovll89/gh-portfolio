@@ -1,3 +1,4 @@
+import { uiText } from "../../utils/uiText";
 import { useState } from "react";
 import { usePWAUpdate } from "../../hooks/usePWAUpdate";
 import { SURFACE_LAYERS } from "../../constants/layout";
@@ -26,17 +27,16 @@ export const PWAUpdateBanner = () => {
                        bg-[#1e1e2e] border border-foreground/10 text-foreground text-sm
                        ${closing ? "animate-[fadeOut_0.25s_ease-in_forwards]" : "animate-[fadeIn_0.3s_ease-out]"}`}
         >
-            <span className="text-foreground">새 버전이 있습니다.</span>
+            <span className="text-foreground">{uiText("새 버전이 있습니다.")}</span>
             <button
                 onClick={updateSW}
                 className="px-3 py-1 rounded-lg bg-primary text-slate-950 font-semibold
                            hover:bg-primary/80 transition-colors text-xs"
             >
-                업데이트
-            </button>
+                {uiText("업데이트")}</button>
             <button
                 onClick={handleDismiss}
-                aria-label="닫기"
+                aria-label={uiText("닫기")}
                 className="text-muted hover:text-foreground transition-colors text-lg leading-none"
             >
                 ×

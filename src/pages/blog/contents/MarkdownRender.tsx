@@ -1,3 +1,4 @@
+import { uiText } from "../../../utils/uiText";
 import { memo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -88,9 +89,9 @@ function CodeBlock({ language, codeString }: { language: string; codeString: str
                     color: copied ? "var(--success)" : "var(--text-muted)",
                     border: "1px solid var(--line)",
                 }}
-                aria-label="코드 복사"
+                aria-label={uiText("코드 복사")}
             >
-                {copied ? "복사됨!" : "복사"}
+                {copied ? uiText("복사됨!") : uiText("복사")}
             </button>
         </div>
     );

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { KeyboardContext } from "../../../context/KeyboardState.context";
+import { KeyboardContext } from "../../../context/KeyboardState";
 import { getCliSuggestions, runCliCommand } from "../../../utils/runCliCommand";
 import { exportCliSession, type CliExportFormat } from "../../../utils/exportCliSession";
 import {
@@ -286,7 +286,7 @@ export const Cli = () => {
                 <span className="text-yellow-300 select-none shrink-0">/d/gh-portfolio</span>
                 <span className="text-blue-300 select-none shrink-0">(main)</span>
                 <span className="text-zinc-400 select-none shrink-0">$</span>
-                <textarea
+                <textarea data-cli-input="true"
                     rows={1}
                     autoFocus
                     placeholder="help"

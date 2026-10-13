@@ -1,3 +1,4 @@
+import { uiText } from "../../utils/uiText";
 import { useCallback, useEffect, useState } from "react";
 import ContributionHeatmap from "./ContributionHeatmap";
 import RecentActivityList from "./RecentActivityList";
@@ -73,13 +74,12 @@ const GhActivityDashboard = ({ username }: { username?: string }) => {
 
             {error === "contributions" && !loading && (
                 <div className="mb-3 flex items-center gap-2 text-[12px] text-muted">
-                    <span>contribution 데이터를 불러오지 못했습니다.</span>
+                    <span>{uiText("contribution 데이터를 불러오지 못했습니다.")}</span>
                     <button
                         onClick={fetchContributions}
                         className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
                     >
-                        재시도
-                    </button>
+                        {uiText("재시도")}</button>
                 </div>
             )}
 

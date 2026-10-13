@@ -1,3 +1,4 @@
+import { uiText } from "../../../utils/uiText";
 import { useEffect, useState } from "react";
 import type { TocItem } from "../../../utils/parseToc";
 import { scrollToHeading } from "../../../utils/scrollToHeading";
@@ -55,12 +56,11 @@ export const TableOfContents = ({ items }: Props) => {
     return (
         // sticky top-6: detail-content(h-dvh overflow-y-auto)가 스크롤 컨테이너이므로 정상 동작
         <nav
-            aria-label="목차"
+            aria-label={uiText("목차")}
             className="hidden xl:block sticky top-6 self-start w-52 shrink-0"
         >
             <p className="text-xs font-semibold text-muted uppercase mb-3 tracking-widest">
-                목차
-            </p>
+                {uiText("목차")}</p>
             <ul className="space-y-1 border-l border-line">
                 {items.map((item) => (
                     <li key={item.id}>

@@ -1,8 +1,8 @@
 import { useCallback, useContext, useEffect } from "react";
-import { KeyboardContext } from "@/context/KeyboardState.context";
+import { KeyboardContext } from "@/context/KeyboardState";
 import { LayoutContext } from "@/context/LayoutContext";
 import { NavigationContext } from "@/context/NavigationContext";
-import { TerminalContext } from "@/context/TerminalContext";
+import { TerminalContext } from "@/context/TerminalState";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -45,15 +45,17 @@ export const useKeyboardEvent = () => {
     const handleKeyDown = useCallback(
         (event: KeyboardEvent) => {
             const target = event.target as HTMLElement;
-            const tag = target.tagName.toLowerCase();
+            if (event.defaultPrevented || event.isComposing) return;
+            const tag = target.tagName?.toLowerCase() ?? "";
 
             // 제한된 태그에서는 Ctrl 키가 눌린 경우에만 단축키 허용
             if (
                 RESTRICTED_TAGS.includes(
                     tag as (typeof RESTRICTED_TAGS)[number],
-                ) &&
-                !event.ctrlKey
+                ) || target.isContentEditable
             ) {
+                handleToggleCommandPalette(event, setIsVisibleCommandPalette);
+                if (target.closest("[data-cli-input]")) handleCliEnterEvent(event, setSubmitCliCommand);
                 return;
             }
 
@@ -63,11 +65,8 @@ export const useKeyboardEvent = () => {
             handleTogglePanelUI(event, setLayoutState, setIsTerminalVisible);
 
             // 네비게이션 관련 핸들러 (매치되면 이후 체크 스킵)
-            handleActiveFolderUI(event, setSelectedNav) ||
-            handleActiveSearchUI(event, setSelectedNav) ||
-            handleActiveGitControlUI(event, setSelectedNav) ||
-            handleActiveBookmarksUI(event, setSelectedNav) ||
-            handleActiveSettingsUI(event, setSelectedNav);
+            const navigationHandlers = [handleActiveFolderUI, handleActiveSearchUI, handleActiveGitControlUI, handleActiveBookmarksUI, handleActiveSettingsUI];
+            navigationHandlers.some(handler => handler(event, setSelectedNav));
 
             // 모달 관련 핸들러
             handleCloseKeyboardInfoUI(event, setIsVisibleKeyboardInfo);

@@ -1,3 +1,4 @@
+import { uiText } from "../../../utils/uiText";
 import { useCallback, useEffect, useMemo, useRef, type MouseEvent } from "react";
 
 const MINIMAP_W = 80;
@@ -146,7 +147,7 @@ export const Minimap = ({ content, scrollContainerId }: MinimapProps) => {
                 height={canvasHeight}
                 onClick={handleClick}
                 className="pointer-events-auto opacity-40 hover:opacity-85 transition-opacity duration-200 cursor-pointer rounded-sm"
-                title="미니맵 — 클릭해서 이동"
+                title={uiText("미니맵 — 클릭해서 이동")}
             />
         </div>
     );

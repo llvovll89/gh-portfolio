@@ -1,3 +1,4 @@
+import { uiText } from "../../../utils/uiText";
 import { useState } from 'react'
 import { LuUser, LuMessageSquare, LuKeyRound, LuX } from 'react-icons/lu'
 import hashPassword from '@/utils/hashPassword'
@@ -13,7 +14,7 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
     const handleSubmit = async () => {
         if (submitting) return
         if (!name.trim() || !password || !message.trim()) {
-            setError('이름, 비밀번호, 내용을 모두 입력해주세요.')
+            setError("이름, 비밀번호, 내용을 모두 입력해주세요.")
             return
         }
         setError('')
@@ -25,9 +26,9 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
         } catch (err) {
             const msg = err instanceof Error ? err.message : String(err)
             if (msg.includes('permission-denied') || msg.includes('PERMISSION_DENIED')) {
-                setError('저장 권한이 없습니다. Firebase 보안 규칙을 확인해주세요.')
+                setError("저장 권한이 없습니다. Firebase 보안 규칙을 확인해주세요.")
             } else {
-                setError(`등록 실패: ${msg}`)
+                setError("저장 권한이 없습니다. Firebase 보안 규칙을 확인해주세요.")
             }
         } finally {
             setSubmitting(false)
@@ -37,10 +38,11 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
     return (
         <div className="mt-6 rounded-2xl border border-foreground/10 bg-foreground/5 p-5 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-bold text-foreground">댓글 작성</h3>
+                <h3 className="text-sm font-bold text-foreground">{uiText("댓글 작성")}</h3>
                 <button
                     type="button"
                     onClick={onClose}
+                    aria-label={uiText("닫기")}
                     className="p-1 rounded-lg text-muted hover:text-muted transition-colors cursor-pointer"
                 >
                     <LuX className="w-4 h-4" />
@@ -53,12 +55,12 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
                         <LuUser className="w-4 h-4 text-primary" />
                     </div>
                     <input
-                        id="comment-name"
+                        id="comment-name" maxLength={40}
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-foreground/10 bg-foreground/5 text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-muted transition-all"
-                        placeholder="이름"
-                        aria-label="이름"
+                        placeholder={uiText("이름")}
+                        aria-label={uiText("이름")}
                         autoFocus
                     />
                 </div>
@@ -71,8 +73,8 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-foreground/10 bg-foreground/5 text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-muted transition-all"
-                        placeholder="비밀번호 (수정·삭제 시 필요)"
-                        aria-label="비밀번호"
+                        placeholder={uiText("비밀번호 (수정·삭제 시 필요)")}
+                        aria-label={uiText("비밀번호")}
                     />
                 </div>
             </div>
@@ -82,18 +84,18 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
                     <LuMessageSquare className="w-4 h-4 text-primary" />
                 </div>
                 <textarea
-                    id="comment-message"
+                    id="comment-message" maxLength={2000}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    onKeyDown={(e) => { if (e.ctrlKey && e.key === 'Enter') handleSubmit(); }}
+                    onKeyDown={(e) => { if (!e.nativeEvent.isComposing && (e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); handleSubmit(); } }}
                     rows={3}
                     className="w-full pl-9 pr-4 py-3 rounded-xl border border-foreground/10 bg-foreground/5 text-foreground text-sm outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-muted resize-none transition-all"
-                    placeholder="댓글을 남겨주세요… (Ctrl+Enter로 등록)"
-                    aria-label="댓글 내용"
+                    placeholder={uiText("댓글을 남겨주세요… (Ctrl+Enter로 등록)")}
+                    aria-label={uiText("댓글 내용")}
                 />
             </div>
 
-            {error && <p className="text-xs text-rose-500 mb-3" role="alert">{error}</p>}
+            {error && <p className="text-xs text-rose-500 mb-3" role="alert">{uiText(error)}</p>}
 
             <div className="flex justify-end gap-2">
                 <button
@@ -101,15 +103,14 @@ export function CommentForm({ slug, onClose }: { slug: string; onClose: () => vo
                     onClick={onClose}
                     className="px-4 py-2 text-sm text-muted hover:text-muted rounded-xl bg-foreground/6 hover:bg-foreground/10 transition-all cursor-pointer"
                 >
-                    취소
-                </button>
+                    {uiText("취소")}</button>
                 <button
                     type="button"
                     onClick={handleSubmit}
                     disabled={submitting}
                     className="px-4 py-2 text-sm font-semibold text-foreground rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-50 transition-all cursor-pointer shadow-sm"
                 >
-                    {submitting ? '등록 중...' : '등록'}
+                    {submitting ? uiText("등록 중...") : uiText("등록")}
                 </button>
             </div>
         </div>

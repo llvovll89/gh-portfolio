@@ -76,7 +76,7 @@ body, #root { background: var(--surface); color: var(--text-primary); }
 .project-dialog-image-mobile img { max-height: 380px; }
 .project-dialog-body { padding: 28px; }
 .project-detail-sections { display: grid; gap: 26px; }
-.project-detail-sections h3 { font-weight: 600; color: var(--text-primary); font-size: 14px; margin-bottom: 8px; }
+.project-detail-sections h2, .project-detail-sections h3 { font-weight: 600; color: var(--text-primary); font-size: 14px; margin-bottom: 8px; }
 .project-detail-sections p, .project-detail-sections li { color: var(--text-muted); max-width: 72ch; word-break: keep-all; overflow-wrap: anywhere; }
 .project-detail-role { display: grid; grid-template-columns: 100px minmax(0, 1fr); gap: 16px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
 .project-detail-role h3 { color: var(--text-muted); margin: 0; }

@@ -1,5 +1,6 @@
+import { uiText } from "../../utils/uiText";
 import { useContext, useMemo } from "react";
-import { KeyboardContext } from "../../context/KeyboardState.context";
+import { KeyboardContext } from "../../context/KeyboardState";
 import { Portal } from "../Portal";
 
 const urlRegex = /(https?:\/\/[^\s]+)/g;
@@ -87,8 +88,7 @@ export const LogViewer = () => {
                                 CLI Command Output
                             </p>
                             <p className="text-[10px] sm:text-xs text-muted truncate">
-                                텍스트 / 링크 자동 인식 / 복사 / 다운로드
-                            </p>
+                                {uiText("텍스트 / 링크 자동 인식 / 복사 / 다운로드")}</p>
                         </div>
 
                         <div className="flex items-center gap-1 sm:gap-2 shrink-0">
@@ -97,22 +97,19 @@ export const LogViewer = () => {
                                 className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-medium border border-line bg-panel hover:bg-panel"
                                 type="button"
                             >
-                                복사
-                            </button>
+                                {uiText("복사")}</button>
                             <button
                                 onClick={download}
                                 className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-medium border border-line bg-panel hover:bg-panel"
                                 type="button"
                             >
-                                다운로드
-                            </button>
+                                {uiText("다운로드")}</button>
                             <button
                                 onClick={close}
                                 className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-medium bg-primary text-foreground hover:bg-primary/90"
                                 type="button"
                             >
-                                닫기
-                            </button>
+                                {uiText("닫기")}</button>
                         </div>
                     </header>
 

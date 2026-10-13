@@ -1,7 +1,9 @@
+import { useRouteFocus } from "./hooks/useRouteFocus";
+import { useTranslation } from "react-i18next";
 import {Route, Routes, useLocation} from "react-router-dom";
 import {Suspense, useEffect, useRef} from "react";
 import {GlobalStateProvider} from "./context/GlobalState.context";
-import {TerminalContext} from "./context/TerminalContext";
+import {TerminalContext} from "./context/TerminalState";
 import {KeyboardProvider} from "./context/KeyboardState.context";
 import {routesPath} from "./routes/route";
 import {AppChildContainer} from "./components/appChildContainer/AppChildContainer";
@@ -19,11 +21,13 @@ import {StatusBar} from "./components/statusBar/StatusBar";
 import {useThemeStyle} from "./hooks/useThemeStyle";
 
 function AppContent() {
+    useTranslation();
     const isMobile = useCheckedMobileSize();
     const {backgroundClass, backgroundStyle} = useThemeStyle();
     const location = useLocation();
     const scrollPositionKey = `v2:${isMobile ? "mobile" : "desktop"}:${location.pathname}`;
     usePageTracking();
+    useRouteFocus();
     const scrollPositionsRef = useRef<Record<string, number>>({});
     const isBlogDetailPage =
         location.pathname.startsWith("/blog/") &&
@@ -116,7 +120,9 @@ function App() {
     return (
         <GlobalStateProvider>
             <KeyboardProvider>
-                <AppContent />
+                <PageErrorBoundary pageName="app">
+                    <AppContent />
+                </PageErrorBoundary>
             </KeyboardProvider>
         </GlobalStateProvider>
     );

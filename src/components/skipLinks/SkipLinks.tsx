@@ -1,43 +1,12 @@
-/**
- * SkipLinks - Accessibility component for keyboard navigation
- * Allows users to skip to main content sections
- */
+import { useTranslation } from "react-i18next";
 export const SkipLinks = () => {
-    const handleSkip = (event: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    const { t } = useTranslation();
+    const skip = (event: React.MouseEvent<HTMLAnchorElement>, id: string) => {
         event.preventDefault();
-        const target = document.getElementById(targetId);
-        if (target) {
-            target.focus();
-            target.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
-        }
+        const target = document.getElementById(id) ?? (id === "main-content" ? document.getElementById("detail-content") : null);
+        target?.focus({ preventScroll: true });
     };
-
-    return (
-        <nav
-            aria-label="Skip links"
-            className="skip-links"
-        >
-            <a
-                href="#main-content"
-                onClick={(e) => handleSkip(e, 'main-content')}
-                className="skip-link"
-            >
-                Skip to main content
-            </a>
-            <a
-                href="#main-navigation"
-                onClick={(e) => handleSkip(e, 'main-navigation')}
-                className="skip-link"
-            >
-                Skip to navigation
-            </a>
-            <a
-                href="#header-tabs"
-                onClick={(e) => handleSkip(e, 'header-tabs')}
-                className="skip-link"
-            >
-                Skip to file tabs
-            </a>
-        </nav>
-    );
+    return <nav aria-label={t("accessibility.skip")} className="skip-links">
+        {[["main-content", "main"], ["main-navigation", "navigation"], ["header-tabs", "tabs"]].map(([id, key]) => <a key={id} href={"#" + id} className="skip-link" onClick={event => skip(event, id)}>{t("accessibility." + key)}</a>)}
+    </nav>;
 };

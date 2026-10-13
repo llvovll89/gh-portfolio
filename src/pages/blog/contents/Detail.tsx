@@ -1,6 +1,8 @@
+import { uiText } from "../../../utils/uiText";
 import {useMemo, useState, useEffect, useRef} from "react";
 import {useParams, Link, useNavigate} from "react-router-dom";
-import {loadAllPosts} from "../../../utils/loadAllPosts";
+import {loadAllPosts, loadPost, type BlogPost} from "../../../utils/loadAllPosts";
+import { useTranslation } from "react-i18next";
 import {MarkdownRenderer} from "./MarkdownRender";
 import {parseToc} from "../../../utils/parseToc";
 import {scrollToHeading} from "../../../utils/scrollToHeading";
@@ -11,6 +13,7 @@ import {LuEye, LuChevronLeft, LuChevronRight} from "react-icons/lu";
 import {logger} from "../../../utils/logger";
 import {BlogComments} from "../comments/BlogComments";
 import {useSeoMeta} from "../../../hooks/useSeoMeta";
+import { FeedbackPage } from "../../../components/error/FeedbackPage";
 import {ShareButton} from "../../../components/ShareButton";
 
 // 빌드 타임에 결정되는 정적 데이터 — slug가 바뀔 때마다 재호출 방지
@@ -22,14 +25,23 @@ export const DETAIL_SCROLL_ID = "detail-content";
 export const Detail = () => {
     const {slug} = useParams<{slug: string}>();
     const navigate = useNavigate();
+    const { t } = useTranslation();
+    const [loaded, setLoaded] = useState<{ slug: string; post?: BlogPost; error?: boolean } | null>(null);
+    const [attempt, setAttempt] = useState(0);
+    const metadata = ALL_POSTS.find(item => item.slug === slug);
+    const post = loaded && loaded.slug === slug ? loaded.post : undefined;
+    useEffect(() => {
+        if (!slug || !metadata) return;
+        let active = true;
+        loadPost(slug).then(post => { if (active) setLoaded({ slug, post }); })
+            .catch(() => { if (active) setLoaded({ slug, error: true }); });
+        return () => { active = false; };
+    }, [slug, metadata, attempt]);
 
     const [showScrollButtons, setShowScrollButtons] = useState(false);
     const [viewCount, setViewCount] = useState<number | null>(null);
     const progressBarRef = useRef<HTMLDivElement>(null);
 
-    const post = useMemo(() => {
-        return ALL_POSTS.find((p) => p.slug === slug);
-    }, [slug]);
 
     const {prevPost, nextPost} = useMemo(() => {
         const idx = ALL_POSTS.findIndex((p) => p.slug === slug);
@@ -70,27 +82,27 @@ export const Detail = () => {
             container.removeEventListener("scroll", handleScroll);
             if (rafId !== null) cancelAnimationFrame(rafId);
         };
-    }, []);
+    }, [post]);
 
     // SEO 메타태그 업데이트 (title, og:title, og:description 등)
     useSeoMeta({
-        title: post?.title,
-        description:
-            post?.summary ??
-            (post ? `${post.title} — 김건호 블로그` : undefined),
+        title: metadata?.title,
+        description: metadata?.summary,
         url: slug ? `/blog/${slug}` : undefined,
         type: "article",
+        noIndex: !metadata,
+        publishedTime: metadata?.date,
     });
 
     // 조회수 증가 + 실시간 구독
     useEffect(() => {
-        if (!slug) return;
+        if (!slug || !post) return;
         incrementViewCount(slug).catch((e) =>
             logger.error("조회수 증가 실패", e),
         );
         const unsubscribe = subscribeViewCount(slug, setViewCount);
         return unsubscribe;
-    }, [slug]);
+    }, [slug, post]);
 
     const scrollToTop = () => {
         document
@@ -117,36 +129,11 @@ export const Detail = () => {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [prevPost, nextPost, navigate]);
 
-    if (!slug) {
-        return (
-            <div className="py-6">
-                <p className="text-muted dark:text-muted">
-                    잘못된 접근입니다.
-                </p>
-                <Link
-                    className="mt-3 inline-block underline underline-offset-4"
-                    to="/blog"
-                >
-                    목록으로
-                </Link>
-            </div>
-        );
-    }
-
+    if (!metadata) return <FeedbackPage kind="notFound" backTo="/blog" />;
     if (!post) {
-        return (
-            <div className="py-6">
-                <p className="text-muted dark:text-muted">
-                    글을 찾을 수 없습니다: {slug}
-                </p>
-                <Link
-                    className="mt-3 inline-block underline underline-offset-4"
-                    to="/blog"
-                >
-                    목록으로
-                </Link>
-            </div>
-        );
+        const failed = loaded?.error && loaded.slug === slug;
+        if (failed) return <FeedbackPage kind="loadError" backTo="/blog" onRetry={() => setAttempt(value => value + 1)} />;
+        return <main id="main-content" data-route-loading="true" tabIndex={-1} className="min-h-dvh bg-base-navy p-6 text-foreground"><p role="status">{t("pages.blog.loadingPost")}</p><Link className="workbench-button mt-5" to="/blog">{t("feedback.backToList")}</Link></main>;
     }
 
     return (
@@ -167,6 +154,7 @@ export const Detail = () => {
              */}
             <section
                 id={DETAIL_SCROLL_ID}
+                role="main" tabIndex={-1}
                 className="w-full h-dvh overflow-y-auto scrolls flex flex-col p-4 sm:p-6 md:py-10 md:px-15 bg-base-navy"
             >
                 <div className="mb-4">
@@ -194,13 +182,13 @@ export const Detail = () => {
 
                     <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm select-none text-muted">
                         <span className="text-[clamp(0.75rem,1.5vw,0.9rem)]">
-                            {post.date || "날짜 없음"}
+                            {post.date || uiText("날짜 없음")}
                         </span>
                         {post.readingTime && (
                             <>
                                 <span className="text-muted">•</span>
                                 <span className="text-[clamp(0.75rem,1.5vw,0.9rem)]">
-                                    {post.readingTime}
+                                    {t("pages.blog.readingMinutes", { count: parseInt(post.readingTime, 10) })}
                                 </span>
                             </>
                         )}
@@ -246,8 +234,7 @@ export const Detail = () => {
                         {tocItems.length > 0 && (
                             <details className="xl:hidden mb-5 group rounded-lg border border-line bg-panel">
                                 <summary className="cursor-pointer select-none marker:content-none [&::-webkit-details-marker]:hidden px-4 py-2.5 text-sm font-semibold text-muted flex items-center justify-between">
-                                    목차
-                                    <svg
+                                    {uiText("목차")}<svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"
                                         viewBox="0 0 24 24"
@@ -290,11 +277,11 @@ export const Detail = () => {
                         <div className="flex xl:gap-10 items-start">
                             <div className="flex-1 min-w-0">
                                 <MarkdownRenderer content={post.body} />
-                                <BlogComments slug={slug} />
+                                <BlogComments slug={post.slug} />
                                 {/* 이전/다음 포스트 네비게이션 */}
                                 {(prevPost || nextPost) && (
                                     <nav
-                                        aria-label="포스트 네비게이션"
+                                        aria-label={uiText("포스트 네비게이션")}
                                         className="mt-10 pt-8 border-t border-line grid grid-cols-2 gap-4"
                                     >
                                         {prevPost ? (
@@ -304,8 +291,7 @@ export const Detail = () => {
                                             >
                                                 <span className="flex items-center gap-1 text-xs text-muted group-hover:text-muted">
                                                     <LuChevronLeft className="w-3 h-3" />{" "}
-                                                    이전 글
-                                                </span>
+                                                    {uiText("이전 글")}</span>
                                                 <span className="text-sm text-muted group-hover:text-foreground line-clamp-2 transition-colors">
                                                     {prevPost.title}
                                                 </span>
@@ -319,7 +305,7 @@ export const Detail = () => {
                                                 className="group flex flex-col gap-1 p-4 rounded-xl border border-line hover:border-line bg-panel hover:bg-panel transition-all text-right"
                                             >
                                                 <span className="flex items-center justify-end gap-1 text-xs text-muted group-hover:text-muted">
-                                                    다음 글{" "}
+                                                    {uiText("다음 글")}{" "}
                                                     <LuChevronRight className="w-3 h-3" />
                                                 </span>
                                                 <span className="text-sm text-muted group-hover:text-foreground line-clamp-2 transition-colors">
@@ -349,7 +335,7 @@ export const Detail = () => {
                         <button
                             onClick={goBack}
                             className="fixed left-4 sm:left-6 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-50 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-panel text-foreground shadow-lg hover:bg-panel transition-all duration-300 ease-in-out opacity-90 hover:opacity-100"
-                            aria-label="뒤로가기"
+                            aria-label={uiText("뒤로가기")}
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -370,7 +356,7 @@ export const Detail = () => {
                         <button
                             onClick={scrollToTop}
                             className="fixed right-4 sm:right-6 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-50 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-panel text-foreground shadow-lg hover:bg-panel transition-all duration-300 ease-in-out opacity-90 hover:opacity-100"
-                            aria-label="위로가기"
+                            aria-label={uiText("위로가기")}
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"

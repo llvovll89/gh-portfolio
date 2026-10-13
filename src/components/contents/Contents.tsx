@@ -1,3 +1,4 @@
+import { uiText } from "../../utils/uiText";
 import {useContext, useEffect, useRef, useState} from "react";
 import {LayoutContext} from "../../context/LayoutContext";
 import {useThemeStyle} from "../../hooks/useThemeStyle";
@@ -84,11 +85,11 @@ export const Contents = ({children, className}: ContentsProps) => {
             {showScrollTop && (
                 <button
                     type="button"
-                    aria-label="맨 위로 스크롤"
+                    aria-label={uiText("맨 위로 스크롤")}
                     onClick={() =>
                         sectionRef.current?.scrollTo({
                             top: 0,
-                            behavior: "smooth",
+                            behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
                         })
                     }
                     className="fixed bottom-14 right-4 z-20 p-2.5 rounded-full bg-foreground/10 hover:bg-foreground/20 border border-foreground/10 text-muted hover:text-foreground backdrop-blur-sm transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg"

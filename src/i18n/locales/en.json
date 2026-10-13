@@ -127,7 +127,13 @@
             "noProjectsHint": "Try selecting a different stack or view all",
             "viewAll": "View All",
             "statusUpdating": "Updating",
-            "statusIncomplete": "Incomplete"
+            "statusIncomplete": "Incomplete",
+            "backToProjects": "All projects",
+            "notFound": "Project not found.",
+            "copyLink": "Copy link",
+            "linkCopied": "Project link copied.",
+            "copyError": "Could not copy the link. Please copy it from the address bar.",
+            "screenshot": "{{title}} screenshot"
         },
         "contact": {
             "title": "Contact",
@@ -214,7 +220,13 @@
             "count": {
                 "total": "{{count}} posts",
                 "filtered": "{{filtered}} / {{total}} shown"
-            }
+            },
+            "searching": "Preparing full-text search.",
+            "searchError": "Could not load full-text search. Please try again.",
+            "retry": "Retry",
+            "loadingPost": "Loading article.",
+            "loadError": "Could not load this article. Please try again.",
+            "readingMinutes": "{{count}} min read"
         },
         "resume": {
             "title": "Resume",
@@ -260,7 +272,7 @@
         }
     },
     "routes": {
-        "default": "Default",
+        "default": "Home",
         "tools": "Tools",
         "profile": "Profile",
         "projects": "Projects",
@@ -269,7 +281,9 @@
         "resume": "Resume",
         "uses": "Uses",
         "contact": "Contact",
-        "notFound": "Not Found"
+        "notFound": "Not Found",
+        "home": "Home",
+        "projectDetail": "Project details"
     },
     "common": {
         "add": "Add",
@@ -292,5 +306,352 @@
         "custom": "Custom color",
         "select": "Choose theme (current: {{current}})",
         "selectColor": "Choose color {{color}}"
+    },
+    "projectContent": {
+        "gh-arcade": {
+            "scale": "Personal project",
+            "description": "A browser game platform for discovering and instantly playing strategy, action, and casual games.",
+            "detailedDescription": "A web game platform featuring Three Kingdoms strategy games, Echo Maze, Slither, and more. Players can search by name and tags, filter by genre, and launch games directly. The platform uses React and TypeScript, with Three.js for 3D games.",
+            "role": "Product planning, UI design, game development, and deployment",
+            "contributions": [
+                "Built game search and genre navigation",
+                "Developed strategy, action, and casual games",
+                "Created 3D games with Three.js"
+            ],
+            "projectMembers": [
+                "Geon Ho Kim"
+            ]
+        },
+        "hovie": {
+            "scale": "Personal project",
+            "description": "A movie and TV discovery website powered by the TMDB API.",
+            "detailedDescription": "Browse movies and TV shows by genre, then explore synopses, cast information, and trailers on detail pages. Responsive layouts support both desktop and mobile browsing.",
+            "role": "Planning, UI design, frontend development, and deployment",
+            "challenge": "Help users navigate a large catalog and move naturally from discovery to detailed information.",
+            "contributions": [
+                "Designed the TMDB content discovery structure",
+                "Implemented genre lists and detail pages",
+                "Built responsive layouts and deployed the service"
+            ],
+            "outcome": "Delivered a responsive browsing flow from content discovery to trailer playback.",
+            "projectMembers": [
+                "Geon Ho Kim"
+            ]
+        },
+        "run-river": {
+            "scale": "Personal project",
+            "description": "A running app for planning routes on Kakao Maps and tracking workouts by distance, time, or intervals.",
+            "detailedDescription": "Plan running and walking routes with Kakao Maps and OSRM, then record workouts in distance, time, or interval modes. Features include pace-based MET calorie estimates, shareable workout cards, voice guidance, and weekly challenges. PWA support provides an app-like mobile experience.",
+            "role": "Product planning, full-stack development, and PWA implementation",
+            "challenge": "Connect map-based route planning with workout tracking in a smooth mobile experience.",
+            "contributions": [
+                "Integrated Kakao Maps with OSRM route calculation",
+                "Implemented pace and MET-based workout records",
+                "Added voice guidance, share cards, and PWA support"
+            ],
+            "outcome": "Combined route planning, workout tracking, and sharing into a mobile-focused running experience.",
+            "projectMembers": [
+                "Geon Ho Kim"
+            ]
+        },
+        "kimgeonho-dev": {
+            "scale": "Personal project",
+            "description": "An interactive developer portfolio inspired by the VS Code interface.",
+            "detailedDescription": "A portfolio website inspired by VS Code, featuring a sidebar, terminal, and keyboard shortcuts. It brings together project stories, a technical blog, and GitHub activity, with themes and keyboard navigation.",
+            "role": "UX design, frontend development, and content publishing",
+            "challenge": "Keep the VS Code concept while helping visitors without a development background find key information.",
+            "contributions": [
+                "Built navigation around tabs and a sidebar",
+                "Implemented themes and keyboard shortcuts",
+                "Combined projects and a technical blog"
+            ],
+            "outcome": "Adapted the character of a development tool into a portfolio browsing experience.",
+            "projectMembers": [
+                "Geon Ho Kim"
+            ]
+        },
+        "meallog": {
+            "scale": "Personal project",
+            "description": "A meal tracking web app combining food logging and health management.",
+            "detailedDescription": "Offers meal suggestions by time of day, food and calorie tracking, weight monitoring, and nutrition pattern analysis. An 87-item menu database powers suggestions that avoid repetition. Includes a BMI calculator, photo uploads, and a slot-machine animation interface. PWA support enables app-like use, and records are stored locally in the browser.",
+            "projectMembers": [
+                "Geon Ho Kim"
+            ]
+        },
+        "wedding-plan": {
+            "scale": "Personal project",
+            "description": "A web app for organizing wedding preparations.",
+            "detailedDescription": "Organize wedding schedules, budgets, and checklists in one place. Firebase provides authentication and real-time data synchronization.",
+            "projectMembers": [
+                "Geon Ho Kim"
+            ]
+        },
+        "balance-plan": {
+            "title": "Balance Plan",
+            "scale": "Personal project",
+            "description": "A personal finance app for recording income and expenses and reviewing monthly trends.",
+            "detailedDescription": "Record income and expenses, manage categories, and review monthly spending. The interface helps users understand spending patterns, manage budgets, and improve everyday financial habits.",
+            "projectMembers": [
+                "Geon Ho Kim"
+            ]
+        }
+    },
+    "feedback": {
+        "loading": "Loading page.",
+        "imageUnavailable": "Image unavailable.",
+        "retry": "Try again",
+        "backToList": "Back to list",
+        "home": "Home",
+        "notFound": {
+            "title": "Page not found.",
+            "description": "This address may be incorrect, or the page may have moved. Return to the list or home to find what you need."
+        },
+        "error": {
+            "title": "This page could not be displayed.",
+            "description": "Something went wrong. Try again to reload the page."
+        },
+        "loadError": {
+            "title": "Content could not be loaded.",
+            "description": "Check your internet connection and try again, or return to the list to browse other articles."
+        }
+    },
+    "seo": {
+        "title": "Geon Ho Kim | Web Developer Portfolio",
+        "description": "I'm Geonho Kim, a full-stack web developer building fast, consistent experiences with React and TypeScript, then keeping them reliable in production."
+    },
+    "ui": {
+        "syjelp": "Mobile navigation",
+        "1vs6twp": "Resize sidebar",
+        "6e6x4t": "This bookmark already exists.",
+        "133frt0": "Bookmark name (e.g. React blog)",
+        "lmzi1": "Path (e.g. /blog/react-hooks)",
+        "13bsuns": "Enter a name and a path.",
+        "1xn9jxo": "Add custom bookmark",
+        "1vxz7hu": "Or choose a page:",
+        "17pzz9e": "Clear search",
+        "1eqf0y1": "Searching…",
+        "1l63otp": "results",
+        "1v5p51m": "· Pages",
+        "1bnpcyu": "· Articles",
+        "7z1rnl": "No results",
+        "1m3uc0r": "Remove recent visit",
+        "1ysca86": "Try another keyword.",
+        "1jub44x": "Reset all",
+        "4n1wqr": "Reset",
+        "mycx62": "Restore defaults",
+        "1q9esae": "Shortcuts are saved in this browser.",
+        "1787f9e": "한국어",
+        "1o8ulbp": "Toggle terminal",
+        "untsmh": "Open or close terminal",
+        "eqjmku": "GitHub profile",
+        "6f8ld2": "Velog blog",
+        "duqovm": "Keyboard shortcut help",
+        "1opc44a": "Keyboard shortcuts",
+        "eqpsv8": "Theme: System",
+        "1dcxyjm": "Theme: Light",
+        "1wfr9o": "Theme: Dark",
+        "120sjxl": "Theme: Navy",
+        "1z00mdz": "Theme: Blue",
+        "ds1ash": "Theme: Pink",
+        "1blzpt8": "Theme: Green",
+        "xxveib": "Theme: Teal",
+        "1rykiqd": "Theme: Sage",
+        "a8fywk": "Language: 한국어",
+        "npnyfd": "Language: English",
+        "1hdkjo": "Language: 日本語",
+        "1vowrow": "Show all available keyboard shortcuts.",
+        "124dbnb": "Open or close the terminal panel.",
+        "r7hjxs": "Toggle the file explorer.",
+        "s1myut": "Open or close content search.",
+        "1uvmgb0": "Show or hide the sidebar.",
+        "dcz6m7": "Open or close the bottom panel.",
+        "1vpc1ft": "Reopen the last closed tab.",
+        "1f0ygcj": "Pin or unpin the active tab.",
+        "j9kjpp": "Next theme",
+        "8ni3vk": "Switch to the next theme.",
+        "1yit3id": "Previous theme",
+        "73ivk8": "Switch to the previous theme.",
+        "a2kb9m": "Reset command history",
+        "15jnqra": "Clear recent commands and usage statistics.",
+        "i9u0xb": "Go to Home",
+        "dl63mt": "Open the home page.",
+        "xhczt6": "Go to Projects",
+        "4f7zyu": "Open the projects page.",
+        "1vur0r": "Go to Resume",
+        "22p0fo": "Open the resume page.",
+        "1rcykz8": "Go to Blog",
+        "14phveb": "Open the article list.",
+        "iq3zvc": "Go to Uses",
+        "1szz5py": "Open tools and environment.",
+        "17om0ms": "Go to Contact",
+        "1y7epqs": "Open contact information.",
+        "1hptrgs": "Open Git Control",
+        "1df6zzm": "Toggle Git Control.",
+        "1922bek": "Open Bookmarks",
+        "ojt1mg": "Toggle bookmarks.",
+        "182xud2": "Open Settings",
+        "f9804a": "Toggle settings.",
+        "1mjly2n": "Change the app theme.",
+        "auh2pm": "Change the display language.",
+        "k9x7lz": "Command palette",
+        "klvxuz": "Search commands…",
+        "5wibgu": "No matching commands.",
+        "14sfb0i": "Unpin",
+        "dythqq": "Pin command",
+        "ezn43s": "↑↓ navigate · Enter run · Ctrl/Cmd+K pin · Alt+P pinned only · Esc close",
+        "aorts1": "Scroll to top",
+        "950hbs": "Double-click to toggle terminal",
+        "txuqus": "Copy",
+        "7r9xc5": "Download",
+        "130viys": "No output yet.",
+        "libo6f": "Run a command in the input below.",
+        "u33yvw": "No problems found.",
+        "tftkys": "Show less",
+        "pp8mrj": "Show more",
+        "1aq96a9": "Could not load contributions.",
+        "1e8fmhw": "Could not load recent activity.",
+        "1tytckj": "Try again",
+        "uf2wmv": "Home",
+        "1wbyw1q": "Go home",
+        "1nq30t3": "Pin tab",
+        "11apzn2": "Close",
+        "1dd91zj": "Go back",
+        "ao5wcb": "Go forward",
+        "1k4lfch": "Reload",
+        "shxfqn": "Exit full screen (F11)",
+        "kx3qak": "Full screen (F11)",
+        "1ljofx3": "Toggle explorer",
+        "19odgik": "Toggle search",
+        "1rv4iw7": "Toggle sidebar",
+        "1ec3h3j": "Toggle terminal",
+        "4ygj25": "Toggle bottom panel",
+        "eka5s9": "Open command palette",
+        "3e1n9n": "Toggle shortcut help",
+        "1elyoez": "Run entered command",
+        "z1krfq": "Escape (twice)",
+        "bs94gt": "Close all dialogs and input modes",
+        "17s5ebb": "Move focus (forward / backward)",
+        "5xs0qm": "Move between list items",
+        "1hzklpq": "Common keyboard shortcuts",
+        "mnvhc2": "Tip:",
+        "thteda": "twice to close all open panels.",
+        "z48n2w": "OK",
+        "190f2y5": "Text, links, copy, and download",
+        "1gtgacb": "Dialog opened.",
+        "1wbhctw": "Dialog closed.",
+        "16eton4": "A new version is available.",
+        "7bnyws": "Update",
+        "2400vs": "Share article",
+        "1vcmj4": "Share",
+        "9ancf9": "Sharing options",
+        "1wj4cz3": "Copied!",
+        "135sohl": "Copy link",
+        "1otim7c": "X (Twitter)",
+        "1o6q4qu": "KakaoTalk",
+        "wbqmw4": "Status bar",
+        "1m0kkv": "Blog",
+        "10hto06": "Comments",
+        "1227deg": "Write a comment",
+        "1thuliy": "Be the first to comment.",
+        "4xzvue": "Edit",
+        "149a04s": "Delete",
+        "wht75i": "Enter your name, password, and comment.",
+        "1yqioks": "Could not save your comment. Please try again later.",
+        "1wh5aat": "Name",
+        "1xx9hh1": "Password (needed to edit or delete)",
+        "2tvpw1": "Password",
+        "zwz77x": "Write a comment… (Ctrl/Cmd+Enter to submit)",
+        "1lqmkgx": "Comment",
+        "jiry9t": "Cancel",
+        "16ifhq": "Submitting…",
+        "44cu1f": "Submit",
+        "1x0x5uh": "Enter your password.",
+        "1xnjsxu": "The password does not match.",
+        "1on14kf": "Could not delete the comment.",
+        "1fj4ejn": "Delete comment",
+        "17dxt1q": "Deleted comments cannot be restored.",
+        "bhchor": "Deleting…",
+        "1parsnl": "Could not update the comment.",
+        "1g99ycx": "Edit comment",
+        "7u5y4u": "Confirm password",
+        "8zy6at": "Saving…",
+        "1xp6hfy": "Save",
+        "gv3awd": "Cards",
+        "6iimkx": "No date",
+        "1pycc3o": "Contents",
+        "zk86af": "Article navigation",
+        "1pghcr1": "Previous article",
+        "1fw336d": "Next article",
+        "1qx20t1": "Go back",
+        "89l60l": "Scroll to top",
+        "hc32vy": "Copy code",
+        "hlcpm6": "Minimap: click to navigate",
+        "1uzgbcn": "Contact Geon Ho Kim by email or through the form.",
+        "15vp36o": "Profile, skills, education, and experience of full-stack developer Geon Ho Kim.",
+        "3nhej5": "Web projects by Geon Ho Kim, built with React, TypeScript, and Firebase.",
+        "1vk7jab": "Experience, skills, education, and projects of web developer Geon Ho Kim.",
+        "2y8iqn": "Geon Ho Kim",
+        "198azo5": "Development tools, technology, and workspace used by Geon Ho Kim.",
+        "1r0a5kn": "Development tools",
+        "6r779s": "Tools I use every day.",
+        "1yd1276": "Primary code editor",
+        "12wz1g0": "Version control and collaboration",
+        "4ay1xe": "API testing and development",
+        "mjsd1o": "Technology stack",
+        "1mbeh7h": "Frameworks and libraries I work with.",
+        "18u0303": "Frontend framework",
+        "f2xeao": "Language for type safety",
+        "a1l030": "Utility-based CSS framework",
+        "kecrqk": "Backend framework",
+        "1avxl9a": "Open-source relational database",
+        "orwfcz": "Enterprise database",
+        "bkzu24": "Backend services including Auth and Firestore",
+        "kz5pkl": "Design and collaboration",
+        "1e0znfk": "Design and teamwork tools.",
+        "xf6fxp": "UI/UX design",
+        "di03oc": "Project management and issue tracking",
+        "1w16f6x": "Team communication",
+        "10wtrl5": "Learn more",
+        "1v67dx": "Notes",
+        "1oe9ncz": "These are the tools I currently use. I adapt my toolkit to each project and situation."
+    },
+    "accessibility": {
+        "languageSwitch": "Current language: {{current}}. Switch to {{next}}",
+        "skip": "Skip links",
+        "main": "Skip to main content",
+        "navigation": "Skip to navigation",
+        "tabs": "Skip to file tabs",
+        "close": "Close",
+        "newWindow": "Open {{name}} in a new tab",
+        "breadcrumb": "Breadcrumb",
+        "mainNavigation": "Main navigation"
+    },
+    "palette": {
+        "Layout": "Layout",
+        "Navigation": "Navigation",
+        "Theme": "Theme",
+        "Language": "Language",
+        "System": "System",
+        "pinned": "Pinned",
+        "recent": "Recent",
+        "recommended": "Recommended",
+        "all": "All commands",
+        "pinnedOnly": "Pinned commands only"
+    },
+    "pwa": {
+        "title": "Install this app",
+        "description": "Add this site to your home screen for quick access.",
+        "install": "Install app",
+        "manual": "Open your browser menu and choose Add to Home screen or Install app.",
+        "ios": "Open the browser share menu and choose Add to Home Screen. If that option is unavailable, open the same address in Safari."
+    },
+    "comments": {
+        "loadError": "Could not load comments.",
+        "saveError": "Could not save your comment. Please try again later."
+    },
+    "tabs": {
+        "pin": "Pin {{name}} tab",
+        "unpin": "Unpin {{name}} tab",
+        "close": "Close {{name}} tab"
     }
 }

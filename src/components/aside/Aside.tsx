@@ -1,3 +1,5 @@
+import { useFocusTrap } from "../../hooks/useKeyboardNavigation";
+import { uiText } from "../../utils/uiText";
 import { useContext, useEffect, useRef, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LayoutContext } from "../../context/LayoutContext";
@@ -17,7 +19,7 @@ import { useHandlePushPath } from "../../hooks/useHandlePushPath";
 import { LuBookOpen, LuFolderKanban, LuHouse, LuMail, LuMenu, LuScrollText } from "react-icons/lu";
 
 const MOBILE_PRIMARY_NAV = [
-    { path: DEFAULT, labelKey: "routes.default", Icon: LuHouse },
+    { path: DEFAULT, labelKey: "routes.home", Icon: LuHouse },
     { path: PROJECTS, labelKey: "routes.projects", Icon: LuFolderKanban },
     { path: BLOG, labelKey: "routes.blog", Icon: LuBookOpen },
     { path: RESUME, labelKey: "routes.resume", Icon: LuScrollText },
@@ -38,7 +40,7 @@ export const Aside = () => {
     const isMobileSize = useCheckedMobileSize();
     const { t } = useTranslation();
     const handlePushPath = useHandlePushPath();
-    const sheetRef = useRef<HTMLDivElement>(null);
+    const sheetRef = useFocusTrap(isMobileSize && Boolean(selectedNav && displayedNav));
     const dragState = useRef({ startY: 0, currentY: 0, dragging: false });
     const handleSheetDragStart = useCallback((e: React.PointerEvent) => {
         dragState.current = { startY: e.clientY, currentY: 0, dragging: true };
@@ -47,7 +49,7 @@ export const Aside = () => {
         if (sheetRef.current) {
             sheetRef.current.style.transition = "none";
         }
-    }, []);
+    }, [sheetRef]);
 
     const handleSheetDragMove = useCallback((e: React.PointerEvent) => {
         if (!dragState.current.dragging) return;
@@ -56,7 +58,7 @@ export const Aside = () => {
         if (sheetRef.current) {
             sheetRef.current.style.transform = `translateY(${delta}px)`;
         }
-    }, []);
+    }, [sheetRef]);
 
     const handleSheetDragEnd = useCallback(() => {
         if (!dragState.current.dragging) return;
@@ -87,7 +89,7 @@ export const Aside = () => {
                 }
             }, 300);
         }
-    }, [setSelectedNav]);
+    }, [setSelectedNav, sheetRef]);
 
     const handleClickNav = (nav: NavType) => {
         if (selectedNav === nav) {
@@ -128,6 +130,14 @@ export const Aside = () => {
         }
     }, [isMobileSize, setSelectedNav]);
 
+    useEffect(() => {
+        if (!isMobileSize || !selectedNav || !displayedNav) return;
+        const elements = Array.from(document.querySelectorAll<HTMLElement>('#main-content, header[role="banner"], #main-navigation'));
+        const previous = elements.map(element => element.inert);
+        for (const element of elements) element.inert = true;
+        return () => elements.forEach((element, index) => { element.inert = previous[index]; });
+    }, [isMobileSize, selectedNav, displayedNav]);
+
     // ── 모바일: 하단 네비 + 바텀시트 ──────────────────────────────
     if (isMobileSize) {
         return (
@@ -142,6 +152,9 @@ export const Aside = () => {
 
                         <div
                             ref={sheetRef}
+                            role="dialog" aria-modal="true" aria-label={t("routes.tools")} tabIndex={-1}
+                            aria-hidden={!selectedNav} inert={!selectedNav}
+                            onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); setSelectedNav(null); } }}
                             className={[
                                 "fixed bottom-18 left-0 right-0 z-50 flex flex-col",
                                 "sidebar-sheet transition-[transform,opacity] duration-250 ease-out",
@@ -155,6 +168,7 @@ export const Aside = () => {
                                 ...backgroundStyle,
                             }}
                         >
+                    <button type="button" className="workbench-button self-end mr-3 mt-3" onClick={() => setSelectedNav(null)}>{t("accessibility.close")}</button>
                     {/* 열린 상태에서만 표시하는 핸들 바 */}
                         <div
                             className="flex justify-center pt-3 pb-2 shrink-0 cursor-grab active:cursor-grabbing touch-none select-none"
@@ -205,7 +219,7 @@ export const Aside = () => {
                         backgroundClass,
                     ].join(" ")}
                     style={backgroundStyle}
-                    aria-label="모바일 하단 네비게이션"
+                    aria-label={uiText("모바일 하단 네비게이션")}
                 >
                     {MOBILE_PRIMARY_NAV.map((item) => (
                         <button
@@ -220,14 +234,14 @@ export const Aside = () => {
                                 "min-h-11 h-full flex-1 gap-1",
                                 "transition-colors",
                                 selectedPathState.state === item.path ||
-                                (item.path === BLOG && selectedPathState.state.startsWith("/blog/"))
+                                (item.path !== DEFAULT && selectedPathState.state.startsWith(`${item.path}/`))
                                     ? "text-primary"
                                     : "text-muted hover:text-foreground",
                             ].join(" ")}
                             aria-label={t(item.labelKey)}
                             aria-current={
                                 selectedPathState.state === item.path ||
-                                (item.path === BLOG && selectedPathState.state.startsWith("/blog/"))
+                                (item.path !== DEFAULT && selectedPathState.state.startsWith(`${item.path}/`))
                                     ? "page"
                                     : undefined
                             }
@@ -260,7 +274,7 @@ export const Aside = () => {
         <nav
             id="main-navigation"
             role="navigation"
-            aria-label="Main navigation"
+            aria-label={t("accessibility.mainNavigation")}
             tabIndex={-1}
             ref={asideRef}
             style={{
@@ -284,7 +298,15 @@ export const Aside = () => {
             {selectedNav && (
                 <div
                     role="separator"
-                    aria-label="사이드바 너비 조절"
+                    tabIndex={0}
+                    aria-valuenow={layoutState.resizeSidebarWidth} aria-valuemin={250} aria-valuemax={600}
+                    onKeyDown={event => {
+                        const delta = event.shiftKey ? 50 : 10;
+                        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+                        event.preventDefault();
+                        setLayoutState(previous => ({ ...previous, resizeSidebarWidth: Math.max(250, Math.min(600, window.innerWidth - 320, event.key === "Home" ? 250 : event.key === "End" ? 600 : previous.resizeSidebarWidth + (event.key === "ArrowLeft" ? -delta : delta))) }));
+                    }}
+                    aria-label={uiText("사이드바 너비 조절")}
                     aria-orientation="vertical"
                     className={[
                         "group absolute top-0 right-0 z-10 h-full",
@@ -301,8 +323,6 @@ export const Aside = () => {
                         touchAction: "none",
                     }}
                     onPointerDown={handleMouseDown}
-                    onMouseDown={handleMouseDown}
-                    onTouchStart={handleMouseDown}
                 >
                     {/* grip dots */}
                     <div className="flex flex-col gap-1.5 opacity-40 group-hover:opacity-90 transition-opacity duration-200">

@@ -1,5 +1,6 @@
 export interface Project {
     id: number;
+    slug: string;
     title: string;
     image: string;
     previewImage?: string;
@@ -25,6 +26,7 @@ export interface Project {
 export const projects = [
     {
         id: 7,
+        slug: "gh-arcade",
         title: "GH ARCADE",
         scale: "개인 프로젝트",
         image: "/assets/images/projects/variety-gaming-platform.png",
@@ -41,6 +43,7 @@ export const projects = [
     },
     {
         id: 1,
+        slug: "hovie",
         title: "Hovie",
         scale: "개인 프로젝트",
         image: "/assets/images/projects/hovie.png",
@@ -63,6 +66,7 @@ export const projects = [
     },
     {
         id: 2,
+        slug: "run-river",
         title: "Run River",
         scale: "개인 프로젝트",
         image: "/assets/images/projects/run-river.png",
@@ -87,6 +91,7 @@ export const projects = [
     },
     {
         id: 3,
+        slug: "kimgeonho-dev",
         title: "kimgeonho.dev",
         scale: "개인 프로젝트",
         image: "/assets/images/projects/kimgeonho.png",
@@ -109,6 +114,7 @@ export const projects = [
     },
     {
         id: 4,
+        slug: "meallog",
         title: "MealLog",
         scale: "개인 프로젝트",
         image: "/assets/images/projects/meallog.png",
@@ -126,6 +132,7 @@ export const projects = [
     },
     {
         id: 5,
+        slug: "wedding-plan",
         title: "Wedding Plan",
         scale: "개인 프로젝트",
         image: "/assets/images/projects/weddingPlan.png",
@@ -142,6 +149,7 @@ export const projects = [
     },
     {
         id: 6,
+        slug: "balance-plan",
         title: "잔고플랜",
         scale: "개인 프로젝트",
         image: "/assets/images/projects/잔고플랜.png",
