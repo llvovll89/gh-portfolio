@@ -1,20 +1,16 @@
 rules_version = '2';
 
+// 이 Firebase 프로젝트(carrot-market-4ed07)는 포트폴리오와 Hovie 가 함께 사용합니다.
+// movies / tv / users 규칙은 Hovie 용이므로 삭제하지 마세요.
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // 댓글: 공개 읽기 전용. 생성/수정/삭제는 /api/comments (Admin SDK) 만 가능
-    match /blog_comments/{slug}/entries/{commentId} {
-      allow read: if true;
-      allow write: if false;
-    }
-
-    // 댓글 비밀번호 해시: 클라이언트 접근 전면 차단
-    match /blog_comment_secrets/{slug}/entries/{commentId} {
+    // ── 방명록 (사이트에서 제거됨: 데이터는 보존, 접근 차단) ──
+    match /guestbook/{docId} {
       allow read, write: if false;
     }
 
-    // 조회수: 읽기 공개, 쓰기는 정확히 +1 만 허용
+    // ── 블로그 조회수: 읽기 공개, 쓰기는 정확히 +1 만 ──
     match /blog_views/{slug} {
       allow read: if true;
       allow create: if request.resource.data.keys().hasOnly(['count'])
@@ -24,9 +20,32 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    // 그 외 전부 차단
-    match /{document=**} {
+    // ── 블로그 댓글: 읽기만 공개, 쓰기는 /api/comments(Admin SDK) 전용 ──
+    match /blog_comments/{slug}/entries/{docId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // ── 댓글 비밀번호 해시: 클라이언트 접근 전면 차단 ──
+    match /blog_comment_secrets/{slug}/entries/{docId} {
       allow read, write: if false;
+    }
+
+    // ── 영화 댓글 (Hovie, 기존 유지) ──
+    match /movies/{movieId}/comments/{commentId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ── TV 댓글 (Hovie, 기존 유지) ──
+    match /tv/{tvId}/comments/{commentId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // ── 유저 데이터: 본인만 접근 (기존 유지) ──
+    match /users/{userId}/{document=**} {
+      allow read, write: if request.auth.uid == userId;
     }
   }
 }
