@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
 import { LuEye } from "react-icons/lu";
 import type { BlogPost } from "../../../utils/loadPosts";
-import { getViewCount } from "../../../utils/blogViews";
+import { getListViewCount } from "../../../utils/viewCounts";
 import { getBodySnippet } from "../../../utils/fuseSearch";
 
 interface BlogCardProps {
@@ -27,7 +27,7 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
     );
 
     useEffect(() => {
-        getViewCount(p.slug).then(setViewCount).catch(() => {});
+        getListViewCount(p.slug).then(setViewCount).catch(() => {});
     }, [p.slug]);
 
     // 본문 스니펫: 검색어가 제목·요약에 없고 본문에만 있을 때 표시
