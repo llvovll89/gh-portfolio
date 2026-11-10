@@ -2,6 +2,7 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { KeyboardContext } from "../../../context/KeyboardState";
 import { getCliSuggestions, runCliCommand } from "../../../utils/runCliCommand";
 import { exportCliSession, type CliExportFormat } from "../../../utils/exportCliSession";
+import { askPortfolio } from "../../../utils/askPortfolio";
 import {
     CLI_TUTORIAL_STEPS,
     formatTutorialStep,
@@ -15,7 +16,7 @@ const loadStoredHistory = (): string[] => {
     try {
         const stored = localStorage.getItem(CLI_HISTORY_STORAGE_KEY);
         if (!stored) return [];
-        const parsed = JSON.parse(stored);
+        const parsed: unknown = JSON.parse(stored);
         if (!Array.isArray(parsed)) return [];
         return parsed.filter((value): value is string => typeof value === "string");
     } catch {
@@ -141,12 +142,13 @@ export const Cli = () => {
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (event.key === "Tab") {
+        if (event.key === "Tab" && !event.shiftKey) {
+            // 자동완성 후보가 없으면 Tab 기본 동작(포커스 이동)을 막지 않음 — 키보드 트랩 방지 (WCAG 2.1.2)
+            const nextSuggestions = inputValue.trim() ? getCliSuggestions(inputValue) : [];
+            if (nextSuggestions.length === 0) return;
+
             event.preventDefault();
             event.stopPropagation();
-
-            const nextSuggestions = getCliSuggestions(inputValue);
-            if (nextSuggestions.length === 0) return;
 
             if (nextSuggestions.length === 1) {
                 const only = nextSuggestions[0];
@@ -226,6 +228,18 @@ export const Cli = () => {
             return;
         }
 
+        if (/^ask(\s|$)/i.test(raw)) {
+            const question = raw.slice(3).trim();
+            if (!question) {
+                appendCommandLog(raw, "usage: ask <질문>  (예: ask 어떤 프로젝트를 만들었어?)");
+            } else {
+                appendCommandLog(raw, "🤔 답변을 준비하고 있어요...");
+                void askPortfolio(question).then(answer => appendSystemLog(`ask › ${answer}`));
+            }
+            setInputValue("");
+            return;
+        }
+
         if (raw.toLowerCase().startsWith("export")) {
             const [, maybeFormat] = raw.split(/\s+/);
             const format: CliExportFormat = maybeFormat?.toLowerCase() === "md" ? "md" : "txt";
@@ -288,9 +302,12 @@ export const Cli = () => {
                 <span className="text-zinc-400 select-none shrink-0">$</span>
                 <textarea data-cli-input="true"
                     rows={1}
+                    // 터미널 패널을 열면 바로 명령을 입력하는 것이 기대 UX (VS Code 터미널과 동일)
+                    // eslint-disable-next-line jsx-a11y-x/no-autofocus
                     autoFocus
                     placeholder="help"
-                    className="flex-1 resize-none outline-none bg-transparent text-zinc-100 placeholder:text-zinc-600 leading-relaxed"
+                    aria-label="Terminal command"
+                    className="flex-1 resize-none outline-none focus-visible:ring-1 focus-visible:ring-primary rounded-sm bg-transparent text-zinc-100 placeholder:text-zinc-600 leading-relaxed"
                     value={inputValue}
                     onChange={(event) => {
                         setInputValue(event.target.value);
@@ -301,7 +318,7 @@ export const Cli = () => {
             </div>
 
             {suggestions.length > 0 && inputValue.trim().length > 0 && (
-                <div className="shrink-0 border-t border-foreground/10 px-3 py-1 text-[10px] text-zinc-500 bg-zinc-950">
+                <div className="shrink-0 border-t border-foreground/10 px-3 py-1 text-[11px] text-zinc-500 bg-zinc-950">
                     Tab 자동완성: {suggestions.slice(0, 4).join(" | ")}
                 </div>
             )}

@@ -46,7 +46,7 @@ export const ProjectDetail = () => {
                 {project ? <>
                     <header className="mb-6 flex flex-wrap items-start justify-between gap-4">
                         <div><p className="mb-2 text-sm text-muted">{project.scale}</p><h1 className="text-3xl font-bold text-foreground">{project.title}</h1><p className="mt-3 max-w-2xl text-sm leading-7 text-muted">{project.description}</p></div>
-                        <button type="button" className="workbench-button" onClick={copyLink}>{copyState === "copied" ? <LuCheck aria-hidden="true" /> : <LuLink aria-hidden="true" />}{t("pages.projects.copyLink")}</button>
+                        <button type="button" className="workbench-button" onClick={() => { void copyLink(); }}>{copyState === "copied" ? <LuCheck aria-hidden="true" /> : <LuLink aria-hidden="true" />}{t("pages.projects.copyLink")}</button>
                     </header>
                     <p className="mb-3 text-sm text-muted" role="status">{copyState !== "idle" ? t(`pages.projects.${copyState === "copied" ? "linkCopied" : "copyError"}`) : ""}</p>
                     <div className="mb-6 flex flex-wrap gap-3">
@@ -54,7 +54,7 @@ export const ProjectDetail = () => {
                         {project.link.projectUrl && <a href={project.link.projectUrl} className="workbench-button workbench-button-primary" target="_blank" rel="noreferrer">{t("pages.projects.viewProject")}<LuArrowUpRight aria-hidden="true" /></a>}
                     </div>
                     <div className={`project-dialog-image${project.previewLayout === "mobile" ? " project-dialog-image-mobile" : ""}`}>
-                        <OptimizedImage src={project.previewImage ?? project.image} alt={t("pages.projects.screenshot", { title: project.title })} sizes={project.previewLayout === "mobile" ? "320px" : "(max-width: 639px) calc(100vw - 32px), 896px"} fetchPriority="high" />
+                        <OptimizedImage style={{ viewTransitionName: `project-shot-${project.slug}` }} src={project.previewImage ?? project.image} alt={t("pages.projects.screenshot", { title: project.title })} sizes={project.previewLayout === "mobile" ? "320px" : "(max-width: 639px) calc(100vw - 32px), 896px"} fetchPriority="high" />
                     </div>
                     <div className="project-dialog-body"><CardDescAndSkills project={project} headingLevel={2} /></div>
 

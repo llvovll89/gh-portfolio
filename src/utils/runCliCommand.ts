@@ -1,4 +1,4 @@
-const CLI_COMMANDS = ["help", "date", "echo", "clear", "tip", "git", "export", "tutorial"] as const;
+const CLI_COMMANDS = ["help", "ask", "date", "echo", "clear", "tip", "git", "export", "tutorial"] as const;
 const GIT_SUB_COMMANDS = [
     "status",
     "log",
@@ -48,6 +48,7 @@ export const runCliCommand = (raw: string): string => {
             return [
                 "사용 가능한 명령어:",
                 "  help                 : 도움말",
+                "  ask <질문>           : AI에게 건호에 대해 질문 (예: ask 대표 프로젝트는?)",
                 "  date                 : 현재 시간",
                 "  echo <text>          : 텍스트 출력",
                 "  clear                : 출력 비우기",
