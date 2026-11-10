@@ -72,10 +72,10 @@
             "title": "Profile",
             "skills": "Skills",
             "description": {
-                "intro": "I'm Gunho Kim, a developer passionate about learning new technologies.",
-                "frontend": "While I primarily focus on frontend development, I'm also interested in backend development and strive to grow as a full-stack developer.",
-                "collaboration": "I value collaboration and communication, and aim to grow together with my teammates.",
-                "ux": "I prioritize user experience and am passionate about creating intuitive and user-friendly interfaces."
+                "intro": "I'm Geonho Kim, a full-stack web developer who designs user flows with React and TypeScript and backs them with Spring Boot and PostgreSQL.",
+                "frontend": "I spent about two and a half years building and maintaining web applications as a frontend developer, and now work as a full-stack developer who also owns the backend.",
+                "collaboration": "I care about running features end to end, so I try to understand the UI, APIs, data model, and deployment as one flow.",
+                "ux": "I prioritize the details repeat users feel, such as tabs, shortcuts, and keyboard accessibility. This portfolio is built to that standard."
             },
             "education": {
                 "title": "Education",
@@ -90,7 +90,7 @@
                 "description": "Web application development and maintenance",
                 "currentlyEmployed": "Current"
             },
-            "photoAlt": "Portrait of Geon Ho Kim",
+            "photoAlt": "Portrait of Geonho Kim",
             "skillEvidence": {
                 "frontend": "I build screens, navigation flows, and responsive interfaces with React and TypeScript.",
                 "frontendExamples": "Examples: content discovery in Hovie, tabs and shortcuts in this portfolio, and game search in GH ARCADE.",
@@ -133,7 +133,9 @@
             "copyLink": "Copy link",
             "linkCopied": "Project link copied.",
             "copyError": "Could not copy the link. Please copy it from the address bar.",
-            "screenshot": "{{title}} screenshot"
+            "screenshot": "{{title}} screenshot",
+            "decisions": "Key decisions",
+            "metrics": "Measured results"
         },
         "contact": {
             "title": "Contact",
@@ -144,7 +146,7 @@
                 "copyEmail": "Copy Email",
                 "emailCopied": "Email copied to clipboard!",
                 "name": "Name",
-                "nameValue": "Gunho Kim",
+                "nameValue": "Geonho Kim",
                 "career": "Experience",
                 "careerYearsMonths": "{{years}}yr {{months}}mo",
                 "careerMonths": "{{months}}mo",
@@ -169,7 +171,7 @@
                 "reset": "Reset",
                 "send": "Open mail app",
                 "infoNotice": "This site does not store your message. If your mail app does not open, copy the email address and send it directly.",
-                "directDescription": "Send your message to Geon Ho Kim by email.",
+                "directDescription": "Send your message to Geonho Kim by email.",
                 "directSend": "Send message",
                 "directNotice": "This site does not store messages. An email delivery service forwards your message.",
                 "nameRequired": "Enter your name.",
@@ -226,7 +228,8 @@
             "retry": "Retry",
             "loadingPost": "Loading article.",
             "loadError": "Could not load this article. Please try again.",
-            "readingMinutes": "{{count}} min read"
+            "readingMinutes": "{{count}} min read",
+            "featured": "Featured posts"
         },
         "resume": {
             "title": "Resume",
@@ -257,16 +260,7 @@
             "headlineLine1": "I design user flows",
             "headlineLine2": "built to stay maintainable.",
             "summary": "I'm Geonho Kim, a full-stack web developer building fast, consistent experiences with React and TypeScript, then keeping them reliable in production.",
-            "metricExperience": "Years building",
-            "metricProjects": "Featured projects",
-            "metricPosts": "Technical notes",
             "terminalPreview": "Developer profile terminal preview",
-            "tagline": "Focused on creating experiences that feel <0>\"effortless\"</0> to users,",
-            "taglineSub": "I aim to build fast, consistent UIs as a maintainable web developer.",
-            "bullet1": "Welcome to my website.",
-            "bullet2": "This is a space where I share projects I've developed and my tech blog.",
-            "bullet3": "I aim to provide useful insights based on various tech stacks and development experience.",
-            "cta": "Feel free to look around. Reach out anytime if you have questions!",
             "viewProjects": "View Projects",
             "getInTouch": "Get in Touch"
         }
@@ -319,7 +313,7 @@
                 "Created 3D games with Three.js"
             ],
             "projectMembers": [
-                "Geon Ho Kim"
+                "Geonho Kim"
             ]
         },
         "hovie": {
@@ -335,7 +329,7 @@
             ],
             "outcome": "Delivered a responsive browsing flow from content discovery to trailer playback.",
             "projectMembers": [
-                "Geon Ho Kim"
+                "Geonho Kim"
             ]
         },
         "run-river": {
@@ -351,7 +345,7 @@
             ],
             "outcome": "Combined route planning, workout tracking, and sharing into a mobile-focused running experience.",
             "projectMembers": [
-                "Geon Ho Kim"
+                "Geonho Kim"
             ]
         },
         "kimgeonho-dev": {
@@ -367,7 +361,18 @@
             ],
             "outcome": "Adapted the character of a development tool into a portfolio browsing experience.",
             "projectMembers": [
-                "Geon Ho Kim"
+                "Geonho Kim"
+            ],
+            "decisions": [
+                "Split blog metadata from bodies at build time: listings ship metadata only, and bodies load lazily when a post opens",
+                "Keep the GitHub token in a Vercel function proxy and allowlist paths and query keys to minimize exposure",
+                "Verify comment passwords on the server with scrypt and store hashes in a collection clients cannot read"
+            ],
+            "metrics": [
+                "PWA precache reduced from 328 to 45 files (2.1 MB → 1.8 MB)",
+                "66 blog posts prerendered statically, each with a generated OG image",
+                "Audited against WCAG 2.2 AA and fixed 20+ issues including a keyboard trap, contrast, and labels",
+                "Available in Korean, English, and Japanese"
             ]
         },
         "meallog": {
@@ -375,7 +380,7 @@
             "description": "A meal tracking web app combining food logging and health management.",
             "detailedDescription": "Offers meal suggestions by time of day, food and calorie tracking, weight monitoring, and nutrition pattern analysis. An 87-item menu database powers suggestions that avoid repetition. Includes a BMI calculator, photo uploads, and a slot-machine animation interface. PWA support enables app-like use, and records are stored locally in the browser.",
             "projectMembers": [
-                "Geon Ho Kim"
+                "Geonho Kim"
             ]
         },
         "wedding-plan": {
@@ -383,7 +388,7 @@
             "description": "A web app for organizing wedding preparations.",
             "detailedDescription": "Organize wedding schedules, budgets, and checklists in one place. Firebase provides authentication and real-time data synchronization.",
             "projectMembers": [
-                "Geon Ho Kim"
+                "Geonho Kim"
             ]
         },
         "balance-plan": {
@@ -392,7 +397,7 @@
             "description": "A personal finance app for recording income and expenses and reviewing monthly trends.",
             "detailedDescription": "Record income and expenses, manage categories, and review monthly spending. The interface helps users understand spending patterns, manage budgets, and improve everyday financial habits.",
             "projectMembers": [
-                "Geon Ho Kim"
+                "Geonho Kim"
             ]
         }
     },
@@ -416,10 +421,14 @@
         }
     },
     "seo": {
-        "title": "Geon Ho Kim | Web Developer Portfolio",
+        "title": "Geonho Kim | Web Developer Portfolio",
         "description": "I'm Geonho Kim, a full-stack web developer building fast, consistent experiences with React and TypeScript, then keeping them reliable in production."
     },
     "ui": {
+        "13da27c": "Bottom panel tabs",
+        "1f3ypnj": "Console command input",
+        "ulcsek": "Widen sidebar",
+        "17y5z9e": "Narrow sidebar",
         "syjelp": "Mobile navigation",
         "1vs6twp": "Resize sidebar",
         "6e6x4t": "This bookmark already exists.",
@@ -556,7 +565,6 @@
         "4xzvue": "Edit",
         "149a04s": "Delete",
         "wht75i": "Enter your name, password, and comment.",
-        "1yqioks": "Could not save your comment. Please try again later.",
         "1wh5aat": "Name",
         "1xx9hh1": "Password (needed to edit or delete)",
         "2tvpw1": "Password",
@@ -586,12 +594,11 @@
         "89l60l": "Scroll to top",
         "hc32vy": "Copy code",
         "hlcpm6": "Minimap: click to navigate",
-        "1uzgbcn": "Contact Geon Ho Kim by email or through the form.",
-        "15vp36o": "Profile, skills, education, and experience of full-stack developer Geon Ho Kim.",
-        "3nhej5": "Web projects by Geon Ho Kim, built with React, TypeScript, and Firebase.",
-        "1vk7jab": "Experience, skills, education, and projects of web developer Geon Ho Kim.",
-        "2y8iqn": "Geon Ho Kim",
-        "198azo5": "Development tools, technology, and workspace used by Geon Ho Kim.",
+        "1uzgbcn": "Contact Geonho Kim by email or through the form.",
+        "15vp36o": "Profile, skills, education, and experience of full-stack developer Geonho Kim.",
+        "3nhej5": "Web projects by Geonho Kim, built with React, TypeScript, and Firebase.",
+        "1vk7jab": "Experience, skills, education, and projects of web developer Geonho Kim.",
+        "198azo5": "Development tools, technology, and workspace used by Geonho Kim.",
         "1r0a5kn": "Development tools",
         "6r779s": "Tools I use every day.",
         "1yd1276": "Primary code editor",
@@ -613,7 +620,9 @@
         "1w16f6x": "Team communication",
         "10wtrl5": "Learn more",
         "1v67dx": "Notes",
-        "1oe9ncz": "These are the tools I currently use. I adapt my toolkit to each project and situation."
+        "1oe9ncz": "These are the tools I currently use. I adapt my toolkit to each project and situation.",
+        "1czchw": "Could not save your comment. Please try again later.",
+        "rgbirj": "Geonho Kim"
     },
     "accessibility": {
         "languageSwitch": "Current language: {{current}}. Switch to {{next}}",

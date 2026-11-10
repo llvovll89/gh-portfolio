@@ -3,6 +3,7 @@ title: PostgreSQL 정리
 date: 2026-02-12
 summary: PostgreSQL 기본부터 고급 기능, 성능 최적화까지 실무에서 바로 쓰는 PostgreSQL 완벽 가이드
 tags: [postgresql, database, sql, rdbms, backend]
+category: Backend
 ---
 
 # PostgreSQL 정리 (실무에서 쓰는 PostgreSQL 가이드)

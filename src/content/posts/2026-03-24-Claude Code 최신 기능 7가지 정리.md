@@ -3,6 +3,7 @@ title: Claude Code 2026년 3월 최신 기능 7가지 정리
 date: 2026-03-24
 summary: 2026년 3월 기준 Claude Code에 새롭게 추가된 핵심 기능 7가지를 정리했습니다. 음성 모드, /loop 반복 작업, 1M 토큰 컨텍스트, Channels, Hooks 강화, MCP Elicitation, 시각화 기능까지 한눈에 파악하세요.
 tags: [ClaudeCode, Anthropic, AI, 개발도구, 업데이트, 2026]
+category: AI
 ---
 
 Claude Code는 2026년 3월 한 달에만 버전 2.1.63에서 2.1.76까지 빠르게 업데이트되며 수많은 신기능을 선보였습니다. 단순한 코딩 도구를 넘어 음성 명령, 반복 자동화, 메신저 연동까지 영역을 확장하고 있는 지금, 놓치면 아쉬운 핵심 업데이트 7가지를 정리합니다.

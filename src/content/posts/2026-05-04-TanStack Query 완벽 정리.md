@@ -3,6 +3,7 @@ title: TanStack Query 완벽 정리 — 서버 상태 관리의 표준
 date: 2026-05-04
 summary: TanStack Query v5의 핵심 개념부터 캐싱 전략, 낙관적 업데이트, 무한 스크롤까지 실전 패턴 중심으로 정리합니다. Redux 없이 서버 상태를 우아하게 다루는 방법을 다룹니다.
 tags: [TanStack Query, React Query, React, TypeScript, 서버상태관리, 캐싱]
+category: Frontend
 ---
 
 프론트엔드 상태는 크게 두 종류입니다. UI 상태(모달 열림 여부, 탭 선택 등)와 **서버 상태**(API에서 온 데이터)입니다. Redux나 Zustand 같은 클라이언트 상태 관리 도구로 서버 상태까지 관리하면 로딩·에러 처리, 캐시 무효화, 리페치 로직을 직접 구현해야 합니다. **TanStack Query**는 이 서버 상태 문제를 전문적으로 해결합니다.

@@ -3,6 +3,7 @@ title: Redux & Redux Toolkit 정리
 date: 2026-02-06
 summary: React 상태관리의 정석 - Redux 핵심 개념부터 Redux Toolkit 실전 활용까지
 tags: [redux, redux-toolkit, react, state-management, rtk, rtk-query]
+category: Frontend
 ---
 
 # Redux & Redux Toolkit 정리 (실전 중심)

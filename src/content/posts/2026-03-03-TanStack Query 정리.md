@@ -3,6 +3,7 @@ title: TanStack Query 정리
 date: 2026-03-03
 summary: TanStack Query(React Query)의 핵심 개념부터 캐싱 전략, 무한 스크롤, Optimistic Update까지 실전 예제와 함께 완벽 정리
 tags: [react, tanstack-query, react-query, 캐싱, 비동기, 서버상태관리, fetching]
+category: Frontend
 ---
 
 # TanStack Query 정리

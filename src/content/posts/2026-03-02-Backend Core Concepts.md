@@ -3,6 +3,7 @@ title: Backend Core Concepts
 date: 2026-03-02
 summary: Backend Core Concepts를 정리한 글 입니다.
 tags: [HTTP, API, WAS, SQL]
+category: Backend
 ---
 
 # Backend Core Concepts

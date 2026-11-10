@@ -3,6 +3,7 @@ title: GitHub Actions CI/CD 실전 가이드
 date: 2026-03-25
 summary: GitHub Actions를 활용해 테스트 자동화, 빌드, 배포 파이프라인을 구축하는 방법을 실전 예제 중심으로 정리합니다. 트리거 설정부터 시크릿 관리, 캐싱, 재사용 워크플로우까지 다룹니다.
 tags: [GitHub Actions, CI/CD, DevOps, 자동화, 배포]
+category: DevOps
 ---
 
 코드를 push할 때마다 자동으로 테스트가 돌고, PR이 머지되면 자동으로 배포되는 환경 — 이것이 **CI/CD**의 핵심입니다. **GitHub Actions**는 GitHub 저장소에 내장된 자동화 플랫폼으로, 별도 서비스 없이 `.github/workflows/` 폴더에 YAML 파일만 추가하면 파이프라인을 구성할 수 있습니다.

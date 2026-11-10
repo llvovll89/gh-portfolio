@@ -27,6 +27,8 @@ const BlogGroupedView = lazy(() =>
 );
 
 const ALL_POSTS = loadAllPosts();
+// 개발과 무관한 공부 노트 — 기본 목록에서는 숨기고, 카테고리 선택·검색 시에만 노출
+const NOTES_CATEGORY = "Notes";
 
 const STORAGE_KEYS = {
     SORT_ORDER: "gh-portfolio:blog-sort-order",
@@ -87,10 +89,21 @@ export const Blog = () => {
         [fullText.posts, debouncedQuery, selectedTags, selectedCategory],
     );
 
+    const isDefaultView = !debouncedQuery.trim() && !selectedCategory && selectedTags.length === 0;
+
+    const featuredPosts = useMemo(
+        () => (isDefaultView ? sortPosts(allPosts.filter(post => post.featured), sortOrder) : []),
+        [allPosts, isDefaultView, sortOrder],
+    );
+
     const sortedPosts = useMemo(() => {
         if (debouncedQuery.trim()) return filteredPosts;
-        return sortPosts(filteredPosts, sortOrder);
-    }, [filteredPosts, sortOrder, debouncedQuery]);
+        // 기본 화면: Notes 와 상단에 고정된 대표 글은 일반 목록에서 제외
+        const visible = isDefaultView
+            ? filteredPosts.filter(post => post.category !== NOTES_CATEGORY && !post.featured)
+            : filteredPosts;
+        return sortPosts(visible, sortOrder);
+    }, [filteredPosts, sortOrder, debouncedQuery, isDefaultView]);
 
     const groupedPosts = useMemo(
         () => (viewMode === "grouped" ? groupPostsByTag(sortedPosts) : {}),
@@ -165,7 +178,17 @@ export const Blog = () => {
                                     {t("pages.blog.filter.resetFilters")}
                                 </button>
                             </div>
-                        ) : viewMode === "list" ? (
+                        ) : (
+                            <>
+                            {featuredPosts.length > 0 && (
+                                <section aria-labelledby="blog-featured-title" className="mb-6">
+                                    <h2 id="blog-featured-title" className="mb-3 text-sm font-bold text-muted">{t("pages.blog.featured")}</h2>
+                                    <ul className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                                        {featuredPosts.map((p, i) => <BlogCard key={p.slug} p={p} searchQuery="" index={i} />)}
+                                    </ul>
+                                </section>
+                            )}
+                            {viewMode === "list" ? (
                             <ul className="flex flex-col gap-3 pb-4">
                                 {sortedPosts.map((p, i) => <BlogCard key={p.slug} p={p} searchQuery={debouncedQuery} index={i} />)}
                             </ul>
@@ -179,6 +202,8 @@ export const Blog = () => {
                                     <BlogGroupedView posts={groupedPosts} />
                                 </Suspense>
                             </div>
+                            )}
+                            </>
                         )}
                     </div>
                 </div>
