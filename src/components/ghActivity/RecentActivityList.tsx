@@ -44,7 +44,7 @@ const RecentActivityList = ({ username }: { username: string }) => {
             });
             const res = await fetch(`/api/github?${qs}`);
             if (!res.ok) throw new Error(`events fetch failed: ${res.status}`);
-            setEvents(await res.json());
+            setEvents((await res.json()) as GitHubEvent[]);
         } catch {
             setError(true);
             setEvents([]);
@@ -54,7 +54,9 @@ const RecentActivityList = ({ username }: { username: string }) => {
     }, [username]);
 
     useEffect(() => {
-        fetchEvents();
+        // username이 바뀔 때 외부 API와 동기화하는 데이터 fetch이며, 로딩 상태 전환은 fetch 함수 내부에서 처리되므로 effect가 적절함
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        void fetchEvents();
     }, [fetchEvents]);
 
     if (loading) return <ActivitySkeleton />;
@@ -64,7 +66,7 @@ const RecentActivityList = ({ username }: { username: string }) => {
             <div className="flex items-center gap-2 text-[12px] text-muted">
                 <span>{uiText("activity 데이터를 불러오지 못했습니다.")}</span>
                 <button
-                    onClick={fetchEvents}
+                    onClick={() => { void fetchEvents(); }}
                     className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
                 >
                     {uiText("재시도")}</button>
@@ -102,7 +104,7 @@ const RecentActivityList = ({ username }: { username: string }) => {
             {hasMore && (
                 <button
                     onClick={() => setIsExpanded((s) => !s)}
-                    className="text-[10px] text-muted hover:text-foreground transition-colors text-left"
+                    className="text-[11px] text-muted hover:text-foreground transition-colors text-left"
                 >
                     {isExpanded ? uiText("접기") : `더보기 (${events.length - COLLAPSED_COUNT}개)`}
                 </button>

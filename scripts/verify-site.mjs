@@ -17,20 +17,30 @@ for (const url of urls) {
     assert.match(html, /<meta name="description" content="[^"]+"/, url + ": description");
     assert.match(html, /<h1[^>]*>[^<]+/, url + ": visible static heading");
     assert.ok(html.includes('id="seo-content"'), url + ": static content");
-    const schema = JSON.parse(html.match(/<script id="seo-schema" type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+    const schema = JSON.parse(html.match(/<script id="seo-schema" type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)[1]);
     assert.equal(schema["@context"], "https://schema.org");
+    assert.ok(/<main id="seo-content"[\s\S]*?<\/main><div id="root"><\/div>/.test(html), url + ": prerendered content must sit outside #root");
     if (pathname.startsWith("/blog/")) {
         const article = schema["@graph"].find(item => item["@type"] === "BlogPosting");
-        assert.ok(article?.headline && article.author && article.mainEntityOfPage === url, url + ": article schema");
+        assert.ok(article?.headline && article.author && article.mainEntityOfPage === url && article.dateModified, url + ": article schema");
+        const ogImage = html.match(/property="og:image" content="([^"]+)"/)[1];
+        assert.ok(ogImage.startsWith(root + "/og/posts/") && article.image === ogImage, url + ": per-post OG image");
+        const metadata = await sharp(path.join("dist", new URL(ogImage).pathname)).metadata();
+        assert.ok(metadata.format === "png" && metadata.width === 1200 && metadata.height === 630, url + ": OG image size");
     }
 }
+assert.ok(xml.includes("<lastmod>"), "sitemap lastmod");
+const llms = fs.readFileSync("dist/llms.txt", "utf8");
+assert.match(llms, /^# .+\n\n> .+/, "llms.txt header");
+for (const section of ["## 프로젝트", "## 최신 블로그 글"]) assert.ok(llms.includes(section), "llms.txt " + section);
+assert.ok(llms.includes("](" + root + "/blog/"), "llms.txt post links");
 assert.match(fs.readFileSync("dist/robots.txt", "utf8"), /Sitemap: https:\/\/kimgeonho\.vercel\.app\/sitemap\.xml/);
 assert.ok(fs.readFileSync("dist/404.html", "utf8").includes('content="noindex, follow"'));
 const vercel = JSON.parse(fs.readFileSync("vercel.json", "utf8"));
 assert.equal(vercel.cleanUrls, true);
 assert.ok(!vercel.rewrites?.some(rule => rule.destination === "/"), "unknown URLs must not become soft 404s");
 const sw = fs.readFileSync("dist/sw.js", "utf8");
-assert.ok(!sw.includes('url:"assets/post-body-') && !sw.includes('url:"assets/searchPosts-'), "on-demand article payloads must not be precached");
+assert.ok(!sw.includes('url:"static/post-body-') && !sw.includes('url:"static/searchPosts-'), "on-demand article payloads must not be precached");
 const images = JSON.parse(fs.readFileSync("src/generated/images.json", "utf8"));
 let originalBytes = 0, optimizedBytes = 0;
 for (const [source, image] of Object.entries(images)) {
@@ -42,7 +52,7 @@ for (const [source, image] of Object.entries(images)) {
     optimizedBytes += fs.statSync("public" + image.src).size;
 }
 assert.ok(optimizedBytes < originalBytes * .3, "image budget");
-const cssFiles = fs.readdirSync("dist/assets").filter(file => file.endsWith(".css"));
-const css = cssFiles.map(file => fs.readFileSync("dist/assets/" + file, "utf8")).join("\n");
+const cssFiles = fs.readdirSync("dist/static").filter(file => file.endsWith(".css"));
+const css = cssFiles.map(file => fs.readFileSync("dist/static/" + file, "utf8")).join("\n");
 assert.ok(css.includes('unicode-range:') && css.includes('Pretendard Variable'), "self-hosted font subsets");
-console.log(JSON.stringify({ pages: urls.length, images: Object.keys(images).length, originalImageBytes: originalBytes, optimizedImageBytes: optimizedBytes, seo: "passed", fontSubsets: "passed" }));
+console.log(JSON.stringify({ pages: urls.length, images: Object.keys(images).length, originalImageBytes: originalBytes, optimizedImageBytes: optimizedBytes, seo: "passed", llms: "passed", fontSubsets: "passed" }));

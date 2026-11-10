@@ -11,7 +11,7 @@ import {
     getTextColorFromBg,
     getLogoColorFromBg,
 } from "../../../utils/convertThemeTextColor";
-import { ThemeMode } from "../../../context/constatns/Theme.type";
+import { ThemeMode } from "../../../context/constants/Theme.type";
 
 interface CommonPageHeaderProps {
     title?: string;
@@ -53,9 +53,10 @@ export const CommonPageHeader = ({ title }: CommonPageHeaderProps) => {
 
                 <div className="flex flex-col gap-0.5">
                     <p className="text-[clamp(0.85rem,1.5vw,1.1rem)] font-bold flex items-center gap-1.5">
-                        Geon Ho Kim
+                        Geonho Kim
                         <Img
                             src="/assets/logo/GH_logo_small_white.png"
+                            alt=""
                             className={`${logoColor} w-4 h-4`}
                         />
                     </p>

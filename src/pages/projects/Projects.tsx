@@ -19,7 +19,7 @@ export const Projects = () => {
         <>
             <Header />
             <Aside />
-            <Contents className="select-none gap-4">
+            <Contents className="gap-4">
                 <section className="relative mx-auto w-full max-w-7xl px-2 pb-8 md:px-6">
                     <div className="relative mb-6 sm:mb-10">
                         <div className="flex items-center gap-3 sm:mb-3 mb-1.5">

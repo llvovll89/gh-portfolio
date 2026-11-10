@@ -83,7 +83,7 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
     if (canNativeShare) {
         return (
             <button
-                onClick={handleNativeShare}
+                onClick={() => { void handleNativeShare(); }}
                 aria-label={uiText("포스트 공유")}
                 className={[
                     "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium",
@@ -137,7 +137,7 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                 >
                     <button
                         role="menuitem"
-                        onClick={handleCopy}
+                        onClick={() => { void handleCopy(); }}
                         className={[
                             "w-full flex items-center gap-2.5 px-4 py-2.5 text-sm",
                             "text-zinc-300",

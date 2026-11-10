@@ -1,7 +1,7 @@
 import { useRouteFocus } from "./hooks/useRouteFocus";
 import { useTranslation } from "react-i18next";
 import {Route, Routes, useLocation} from "react-router-dom";
-import {Suspense, useEffect, useRef} from "react";
+import {Suspense, useEffect, useLayoutEffect, useRef} from "react";
 import {GlobalStateProvider} from "./context/GlobalState.context";
 import {TerminalContext} from "./context/TerminalState";
 import {KeyboardProvider} from "./context/KeyboardState.context";
@@ -19,6 +19,14 @@ import {PageErrorBoundary} from "./components/error/PageErrorBoundary";
 import {Toast} from "./components/toast/Toast";
 import {StatusBar} from "./components/statusBar/StatusBar";
 import {useThemeStyle} from "./hooks/useThemeStyle";
+
+// Suspense 경계 안에 두어 lazy 라우트가 실제로 커밋된 뒤에만 프리렌더 콘텐츠를 제거 (페인트 전 교체)
+function PrerenderedContentCleanup() {
+    useLayoutEffect(() => {
+        document.getElementById("seo-content")?.remove();
+    }, []);
+    return null;
+}
 
 function AppContent() {
     useTranslation();
@@ -57,8 +65,10 @@ function AppContent() {
         const container = document.getElementById("main-content");
         if (!container) return;
 
-        const handleScroll = () => {
-            scrollPositionsRef.current[scrollPositionKey] = container.scrollTop;
+        // 스크롤 중에는 메모리만 갱신하고, 저장은 스크롤이 멈춘 뒤·라우트 이탈·페이지 숨김 시점에만 수행
+        let persistTimer: ReturnType<typeof setTimeout> | undefined;
+        const persist = () => {
+            clearTimeout(persistTimer);
             try {
                 localStorage.setItem(
                     "portfolio-scroll-positions",
@@ -69,12 +79,21 @@ function AppContent() {
             }
         };
 
+        const handleScroll = () => {
+            scrollPositionsRef.current[scrollPositionKey] = container.scrollTop;
+            clearTimeout(persistTimer);
+            persistTimer = setTimeout(persist, 300);
+        };
+
         const saved = scrollPositionsRef.current[scrollPositionKey] ?? 0;
         container.scrollTop = saved;
         container.addEventListener("scroll", handleScroll, {passive: true});
+        window.addEventListener("pagehide", persist);
 
         return () => {
             container.removeEventListener("scroll", handleScroll);
+            window.removeEventListener("pagehide", persist);
+            persist();
         };
     }, [scrollPositionKey]);
 
@@ -87,6 +106,7 @@ function AppContent() {
             <AppChildContainer />
 
             <Suspense fallback={<RouteLoading />}>
+                <PrerenderedContentCleanup />
                 <Routes>
                     {routesPath.map((r) => (
                         <Route

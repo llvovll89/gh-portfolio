@@ -1,15 +1,20 @@
+import type { Ref } from "react";
 import type { FooterTab } from "../types";
 
 
 interface TabButtonProps {
+    ref?: Ref<HTMLButtonElement>;
     tab: FooterTab;
     isActive: boolean;
     onClick: () => void;
 }
 
-export const TabButton = ({ tab, isActive, onClick }: TabButtonProps) => {
+export const TabButton = ({ ref, tab, isActive, onClick }: TabButtonProps) => {
     return (
         <button
+            ref={ref}
+            type="button"
+            id={`footer-tab-${tab.id}`}
             role="tab"
             aria-selected={isActive}
             aria-controls={`footer-tabpanel-${tab.id}`}

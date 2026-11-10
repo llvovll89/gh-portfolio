@@ -21,8 +21,8 @@
   <meta property="og:description" content="웹 개발자 김건호의 포트폴리오 및 블로그" />
   <meta property="og:url" content="https://kimgeonho.vercel.app/" />
   <meta property="og:image" content="https://kimgeonho.vercel.app/og/thumbnail.webp" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
+  <meta property="og:image:width" content="1024" />
+  <meta property="og:image:height" content="1024" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
@@ -31,7 +31,12 @@
   <meta name="twitter:image" content="https://kimgeonho.vercel.app/og/thumbnail.webp" />
 
   <link rel="alternate" type="application/rss+xml" title="김건호 블로그" href="/rss.xml" />
-  <title>Geon Ho Kim</title>
+  <title>Geonho Kim</title>
+  <!-- 빌드 시 프리렌더된 #seo-content가 있으면 첫 라우트 커밋 전까지 앱을 숨긴 채 그 위치에 겹쳐 렌더 (깜빡임·CLS 방지) -->
+  <style>#seo-content~#root{position:absolute;inset:0;visibility:hidden;opacity:0;pointer-events:none}</style>
+  <script type="speculationrules">
+    {"prefetch":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/api/*"}},{"not":{"href_matches":"/assets/*"}},{"not":{"selector_matches":"[rel~=nofollow], [download]"}}]},"eagerness":"moderate"}]}
+  </script>
 </head>
 
 <body>

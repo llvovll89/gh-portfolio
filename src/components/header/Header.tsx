@@ -58,11 +58,11 @@ export const Header = () => {
     // 풀스크린 토글 함수
     const toggleFullscreen = useCallback(() => {
         if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch((err) => {
+            document.documentElement.requestFullscreen().catch((err: Error) => {
                 console.error(`풀스크린 전환 실패: ${err.message}`);
             });
         } else {
-            document.exitFullscreen();
+            void document.exitFullscreen();
         }
     }, []);
 
@@ -126,7 +126,7 @@ export const Header = () => {
         if (location.pathname === path) {
             const remaining = selectedPathState.list.filter(item => item !== path);
             const index = selectedPathState.list.indexOf(path);
-            navigate(remaining[Math.max(0, index - 1)] ?? "/");
+            void navigate(remaining[Math.max(0, index - 1)] ?? "/");
         }
         setClosedTabs((prev) => [...prev, path]);
         setPinnedTabs((prev) => prev.filter((p) => p !== path));
@@ -202,12 +202,6 @@ export const Header = () => {
                         const { Icon, colorClass } = getFileIcon(route.path);
                         return (
                             <li
-                                onClick={() =>
-                                    setSelectedPathState((prev) => ({
-                                        ...prev,
-                                        state: route.path,
-                                    }))
-                                }
                                 key={route.path}
                                 className={`${selectedStyle(route.path).bgColor
                                     } min-w-0 sm:min-w-24 md:min-w-30 w-max h-full border-r text-foreground border-sub-gary/30 text-[11px] sm:text-[12px] md:text-[13px] flex items-center cursor-pointer user-select-none gap-1 justify-center px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-inset`}
@@ -226,7 +220,7 @@ export const Header = () => {
                                         togglePinPath(route.path);
                                     }}
                                     aria-label={t(isPinned ? "tabs.unpin" : "tabs.pin", { name: route.name })}
-                                    className={`hidden sm:flex h-full px-1 items-center justify-center cursor-pointer rounded transition-colors shrink-0 ${isPinned ? "text-amber-300" : "text-muted hover:text-foreground"}`}
+                                    className={`hidden sm:flex h-full min-w-6 px-1 items-center justify-center cursor-pointer rounded transition-colors shrink-0 ${isPinned ? "text-primary" : "text-muted hover:text-foreground"}`}
                                     title={isPinned ? uiText("고정 해제") : uiText("탭 고정")}
                                 >
                                     <span className="text-[11px] sm:text-xs">
@@ -269,7 +263,7 @@ export const Header = () => {
                 <div className="flex items-center h-full border-l border-sub-gary/10 shrink-0">
                     {/* 뒤로 가기 버튼 */}
                     <button
-                        onClick={() => navigate(-1)}
+                        onClick={() => { void navigate(-1); }}
                         className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors"
                         title={uiText("뒤로 가기")}
                     >
@@ -293,7 +287,7 @@ export const Header = () => {
 
                     {/* 앞으로 가기 버튼 - 모바일에서 숨김 */}
                     <button
-                        onClick={() => navigate(1)}
+                        onClick={() => { void navigate(1); }}
                         className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors border-l border-sub-gary/10"
                         title={uiText("앞으로 가기")}
                     >
@@ -317,7 +311,7 @@ export const Header = () => {
 
                     {/* 새로고침 버튼 */}
                     <button
-                        onClick={() => navigate(0)}
+                        onClick={() => { void navigate(0); }}
                         className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors border-l border-sub-gary/10"
                         title={uiText("새로고침")}
                     >

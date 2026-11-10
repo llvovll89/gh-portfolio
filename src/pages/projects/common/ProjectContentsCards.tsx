@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LuArrowUpRight, LuFolderOpen } from "react-icons/lu";
-import type { Project } from "../mocks/projectData";
+import type { Project } from "../projectData";
 import { Link } from "react-router-dom";
 import { projectPath, useProjects } from "../useProjects";
 import { ProjectPreview } from "./ProjectPreview";
@@ -16,6 +16,7 @@ const ProjectCard = ({ project, featured = false }: { project: Project; featured
     return (
         <Link
         to={projectPath(project)}
+        viewTransition
         className={`project-card group grid h-full min-w-0 w-full overflow-hidden rounded-2xl border border-foreground/10 bg-panel text-left transition-colors hover:border-primary/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${featured ? "project-card-featured md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]" : ""}`}
     >
         <div className={`relative overflow-hidden bg-inset ${featured ? "aspect-video md:aspect-auto md:min-h-72" : "aspect-video"}`}>
@@ -55,7 +56,9 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
     const visibleSkills = showAllSkills ? allSkills : [...new Set([...primarySkills, ...(selectedSkill ? [selectedSkill] : [])])];
     const filteredProjects = useMemo(() => {
         const base = selectedSkill ? projects.filter((project) => project.skills.includes(selectedSkill)) : projects;
-        return sortKey === "name" ? [...base].sort((a, b) => a.title.localeCompare(b.title, "ko")) : base;
+        if (sortKey === "name") return [...base].sort((a, b) => a.title.localeCompare(b.title, "ko"));
+        // 기본 정렬: 아카이브 프로젝트는 목록 마지막에 배치
+        return [...base].sort((a, b) => Number(a.archived ?? false) - Number(b.archived ?? false));
     }, [projects, selectedSkill, sortKey]);
     const featuredProject = sortKey === "default" ? featuredProjects.find(project => filteredProjects.includes(project)) : undefined;
     const archiveProjects = filteredProjects.filter(project => project.id !== featuredProject?.id);

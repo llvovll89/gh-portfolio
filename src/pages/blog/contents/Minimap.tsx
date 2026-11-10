@@ -135,7 +135,7 @@ export const Minimap = ({ content, scrollContainerId }: MinimapProps) => {
         const { scrollHeight, clientHeight } = container;
         container.scrollTo({
             top: ratio * (scrollHeight - clientHeight),
-            behavior: "smooth",
+            behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
         });
     };
 
@@ -143,6 +143,7 @@ export const Minimap = ({ content, scrollContainerId }: MinimapProps) => {
         <div className="fixed right-0 top-0 h-dvh hidden xl:flex items-center pr-0.5 z-30 pointer-events-none">
             <canvas
                 ref={canvasRef}
+                aria-hidden="true"
                 width={MINIMAP_W}
                 height={canvasHeight}
                 onClick={handleClick}

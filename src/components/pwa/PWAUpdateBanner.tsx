@@ -29,7 +29,7 @@ export const PWAUpdateBanner = () => {
         >
             <span className="text-foreground">{uiText("새 버전이 있습니다.")}</span>
             <button
-                onClick={updateSW}
+                onClick={() => { void updateSW(); }}
                 className="px-3 py-1 rounded-lg bg-primary text-slate-950 font-semibold
                            hover:bg-primary/80 transition-colors text-xs"
             >

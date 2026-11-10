@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
-export type FooterTabType = "problems" | "output" | "terminal" | "console";
+export const FOOTER_TAB_IDS = ["problems", "output", "terminal", "console"] as const;
+export type FooterTabType = (typeof FOOTER_TAB_IDS)[number];
 
 export interface FooterTab {
     id: FooterTabType;

@@ -45,6 +45,8 @@ export const Detail = () => {
 
     const {prevPost, nextPost} = useMemo(() => {
         const idx = ALL_POSTS.findIndex((p) => p.slug === slug);
+        // 존재하지 않는 slug(404)에서는 이전/다음 글을 노출하지 않음
+        if (idx < 0) return {prevPost: null, nextPost: null};
         return {
             prevPost: idx < ALL_POSTS.length - 1 ? ALL_POSTS[idx + 1] : null,
             nextPost: idx > 0 ? ALL_POSTS[idx - 1] : null,
@@ -107,23 +109,25 @@ export const Detail = () => {
     const scrollToTop = () => {
         document
             .getElementById(DETAIL_SCROLL_ID)
-            ?.scrollTo({top: 0, behavior: "smooth"});
+            ?.scrollTo({
+                top: 0,
+                behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+            });
     };
 
-    const goBack = () => navigate("/blog");
+    const goBack = () => { void navigate("/blog"); };
 
     // ← / → 키로 이전/다음 포스트 이동
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (
-                e.target instanceof HTMLInputElement ||
-                e.target instanceof HTMLTextAreaElement
-            )
-                return;
+            // 수정키 조합(Alt+← 뒤로가기 등), 입력·선택 요소, 코드 블록/스크롤 영역·대화상자 내부에서는 무시
+            if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+            const target = e.target instanceof Element ? e.target : null;
+            if (target?.closest("input, textarea, select, [contenteditable='true'], pre, [role='dialog'], [role='slider'], [role='tablist']")) return;
             if (e.key === "ArrowLeft" && prevPost)
-                navigate(`/blog/${prevPost.slug}`);
+                void navigate(`/blog/${prevPost.slug}`);
             if (e.key === "ArrowRight" && nextPost)
-                navigate(`/blog/${nextPost.slug}`);
+                void navigate(`/blog/${nextPost.slug}`);
         };
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);

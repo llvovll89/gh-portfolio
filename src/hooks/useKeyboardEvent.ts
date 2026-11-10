@@ -77,7 +77,7 @@ export const useKeyboardEvent = () => {
                 closedTabs,
                 setClosedTabs,
                 setSelectedPathState,
-                navigate,
+                (path: string) => { void navigate(path); },
             );
 
             handleTogglePinCurrentTab(

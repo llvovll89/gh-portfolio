@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { KeyboardContext } from "../../context/KeyboardState";
 import { keyboardKeyAndStateMock } from "./constants/mock";
 import { Portal } from "../Portal";
-import { useFocusTrap } from "../../hooks/useKeyboardNavigation";
+import { useFocusTrap } from "../../hooks/useFocusTrap";
 
 export const KeyboardInfo = () => {
     const { setIsVisibleKeyboardInfo, isVisibleKeyboardInfo } =
@@ -14,12 +14,14 @@ export const KeyboardInfo = () => {
 
     return (
         <Portal>
+            {/* 백드롭 클릭 닫기는 마우스 보조 동작이며, 키보드는 전역 Escape 2회(handleAllClear) 및 닫기 버튼으로 닫힘 */}
+            {/* eslint-disable-next-line jsx-a11y-x/click-events-have-key-events, jsx-a11y-x/no-noninteractive-element-interactions */}
             <section
                 className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0c1018]/50 backdrop-blur-md"
                 role="dialog"
                 aria-modal="true"
                 aria-label={uiText("키보드 단축키 안내")}
-                onClick={() => setIsVisibleKeyboardInfo(false)}
+                onClick={(e) => { if (e.target === e.currentTarget) setIsVisibleKeyboardInfo(false); }}
             >
                 <div
                     ref={containerRef}
@@ -28,7 +30,6 @@ export const KeyboardInfo = () => {
                         "border border-line bg-panel text-foreground",
                         "shadow-[0_30px_90px_rgba(2,6,23,0.35)]",
                     ].join(" ")}
-                    onClick={(e) => e.stopPropagation()}
                 >
                     {/* subtle highlight */}
                     <div className="pointer-events-none absolute inset-0">
@@ -44,7 +45,7 @@ export const KeyboardInfo = () => {
                             <div className="leading-tight">
                                 <p className="text-xs sm:text-sm font-semibold tracking-tight">
                                     {uiText("키보드 단축키")}</p>
-                                <p className="text-[10px] sm:text-xs text-muted">
+                                <p className="text-[11px] sm:text-xs text-muted">
                                     {uiText("자주 쓰는 키 조합 모음")}</p>
                             </div>
                         </div>
@@ -99,7 +100,7 @@ export const KeyboardInfo = () => {
                     </ul>
 
                     <div className="relative px-3 sm:px-5 py-3 sm:py-4 border-t border-line flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-                        <p className="text-[10px] sm:text-xs text-muted">
+                        <p className="text-[11px] sm:text-xs text-muted">
                             {uiText("팁:")}<span className="font-medium">ESC</span>{uiText("를 두 번 누르면 열려있는 UI를 한 번에 닫을 수 있어요.")}</p>
 
                         <button

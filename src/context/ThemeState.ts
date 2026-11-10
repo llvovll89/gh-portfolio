@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { ThemeMode } from "./constatns/Theme.type";
+import { ThemeMode } from "./constants/Theme.type";
 
 export interface SelectedThemeState {
     mode: ThemeMode;

@@ -7,7 +7,7 @@ const SESSION_KEY = "viewed_posts";
 function hasViewedInSession(slug: string): boolean {
     try {
         const raw = sessionStorage.getItem(SESSION_KEY);
-        const viewed: string[] = raw ? JSON.parse(raw) : [];
+        const viewed = (raw ? JSON.parse(raw) : []) as string[];
         return viewed.includes(slug);
     } catch {
         return false;
@@ -17,7 +17,7 @@ function hasViewedInSession(slug: string): boolean {
 function markViewedInSession(slug: string): void {
     try {
         const raw = sessionStorage.getItem(SESSION_KEY);
-        const viewed: string[] = raw ? JSON.parse(raw) : [];
+        const viewed = (raw ? JSON.parse(raw) : []) as string[];
         if (!viewed.includes(slug)) {
             viewed.push(slug);
             sessionStorage.setItem(SESSION_KEY, JSON.stringify(viewed));

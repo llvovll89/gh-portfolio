@@ -1,3 +1,4 @@
+import { SETTINGS_BADGE_STORAGE_KEY, SETTINGS_UPDATED_EVENT } from "@/constants/settings";
 import { uiText } from "../../../utils/uiText";
 import { useTranslation } from "react-i18next";
 import { CiKeyboard } from "react-icons/ci";
@@ -14,8 +15,6 @@ import { useCheckedMobileSize } from "../../../hooks/useCheckedMobileSize";
 const BOOKMARKS_STORAGE_KEY = "portfolio-bookmarks";
 const BOOKMARKS_UPDATED_EVENT = "portfolio-bookmarks-updated";
 const GIT_SUMMARY_UPDATED_EVENT = "portfolio-git-summary-updated";
-const SETTINGS_BADGE_STORAGE_KEY = "portfolio-settings-has-updates";
-const SETTINGS_UPDATED_EVENT = "portfolio-settings-updated";
 
 interface NavbarProps {
     selectedNav: NavType | null;
@@ -68,7 +67,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                     setBookmarkCount(0);
                     return;
                 }
-                const parsed = JSON.parse(stored);
+                const parsed: unknown = JSON.parse(stored);
                 if (Array.isArray(parsed)) {
                     setBookmarkCount(parsed.length);
                 } else {
@@ -133,7 +132,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
     }, [hasSettingsUpdates, selectedNav]);
 
     return (
-        <nav className="relative w-10 flex flex-col items-center h-full z-10 border-r border-sub-gary/30 text-foreground select-none">
+        <div className="relative w-10 flex flex-col items-center h-full z-10 border-r border-sub-gary/30 text-foreground select-none">
             {/* Main navigation items */}
             <div className="flex-1 flex flex-col w-full">
                 {NAV_ITEMS.map((item) => (
@@ -152,14 +151,21 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                                 ? "bg-sub-gary/20 text-primary"
                                 : "text-foreground hover:bg-sub-gary/10"
                         }`}
-                        aria-label={t(item.labelKey)}
+                        aria-label={
+                            item.type === NavType.BOOKMARKS && bookmarkCount > 0
+                                ? `${t(item.labelKey)} (${bookmarkCount})`
+                                : item.type === NavType.GIT_CONTROL && gitOpenCount > 0
+                                ? `${t(item.labelKey)} (${gitOpenCount})`
+                                : t(item.labelKey)
+                        }
+                        aria-expanded={selectedNav === item.type}
                     >
                         <span className="relative inline-flex">
                             <item.icon className="w-5 h-5" />
                             {item.type === NavType.BOOKMARKS && bookmarkCount > 0 && (
                                 <span
                                     aria-hidden="true"
-                                    className={`absolute -top-1.5 -right-2 min-w-3.5 h-3.5 px-1 rounded-full text-[9px] font-bold leading-3.5 text-center ${selectedNav === NavType.BOOKMARKS ? "bg-primary text-foreground" : "bg-amber-400 text-foreground"}`}
+                                    className={`absolute -top-1.5 -right-2 min-w-3.5 h-3.5 px-1 rounded-full text-[11px] font-bold leading-3.5 text-center bg-primary text-on-accent`}
                                 >
                                     {bookmarkCount > 99 ? "99+" : bookmarkCount}
                                 </span>
@@ -167,7 +173,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                             {item.type === NavType.GIT_CONTROL && gitOpenCount > 0 && (
                                 <span
                                     aria-hidden="true"
-                                    className={`absolute -top-1.5 -right-2 min-w-3.5 h-3.5 px-1 rounded-full text-[9px] font-bold leading-3.5 text-center ${selectedNav === NavType.GIT_CONTROL ? "bg-primary text-foreground" : "bg-cyan-400 text-foreground"}`}
+                                    className={`absolute -top-1.5 -right-2 min-w-3.5 h-3.5 px-1 rounded-full text-[11px] font-bold leading-3.5 text-center bg-primary text-on-accent`}
                                 >
                                     {gitOpenCount > 99 ? "99+" : gitOpenCount}
                                 </span>
@@ -188,7 +194,9 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                 {/* Terminal toggle button - desktop only */}
                 {!isMobileSize && (
                 <button
+                    type="button"
                     onClick={toggleTerminal}
+                    aria-pressed={isTerminalVisible}
                     className="cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center text-foreground hover:bg-sub-gary/10 transition-colors"
                     aria-label={uiText("터미널 토글")}
                     title={uiText("터미널 열기/닫기")}
@@ -223,8 +231,10 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
 
                 {/* Keyboard shortcuts button */}
                 <button
+                    type="button"
                     onClick={toggleKeyboardInfo}
-                    className="focus:outline-none cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center text-foreground hover:bg-sub-gary/10 transition-colors"
+                    aria-expanded={isVisibleKeyboardInfo}
+                    className="cursor-pointer py-2 px-1 w-full h-10 flex items-center justify-center text-foreground hover:bg-sub-gary/10 transition-colors"
                     aria-label={uiText("키보드 단축키 안내")}
                     title={uiText("키보드 단축키")}
                 >
@@ -233,6 +243,6 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
             </div>
 
             {isVisibleKeyboardInfo && <KeyboardInfo />}
-        </nav>
+        </div>
     );
 };

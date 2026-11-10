@@ -22,7 +22,7 @@ function loadTypeScript(file) {
     return exports;
 }
 
-const { ThemeMode } = loadTypeScript("src/context/constatns/Theme.type.ts");
+const { ThemeMode } = loadTypeScript("src/context/constants/Theme.type.ts");
 const { getThemePalette, contrast } = loadTypeScript("src/utils/themePalette.ts");
 const { buildContactMailto } = loadTypeScript("src/utils/contactMailto.ts");
 

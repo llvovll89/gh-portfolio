@@ -27,7 +27,7 @@ export const CommunicationCard = () => {
         <div className="contact-email">
             <LuMail aria-hidden="true" size={24} />
             <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
-            <button type="button" className="workbench-button" onClick={copyEmail}>
+            <button type="button" className="workbench-button" onClick={() => { void copyEmail(); }}>
                 {copyStatus === "copied" ? <LuCheck aria-hidden="true" /> : <LuCopy aria-hidden="true" />}
                 {t("pages.contact.communicationCard.copyEmail")}
             </button>

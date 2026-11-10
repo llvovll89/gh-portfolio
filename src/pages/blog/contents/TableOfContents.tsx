@@ -67,6 +67,7 @@ export const TableOfContents = ({ items }: Props) => {
                         <a
                             href={`#${item.id}`}
                             onClick={(e) => handleClick(e, item.id)}
+                            aria-current={activeId === item.id ? "location" : undefined}
                             className={`block text-[0.8rem] leading-snug py-1 border-l-2 -ml-px transition-colors duration-150
                                 ${item.level === 3 ? "pl-5" : "pl-3"}
                                 ${

@@ -61,9 +61,11 @@ export const LogViewer = () => {
 
     return (
         <Portal>
+            {/* 백드롭 클릭 닫기는 마우스 보조 동작이며, 키보드는 전역 Escape 2회(handleAllClear) 및 닫기 버튼으로 닫힘 */}
+            {/* eslint-disable-next-line jsx-a11y-x/click-events-have-key-events, jsx-a11y-x/no-noninteractive-element-interactions */}
             <section
                 className="select-none fixed inset-0 z-999 flex items-center justify-center p-4 bg-[#0c1018]/50 backdrop-blur-md"
-                onClick={close}
+                onClick={(e) => { if (e.target === e.currentTarget) close(); }}
                 role="dialog"
                 aria-modal="true"
                 aria-label="CLI Command Output"
@@ -74,7 +76,6 @@ export const LogViewer = () => {
                         "border border-line bg-panel text-foreground",
                         "shadow-[0_30px_90px_rgba(2,6,23,0.35)]",
                     ].join(" ")}
-                    onClick={(e) => e.stopPropagation()}
                 >
                     {/* highlight */}
                     <div className="pointer-events-none absolute inset-0">
@@ -87,26 +88,26 @@ export const LogViewer = () => {
                             <p className="text-xs sm:text-sm font-semibold tracking-tight">
                                 CLI Command Output
                             </p>
-                            <p className="text-[10px] sm:text-xs text-muted truncate">
+                            <p className="text-[11px] sm:text-xs text-muted truncate">
                                 {uiText("텍스트 / 링크 자동 인식 / 복사 / 다운로드")}</p>
                         </div>
 
                         <div className="flex items-center gap-1 sm:gap-2 shrink-0">
                             <button
-                                onClick={copy}
-                                className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-medium border border-line bg-panel hover:bg-panel"
+                                onClick={() => { void copy(); }}
+                                className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[11px] sm:text-xs font-medium border border-line bg-panel hover:bg-panel"
                                 type="button"
                             >
                                 {uiText("복사")}</button>
                             <button
                                 onClick={download}
-                                className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-medium border border-line bg-panel hover:bg-panel"
+                                className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[11px] sm:text-xs font-medium border border-line bg-panel hover:bg-panel"
                                 type="button"
                             >
                                 {uiText("다운로드")}</button>
                             <button
                                 onClick={close}
-                                className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-medium bg-primary text-foreground hover:bg-primary/90"
+                                className="rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-[11px] sm:text-xs font-medium bg-primary text-foreground hover:bg-primary/90"
                                 type="button"
                             >
                                 {uiText("닫기")}</button>
@@ -115,14 +116,14 @@ export const LogViewer = () => {
 
                     <div className="relative max-h-[60vh] sm:max-h-[70vh] overflow-auto p-3 sm:p-4">
                         <div className="rounded-xl border border-line bg-panel text-foreground overflow-hidden">
-                            <div className="flex items-center gap-2 px-3 sm:px-4 py-2 border-b border-foreground/10 text-[10px] sm:text-[11px] text-muted">
+                            <div className="flex items-center gap-2 px-3 sm:px-4 py-2 border-b border-foreground/10 text-[11px] text-muted">
                                 <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-red-400/80" />
                                 <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-yellow-300/80" />
                                 <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-green-400/80" />
                                 <span className="ml-1 sm:ml-2">Output</span>
                             </div>
 
-                            <pre className="m-0 p-3 sm:p-4 text-[10px] sm:text-xs leading-relaxed font-mono whitespace-pre-wrap">
+                            <pre className="m-0 p-3 sm:p-4 text-[11px] sm:text-xs leading-relaxed font-mono whitespace-pre-wrap">
                                 {lines.map((line, idx) => (
                                     <div key={idx} className="wrap-break-word">
                                         {renderWithLinks(line)}

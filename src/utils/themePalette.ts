@@ -1,4 +1,4 @@
-import { ThemeMode, THEME_COLORS } from "../context/constatns/Theme.type";
+import { ThemeMode, THEME_COLORS } from "../context/constants/Theme.type";
 
 const rgb = (hex: string) => [1, 3, 5].map(offset => parseInt(hex.slice(offset, offset + 2), 16));
 const validHex = (hex?: string): hex is string => !!hex && /^#[\da-f]{6}$/i.test(hex);

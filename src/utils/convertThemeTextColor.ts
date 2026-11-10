@@ -1,4 +1,4 @@
-import type { ThemeMode } from "../context/constatns/Theme.type";
+import type { ThemeMode } from "../context/constants/Theme.type";
 
 // Legacy helpers now resolve through the shared palette, including custom colors.
 export const convertThemeTextColor = (mode: ThemeMode): string => { void mode; return "text-foreground"; };

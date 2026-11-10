@@ -65,7 +65,7 @@ export type Commit = {
 
 export type GitHubIssueResponse = {
     pull_request?: unknown;
-    labels: Array<{ name: string; color: string } | unknown>;
+    labels: unknown[];
 } & Omit<Issue, 'labels'>;
 
 export type RepoState = {

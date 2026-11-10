@@ -83,6 +83,8 @@ export const Search = () => {
                         type="text"
                         placeholder={t("search.placeholder")}
                         className="focus:border-primary transition-all w-full h-7 bg-base-navy border border-sub-gary/30 rounded-sm px-2 pr-7 tracking-wide text-foreground outline-none text-xs"
+                        // 검색 패널을 열면 바로 입력하는 것이 기대 UX (VS Code 검색 패널과 동일)
+                        // eslint-disable-next-line jsx-a11y-x/no-autofocus
                         autoFocus
                         role="combobox"
                         aria-expanded={showResults}
@@ -102,7 +104,7 @@ export const Search = () => {
                 </div>
 
                 {showResults && (
-                    <div className="text-[10px] text-muted px-0.5 flex items-center gap-1">
+                    <div className="text-[11px] text-muted px-0.5 flex items-center gap-1">
                         {isDebouncing ? (
                             <span className="animate-pulse">{uiText("검색 중…")}</span>
                         ) : hasAnyResults ? (
@@ -131,6 +133,8 @@ export const Search = () => {
                     </div>
                     <ul className="flex flex-col gap-0.5">
                         {searchHistory.map((term, idx) => (
+                            // 키보드는 검색 input의 ArrowUp/Down/Enter(handleKeyDown)로 조작하며, 항목 클릭은 마우스 보조 동작
+                            // eslint-disable-next-line jsx-a11y-x/click-events-have-key-events, jsx-a11y-x/no-noninteractive-element-interactions
                             <li
                                 key={idx}
                                 onMouseEnter={() => setActiveIndex(idx)}
@@ -156,7 +160,7 @@ export const Search = () => {
                         <span>{t("search.recentVisits")}</span>
                         <button
                             onClick={() => persistRecents([])}
-                            className="flex items-center gap-1 hover:text-primary transition-colors text-[10px]"
+                            className="flex items-center gap-1 hover:text-primary transition-colors text-[11px]"
                             title={t("search.clearAll")}
                         >
                             <MdClearAll fontSize={14} />
@@ -172,15 +176,20 @@ export const Search = () => {
                                 return (
                                     <li
                                         key={r!.path}
-                                        onClick={() => openRoute(r!.path)}
                                         className={[
                                             "w-full h-8 flex items-center px-3 text-foreground text-xs cursor-pointer gap-2 rounded-sm relative",
                                             "hover:bg-primary/20",
                                             selectedPathState.state === r!.path ? "bg-sub-gary/20" : "",
                                         ].join(" ")}
                                     >
-                                        <Icon className={`w-4 h-4 shrink-0 ${colorClass}`} />
-                                        <span className="truncate flex-1">{r!.name}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => openRoute(r!.path)}
+                                            className="flex flex-1 min-w-0 h-full items-center gap-2 text-left cursor-pointer"
+                                        >
+                                            <Icon className={`w-4 h-4 shrink-0 ${colorClass}`} />
+                                            <span className="truncate flex-1">{r!.name}</span>
+                                        </button>
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
@@ -217,7 +226,7 @@ export const Search = () => {
                         <>
                             {results.length > 0 && (
                                 <section>
-                                    <div className="px-2 py-1 mb-1 text-[10px] text-muted uppercase tracking-widest flex items-center gap-1">
+                                    <div className="px-2 py-1 mb-1 text-[11px] text-muted uppercase tracking-widest flex items-center gap-1">
                                         <FcOpenedFolder className="w-3 h-3" />
                                         Pages
                                         <span className="ml-auto text-muted normal-case tracking-normal">{results.length}</span>
@@ -227,6 +236,8 @@ export const Search = () => {
                                             const isActive = idx === activeIndex;
                                             const { Icon, colorClass } = getFileIcon(r.path);
                                             return (
+                                                // combobox 패턴: 키보드는 input의 aria-activedescendant + ArrowUp/Down/Enter로 조작
+                                                // eslint-disable-next-line jsx-a11y-x/click-events-have-key-events
                                                 <li
                                                     id={`search-option-${idx}`}
                                                     role="option"
@@ -254,7 +265,7 @@ export const Search = () => {
 
                             {blogResults.length > 0 && (
                                 <section className={results.length > 0 ? "mt-3" : ""}>
-                                    <div className="px-2 py-1 mb-1 text-[10px] text-muted uppercase tracking-widest flex items-center gap-1">
+                                    <div className="px-2 py-1 mb-1 text-[11px] text-muted uppercase tracking-widest flex items-center gap-1">
                                         <FiFileText className="w-3 h-3" />
                                         Blog Posts
                                         <span className="ml-auto text-muted normal-case tracking-normal">{blogResults.length}</span>
@@ -264,6 +275,8 @@ export const Search = () => {
                                             const globalIdx = results.length + idx;
                                             const isActive = globalIdx === activeIndex;
                                             return (
+                                                // combobox 패턴: 키보드는 input의 aria-activedescendant + ArrowUp/Down/Enter로 조작
+                                                // eslint-disable-next-line jsx-a11y-x/click-events-have-key-events
                                                 <li
                                                     id={`search-option-${globalIdx}`}
                                                     role="option"
@@ -285,13 +298,13 @@ export const Search = () => {
                                                     </div>
 
                                                     {post.snippet && (
-                                                        <p className="pl-5 mt-0.5 text-[10px] text-muted leading-relaxed line-clamp-2">
+                                                        <p className="pl-5 mt-0.5 text-[11px] text-muted leading-relaxed line-clamp-2">
                                                             <HighlightedText text={post.snippet} keywords={keywords} />
                                                         </p>
                                                     )}
 
                                                     {(post.date || (post.tags?.length ?? 0) > 0) && (
-                                                        <div className="flex items-center gap-2 pl-5 mt-0.5 text-[10px] text-muted">
+                                                        <div className="flex items-center gap-2 pl-5 mt-0.5 text-[11px] text-muted">
                                                             {post.date && <span>{post.date}</span>}
                                                             {post.tags?.slice(0, 3).map((tag) => (
                                                                 <span key={tag} className="text-primary/50">#{tag}</span>

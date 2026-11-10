@@ -42,7 +42,7 @@ const GhActivityDashboard = ({ username }: { username?: string }) => {
             const res = await fetch(`/api/contributions?${qs}`);
             if (!res.ok) throw new Error(`${res.status}`);
 
-            const json: ContributionsResponse = await res.json();
+            const json = (await res.json()) as ContributionsResponse;
             const calendar = json.data?.user?.contributionsCollection?.contributionCalendar;
 
             setWeeks(calendar?.weeks ?? []);
@@ -55,7 +55,9 @@ const GhActivityDashboard = ({ username }: { username?: string }) => {
     }, [user]);
 
     useEffect(() => {
-        fetchContributions();
+        // user가 바뀔 때 외부 API와 동기화하는 데이터 fetch이며, 로딩 상태 전환은 fetch 함수 내부에서 처리되므로 effect가 적절함
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        void fetchContributions();
     }, [fetchContributions]);
 
     return (
@@ -76,7 +78,7 @@ const GhActivityDashboard = ({ username }: { username?: string }) => {
                 <div className="mb-3 flex items-center gap-2 text-[12px] text-muted">
                     <span>{uiText("contribution 데이터를 불러오지 못했습니다.")}</span>
                     <button
-                        onClick={fetchContributions}
+                        onClick={() => { void fetchContributions(); }}
                         className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
                     >
                         {uiText("재시도")}</button>

@@ -2,7 +2,7 @@ import { uiText } from "../../utils/uiText";
 import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
-import { CommunicationCard } from "./contents/CommnuiCationCard";
+import { CommunicationCard } from "./contents/CommunicationCard";
 import { MessageCardForm } from "./contents/MessageCardForm";
 import { LuMailOpen } from "react-icons/lu";
 import { useTranslation } from "react-i18next";

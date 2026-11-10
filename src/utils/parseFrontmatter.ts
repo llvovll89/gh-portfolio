@@ -1,4 +1,4 @@
-export type Frontmatter = Record<string, unknown>;
+export type Frontmatter = Record<string, string | string[]>;
 
 export function parseFrontmatter(markdown: string): {
     frontmatter: Frontmatter;

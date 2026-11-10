@@ -1,3 +1,4 @@
+import { SETTINGS_STORAGE_KEY, SETTINGS_BADGE_STORAGE_KEY, SETTINGS_UPDATED_EVENT } from "@/constants/settings";
 import { Portal } from "../Portal";
 import { useModalBackground } from "../../hooks/useModalBackground";
 import { uiText } from "../../utils/uiText";
@@ -16,7 +17,7 @@ import {
     SHORTCUT_DESCRIPTIONS_JA,
 } from "@/constants/keyboardConstants";
 import { KeyboardShortcutId } from "@/types/Keyboard.types";
-import { useFocusTrap } from "@/hooks/useKeyboardNavigation";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useHandlePushPath } from "@/hooks/useHandlePushPath";
 import {
     BLOG,
@@ -25,16 +26,13 @@ import {
     RESUME,
     USES,
 } from "@/routes/route";
-import { ThemeMode } from "@/context/constatns/Theme.type";
+import { ThemeMode } from "@/context/constants/Theme.type";
 import { useTranslation } from "react-i18next";
 
 const RECENT_COMMANDS_STORAGE_KEY = "portfolio-command-palette-recent";
 const PINNED_COMMANDS_STORAGE_KEY = "portfolio-command-palette-pinned";
 const COMMAND_USAGE_STATS_STORAGE_KEY = "portfolio-command-palette-usage-stats";
 const COMMAND_USAGE_STORAGE_VERSION = 1;
-const SETTINGS_STORAGE_KEY = "portfolio-settings";
-const SETTINGS_BADGE_STORAGE_KEY = "portfolio-settings-has-updates";
-const SETTINGS_UPDATED_EVENT = "portfolio-settings-updated";
 const MAX_RECENT_COMMANDS = 6;
 const MAX_PINNED_COMMANDS = 8;
 const MAX_RECOMMENDED_COMMANDS = 5;
@@ -104,8 +102,8 @@ function readStoredList(key: string): string[] {
 }
 function readUsageStats(): CommandUsageStats {
     try {
-        const stored = JSON.parse(localStorage.getItem(COMMAND_USAGE_STATS_STORAGE_KEY) ?? "{}");
-        const stats = stored.stats ?? stored;
+        const stored = JSON.parse(localStorage.getItem(COMMAND_USAGE_STATS_STORAGE_KEY) ?? "{}") as { stats?: unknown };
+        const stats = (stored.stats ?? stored) as Record<string, unknown>;
         return Object.fromEntries(Object.entries(stats).filter(([, value]) => {
             if (!value || typeof value !== "object") return false;
             const entry = value as { count?: unknown; lastUsedAt?: unknown };
@@ -156,9 +154,9 @@ export const CommandPalette = () => {
     useModalBackground(isVisibleCommandPalette);
 
     const setLanguage = (next: "ko" | "en" | "ja") => {
-        i18n.changeLanguage(next);
+        void i18n.changeLanguage(next);
         try {
-            const existing = JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY) ?? "{}");
+            const existing = JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY) ?? "{}") as Record<string, unknown>;
             localStorage.setItem(
                 SETTINGS_STORAGE_KEY,
                 JSON.stringify({ ...existing, language: next }),
@@ -800,9 +798,12 @@ export const CommandPalette = () => {
     if (!isVisibleCommandPalette) return null;
 
     return (
-        <Portal><div
+        <Portal>
+        {/* 백드롭 클릭 닫기는 마우스 보조 동작이며, 키보드는 input의 Escape(handleKeyDown)로 닫힘 */}
+        {/* eslint-disable-next-line jsx-a11y-x/click-events-have-key-events, jsx-a11y-x/no-noninteractive-element-interactions */}
+        <div
             className="fixed inset-0 z-50 flex items-start justify-center bg-inverse/50 pt-12 sm:pt-16 md:pt-24 px-4"
-            onClick={closeCommandPalette}
+            onClick={(e) => { if (e.target === e.currentTarget) closeCommandPalette(); }}
             role="dialog"
             aria-modal="true"
             aria-label={uiText("명령 팔레트")}
@@ -810,7 +811,6 @@ export const CommandPalette = () => {
             <div
                 ref={containerRef}
                 className="w-full max-w-sm sm:max-w-lg md:max-w-2xl rounded-lg bg-panel shadow-2xl"
-                onClick={(e) => e.stopPropagation()}
             >
                 {/* 검색 입력 */}
                 <div className="border-b border-line p-4">
@@ -824,7 +824,7 @@ export const CommandPalette = () => {
                         }}
                         onKeyDown={handleKeyDown}
                         placeholder={uiText("명령을 입력하세요...")}
-                        className="w-full bg-transparent text-foreground outline-none placeholder:text-muted"
+                        className="w-full rounded-sm bg-transparent text-foreground outline-none placeholder:text-muted focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:ring-offset-panel"
                         role="combobox" aria-haspopup="grid"
                         aria-expanded="true"
                         aria-controls="command-list"
@@ -832,7 +832,7 @@ export const CommandPalette = () => {
                         aria-label={uiText("명령 팔레트")}
                     />
                     {showPinnedOnly && (
-                        <div className="mt-2 inline-flex items-center rounded bg-amber-400/15 px-2 py-1 text-[11px] text-amber-200">
+                        <div className="mt-2 inline-flex items-center rounded border border-primary px-2 py-1 text-[11px] text-primary">
                             {t("palette.pinnedOnly")}
                         </div>
                     )}
@@ -853,7 +853,7 @@ export const CommandPalette = () => {
                                 return (
                                     <div
                                         key={row.id}
-                                        className="px-4 py-2 text-[10px] uppercase tracking-[0.08em] text-muted bg-panel border-y border-line"
+                                        className="px-4 py-2 text-[11px] uppercase tracking-[0.08em] text-muted bg-panel border-y border-line"
                                     >
                                         {row.label}
                                     </div>
@@ -865,6 +865,8 @@ export const CommandPalette = () => {
                             const isPinned = pinnedCommandIds.includes(command.id);
 
                             return (
+                                // grid 패턴: 포커스는 input에 두고 aria-activedescendant + 방향키/Enter로 행을 조작
+                                // eslint-disable-next-line jsx-a11y-x/click-events-have-key-events, jsx-a11y-x/interactive-supports-focus
                                 <div
                                     key={command.id}
                                     id={`command-${index}`}
@@ -880,7 +882,7 @@ export const CommandPalette = () => {
                                     <span role="gridcell" className="flex flex-col gap-0.5 min-w-0">
                                         <span className="text-sm flex items-center gap-2">
                                             <Highlight text={command.label} query={searchQuery} />
-                                            <span className="rounded px-1.5 py-0.5 text-[10px] leading-none bg-foreground/10 text-foreground">
+                                            <span className="rounded px-1.5 py-0.5 text-[11px] leading-none bg-foreground/10 text-foreground">
                                                 {t("palette." + command.category)}
                                             </span>
                                         </span>
@@ -898,8 +900,8 @@ export const CommandPalette = () => {
                                             }}
                                             aria-label={uiText(isPinned ? "고정 해제" : "명령 고정")}
                                             title={isPinned ? uiText("고정 해제") : uiText("명령 고정")}
-                                            className={`cursor-pointer rounded px-1.5 py-0.5 text-[11px] transition-colors ${isPinned
-                                                ? "text-amber-300 bg-amber-400/15"
+                                            className={`cursor-pointer inline-flex h-6 min-w-6 items-center justify-center rounded px-1.5 text-[11px] transition-colors ${isPinned
+                                                ? "text-primary bg-foreground/5"
                                                 : "text-muted hover:text-muted hover:bg-foreground/10"
                                                 }`}
                                         >

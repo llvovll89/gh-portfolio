@@ -9,7 +9,7 @@ export const Default = () => {
         <>
             <Header />
             <Aside />
-            <Contents className="select-none">
+            <Contents>
                 <MainContents />
             </Contents>
             <MarchFirstOverlay />

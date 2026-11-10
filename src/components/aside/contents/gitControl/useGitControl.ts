@@ -83,7 +83,7 @@ export function useGitControl() {
     const [showActivity, setShowActivity] = useState(false);
 
     useEffect(() => {
-        (async () => {
+        void (async () => {
             try {
                 const results = await Promise.all(
                     REPOS.map(async (repo) => {
@@ -113,13 +113,16 @@ export function useGitControl() {
 
     useEffect(() => {
         if (!selected) return;
-        (async () => {
+        // 브랜치를 빠르게 전환할 때 늦게 도착한 이전 응답이 덮어쓰지 않도록 취소 플래그 사용
+        let active = true;
+        void (async () => {
             try {
                 setGitStates((prev) => ({
                     ...prev,
                     [selected.repo]: { ...prev[selected.repo], commits: [] },
                 }));
                 const commits = await fetchCommits(owner, selected.repo, selected.branch);
+                if (!active) return;
                 setGitStates((prev) => ({
                     ...prev,
                     [selected.repo]: { ...prev[selected.repo], commits },
@@ -128,6 +131,9 @@ export function useGitControl() {
                 console.error("Error fetching commits:", error);
             }
         })();
+        return () => {
+            active = false;
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selected?.repo, selected?.branch]);
 

@@ -2,7 +2,8 @@ import { uiText } from "../../../utils/uiText";
 import { memo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter";
+// PrismAsyncLight 는 전체 언어(~280개)를 청크로 내보내 PWA precache 가 비대해짐 → 사용하는 언어만 정적 등록
+import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import oneLight from "react-syntax-highlighter/dist/esm/styles/prism/one-light";
 import { useThemeStyle } from "../../../hooks/useThemeStyle";
 import vscDarkPlus from "react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus";
@@ -17,6 +18,16 @@ import markupLang from "react-syntax-highlighter/dist/esm/languages/prism/markup
 import pythonLang from "react-syntax-highlighter/dist/esm/languages/prism/python";
 import sqlLang from "react-syntax-highlighter/dist/esm/languages/prism/sql";
 import markdownLang from "react-syntax-highlighter/dist/esm/languages/prism/markdown";
+import javaLang from "react-syntax-highlighter/dist/esm/languages/prism/java";
+import yamlLang from "react-syntax-highlighter/dist/esm/languages/prism/yaml";
+import powershellLang from "react-syntax-highlighter/dist/esm/languages/prism/powershell";
+import nginxLang from "react-syntax-highlighter/dist/esm/languages/prism/nginx";
+import graphqlLang from "react-syntax-highlighter/dist/esm/languages/prism/graphql";
+import dockerLang from "react-syntax-highlighter/dist/esm/languages/prism/docker";
+import httpLang from "react-syntax-highlighter/dist/esm/languages/prism/http";
+import cLang from "react-syntax-highlighter/dist/esm/languages/prism/c";
+import groovyLang from "react-syntax-highlighter/dist/esm/languages/prism/groovy";
+import batchLang from "react-syntax-highlighter/dist/esm/languages/prism/batch";
 import { slugifyHeading } from "../../../utils/parseToc";
 import { scrollToHeading } from "../../../utils/scrollToHeading";
 import { DETAIL_SCROLL_ID } from "./Detail";
@@ -38,6 +49,21 @@ SyntaxHighlighter.registerLanguage("python", pythonLang);
 SyntaxHighlighter.registerLanguage("py", pythonLang);
 SyntaxHighlighter.registerLanguage("sql", sqlLang);
 SyntaxHighlighter.registerLanguage("markdown", markdownLang);
+SyntaxHighlighter.registerLanguage("java", javaLang);
+SyntaxHighlighter.registerLanguage("yaml", yamlLang);
+SyntaxHighlighter.registerLanguage("yml", yamlLang);
+SyntaxHighlighter.registerLanguage("powershell", powershellLang);
+SyntaxHighlighter.registerLanguage("ps1", powershellLang);
+SyntaxHighlighter.registerLanguage("nginx", nginxLang);
+SyntaxHighlighter.registerLanguage("graphql", graphqlLang);
+SyntaxHighlighter.registerLanguage("dockerfile", dockerLang);
+SyntaxHighlighter.registerLanguage("docker", dockerLang);
+SyntaxHighlighter.registerLanguage("http", httpLang);
+SyntaxHighlighter.registerLanguage("c", cLang);
+SyntaxHighlighter.registerLanguage("groovy", groovyLang);
+SyntaxHighlighter.registerLanguage("cmd", batchLang);
+SyntaxHighlighter.registerLanguage("batch", batchLang);
+SyntaxHighlighter.registerLanguage("svg", markupLang);
 SyntaxHighlighter.registerLanguage("md", markdownLang);
 
 function extractText(children: unknown): string {
@@ -56,7 +82,7 @@ function CodeBlock({ language, codeString }: { language: string; codeString: str
     const { isDark } = useThemeStyle();
 
     const handleCopy = () => {
-        navigator.clipboard.writeText(codeString).then(() => {
+        void navigator.clipboard.writeText(codeString).then(() => {
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
         });
@@ -110,14 +136,16 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
             <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
-                    h1: (props) => (
+                    h1: ({ children, ...props }) => (
                         <h1
                             className={`mt-6 mb-4 text-3xl font-bold ${overflowXStyle} text-[clamp(1.5rem,2.5vw,2.5rem)]`}
                             {...props}
-                        />
+                        >
+                            {children}
+                        </h1>
                     ),
-                    h2: (props) => {
-                        const text = extractText(props.children);
+                    h2: ({ children, ...props }) => {
+                        const text = extractText(children);
                         const baseId = slugifyHeading(text);
                         const count = (idCounts.get(baseId) ?? 0) + 1;
                         idCounts.set(baseId, count);
@@ -127,11 +155,13 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                                 id={id || undefined}
                                 className={`mt-6 mb-3 text-2xl font-bold ${overflowXStyle} text-[clamp(1.25rem,2vw,2rem)]`}
                                 {...props}
-                            />
+                            >
+                                {children}
+                            </h2>
                         );
                     },
-                    h3: (props) => {
-                        const text = extractText(props.children);
+                    h3: ({ children, ...props }) => {
+                        const text = extractText(children);
                         const baseId = slugifyHeading(text);
                         const count = (idCounts.get(baseId) ?? 0) + 1;
                         idCounts.set(baseId, count);
@@ -141,7 +171,9 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                                 id={id || undefined}
                                 className={`mt-5 mb-2 text-xl font-semibold ${overflowXStyle} text-[clamp(1.1rem,1.5vw,1.5rem)]`}
                                 {...props}
-                            />
+                            >
+                                {children}
+                            </h3>
                         );
                     },
                     p: (props) => (
@@ -215,10 +247,11 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                             {...props}
                         />
                     ),
-                    img: (props) => (
+                    img: ({ alt, ...props }) => (
                         <img
                             loading="lazy"
                             className="max-w-full h-auto rounded-lg my-4"
+                            alt={alt ?? ""}
                             {...props}
                         />
                     ),

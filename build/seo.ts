@@ -4,15 +4,20 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import sharp from "sharp";
 import type { Plugin } from "vite";
-import { projects } from "../src/pages/projects/mocks/projectData";
-import { parseMarkdownPost, parseHtmlPost, plainSummary, type BlogPost } from "../src/utils/postMetadata";
+import { projects } from "../src/pages/projects/projectData";
+import { careers } from "../src/pages/profile/careerData";
+import { parseMarkdownPost, parseHtmlPost, plainSummary, postOgImagePath, type BlogPost } from "../src/utils/postMetadata";
 
 export const SITE_URL = "https://kimgeonho.vercel.app";
 export const escapeHtml = (value: string) => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 const absolute = (pathname: string) => new URL(pathname, SITE_URL).href;
 const json = (value: unknown) => JSON.stringify(value).replace(/</g, "\\u003c");
-const author = { "@type": "Person", "@id": SITE_URL + "/#person", name: "김건호", alternateName: "Geon Ho Kim", url: SITE_URL, jobTitle: "Full-stack Web Developer", sameAs: ["https://github.com/llvovll89"] };
+const author = { "@type": "Person", "@id": SITE_URL + "/#person", name: "김건호", alternateName: "Geonho Kim", url: SITE_URL, jobTitle: "Full-stack Web Developer", sameAs: ["https://github.com/llvovll89"] };
+
+const isDate = (value?: string) => !!value && /^\d{4}-\d{2}-\d{2}/.test(value);
+const postModified = (post: BlogPost) => isDate(post.updated) ? post.updated : isDate(post.date) ? post.date : undefined;
 
 interface Page {
     pathname: string;
@@ -21,13 +26,47 @@ interface Page {
     content: string;
     schema?: Record<string, unknown>;
     article?: BlogPost;
+    lastmod?: string;
+}
+
+const OG_FONT_DIR = path.resolve("node_modules/pretendard/dist/public/static");
+const pangoText = (value: string) => escapeHtml(value).replace(/&#39;/g, "&apos;");
+
+// 텍스트는 Pango(fontfile 지정)로 렌더링 — 빌드 서버(Linux)에 한글 시스템 폰트가 없어도 Pretendard로 그려짐
+async function renderOgImage(post: BlogPost, file: string) {
+    const text = async (markup: string, weight: "Bold" | "Medium", size: number, width: number) => {
+        const { data, info } = await sharp({ text: { text: markup, font: "Pretendard " + weight + " " + size, fontfile: path.join(OG_FONT_DIR, "Pretendard-" + weight + ".otf"), width, rgba: true, wrap: "word", spacing: Math.round(size * .28) } }).png().toBuffer({ resolveWithObject: true });
+        return { data, width: info.width, height: info.height };
+    };
+    const title = post.title.length > 90 ? post.title.slice(0, 88) + "…" : post.title;
+    let heading = await text('<span foreground="#f3f6fa">' + pangoText(title) + '</span>', "Bold", 68, 1040);
+    for (const size of [56, 46]) {
+        if (heading.height <= 270) break;
+        heading = await text('<span foreground="#f3f6fa">' + pangoText(title) + '</span>', "Bold", size, 1040);
+    }
+    // 날짜·태그는 한 줄에 들어갈 때까지 태그 수를 줄임
+    let footer: Awaited<ReturnType<typeof text>> | undefined;
+    for (let count = Math.min(4, post.tags?.length ?? 0); count >= 0; count--) {
+        const meta = [post.date, ...(post.tags ?? []).slice(0, count).map(tag => "#" + tag)].filter(Boolean).join("   ");
+        footer = meta ? await text('<span foreground="#a4aab3">' + pangoText(meta) + '</span>', "Medium", 28, 720) : undefined;
+        if (!footer || footer.height <= 48) break;
+    }
+    const site = await text('<span foreground="#75b8e8">kimgeonho.vercel.app</span>', "Medium", 28, 400);
+    const label = await text('<span foreground="#75b8e8">GH · Tech Blog</span>', "Bold", 26, 400);
+    const background = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#181b20"/><stop offset="1" stop-color="#0c0b10"/></linearGradient></defs><rect width="1200" height="630" fill="url(#g)"/><rect x="0" y="0" width="12" height="630" fill="#75b8e8"/><rect x="80" y="500" width="1040" height="1" fill="#ffffff" fill-opacity=".15"/></svg>');
+    await sharp(background).composite([
+        { input: label.data, left: 80, top: 72 },
+        { input: heading.data, left: 80, top: 132 + Math.max(0, Math.round((300 - heading.height) / 2)) },
+        ...(footer ? [{ input: footer.data, left: 80, top: 540 }] : []),
+        { input: site.data, left: 1120 - site.width, top: 540 },
+    ]).png({ compressionLevel: 9, palette: true }).toFile(file);
 }
 
 export function seoPages(): Plugin {
     return {
         name: "static-search-pages",
         apply: "build",
-        writeBundle() {
+        async writeBundle() {
             const outDir = path.resolve("dist");
             const template = fs.readFileSync(path.join(outDir, "index.html"), "utf8");
             const ko = JSON.parse(fs.readFileSync("src/i18n/locales/ko.json", "utf8"));
@@ -41,12 +80,13 @@ export function seoPages(): Plugin {
                 }
             }
             posts.sort((a,b) => b.date.localeCompare(a.date));
+            const latestModified = posts.map(postModified).filter(Boolean).sort().pop();
             const projectLinks = projects.map(project => '<li><a href="/projects/' + project.slug + '">' + escapeHtml(project.title) + '</a><p>' + escapeHtml(project.description) + '</p></li>').join("");
             const blogLinks = posts.map(post => '<li><a href="/blog/' + encodeURIComponent(post.slug) + '">' + escapeHtml(post.title) + '</a><p>' + escapeHtml(post.summary ?? "") + '</p></li>').join("");
             const pages: Page[] = [
-                { pathname: "/", title: "김건호 | 풀스택 웹 개발자 포트폴리오", description: ko.pages.home.summary, content: '<h1>김건호 · 웹 개발자</h1><p>' + escapeHtml(ko.pages.home.summary) + '</p><h2>프로젝트</h2><ul>' + projectLinks + '</ul>', schema: { "@type": "WebSite", name: "김건호 포트폴리오", url: SITE_URL, author } },
+                { pathname: "/", title: "김건호 | 풀스택 웹 개발자 포트폴리오", description: ko.pages.home.summary, content: '<h1>김건호 · 웹 개발자</h1><p>' + escapeHtml(ko.pages.home.summary) + '</p><h2>프로젝트</h2><ul>' + projectLinks + '</ul>', schema: { "@type": "WebSite", name: "김건호 포트폴리오", url: SITE_URL, author }, lastmod: latestModified },
                 { pathname: "/projects", title: "프로젝트 | 김건호", description: "김건호의 웹 프로젝트와 기술 선택, 담당 역할, 구현 경험을 소개합니다.", content: '<h1>프로젝트</h1><ul>' + projectLinks + '</ul>', schema: { "@type": "CollectionPage", name: "프로젝트", url: absolute("/projects") } },
-                { pathname: "/blog", title: "기술 블로그 | 김건호", description: "React, TypeScript, 백엔드, 개발 도구와 실무 개념을 기록하는 김건호의 기술 블로그입니다.", content: '<h1>기술 블로그</h1><ul>' + blogLinks + '</ul>', schema: { "@type": "Blog", name: "김건호 기술 블로그", url: absolute("/blog"), author } },
+                { pathname: "/blog", title: "기술 블로그 | 김건호", description: "React, TypeScript, 백엔드, 개발 도구와 실무 개념을 기록하는 김건호의 기술 블로그입니다.", content: '<h1>기술 블로그</h1><ul>' + blogLinks + '</ul>', schema: { "@type": "Blog", name: "김건호 기술 블로그", url: absolute("/blog"), author }, lastmod: latestModified },
                 { pathname: "/profile", title: "프로필 | 김건호", description: ko.pages.profile.description.intro, content: '<h1>김건호 프로필</h1>' + Object.values(ko.pages.profile.description).map(text => '<p>' + escapeHtml(String(text)) + '</p>').join("") + '<a href="/resume">이력서</a>', schema: { "@type": "ProfilePage", mainEntity: author } },
                 { pathname: "/resume", title: "이력서 | 김건호", description: "웹 개발자 김건호의 경력, 기술 스택, 학력과 프로젝트 경험을 확인하세요.", content: '<h1>김건호 이력서</h1><p>' + escapeHtml(ko.pages.resume.description) + '</p><p>React, TypeScript, Java, Spring Boot, PostgreSQL</p><a href="/assets/resume/' + encodeURIComponent("김건호_이력서.pdf") + '">PDF 이력서 다운로드</a>' },
                 { pathname: "/contact", title: "연락처 | 김건호", description: ko.pages.contact.subtitle, content: '<h1>연락처</h1><p>' + escapeHtml(ko.pages.contact.subtitle) + '</p><a href="mailto:svvvs5579@naver.com">svvvs5579@naver.com</a>' },
@@ -58,7 +98,7 @@ export function seoPages(): Plugin {
             for (const post of posts) {
                 const pathname = "/blog/" + encodeURIComponent(post.slug);
                 const body = post.type === "html" ? '<p>' + escapeHtml(plainSummary(post.body, 1000000)) + '</p>' : renderToStaticMarkup(createElement(ReactMarkdown, { remarkPlugins: [remarkGfm], children: post.body }));
-                pages.push({ pathname, title: post.title + " | 김건호 블로그", description: post.summary ?? post.title, article: post, content: '<article><h1>' + escapeHtml(post.title) + '</h1><time datetime="' + escapeHtml(post.date) + '">' + escapeHtml(post.date) + '</time>' + body + '</article>', schema: { "@type": "BlogPosting", headline: post.title, description: post.summary, datePublished: post.date || undefined, author, publisher: author, inLanguage: "ko", image: absolute("/og/thumbnail.webp"), mainEntityOfPage: absolute(pathname), url: absolute(pathname) } });
+                pages.push({ pathname, title: post.title + " | 김건호 블로그", description: post.summary ?? post.title, article: post, lastmod: postModified(post), content: '<article><h1>' + escapeHtml(post.title) + '</h1><time datetime="' + escapeHtml(post.date) + '">' + escapeHtml(post.date) + '</time>' + body + '</article>', schema: { "@type": "BlogPosting", headline: post.title, description: post.summary, datePublished: post.date || undefined, dateModified: postModified(post), author, publisher: author, inLanguage: "ko", image: absolute(postOgImagePath(post.slug)), mainEntityOfPage: absolute(pathname), url: absolute(pathname) } });
             }
             const nav = '<nav aria-label="주요 메뉴">' + pages.filter(page => page.pathname.split("/").length <= 2).map(page => '<a href="' + page.pathname + '">' + escapeHtml(page.title.split(" |")[0]) + '</a>').join(' · ') + '</nav>';
             const preview = process.env.VERCEL_ENV === "preview";
@@ -79,17 +119,66 @@ export function seoPages(): Plugin {
                 meta('property="og:type"', page.article ? "article" : "website");
                 meta('name="twitter:title"', page.title);
                 meta('name="twitter:description"', page.description);
-                html = html.replace('</head>', '<link rel="canonical" href="' + escapeHtml(url) + '"><meta name="robots" content="' + (preview ? 'noindex, nofollow' : 'index, follow') + '"><script id="seo-schema" type="application/ld+json">' + json(schema) + '</script></head>');
-                html = html.replace('<div id="root"></div>', '<div id="root"><main id="seo-content" style="max-width:960px;margin:32px auto;padding:16px;line-height:1.8">' + nav + page.content + '</main></div>');
+                if (page.article) {
+                    meta('property="og:image"', absolute(postOgImagePath(page.article.slug)));
+                    meta('name="twitter:image"', absolute(postOgImagePath(page.article.slug)));
+                    meta('property="og:image:width"', "1200");
+                    meta('property="og:image:height"', "630");
+                }
+                html = html.replace('</head>', '<link rel="canonical" href="' + escapeHtml(url) + '"><meta name="robots" content="' + (preview ? 'noindex, nofollow' : 'index, follow') + '"><script id="seo-schema" type="application/ld+json" data-url="' + escapeHtml(url) + '">' + json(schema) + '</script></head>');
+                // #root 밖(형제)에 두어 createRoot가 지우지 않게 함 → 첫 라우트 커밋 시 App에서 제거 (index.html의 #seo-content~#root 규칙 참고)
+                html = html.replace('<div id="root"></div>', '<main id="seo-content" style="max-width:960px;margin:32px auto;padding:16px;line-height:1.8">' + nav + page.content + '</main><div id="root"></div>');
                 const dir = page.pathname === "/" ? outDir : path.join(outDir, decodeURIComponent(page.pathname));
                 fs.mkdirSync(dir, { recursive: true });
                 fs.writeFileSync(path.join(dir, "index.html"), html);
             }
-            const sitemap = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + pages.map(page => '<url><loc>' + escapeHtml(absolute(page.pathname)) + '</loc></url>').join('') + '</urlset>';
+            const sitemap = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + pages.map(page => '<url><loc>' + escapeHtml(absolute(page.pathname)) + '</loc>' + (page.lastmod ? '<lastmod>' + escapeHtml(page.lastmod) + '</lastmod>' : '') + '</url>').join('') + '</urlset>';
             fs.writeFileSync(path.join(outDir, "sitemap.xml"), sitemap);
             fs.writeFileSync(path.join(outDir, "robots.txt"), preview ? 'User-agent: *\nDisallow: /\n' : 'User-agent: *\nAllow: /\nDisallow: /api/\nSitemap: ' + SITE_URL + '/sitemap.xml\n');
             const rss = '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>김건호 기술 블로그</title><link>' + SITE_URL + '/blog</link><description>김건호의 개발 기록</description><language>ko</language>' + posts.map(post => '<item><title>' + escapeHtml(post.title) + '</title><link>' + escapeHtml(absolute('/blog/' + encodeURIComponent(post.slug))) + '</link><guid>' + escapeHtml(absolute('/blog/' + encodeURIComponent(post.slug))) + '</guid><description>' + escapeHtml(post.summary ?? post.title) + '</description>' + (post.date ? '<pubDate>' + new Date(post.date).toUTCString() + '</pubDate>' : '') + '</item>').join('') + '</channel></rss>';
             fs.writeFileSync(path.join(outDir, "rss.xml"), rss);
+            // llmstxt.org 형식: H1 → 요약 blockquote → H2 섹션별 링크 목록
+            const link = (title: string, pathname: string, description?: string) => '- [' + title.replace(/[[\]]/g, "") + '](' + absolute(pathname) + ')' + (description ? ': ' + description.replace(/\s+/g, " ").trim() : '');
+            const llms = [
+                '# 김건호 (Geonho Kim) 포트폴리오',
+                '',
+                '> ' + ko.pages.home.summary,
+                '',
+                '풀스택 웹 개발자 김건호의 포트폴리오와 기술 블로그입니다. 콘텐츠는 기본적으로 한국어이며 UI는 영어·일본어도 지원합니다. 주요 스택: React, TypeScript, Tailwind CSS, Spring Boot, JPA, PostgreSQL.',
+                '',
+                '## 주요 페이지',
+                ...pages.filter(page => !page.article && !page.pathname.startsWith("/projects/")).map(page => link(page.title.split(" |")[0], page.pathname, page.description)),
+                '',
+                '## 경력',
+                ...careers.map(career => '- ' + career.period + ' ' + ko.pages.profile.personalHistory[career.company] + ' · ' + career.position + (career.active ? ' (재직 중)' : ' · ' + ko.pages.profile.personalHistory.description)),
+                '',
+                '## 프로젝트',
+                // 대표 프로젝트를 먼저, 아카이브 프로젝트는 마지막에 — 역할·결정·수치까지 포함해 AI 요약의 근거로 사용
+                ...[...projects].sort((a, b) => Number(a.archived ?? false) - Number(b.archived ?? false)).map(project => link(
+                    project.title + (project.archived ? ' (아카이브)' : ''),
+                    "/projects/" + project.slug,
+                    [project.description, project.role && '역할: ' + project.role, project.outcome && '결과: ' + project.outcome, project.decisions?.length && '설계 결정: ' + project.decisions.join('; '), project.metrics?.length && '수치: ' + project.metrics.join('; '), '기술: ' + project.skills.join(', ')].filter(Boolean).join(' · '),
+                )),
+                '',
+                '## 대표 블로그 글',
+                ...posts.filter(post => post.featured).map(post => link(post.title, "/blog/" + encodeURIComponent(post.slug), [post.date, post.summary].filter(Boolean).join(" · "))),
+                '',
+                '## 최신 블로그 글',
+                ...posts.filter(post => post.category !== "Notes" && !post.featured).slice(0, 20).map(post => link(post.title, "/blog/" + encodeURIComponent(post.slug), [post.date, post.summary].filter(Boolean).join(" · "))),
+                '',
+                '## Optional',
+                link("RSS 피드 (전체 글 목록)", "/rss.xml"),
+                link("사이트맵", "/sitemap.xml"),
+                link("GitHub", "https://github.com/llvovll89"),
+                '',
+            ].join("\n");
+            fs.writeFileSync(path.join(outDir, "llms.txt"), llms);
+            const ogDir = path.join(outDir, "og", "posts");
+            fs.mkdirSync(ogDir, { recursive: true });
+            const queue = [...posts];
+            await Promise.all(Array.from({ length: 4 }, async () => {
+                for (let post = queue.shift(); post; post = queue.shift()) await renderOgImage(post, path.join(outDir, postOgImagePath(post.slug)));
+            }));
             fs.writeFileSync(path.join(outDir, "404.html"), template.replace('<div id="root"></div>', '<div id="root"><main style="padding:32px"><h1>페이지를 찾을 수 없습니다</h1><a href="/">홈으로</a></main></div>').replace('</head>', '<meta name="robots" content="noindex, follow"></head>'));
         },
     };

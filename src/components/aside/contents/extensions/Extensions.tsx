@@ -139,7 +139,7 @@ export const Extensions = () => {
                                         </h3>
                                     </div>
                                     {ext.description && (
-                                        <p className="text-[10px] text-muted line-clamp-2 ml-6">
+                                        <p className="text-[11px] text-muted line-clamp-2 ml-6">
                                             {ext.description}
                                         </p>
                                     )}
@@ -153,7 +153,7 @@ export const Extensions = () => {
                                                 }
                                                 className="w-3 h-3"
                                             />
-                                            <span className="text-[10px] text-muted">
+                                            <span className="text-[11px] text-muted">
                                                 {ext.enabled ? t("extensions.enabled") : t("extensions.disabled")}
                                             </span>
                                         </label>
