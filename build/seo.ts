@@ -126,8 +126,8 @@ export function seoPages(): Plugin {
                     meta('property="og:image:height"', "630");
                 }
                 html = html.replace('</head>', '<link rel="canonical" href="' + escapeHtml(url) + '"><meta name="robots" content="' + (preview ? 'noindex, nofollow' : 'index, follow') + '"><script id="seo-schema" type="application/ld+json" data-url="' + escapeHtml(url) + '">' + json(schema) + '</script></head>');
-                // #root 밖(형제)에 두어 createRoot가 지우지 않게 함 → 첫 라우트 커밋 시 App에서 제거 (index.html의 #seo-content~#root 규칙 참고)
-                html = html.replace('<div id="root"></div>', '<main id="seo-content" style="max-width:960px;margin:32px auto;padding:16px;line-height:1.8">' + nav + page.content + '</main><div id="root"></div>');
+                // #root 밖(형제)에 두어 createRoot가 지우지 않게 함 → 첫 라우트 커밋 시 App에서 제거 (index.html에서 시각적으로 숨김)
+                html = html.replace('<div id="root"></div>', '<main id="seo-content">' + nav + page.content + '</main><div id="root"></div>');
                 const dir = page.pathname === "/" ? outDir : path.join(outDir, decodeURIComponent(page.pathname));
                 fs.mkdirSync(dir, { recursive: true });
                 fs.writeFileSync(path.join(dir, "index.html"), html);

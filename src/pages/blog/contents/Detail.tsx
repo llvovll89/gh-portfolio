@@ -9,6 +9,7 @@ import {scrollToHeading} from "../../../utils/scrollToHeading";
 import {TableOfContents} from "./TableOfContents";
 import {Minimap} from "./Minimap";
 import {incrementViewCount, subscribeViewCount} from "../../../utils/blogViews";
+import {primeListViewCount} from "../../../utils/viewCounts";
 import {LuEye, LuChevronLeft, LuChevronRight} from "react-icons/lu";
 import {logger} from "../../../utils/logger";
 import {BlogComments} from "../comments/BlogComments";
@@ -102,7 +103,10 @@ export const Detail = () => {
         incrementViewCount(slug).catch((e) =>
             logger.error("조회수 증가 실패", e),
         );
-        const unsubscribe = subscribeViewCount(slug, setViewCount);
+        const unsubscribe = subscribeViewCount(slug, (count) => {
+            setViewCount(count);
+            primeListViewCount(slug, count);
+        });
         return unsubscribe;
     }, [slug, post]);
 

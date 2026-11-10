@@ -32,8 +32,8 @@
 
   <link rel="alternate" type="application/rss+xml" title="김건호 블로그" href="/rss.xml" />
   <title>Geonho Kim</title>
-  <!-- 빌드 시 프리렌더된 #seo-content가 있으면 첫 라우트 커밋 전까지 앱을 숨긴 채 그 위치에 겹쳐 렌더 (깜빡임·CLS 방지) -->
-  <style>#seo-content~#root{position:absolute;inset:0;visibility:hidden;opacity:0;pointer-events:none}</style>
+  <!-- 프리렌더된 #seo-content는 크롤러·스크린리더용 — 스타일 없는 텍스트가 첫 화면에 비치지 않도록 시각적으로만 숨김 (앱 첫 렌더 시 제거) -->
+  <style>#seo-content{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}</style>
   <script type="speculationrules">
     {"prefetch":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/api/*"}},{"not":{"href_matches":"/assets/*"}},{"not":{"selector_matches":"[rel~=nofollow], [download]"}}]},"eagerness":"moderate"}]}
   </script>

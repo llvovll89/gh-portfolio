@@ -53,3 +53,9 @@ export function getListViewCount(slug: string): Promise<number> {
     }
     return cache.promise.then(counts => counts.get(slug) ?? 0);
 }
+
+/** 글 상세에서 받은 최신 조회수를 목록 캐시에 반영 (상세 2 / 목록 1 처럼 어긋나지 않도록) */
+export function primeListViewCount(slug: string, count: number): void {
+    if (!cache) return;
+    void cache.promise.then(counts => { counts.set(slug, count); }).catch(() => {});
+}
