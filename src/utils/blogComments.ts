@@ -19,16 +19,17 @@ export class CommentRequestError extends Error {
     }
 }
 
-function entriesRef(slug: string) {
-    return collection(db, 'blog_comments', slug, 'entries')
-}
-
 export function subscribeBlogComments(
     slug: string,
     callback: (comments: BlogComment[]) => void,
     onError?: () => void,
 ): () => void {
-    const q = query(entriesRef(slug), orderBy('createdAt', 'desc'))
+    // Firebase 미설정 환경: 기존 로드 실패 UI 로 안내
+    if (!db) {
+        queueMicrotask(() => onError?.())
+        return () => {}
+    }
+    const q = query(collection(db, 'blog_comments', slug, 'entries'), orderBy('createdAt', 'desc'))
     return onSnapshot(q, (snap) => {
         const list: BlogComment[] = []
         snap.forEach((d) => {

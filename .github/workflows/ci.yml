@@ -30,3 +30,9 @@ jobs:
           VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
           VITE_GIT_HUB_APP_ADMIN: ${{ secrets.VITE_GIT_HUB_APP_ADMIN }}
+      # 빌드 결과물을 실제 브라우저(Chrome)로 열어 콘솔 에러·axe 접근성 위반 점검
+      - name: Browser smoke test
+        run: |
+          npx vite preview --port 4173 --strictPort &
+          timeout 60 bash -c 'until curl -sf http://localhost:4173 >/dev/null; do sleep 1; done'
+          npm run smoke -- http://localhost:4173

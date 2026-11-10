@@ -4,7 +4,8 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 // PrismAsyncLight 는 전체 언어(~280개)를 청크로 내보내 PWA precache 가 비대해짐 → 사용하는 언어만 정적 등록
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
-import oneLight from "react-syntax-highlighter/dist/esm/styles/prism/one-light";
+// 라이트 테마는 토큰 대비가 WCAG AA(4.5:1)를 만족하는 a11y-one-light 사용
+import oneLight from "react-syntax-highlighter/dist/esm/styles/prism/a11y-one-light";
 import { useThemeStyle } from "../../../hooks/useThemeStyle";
 import vscDarkPlus from "react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus";
 import tsxLang from "react-syntax-highlighter/dist/esm/languages/prism/tsx";

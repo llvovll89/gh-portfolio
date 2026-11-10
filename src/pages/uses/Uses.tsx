@@ -154,7 +154,6 @@ export const Uses = () => {
                                             href={tool.link}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            aria-label={uiText("자세히 보기") + ": " + tool.name}
                                             className={[
                                                 "tool-item group relative overflow-hidden",
                                                 "rounded-xl p-5",

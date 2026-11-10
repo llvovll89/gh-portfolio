@@ -29,6 +29,7 @@ function markViewedInSession(slug: string): void {
 
 export async function incrementViewCount(slug: string): Promise<void> {
     if (hasViewedInSession(slug)) return;
+    if (!db) return;
     markViewedInSession(slug);
     const ref = doc(db, COLLECTION, slug);
     await setDoc(ref, { count: increment(1) }, { merge: true });
@@ -40,6 +41,7 @@ let countsCache: { promise: Promise<Map<string, number>>; fetchedAt: number } | 
 
 function loadAllViewCounts(): Promise<Map<string, number>> {
     if (countsCache && Date.now() - countsCache.fetchedAt < COUNTS_TTL_MS) return countsCache.promise;
+    if (!db) return Promise.resolve(new Map<string, number>());
     const promise = getDocs(collection(db, COLLECTION)).then((snap) => {
         const counts = new Map<string, number>();
         snap.forEach((d) => {
@@ -62,6 +64,7 @@ export function subscribeViewCount(
     slug: string,
     callback: (count: number) => void
 ): () => void {
+    if (!db) return () => {};
     const ref = doc(db, COLLECTION, slug);
     return onSnapshot(ref, (snap) => {
         callback(snap.exists() ? (snap.data().count as number) ?? 0 : 0);
