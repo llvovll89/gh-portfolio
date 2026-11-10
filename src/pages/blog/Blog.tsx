@@ -137,7 +137,7 @@ export const Blog = () => {
                             availableCategories={availableCategories}
                             tagCounts={tagCounts}
                             totalPosts={allPosts.length}
-                            filteredCount={sortedPosts.length}
+                            filteredCount={sortedPosts.length + featuredPosts.length}
                         />
                     </div>
 

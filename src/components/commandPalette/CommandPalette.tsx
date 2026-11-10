@@ -28,102 +28,26 @@ import {
 } from "@/routes/route";
 import { ThemeMode } from "@/context/constants/Theme.type";
 import { useTranslation } from "react-i18next";
-
-const RECENT_COMMANDS_STORAGE_KEY = "portfolio-command-palette-recent";
-const PINNED_COMMANDS_STORAGE_KEY = "portfolio-command-palette-pinned";
-const COMMAND_USAGE_STATS_STORAGE_KEY = "portfolio-command-palette-usage-stats";
-const COMMAND_USAGE_STORAGE_VERSION = 1;
-const MAX_RECENT_COMMANDS = 6;
-const MAX_PINNED_COMMANDS = 8;
-const MAX_RECOMMENDED_COMMANDS = 5;
-
-type CommandUsageStats = Record<string, { count: number; lastUsedAt: number }>;
-type CommandUsageStorage = {
-    version: number;
-    stats: CommandUsageStats;
-};
-
-
-const CATEGORY_ORDER: Command["category"][] = [
-    "Navigation",
-    "Layout",
-    "Theme",
-    "Language",
-    "System",
-];
-
-const THEME_LABELS: Record<Exclude<ThemeMode, ThemeMode.CUSTOM>, string> = {
-    [ThemeMode.SYSTEM]: "테마: 시스템 설정",
-    [ThemeMode.LIGHT]: "테마: 밝은 화면",
-    [ThemeMode.DARK]: "테마: 검은배경",
-    [ThemeMode.BASE_NAVY]: "테마: 짙은 남색",
-    [ThemeMode.SUB_BLUE]: "테마: 파란하늘",
-    [ThemeMode.SUB_PINK]: "테마: 분홍빛",
-    [ThemeMode.SUB_GREEN]: "테마: 짙은 숲",
-    [ThemeMode.MAIN_TEAL]: "테마: 푸른숲",
-    [ThemeMode.SUB_TEAL]: "테마: 푸른 나무",
-};
-
-const THEME_MODE_ORDER = Object.keys(THEME_LABELS) as Array<Exclude<ThemeMode, ThemeMode.CUSTOM>>;
-
-const LANGUAGE_LABELS = {
-    ko: "언어: 한국어",
-    en: "언어: English",
-    ja: "언어: 日本語",
-} as const;
-
-interface Command {
-    id: string;
-    label: string;
-    description: string;
-    shortcut: string;
-    category: "Layout" | "Navigation" | "Theme" | "Language" | "System";
-    keywords?: string[];
-    quickHint?: string;
-    action: () => void;
-}
-
-interface CommandSectionRow {
-    type: "section";
-    id: string;
-    label: string;
-}
-
-interface CommandItemRow {
-    type: "command";
-    command: Command;
-    index: number;
-}
-
-type CommandRow = CommandSectionRow | CommandItemRow;
-
-function readStoredList(key: string): string[] {
-    try { const value: unknown = JSON.parse(localStorage.getItem(key) ?? "[]"); return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []; } catch { return []; }
-}
-function readUsageStats(): CommandUsageStats {
-    try {
-        const stored = JSON.parse(localStorage.getItem(COMMAND_USAGE_STATS_STORAGE_KEY) ?? "{}") as { stats?: unknown };
-        const stats = (stored.stats ?? stored) as Record<string, unknown>;
-        return Object.fromEntries(Object.entries(stats).filter(([, value]) => {
-            if (!value || typeof value !== "object") return false;
-            const entry = value as { count?: unknown; lastUsedAt?: unknown };
-            return typeof entry.count === "number" && Number.isFinite(entry.count) && entry.count >= 0 && typeof entry.lastUsedAt === "number" && Number.isFinite(entry.lastUsedAt);
-        })) as CommandUsageStats;
-    } catch { return {}; }
-}
-
-function Highlight({ text, query }: { text: string; query: string }) {
-    if (!query) return <>{text}</>
-    const idx = text.toLowerCase().indexOf(query.toLowerCase())
-    if (idx === -1) return <>{text}</>
-    return (
-        <>
-            {text.slice(0, idx)}
-            <mark className="bg-yellow-400/30 text-inherit rounded-sm">{text.slice(idx, idx + query.length)}</mark>
-            {text.slice(idx + query.length)}
-        </>
-    )
-}
+import {
+    CATEGORY_ORDER,
+    COMMAND_USAGE_STATS_STORAGE_KEY,
+    COMMAND_USAGE_STORAGE_VERSION,
+    LANGUAGE_LABELS,
+    MAX_PINNED_COMMANDS,
+    MAX_RECENT_COMMANDS,
+    MAX_RECOMMENDED_COMMANDS,
+    PINNED_COMMANDS_STORAGE_KEY,
+    RECENT_COMMANDS_STORAGE_KEY,
+    THEME_LABELS,
+    THEME_MODE_ORDER,
+    readStoredList,
+    readUsageStats,
+    type Command,
+    type CommandRow,
+    type CommandUsageStats,
+    type CommandUsageStorage,
+} from "./commandPaletteModel";
+import { Highlight } from "./Highlight";
 
 /**
  * 명령 팔레트 컴포넌트
@@ -728,45 +652,23 @@ export const CommandPalette = () => {
         if (command && command.action) {
             command.action();
 
-            setUsageStats((prev) => {
-                const current = prev[command.id];
-                const next: CommandUsageStats = {
-                    ...prev,
-                    [command.id]: {
-                        count: (current?.count ?? 0) + 1,
-                        lastUsedAt: now,
-                    },
-                };
-                try {
-                    const nextStorage: CommandUsageStorage = {
-                        version: COMMAND_USAGE_STORAGE_VERSION,
-                        stats: next,
-                    };
-                    localStorage.setItem(
-                        COMMAND_USAGE_STATS_STORAGE_KEY,
-                        JSON.stringify(nextStorage),
-                    );
-                } catch {
-                    // ignore storage errors
-                }
-                return next;
-            });
-
-            setRecentCommandIds((prev) => {
-                const next = [command.id, ...prev.filter((id) => id !== command.id)].slice(
-                    0,
-                    MAX_RECENT_COMMANDS,
-                );
-                try {
-                    localStorage.setItem(
-                        RECENT_COMMANDS_STORAGE_KEY,
-                        JSON.stringify(next),
-                    );
-                } catch {
-                    // ignore storage errors
-                }
-                return next;
-            });
+            // 실행 직후 팔레트가 닫히며 unmount 되면 state updater 가 실행되지 않으므로,
+            // 다음 값을 먼저 계산해 저장소에 즉시 기록한 뒤 state 를 갱신
+            const current = usageStats[command.id];
+            const nextStats: CommandUsageStats = {
+                ...usageStats,
+                [command.id]: { count: (current?.count ?? 0) + 1, lastUsedAt: now },
+            };
+            const nextRecent = [command.id, ...recentCommandIds.filter((id) => id !== command.id)].slice(0, MAX_RECENT_COMMANDS);
+            try {
+                const nextStorage: CommandUsageStorage = { version: COMMAND_USAGE_STORAGE_VERSION, stats: nextStats };
+                localStorage.setItem(COMMAND_USAGE_STATS_STORAGE_KEY, JSON.stringify(nextStorage));
+                localStorage.setItem(RECENT_COMMANDS_STORAGE_KEY, JSON.stringify(nextRecent));
+            } catch {
+                // ignore storage errors
+            }
+            setUsageStats(nextStats);
+            setRecentCommandIds(nextRecent);
         }
         closeCommandPalette();
     };
