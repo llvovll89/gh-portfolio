@@ -622,7 +622,14 @@
         "1v67dx": "Notes",
         "1oe9ncz": "These are the tools I currently use. I adapt my toolkit to each project and situation.",
         "1czchw": "Could not save your comment. Please try again later.",
-        "rgbirj": "Geonho Kim"
+        "rgbirj": "Geonho Kim",
+        "17evmmu": "New comment",
+        "spt7at": "Share a thought or ask a question about this post",
+        "1pl4no7": "You'll need this password to edit or delete your comment later.",
+        "hc04ld": "Enter the password you used when posting.",
+        "lv0qfk": "Enter the password you used when posting to delete it. Deleted comments can't be restored.",
+        "y2w3f2": "No comments yet. Be the first to share a thought.",
+        "1obauh0": "Too many requests. Try again in a few minutes."
     },
     "accessibility": {
         "languageSwitch": "Current language: {{current}}. Switch to {{next}}",
