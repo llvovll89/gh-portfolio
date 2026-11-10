@@ -208,7 +208,8 @@ export default defineConfig(({ mode }) => {
                                 if (!process.env[key] && env[key]) process.env[key] = env[key];
                             }
 
-                            const { default: handler } = await server.ssrLoadModule(urlObj.pathname + ".ts");
+                            try {
+                            const { default: handler } = await server.ssrLoadModule(urlObj.pathname + ".ts") as { default: (req: unknown, res: unknown) => Promise<void> };
                             const shimRes = Object.assign(res, {
                                 status(code: number) { res.statusCode = code; return shimRes; },
                                 json(data: unknown) {
@@ -219,6 +220,12 @@ export default defineConfig(({ mode }) => {
                             let body: unknown;
                             try { body = raw ? JSON.parse(raw) : null; } catch { body = null; }
                             await handler(Object.assign(req, { body }), shimRes);
+                            } catch (err) {
+                                // 모듈 로드·핸들러 예외 시 요청이 pending 으로 남지 않도록 500 응답
+                                console.error("[dev api]", err);
+                                if (!res.headersSent) res.writeHead(500, { "Content-Type": "application/json" });
+                                res.end(JSON.stringify({ error: "server-error" }));
+                            }
                             return;
                         }
 

@@ -4,6 +4,7 @@ import { parseCommentAction } from './_lib/commentInput.js'
 import { hashCommentPassword, verifyCommentPassword } from './_lib/commentPassword.js'
 import { getAdminDb } from './_lib/firebaseAdmin.js'
 import { createRateLimiter } from './_lib/rateLimit.js'
+import { clientIp, readJsonBody } from './_lib/request.js'
 
 type Req = IncomingMessage & { body?: unknown }
 type Res = ServerResponse & {
@@ -15,12 +16,6 @@ const WRONG_PASSWORD_DELAY_MS = 400
 // IP당 10분에 20회 (생성·수정·삭제 합산) — 스팸·비밀번호 대입 완화
 const allow = createRateLimiter(20, 10 * 60 * 1000)
 
-function clientIp(req: Req): string {
-    const forwarded = req.headers['x-forwarded-for']
-    const first = (Array.isArray(forwarded) ? forwarded[0] : forwarded)?.split(',')[0]?.trim()
-    return first || req.socket.remoteAddress || 'unknown'
-}
-
 /**
  * 댓글 생성/수정/삭제 — 비밀번호 해시는 공개 문서가 아닌
  * blog_comment_secrets/{slug}/entries/{id} 에 저장하고 클라이언트 접근은 규칙으로 차단
@@ -31,7 +26,7 @@ export default async function handler(req: Req, res: Res) {
         return res.status(405).json({ error: 'method-not-allowed' })
     }
 
-    const input = parseCommentAction(typeof req.body === 'string' ? safeParse(req.body) : req.body)
+    const input = parseCommentAction(readJsonBody(req.body))
     if (!input) return res.status(400).json({ error: 'invalid-input' })
     if (!allow(clientIp(req))) return res.status(429).json({ error: 'rate-limited' })
 
@@ -83,13 +78,5 @@ export default async function handler(req: Req, res: Res) {
     } catch (err) {
         console.error('[api/comments]', err)
         return res.status(500).json({ error: 'server-error' })
-    }
-}
-
-function safeParse(raw: string): unknown {
-    try {
-        return JSON.parse(raw)
-    } catch {
-        return null
     }
 }

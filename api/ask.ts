@@ -2,6 +2,7 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 import Anthropic from '@anthropic-ai/sdk'
 import { ASK_LIMITS, parseAskInput, type AskLang } from './_lib/askInput.js'
 import { createRateLimiter } from './_lib/rateLimit.js'
+import { clientIp, readJsonBody } from './_lib/request.js'
 
 type Req = IncomingMessage & { body?: unknown }
 type Res = ServerResponse & {
@@ -34,19 +35,26 @@ let client: Anthropic | null = null
 let cachedContext: { text: string; fetchedAt: number } | null = null
 const allow = createRateLimiter(ASK_LIMITS.maxPerWindow, ASK_LIMITS.windowMs)
 
-async function loadContext(): Promise<string> {
-    if (cachedContext && Date.now() - cachedContext.fetchedAt < CONTEXT_TTL_MS) return cachedContext.text
-    const response = await fetch(`${siteOrigin()}/llms.txt`)
+async function fetchLlmsTxt(origin: string): Promise<string> {
+    // 느린 응답이 함수 실행 시간을 잡아먹지 않도록 5초 제한
+    const response = await fetch(`${origin}/llms.txt`, { signal: AbortSignal.timeout(5000) })
     if (!response.ok) throw new Error(`llms.txt ${response.status}`)
-    const text = (await response.text()).slice(0, 60_000)
-    cachedContext = { text, fetchedAt: Date.now() }
-    return text
+    return (await response.text()).slice(0, 60_000)
 }
 
-function clientIp(req: Req): string {
-    const forwarded = req.headers['x-forwarded-for']
-    const first = (Array.isArray(forwarded) ? forwarded[0] : forwarded)?.split(',')[0]?.trim()
-    return first || req.socket.remoteAddress || 'unknown'
+async function loadContext(): Promise<string> {
+    if (cachedContext && Date.now() - cachedContext.fetchedAt < CONTEXT_TTL_MS) return cachedContext.text
+    const origin = siteOrigin()
+    let text: string
+    try {
+        text = await fetchLlmsTxt(origin)
+    } catch (err) {
+        // Preview 배포 보호(401) 등으로 실패하면 운영 사이트의 문서로 대체
+        if (origin === FALLBACK_SITE) throw err
+        text = await fetchLlmsTxt(FALLBACK_SITE)
+    }
+    cachedContext = { text, fetchedAt: Date.now() }
+    return text
 }
 
 export default async function handler(req: Req, res: Res) {
@@ -56,7 +64,7 @@ export default async function handler(req: Req, res: Res) {
         return res.status(405).json({ error: 'method-not-allowed' })
     }
 
-    const input = parseAskInput(typeof req.body === 'string' ? safeParse(req.body) : req.body)
+    const input = parseAskInput(readJsonBody(req.body))
     if (!input) return res.status(400).json({ error: 'invalid-input' })
     if (!process.env.ANTHROPIC_API_KEY) return res.status(503).json({ error: 'not-configured' })
     if (!allow(clientIp(req))) return res.status(429).json({ error: 'rate-limited' })
@@ -66,7 +74,8 @@ export default async function handler(req: Req, res: Res) {
         client ??= new Anthropic()
         const response = await client.messages.create({
             model: MODEL,
-            max_tokens: 1024,
+            // adaptive thinking 토큰도 포함되므로 답변 본문이 잘리지 않게 여유 있게 설정 (effort low 로 사고량은 제한)
+            max_tokens: 4096,
             output_config: { effort: 'low' },
             // 고정 지침 + 포트폴리오 문서를 캐시해 반복 질문의 입력 비용을 낮춤
             system: [
@@ -95,13 +104,5 @@ export default async function handler(req: Req, res: Res) {
         }
         console.error('[api/ask]', err)
         return res.status(500).json({ error: 'server-error' })
-    }
-}
-
-function safeParse(raw: string): unknown {
-    try {
-        return JSON.parse(raw)
-    } catch {
-        return null
     }
 }

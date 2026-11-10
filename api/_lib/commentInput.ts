@@ -20,10 +20,13 @@ const isDocId = (value: unknown, max: number): value is string =>
     && value !== '..'
     && !/^__.*__$/.test(value)
 
+// 블로그 글 slug 형식: 마크다운은 'YYYY-MM-DD-제목', HTML 글은 'html-제목' — 임의 컬렉션 생성 방지
+const POST_SLUG = /^(\d{4}-\d{2}-\d{2}-|html-)\S/
+
 export function parseCommentAction(body: unknown): CommentAction | null {
     if (!body || typeof body !== 'object') return null
     const b = body as Record<string, unknown>
-    if (!isDocId(b.slug, COMMENT_LIMITS.slug)) return null
+    if (!isDocId(b.slug, COMMENT_LIMITS.slug) || !POST_SLUG.test(b.slug)) return null
     if (typeof b.password !== 'string' || b.password.length === 0 || b.password.length > COMMENT_LIMITS.password) return null
 
     switch (b.action) {

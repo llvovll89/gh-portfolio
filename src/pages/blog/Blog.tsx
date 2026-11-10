@@ -92,18 +92,22 @@ export const Blog = () => {
     const isDefaultView = !debouncedQuery.trim() && !selectedCategory && selectedTags.length === 0;
 
     const featuredPosts = useMemo(
-        () => (isDefaultView ? sortPosts(allPosts.filter(post => post.featured), sortOrder) : []),
-        [allPosts, isDefaultView, sortOrder],
+        // 그룹 보기는 태그별 탐색이 목적이므로 대표 글을 따로 빼지 않음
+        () => (isDefaultView && viewMode !== "grouped"
+            ? sortPosts(allPosts.filter(post => post.featured && post.category !== NOTES_CATEGORY), sortOrder)
+            : []),
+        [allPosts, isDefaultView, sortOrder, viewMode],
     );
 
     const sortedPosts = useMemo(() => {
         if (debouncedQuery.trim()) return filteredPosts;
         // 기본 화면: Notes 와 상단에 고정된 대표 글은 일반 목록에서 제외
+        const featuredSlugs = new Set(featuredPosts.map(post => post.slug));
         const visible = isDefaultView
-            ? filteredPosts.filter(post => post.category !== NOTES_CATEGORY && !post.featured)
+            ? filteredPosts.filter(post => post.category !== NOTES_CATEGORY && !featuredSlugs.has(post.slug))
             : filteredPosts;
         return sortPosts(visible, sortOrder);
-    }, [filteredPosts, sortOrder, debouncedQuery, isDefaultView]);
+    }, [filteredPosts, sortOrder, debouncedQuery, isDefaultView, featuredPosts]);
 
     const groupedPosts = useMemo(
         () => (viewMode === "grouped" ? groupPostsByTag(sortedPosts) : {}),

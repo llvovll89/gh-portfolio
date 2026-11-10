@@ -48,6 +48,6 @@ export async function verifyCommentPassword(password: string, stored: string): P
         return safeEqual(sha256(password), stored)
     }
 
-    // crypto.subtle 미지원 환경에서 평문으로 저장됐던 과거 데이터
-    return safeEqual(password, stored)
+    // 과거 평문 저장값은 공개 문서에서 그대로 읽을 수 있으므로 비밀번호로 인정하지 않음
+    return false
 }
