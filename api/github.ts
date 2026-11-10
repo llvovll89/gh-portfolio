@@ -1,4 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
+import { GITHUB_CACHE_CONTROL, getAllowedOwner, pickGithubParams, validateGithubPath } from './_lib/githubGuard.js'
 
 type Req = IncomingMessage & { query: Record<string, string | string[]> }
 type Res = ServerResponse & {
@@ -6,28 +7,30 @@ type Res = ServerResponse & {
     json: (data: unknown) => void
 }
 
-const ALLOWED_PATH = /^\/repos\/[^/]+\/[^/]+(?:\/(?:branches|commits|issues|pulls))?$|^\/users\/[^/]+\/events$/
-
 export default async function handler(req: Req, res: Res) {
-    const rawPath = req.query.path
-    const apiPath = Array.isArray(rawPath) ? rawPath[0] : rawPath
+    if (req.method !== 'GET') {
+        res.setHeader('Allow', 'GET')
+        return res.status(405).json({ error: 'Method not allowed' })
+    }
 
-    if (!apiPath || !ALLOWED_PATH.test(apiPath)) {
+    const rawPath = req.query.path
+    const apiPath = validateGithubPath(
+        Array.isArray(rawPath) ? rawPath[0] : rawPath,
+        getAllowedOwner(process.env),
+    )
+
+    if (!apiPath) {
         return res.status(400).json({ error: 'Invalid or disallowed path' })
     }
 
-    const params = new URLSearchParams()
-    for (const [key, value] of Object.entries(req.query)) {
-        if (key === 'path') continue
-        if (Array.isArray(value)) value.forEach((v) => params.append(key, v))
-        else params.set(key, value)
-    }
-
-    const qs = params.toString()
+    const entries: [string, string][] = Object.entries(req.query)
+        .filter(([key]) => key !== 'path')
+        .map(([key, value]) => [key, Array.isArray(value) ? value[0] : value])
+    const qs = pickGithubParams(entries).toString()
     const url = `https://api.github.com${apiPath}${qs ? `?${qs}` : ''}`
 
     const token = process.env.GITHUB_TOKEN
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
         Accept: 'application/vnd.github+json',
         'X-GitHub-Api-Version': '2022-11-28',
         'User-Agent': 'gh-portfolio',
@@ -37,6 +40,7 @@ export default async function handler(req: Req, res: Res) {
     try {
         const upstream = await fetch(url, { headers })
         const data = await upstream.json()
+        if (upstream.ok) res.setHeader('Cache-Control', GITHUB_CACHE_CONTROL)
         res.status(upstream.status).json(data)
     } catch {
         res.status(502).json({ error: 'Upstream request failed' })

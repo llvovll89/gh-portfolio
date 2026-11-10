@@ -1,15 +1,22 @@
 import { db } from '../firebase/config'
-import {
-    collection, addDoc, updateDoc, deleteDoc,
-    doc, onSnapshot, query, orderBy, serverTimestamp,
-} from 'firebase/firestore'
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore'
 
 export type BlogComment = {
     id: string
     name: string
     message: string
-    pwHash: string
     createdAt: { toDate: () => Date } | null
+}
+
+export type CommentErrorCode = 'invalid-input' | 'wrong-password' | 'not-found' | 'not-configured' | 'rate-limited' | 'server-error'
+
+export class CommentRequestError extends Error {
+    readonly code: CommentErrorCode
+
+    constructor(code: CommentErrorCode) {
+        super(code)
+        this.code = code
+    }
 }
 
 function entriesRef(slug: string) {
@@ -25,12 +32,11 @@ export function subscribeBlogComments(
     return onSnapshot(q, (snap) => {
         const list: BlogComment[] = []
         snap.forEach((d) => {
-            const data = d.data()
+            const data = d.data() as Partial<Omit<BlogComment, 'id'>>
             list.push({
                 id: d.id,
                 name: data.name || '익명',
                 message: data.message || '',
-                pwHash: data.pwHash || '',
                 createdAt: data.createdAt ?? null,
             })
         })
@@ -41,17 +47,31 @@ export function subscribeBlogComments(
     })
 }
 
-export async function addBlogComment(
-    slug: string,
-    data: { name: string; message: string; pwHash: string },
-) {
-    await addDoc(entriesRef(slug), { ...data, createdAt: serverTimestamp() })
+// 쓰기는 서버(/api/comments)에서 비밀번호를 검증한 뒤 Admin SDK로 처리
+async function requestComment(body: Record<string, string>): Promise<void> {
+    let res: Response
+    try {
+        res = await fetch('/api/comments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        })
+    } catch {
+        throw new CommentRequestError('server-error')
+    }
+    if (res.ok) return
+    const data = await res.json().catch(() => null) as { error?: CommentErrorCode } | null
+    throw new CommentRequestError(data?.error ?? 'server-error')
 }
 
-export async function updateBlogComment(slug: string, commentId: string, message: string) {
-    await updateDoc(doc(db, 'blog_comments', slug, 'entries', commentId), { message })
+export function addBlogComment(slug: string, data: { name: string; message: string; password: string }) {
+    return requestComment({ action: 'create', slug, ...data })
 }
 
-export async function deleteBlogComment(slug: string, commentId: string) {
-    await deleteDoc(doc(db, 'blog_comments', slug, 'entries', commentId))
+export function updateBlogComment(slug: string, commentId: string, message: string, password: string) {
+    return requestComment({ action: 'update', slug, id: commentId, message, password })
+}
+
+export function deleteBlogComment(slug: string, commentId: string, password: string) {
+    return requestComment({ action: 'delete', slug, id: commentId, password })
 }

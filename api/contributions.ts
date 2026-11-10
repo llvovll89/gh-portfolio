@@ -1,4 +1,10 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
+import {
+    CONTRIBUTIONS_QUERY,
+    GITHUB_CACHE_CONTROL,
+    getAllowedOwner,
+    validateContributionsInput,
+} from './_lib/githubGuard.js'
 
 type Req = IncomingMessage & { query: Record<string, string | string[]> }
 type Res = ServerResponse & {
@@ -6,37 +12,24 @@ type Res = ServerResponse & {
     json: (data: unknown) => void
 }
 
-const CONTRIBUTIONS_QUERY = `
-query ($login: String!, $from: DateTime!, $to: DateTime!) {
-  user(login: $login) {
-    contributionsCollection(from: $from, to: $to) {
-      contributionCalendar {
-        totalContributions
-        weeks {
-          contributionDays {
-            date
-            contributionCount
-            color
-          }
-        }
-      }
-    }
-  }
-}
-`
-
 export default async function handler(req: Req, res: Res) {
+    if (req.method !== 'GET') {
+        res.setHeader('Allow', 'GET')
+        return res.status(405).json({ error: 'Method not allowed' })
+    }
+
     const get = (key: string) => {
         const v = req.query[key]
         return Array.isArray(v) ? v[0] : v
     }
 
-    const login = get('login')
-    const from = get('from')
-    const to = get('to')
+    const variables = validateContributionsInput(
+        { login: get('login'), from: get('from'), to: get('to') },
+        getAllowedOwner(process.env),
+    )
 
-    if (!login || !from || !to) {
-        return res.status(400).json({ error: 'login, from, to are required' })
+    if (!variables) {
+        return res.status(400).json({ error: 'Invalid login or date range' })
     }
 
     const token = process.env.GITHUB_TOKEN
@@ -50,10 +43,12 @@ export default async function handler(req: Req, res: Res) {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
+                'User-Agent': 'gh-portfolio',
             },
-            body: JSON.stringify({ query: CONTRIBUTIONS_QUERY, variables: { login, from, to } }),
+            body: JSON.stringify({ query: CONTRIBUTIONS_QUERY, variables }),
         })
         const data = await upstream.json()
+        if (upstream.ok) res.setHeader('Cache-Control', GITHUB_CACHE_CONTROL)
         res.status(upstream.status).json(data)
     } catch {
         res.status(502).json({ error: 'Upstream request failed' })
