@@ -3,6 +3,7 @@ title: Prompt Engineering 완벽 가이드 — AI 트렌드 총정리
 date: 2026-04-13
 summary: Zero-shot부터 Chain-of-Thought, Tree of Thought, ReAct까지 2026년 현재 실무에서 통하는 프롬프트 엔지니어링 핵심 기법과 안티패턴을 코드 예시와 함께 완전 정리합니다.
 tags: [AI, 프롬프트엔지니어링, LLM, Claude, GPT, Chain-of-Thought, RAG, AI트렌드]
+category: AI
 ---
 
 LLM(대형 언어 모델)이 일상이 된 지금, **모델을 얼마나 잘 다루느냐**가 개발자의 새로운 역량이 됐다. 프롬프트 엔지니어링은 단순히 "잘 물어보는 법"이 아니라, 모델의 추론 경로를 설계하고 원하는 출력을 안정적으로 끌어내는 **소프트웨어 엔지니어링의 한 분야**다.

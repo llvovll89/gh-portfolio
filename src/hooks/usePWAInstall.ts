@@ -86,14 +86,16 @@ export function usePWAInstall() {
             const deferredPrompt = e as BeforeInstallPromptEvent;
             setState({
                 status: "android",
-                prompt: async () => {
-                    await deferredPrompt.prompt();
-                    const choice = await deferredPrompt.userChoice;
-                    if (choice.outcome === "accepted") {
-                        setState({ status: "installed" });
-                    } else {
-                        dismiss();
-                    }
+                prompt: () => {
+                    void (async () => {
+                        await deferredPrompt.prompt();
+                        const choice = await deferredPrompt.userChoice;
+                        if (choice.outcome === "accepted") {
+                            setState({ status: "installed" });
+                        } else {
+                            dismiss();
+                        }
+                    })();
                 },
             });
         };

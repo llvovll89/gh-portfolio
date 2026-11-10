@@ -12,7 +12,7 @@ const loadStoredShortcuts = (): Record<KeyboardShortcutId, KeyCombination> => {
     try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
-            const parsed = JSON.parse(stored);
+            const parsed = JSON.parse(stored) as Partial<Record<KeyboardShortcutId, KeyCombination>>;
             return { ...DEFAULT_KEY_COMBINATIONS, ...parsed };
         }
     } catch (error) {
@@ -36,7 +36,7 @@ export const useKeyboardShortcuts = () => {
         combination: KeyCombination,
     ): { success: boolean; error?: string } => {
         // 충돌 검사
-        const conflict = Object.entries(shortcuts).find(
+        const conflict = (Object.entries(shortcuts) as [KeyboardShortcutId, KeyCombination][]).find(
             ([existingId, existingCombo]) =>
                 existingId !== id &&
                 areKeyCombinationsEqual(existingCombo, combination),

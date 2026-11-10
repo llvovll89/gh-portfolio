@@ -7,9 +7,11 @@ import {
     getTextColorFromBg,
 } from "../../utils/convertThemeTextColor";
 import {useCheckedMobileSize} from "../../hooks/useCheckedMobileSize";
-import {ThemeMode} from "../../context/constatns/Theme.type";
+import {ThemeMode} from "../../context/constants/Theme.type";
 import {LAYOUT_CONSTANTS} from "../../constants/layout";
 import {LuArrowUp} from "react-icons/lu";
+import {useLocation} from "react-router-dom";
+import {TerminalContext} from "../../context/TerminalState";
 
 interface ContentsProps {
     children?: React.ReactNode;
@@ -24,6 +26,12 @@ export const Contents = ({children, className}: ContentsProps) => {
     const [showScrollTop, setShowScrollTop] = useState(false);
     const [readProgress, setReadProgress] = useState(0);
     const sectionRef = useRef<HTMLElement>(null);
+    const {isTerminalVisible} = useContext(TerminalContext);
+    const {pathname} = useLocation();
+    // 하단 터미널 패널(absolute)이 본문을 덮으므로 포커스 요소가 가려지지 않도록 그 높이만큼 여백 확보
+    const isFooterOverlaying =
+        !isMobileSize && isTerminalVisible && !(pathname.startsWith("/blog/") && pathname !== "/blog/");
+    const footerInset = isFooterOverlaying ? layoutState.resizeFooterHeight + 8 : undefined;
 
     // 풀스크린 상태 감지
     useEffect(() => {
@@ -69,6 +77,8 @@ export const Contents = ({children, className}: ContentsProps) => {
                 py-2 sm:py-3 md:py-4 ${isMobileSize ? "px-2 pb-24" : "px-2 sm:px-3 md:px-4 pb-2"} ${isFullscreen ? "justify-center" : ""} ${className} ${backgroundClass} ${textColor}`}
             style={{
                 width: `calc(100% - ${isMobileSize ? LAYOUT_CONSTANTS.MOBILE_SIDEBAR_WIDTH : layoutState.resizeSidebarWidth}px)`,
+                scrollPaddingBottom: footerInset,
+                paddingBottom: footerInset,
                 ...backgroundStyle,
             }}
         >

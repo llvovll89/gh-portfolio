@@ -2,7 +2,7 @@ import { OptimizedImage } from "../../../components/OptimizedImage";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LuArrowUpRight, LuX } from "react-icons/lu";
 import { SiGithub } from "react-icons/si";
-import type { Project } from "../mocks/projectData";
+import type { Project } from "../projectData";
 import { CardDescAndSkills } from "./CardDescAndSkills";
 import { useTranslation } from "react-i18next";
 import { Portal } from "../../../components/Portal";
@@ -65,8 +65,10 @@ export const CardDetail = ({ selected, setSelectedProject }: CardDetailProps) =>
 
     return (
         <Portal>
-            <div className={`project-dialog-backdrop ${isVisible ? "is-visible" : ""}`} style={{ zIndex: SURFACE_LAYERS.projectDialog }} onClick={handleClose}>
-                <div ref={dialogRef} className="project-dialog scrolls" role="dialog" aria-modal="true" aria-labelledby="card-detail-title" onClick={event => event.stopPropagation()}>
+            {/* 백드롭 클릭 닫기는 마우스 보조 동작이며, 키보드는 document Escape 핸들러로 닫힘 */}
+            {/* eslint-disable-next-line jsx-a11y-x/click-events-have-key-events, jsx-a11y-x/no-static-element-interactions */}
+            <div className={`project-dialog-backdrop ${isVisible ? "is-visible" : ""}`} style={{ zIndex: SURFACE_LAYERS.projectDialog }} onClick={event => { if (event.target === event.currentTarget) handleClose(); }}>
+                <div ref={dialogRef} className="project-dialog scrolls" role="dialog" aria-modal="true" aria-labelledby="card-detail-title">
                     <header className="project-dialog-header">
                         <div><h2 id="card-detail-title">{selected.title}</h2><p>{selected.scale}{selected.status === "incomplete" ? ` / ${t("pages.projects.incomplete")}` : ""}</p></div>
                         <button ref={closeButtonRef} type="button" className="project-dialog-close" onClick={handleClose} aria-label={t("pages.projects.close")}><LuX aria-hidden="true" /></button>

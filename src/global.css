@@ -14,7 +14,10 @@
     --color-panel: var(--surface-panel);
     --color-inset: var(--surface-inset);
     --color-line: var(--line);
+    --color-input-line: var(--input-line);
     --color-on-accent: var(--on-accent);
+    --color-error: var(--error);
+    --color-success: var(--success);
     --color-main: var(--surface);
     --color-navy: var(--surface-inset);
     --color-sub-gary: var(--text-muted);
@@ -398,3 +401,17 @@ body {
 .image-fallback { display: grid; place-items: center; min-height: 64px; width: 100%; height: 100%; padding: 16px; background: var(--surface-inset); color: var(--text-muted); font-size: 12px; }
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+
+/* 프로젝트 카드 → 상세 View Transition (스크린샷이 이어지는 모션) */
+::view-transition-group(*) {
+    animation-duration: 280ms;
+    animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none !important;
+    }
+}

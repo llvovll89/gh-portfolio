@@ -3,6 +3,7 @@ title: Spring Boot + JPA 정리
 date: 2026-02-08
 summary: Spring Boot 기초부터 JPA 실전 활용까지 - 엔터프라이즈 애플리케이션 개발의 정석
 tags: [spring-boot, jpa, hibernate, spring-data-jpa, entity, repository, java]
+category: Backend
 ---
 
 # Spring Boot + JPA 정리 (실전 중심)

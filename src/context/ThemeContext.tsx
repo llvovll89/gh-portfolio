@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useMemo } from "react";
 import { ThemeContext, type SelectedThemeState } from "./ThemeState";
-import { ThemeMode } from "./constatns/Theme.type";
+import { ThemeMode } from "./constants/Theme.type";
 import { getThemePalette } from "../utils/themePalette";
 const THEME_STORAGE_KEY = "portfolio-theme-settings";
 
@@ -9,9 +9,9 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             const stored = localStorage.getItem(THEME_STORAGE_KEY);
             if (stored) {
-                const parsed = JSON.parse(stored);
+                const parsed = JSON.parse(stored) as { mode?: ThemeMode; customColor?: string };
                 return {
-                    mode: Object.values(ThemeMode).includes(parsed.mode) ? parsed.mode : ThemeMode.SYSTEM,
+                    mode: parsed.mode && Object.values(ThemeMode).includes(parsed.mode) ? parsed.mode : ThemeMode.SYSTEM,
                     isVisibleThemeDropdown: false,
                     customColor: parsed.customColor,
                 };
@@ -52,8 +52,13 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }, [selectedTheme.mode, selectedTheme.customColor]);
 
+    const value = useMemo(
+        () => ({ selectedTheme, setSelectedTheme, resolvedDark: palette.dark }),
+        [selectedTheme, palette.dark],
+    );
+
     return (
-        <ThemeContext.Provider value={{ selectedTheme, setSelectedTheme, resolvedDark: palette.dark }}>
+        <ThemeContext.Provider value={value}>
             {children}
         </ThemeContext.Provider>
     );

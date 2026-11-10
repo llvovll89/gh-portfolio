@@ -22,7 +22,7 @@ export const Profile = () => {
                 <header className="profile-intro">
                     <OptimizedImage src="/assets/images/kimgeonho/증명사진.png" alt={t("pages.profile.photoAlt")} sizes="112px" width={112} height={112} />
                     <div>
-                        <h1>김건호 <span>Geon Ho Kim</span></h1>
+                        <h1>김건호 <span>Geonho Kim</span></h1>
                         <p className="profile-role">Full-stack Web Developer</p>
                         <p className="profile-summary">{t("pages.home.summary")}</p>
                         <div className="profile-links">

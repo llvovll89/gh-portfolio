@@ -1,4 +1,4 @@
-import type { Project } from "../mocks/projectData";
+import type { Project } from "../projectData";
 import { useTranslation } from "react-i18next";
 
 export const CardDescAndSkills = ({ project, headingLevel = 3 }: { project: Project; headingLevel?: 2 | 3 }) => {
@@ -10,6 +10,8 @@ export const CardDescAndSkills = ({ project, headingLevel = 3 }: { project: Proj
             {project.challenge && <section><Heading>{t("pages.projects.challenge")}</Heading><p>{project.challenge}</p></section>}
             {!!project.contributions?.length && <section><Heading>{t("pages.projects.contributions")}</Heading><ul>{project.contributions.map(item => <li key={item}>{item}</li>)}</ul></section>}
             {project.outcome && <section><Heading>{t("pages.projects.outcome")}</Heading><p>{project.outcome}</p></section>}
+            {!!project.decisions?.length && <section><Heading>{t("pages.projects.decisions")}</Heading><ul>{project.decisions.map(item => <li key={item}>{item}</li>)}</ul></section>}
+            {!!project.metrics?.length && <section><Heading>{t("pages.projects.metrics")}</Heading><ul>{project.metrics.map(item => <li key={item}>{item}</li>)}</ul></section>}
             <section><Heading>{t("pages.projects.projectIntro")}</Heading><p>{project.detailedDescription}</p></section>
             <section><Heading>{t("pages.projects.techStack")}</Heading><div className="project-detail-tags">{project.skills.map(skill => <span key={skill}>{skill}</span>)}</div></section>
             {!!project.projectMembers?.length && <section><Heading>{t("pages.projects.team")}</Heading><p>{project.projectMembers.join(", ")}</p></section>}

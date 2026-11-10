@@ -3,9 +3,10 @@ import { uiText } from "../../utils/uiText";
 import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
-import { FaReact, FaGithub, FaFigma } from "react-icons/fa";
+import { FaReact, FaGithub, FaFigma, FaSlack } from "react-icons/fa";
+import { GrOracle } from "react-icons/gr";
 import { TbBrandTypescript, TbBrandVscode } from "react-icons/tb";
-import { SiPostman, SiSlack, SiTailwindcss, SiPostgresql, SiOracle, SiJira, SiFirebase } from "react-icons/si";
+import { SiPostman, SiTailwindcss, SiPostgresql, SiJira, SiFirebase } from "react-icons/si";
 import { BiLogoSpringBoot } from "react-icons/bi";
 import { useSeoMeta } from "../../hooks/useSeoMeta";
 
@@ -81,7 +82,7 @@ export const Uses = () => {
                 },
                 {
                     name: "Oracle",
-                    icon: SiOracle,
+                    icon: GrOracle,
                     description: uiText("엔터프라이즈 데이터베이스"),
                     link: "https://www.oracle.com/database/",
                 },
@@ -115,7 +116,7 @@ export const Uses = () => {
                 },
                 {
                     name: "Slack",
-                    icon: SiSlack,
+                    icon: FaSlack,
                     description: uiText("팀 커뮤니케이션"),
                     link: "https://slack.com/",
                 },
@@ -153,7 +154,6 @@ export const Uses = () => {
                                             href={tool.link}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            aria-label={uiText("자세히 보기") + ": " + tool.name}
                                             className={[
                                                 "tool-item group relative overflow-hidden",
                                                 "rounded-xl p-5",
@@ -190,7 +190,7 @@ export const Uses = () => {
                                                     </p>
 
                                                     {/* 링크 표시 */}
-                                                    <div className="flex items-center gap-1 text-[10px] md:text-xs text-primary group-hover:text-primary transition-colors">
+                                                    <div className="flex items-center gap-1 text-[11px] md:text-xs text-primary group-hover:text-primary transition-colors">
                                                         <span>{uiText("자세히 보기")}</span>
                                                         <svg className="w-3 h-3 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

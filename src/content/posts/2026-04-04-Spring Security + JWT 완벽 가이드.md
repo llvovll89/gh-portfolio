@@ -3,6 +3,7 @@ title: Spring Security + JWT 완벽 가이드
 date: 2026-04-04
 summary: Spring Security 아키텍처부터 JWT 발급/검증, Refresh Token 전략, React 연동까지 실무에서 바로 쓰는 인증·인가 구현을 단계별로 정리한다.
 tags: [Spring Boot, Spring Security, JWT, Java, 인증, 백엔드]
+category: Backend
 ---
 
 Spring Boot 애플리케이션에서 인증·인가를 구현할 때 가장 많이 쓰이는 조합이 **Spring Security + JWT**다. 세션 없이 Stateless하게 사용자를 인증하고, 마이크로서비스나 SPA와도 자연스럽게 연동된다. 이 글에서는 의존성 설정부터 Refresh Token 전략, React 프론트엔드 연동까지 실무 수준으로 다룬다.

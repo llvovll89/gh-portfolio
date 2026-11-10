@@ -1,34 +1,32 @@
 import { defineConfig, loadEnv } from "vite";
-import react from "@vitejs/plugin-react";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import { VitePWA } from "vite-plugin-pwa";
 import { blogContent } from "./build/blogContent";
 import { seoPages } from "./build/seo";
+import {
+    CONTRIBUTIONS_QUERY,
+    getAllowedOwner,
+    pickGithubParams,
+    validateContributionsInput,
+    validateGithubPath,
+} from "./api/_lib/githubGuard.js";
 
-const ALLOWED_PATH = /^\/repos\/[^/]+\/[^/]+(?:\/(?:branches|commits|issues|pulls))?$|^\/users\/[^/]+\/events$/;
-
-const CONTRIBUTIONS_QUERY = `
-query ($login: String!, $from: DateTime!, $to: DateTime!) {
-  user(login: $login) {
-    contributionsCollection(from: $from, to: $to) {
-      contributionCalendar {
-        totalContributions
-        weeks { contributionDays { date contributionCount color } }
-      }
-    }
-  }
-}`;
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), "");
     // 로컬: VITE_GIT_HUB_TOKEN 또는 GITHUB_TOKEN 모두 지원
     const GITHUB_TOKEN = env.GITHUB_TOKEN || env.VITE_GIT_HUB_TOKEN || "";
+    const GITHUB_OWNER = getAllowedOwner(env);
 
     return {
         plugins: [
             blogContent(),
             react(),
+            // React Compiler(안정판 Babel preset) — 컴포넌트·훅 자동 메모이제이션
+            babel({ presets: [reactCompilerPreset()] }),
             tailwindcss(),
             VitePWA({
                 registerType: "autoUpdate",
@@ -36,7 +34,7 @@ export default defineConfig(({ mode }) => {
                 devOptions: { enabled: false },
                 // 빌드 시 precache할 파일 패턴
                 workbox: {
-                    globIgnores: ["**/post-body-*.js", "**/searchPosts-*.js", "blog/**", "projects/**", "profile/**", "resume/**", "contact/**", "uses/**", "404.html"],
+                    globIgnores: ["**/post-body-*.js", "**/searchPosts-*.js", "**/static/en-*.js", "**/static/ja-*.js", "blog/**", "projects/**", "profile/**", "resume/**", "contact/**", "uses/**", "404.html"],
                     globPatterns: [
                         "**/*.{js,css,html,ico,svg}",
                         "assets/logo/*.png",
@@ -50,7 +48,8 @@ export default defineConfig(({ mode }) => {
                             options: { cacheName: "on-demand-scripts", expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 30 } },
                         },
                         {
-                            urlPattern: /^\/api\//,
+                            // Workbox는 RegExp를 전체 href와 비교하므로 pathname으로 매칭 (GET만 캐시됨)
+                            urlPattern: ({ url, sameOrigin }) => sameOrigin && url.pathname.startsWith("/api/"),
                             handler: "NetworkFirst",
                             options: {
                                 cacheName: "api-cache",
@@ -129,18 +128,14 @@ export default defineConfig(({ mode }) => {
 
                         // ── /api/github ─────────────────────────────────────
                         if (urlObj.pathname === "/api/github") {
-                            const apiPath = urlObj.searchParams.get("path");
-                            if (!apiPath || !ALLOWED_PATH.test(apiPath)) {
+                            const apiPath = validateGithubPath(urlObj.searchParams.get("path") ?? undefined, GITHUB_OWNER);
+                            if (!apiPath) {
                                 res.writeHead(400, { "Content-Type": "application/json" });
                                 res.end(JSON.stringify({ error: "Invalid path" }));
                                 return;
                             }
 
-                            const params = new URLSearchParams();
-                            for (const [k, v] of urlObj.searchParams) {
-                                if (k !== "path") params.set(k, v);
-                            }
-                            const qs = params.toString();
+                            const qs = pickGithubParams(urlObj.searchParams).toString();
                             const url = `https://api.github.com${apiPath}${qs ? `?${qs}` : ""}`;
 
                             const headers: Record<string, string> = {
@@ -164,13 +159,15 @@ export default defineConfig(({ mode }) => {
 
                         // ── /api/contributions ───────────────────────────────
                         if (urlObj.pathname === "/api/contributions") {
-                            const login = urlObj.searchParams.get("login");
-                            const from = urlObj.searchParams.get("from");
-                            const to = urlObj.searchParams.get("to");
+                            const variables = validateContributionsInput({
+                                login: urlObj.searchParams.get("login") ?? undefined,
+                                from: urlObj.searchParams.get("from") ?? undefined,
+                                to: urlObj.searchParams.get("to") ?? undefined,
+                            }, GITHUB_OWNER);
 
-                            if (!login || !from || !to) {
+                            if (!variables) {
                                 res.writeHead(400, { "Content-Type": "application/json" });
-                                res.end(JSON.stringify({ error: "login, from, to are required" }));
+                                res.end(JSON.stringify({ error: "Invalid login or date range" }));
                                 return;
                             }
                             if (!GITHUB_TOKEN) {
@@ -188,7 +185,7 @@ export default defineConfig(({ mode }) => {
                                     },
                                     body: JSON.stringify({
                                         query: CONTRIBUTIONS_QUERY,
-                                        variables: { login, from, to },
+                                        variables,
                                     }),
                                 });
                                 const data = await upstream.text();
@@ -201,6 +198,37 @@ export default defineConfig(({ mode }) => {
                             return;
                         }
 
+                        // ── /api/comments, /api/ask (Vercel 함수 그대로 실행) ──
+                        if (urlObj.pathname === "/api/comments" || urlObj.pathname === "/api/ask") {
+                            const chunks: Buffer[] = [];
+                            for await (const chunk of req) chunks.push(chunk as Buffer);
+                            const raw = Buffer.concat(chunks).toString("utf8");
+                            // process.env 에 undefined 를 대입하면 문자열 "undefined" 가 되므로 값이 있을 때만 주입
+                            for (const key of ["FIREBASE_SERVICE_ACCOUNT", "ANTHROPIC_API_KEY"]) {
+                                if (!process.env[key] && env[key]) process.env[key] = env[key];
+                            }
+
+                            try {
+                            const { default: handler } = await server.ssrLoadModule(urlObj.pathname + ".ts") as { default: (req: unknown, res: unknown) => Promise<void> };
+                            const shimRes = Object.assign(res, {
+                                status(code: number) { res.statusCode = code; return shimRes; },
+                                json(data: unknown) {
+                                    res.setHeader("Content-Type", "application/json");
+                                    res.end(JSON.stringify(data));
+                                },
+                            });
+                            let body: unknown;
+                            try { body = raw ? JSON.parse(raw) : null; } catch { body = null; }
+                            await handler(Object.assign(req, { body }), shimRes);
+                            } catch (err) {
+                                // 모듈 로드·핸들러 예외 시 요청이 pending 으로 남지 않도록 500 응답
+                                console.error("[dev api]", err);
+                                if (!res.headersSent) res.writeHead(500, { "Content-Type": "application/json" });
+                                res.end(JSON.stringify({ error: "server-error" }));
+                            }
+                            return;
+                        }
+
                         next();
                     });
                 },
@@ -208,11 +236,13 @@ export default defineConfig(({ mode }) => {
             seoPages(),
         ],
         build: {
-            rollupOptions: {
+            // 해시 산출물은 /static 으로 분리 → vercel.json 에서 immutable 캐시 적용
+            assetsDir: "static",
+            rolldownOptions: {
                 output: {
                     chunkFileNames: chunk => chunk.facadeModuleId?.includes("?raw")
-                        ? "assets/post-body-[hash].js"
-                        : "assets/[name]-[hash].js",
+                        ? "static/post-body-[hash].js"
+                        : "static/[name]-[hash].js",
                 },
             },
         },

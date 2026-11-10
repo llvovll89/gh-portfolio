@@ -23,7 +23,7 @@ function loadTypeScript(file) {
 
 const { blogContent } = loadTypeScript("build/blogContent.ts");
 const { parseMarkdownPost, parseHtmlPost } = loadTypeScript("src/utils/postMetadata.ts");
-const { projects } = loadTypeScript("src/pages/projects/mocks/projectData.ts");
+const { projects } = loadTypeScript("src/pages/projects/projectData.ts");
 
 function readGenerated(plugin, filename, query) {
     const code = plugin.load.call({ addWatchFile() {} }, resolve(filename) + "?" + query);

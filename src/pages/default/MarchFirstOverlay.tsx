@@ -72,7 +72,8 @@ export const MarchFirstOverlay = () => {
     const [dismissed, setDismissed] = useState(false);
     const isMobileSize = useCheckedMobileSize();
 
-    if (!isMarchFirst()) return null;
+    // 닫으면 배지와 무한 반복 깃발 애니메이션을 함께 숨김 (WCAG 2.2.2)
+    if (!isMarchFirst() || dismissed) return null;
 
     const visibleFlags = isMobileSize ? FLAGS.slice(0, 6) : FLAGS;
 
@@ -118,13 +119,14 @@ export const MarchFirstOverlay = () => {
                             boxShadow: "0 1px 4px rgba(0,0,0,0.45)",
                         }}
                     />
-                    <div className="flex flex-col min-w-0">
-                        <div className="text-[10px] text-muted font-medium tracking-wide">제 107주년</div>
+                    <div lang="ko" className="flex flex-col min-w-0">
+                        <div className="text-[11px] text-muted font-medium tracking-wide">제 107주년</div>
                         <div className="text-sm font-bold text-foreground whitespace-nowrap">3·1절을 기념합니다</div>
                     </div>
                     <button
+                        type="button"
                         onClick={() => setDismissed(true)}
-                        className="ml-1 flex items-center justify-center w-5 h-5 rounded-full text-muted hover:text-foreground hover:bg-foreground/10 transition-all duration-150 text-base leading-none shrink-0"
+                        className="ml-1 flex items-center justify-center w-8 h-8 rounded-full text-muted hover:text-foreground hover:bg-foreground/10 transition-all duration-150 text-base leading-none shrink-0"
                         aria-label={uiText("닫기")}
                     >
                         ×

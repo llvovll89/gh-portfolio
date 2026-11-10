@@ -10,7 +10,7 @@ import { FooterTabs } from "./tabs/FooterTabs";
 import { ConsoleTab } from "./tabs/ConsoleTab";
 import { ProblemsTab } from "./tabs/ProblemsTab";
 import { OutputTab } from "./tabs/OutputTab";
-import type { FooterTabType } from "./types";
+import { FOOTER_TAB_IDS, type FooterTabType } from "./types";
 import { KeyboardContext } from "../../context/KeyboardState";
 
 const COLLAPSED_HEIGHT = 32; // 헤더 바 높이(h-8)
@@ -43,7 +43,14 @@ export const Bottom = () => {
 
     // 탭 상태 관리
     const [activeTab, setActiveTab] = useState<FooterTabType>(
-        () => (localStorage.getItem("footerActiveTab") as FooterTabType) || "terminal"
+        () => {
+            try {
+                const stored = localStorage.getItem("footerActiveTab");
+                return FOOTER_TAB_IDS.includes(stored as FooterTabType) ? (stored as FooterTabType) : "terminal";
+            } catch {
+                return "terminal";
+            }
+        }
     );
 
     // CLI 명령 실행(외부 KeyboardContext 이벤트) 시 콘솔 탭으로 자동 전환 + 패널 열기
@@ -58,7 +65,11 @@ export const Bottom = () => {
     // activeTab 변경 시 localStorage에 저장
     const handleTabChange = (tab: FooterTabType) => {
         setActiveTab(tab);
-        localStorage.setItem("footerActiveTab", tab);
+        try {
+            localStorage.setItem("footerActiveTab", tab);
+        } catch {
+            // 저장소 차단 환경에서는 무시
+        }
     };
 
     return (
@@ -140,7 +151,9 @@ export const Bottom = () => {
 
             {/* 리사이즈 핸들도 열렸을 때만 */}
             {isOpen && (
+                // 포인터 드래그 전용 장식 핸들이므로 보조기술에서 숨김
                 <div
+                    aria-hidden="true"
                     style={{
                         height: 10,
                         cursor: "ns-resize",

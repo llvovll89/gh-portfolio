@@ -3,6 +3,7 @@ title: Claude Code 정리
 date: 2026-03-08
 summary: Anthropic의 AI 코딩 도구 Claude Code의 핵심 개념, 주요 기능, 슬래시 명령어, 훅 시스템, MCP 서버 연동까지 실전 활용법 총정리
 tags: [claude-code, AI, anthropic, 개발도구, CLI, LLM, 코딩도구]
+category: AI
 ---
 
 # Claude Code 정리

@@ -9,7 +9,7 @@ export const keyboardKeyAndStateMock: KeyboardKeyAndState[] = [
         label: "폴더 열기/닫기",
     },
     {
-        key: "Ctrl + F",
+        key: "Ctrl + Shift + F",
         label: "검색 열기/닫기",
     },
     {

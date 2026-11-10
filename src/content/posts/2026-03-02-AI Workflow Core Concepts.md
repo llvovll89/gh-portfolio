@@ -3,6 +3,7 @@ title: AI Workflow Core Concepts
 date: 2026-03-02
 summary: AI Workflow를 정리한 글 입니다.
 tags: [LLM, AI, Agent]
+category: AI
 ---
 
 # AI Workflow Core Concepts

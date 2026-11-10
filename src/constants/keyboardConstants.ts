@@ -42,9 +42,11 @@ export const DEFAULT_KEY_COMBINATIONS: Record<
         key: "KeyY",
         ctrl: true,
     },
+    // 브라우저의 페이지 내 찾기(Ctrl+F)를 가로채지 않도록 VS Code 전체 검색과 같은 Ctrl+Shift+F 사용
     [KeyboardShortcutId.TOGGLE_SEARCH]: {
         key: "KeyF",
         ctrl: true,
+        shift: true,
     },
     [KeyboardShortcutId.CLI_ENTER]: {
         key: "Enter",

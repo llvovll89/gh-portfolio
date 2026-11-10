@@ -3,7 +3,8 @@ import {useState} from "react";
 
 interface ImgProps {
     src: string;
-    alt?: string;
+    // 장식용 이미지는 alt="" 를 명시적으로 전달
+    alt: string;
     className?: string;
     fallbackSrc?: string;
     showSkeleton?: boolean;
@@ -32,7 +33,7 @@ export const Img = ({
             <OptimizedImage
                 onDragStart={(e) => e.preventDefault()}
                 src={currentSrc}
-                alt={alt ?? ""}
+                alt={alt}
                 className={`${className ?? ""} ${showSkeleton && !loaded ? "opacity-0" : "opacity-100"} transition-opacity duration-300`}
                 loading="lazy"
                 decoding="async"

@@ -1,3 +1,4 @@
+import { SETTINGS_STORAGE_KEY, SETTINGS_BADGE_STORAGE_KEY, SETTINGS_UPDATED_EVENT } from "@/constants/settings";
 import { Portal } from "../Portal";
 import { useModalBackground } from "../../hooks/useModalBackground";
 import { uiText } from "../../utils/uiText";
@@ -16,7 +17,7 @@ import {
     SHORTCUT_DESCRIPTIONS_JA,
 } from "@/constants/keyboardConstants";
 import { KeyboardShortcutId } from "@/types/Keyboard.types";
-import { useFocusTrap } from "@/hooks/useKeyboardNavigation";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useHandlePushPath } from "@/hooks/useHandlePushPath";
 import {
     BLOG,
@@ -25,107 +26,28 @@ import {
     RESUME,
     USES,
 } from "@/routes/route";
-import { ThemeMode } from "@/context/constatns/Theme.type";
+import { ThemeMode } from "@/context/constants/Theme.type";
 import { useTranslation } from "react-i18next";
-
-const RECENT_COMMANDS_STORAGE_KEY = "portfolio-command-palette-recent";
-const PINNED_COMMANDS_STORAGE_KEY = "portfolio-command-palette-pinned";
-const COMMAND_USAGE_STATS_STORAGE_KEY = "portfolio-command-palette-usage-stats";
-const COMMAND_USAGE_STORAGE_VERSION = 1;
-const SETTINGS_STORAGE_KEY = "portfolio-settings";
-const SETTINGS_BADGE_STORAGE_KEY = "portfolio-settings-has-updates";
-const SETTINGS_UPDATED_EVENT = "portfolio-settings-updated";
-const MAX_RECENT_COMMANDS = 6;
-const MAX_PINNED_COMMANDS = 8;
-const MAX_RECOMMENDED_COMMANDS = 5;
-
-type CommandUsageStats = Record<string, { count: number; lastUsedAt: number }>;
-type CommandUsageStorage = {
-    version: number;
-    stats: CommandUsageStats;
-};
-
-
-const CATEGORY_ORDER: Command["category"][] = [
-    "Navigation",
-    "Layout",
-    "Theme",
-    "Language",
-    "System",
-];
-
-const THEME_LABELS: Record<Exclude<ThemeMode, ThemeMode.CUSTOM>, string> = {
-    [ThemeMode.SYSTEM]: "테마: 시스템 설정",
-    [ThemeMode.LIGHT]: "테마: 밝은 화면",
-    [ThemeMode.DARK]: "테마: 검은배경",
-    [ThemeMode.BASE_NAVY]: "테마: 짙은 남색",
-    [ThemeMode.SUB_BLUE]: "테마: 파란하늘",
-    [ThemeMode.SUB_PINK]: "테마: 분홍빛",
-    [ThemeMode.SUB_GREEN]: "테마: 짙은 숲",
-    [ThemeMode.MAIN_TEAL]: "테마: 푸른숲",
-    [ThemeMode.SUB_TEAL]: "테마: 푸른 나무",
-};
-
-const THEME_MODE_ORDER = Object.keys(THEME_LABELS) as Array<Exclude<ThemeMode, ThemeMode.CUSTOM>>;
-
-const LANGUAGE_LABELS = {
-    ko: "언어: 한국어",
-    en: "언어: English",
-    ja: "언어: 日本語",
-} as const;
-
-interface Command {
-    id: string;
-    label: string;
-    description: string;
-    shortcut: string;
-    category: "Layout" | "Navigation" | "Theme" | "Language" | "System";
-    keywords?: string[];
-    quickHint?: string;
-    action: () => void;
-}
-
-interface CommandSectionRow {
-    type: "section";
-    id: string;
-    label: string;
-}
-
-interface CommandItemRow {
-    type: "command";
-    command: Command;
-    index: number;
-}
-
-type CommandRow = CommandSectionRow | CommandItemRow;
-
-function readStoredList(key: string): string[] {
-    try { const value: unknown = JSON.parse(localStorage.getItem(key) ?? "[]"); return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string") : []; } catch { return []; }
-}
-function readUsageStats(): CommandUsageStats {
-    try {
-        const stored = JSON.parse(localStorage.getItem(COMMAND_USAGE_STATS_STORAGE_KEY) ?? "{}");
-        const stats = stored.stats ?? stored;
-        return Object.fromEntries(Object.entries(stats).filter(([, value]) => {
-            if (!value || typeof value !== "object") return false;
-            const entry = value as { count?: unknown; lastUsedAt?: unknown };
-            return typeof entry.count === "number" && Number.isFinite(entry.count) && entry.count >= 0 && typeof entry.lastUsedAt === "number" && Number.isFinite(entry.lastUsedAt);
-        })) as CommandUsageStats;
-    } catch { return {}; }
-}
-
-function Highlight({ text, query }: { text: string; query: string }) {
-    if (!query) return <>{text}</>
-    const idx = text.toLowerCase().indexOf(query.toLowerCase())
-    if (idx === -1) return <>{text}</>
-    return (
-        <>
-            {text.slice(0, idx)}
-            <mark className="bg-yellow-400/30 text-inherit rounded-sm">{text.slice(idx, idx + query.length)}</mark>
-            {text.slice(idx + query.length)}
-        </>
-    )
-}
+import {
+    CATEGORY_ORDER,
+    COMMAND_USAGE_STATS_STORAGE_KEY,
+    COMMAND_USAGE_STORAGE_VERSION,
+    LANGUAGE_LABELS,
+    MAX_PINNED_COMMANDS,
+    MAX_RECENT_COMMANDS,
+    MAX_RECOMMENDED_COMMANDS,
+    PINNED_COMMANDS_STORAGE_KEY,
+    RECENT_COMMANDS_STORAGE_KEY,
+    THEME_LABELS,
+    THEME_MODE_ORDER,
+    readStoredList,
+    readUsageStats,
+    type Command,
+    type CommandRow,
+    type CommandUsageStats,
+    type CommandUsageStorage,
+} from "./commandPaletteModel";
+import { Highlight } from "./Highlight";
 
 /**
  * 명령 팔레트 컴포넌트
@@ -156,9 +78,9 @@ export const CommandPalette = () => {
     useModalBackground(isVisibleCommandPalette);
 
     const setLanguage = (next: "ko" | "en" | "ja") => {
-        i18n.changeLanguage(next);
+        void i18n.changeLanguage(next);
         try {
-            const existing = JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY) ?? "{}");
+            const existing = JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY) ?? "{}") as Record<string, unknown>;
             localStorage.setItem(
                 SETTINGS_STORAGE_KEY,
                 JSON.stringify({ ...existing, language: next }),
@@ -730,45 +652,23 @@ export const CommandPalette = () => {
         if (command && command.action) {
             command.action();
 
-            setUsageStats((prev) => {
-                const current = prev[command.id];
-                const next: CommandUsageStats = {
-                    ...prev,
-                    [command.id]: {
-                        count: (current?.count ?? 0) + 1,
-                        lastUsedAt: now,
-                    },
-                };
-                try {
-                    const nextStorage: CommandUsageStorage = {
-                        version: COMMAND_USAGE_STORAGE_VERSION,
-                        stats: next,
-                    };
-                    localStorage.setItem(
-                        COMMAND_USAGE_STATS_STORAGE_KEY,
-                        JSON.stringify(nextStorage),
-                    );
-                } catch {
-                    // ignore storage errors
-                }
-                return next;
-            });
-
-            setRecentCommandIds((prev) => {
-                const next = [command.id, ...prev.filter((id) => id !== command.id)].slice(
-                    0,
-                    MAX_RECENT_COMMANDS,
-                );
-                try {
-                    localStorage.setItem(
-                        RECENT_COMMANDS_STORAGE_KEY,
-                        JSON.stringify(next),
-                    );
-                } catch {
-                    // ignore storage errors
-                }
-                return next;
-            });
+            // 실행 직후 팔레트가 닫히며 unmount 되면 state updater 가 실행되지 않으므로,
+            // 다음 값을 먼저 계산해 저장소에 즉시 기록한 뒤 state 를 갱신
+            const current = usageStats[command.id];
+            const nextStats: CommandUsageStats = {
+                ...usageStats,
+                [command.id]: { count: (current?.count ?? 0) + 1, lastUsedAt: now },
+            };
+            const nextRecent = [command.id, ...recentCommandIds.filter((id) => id !== command.id)].slice(0, MAX_RECENT_COMMANDS);
+            try {
+                const nextStorage: CommandUsageStorage = { version: COMMAND_USAGE_STORAGE_VERSION, stats: nextStats };
+                localStorage.setItem(COMMAND_USAGE_STATS_STORAGE_KEY, JSON.stringify(nextStorage));
+                localStorage.setItem(RECENT_COMMANDS_STORAGE_KEY, JSON.stringify(nextRecent));
+            } catch {
+                // ignore storage errors
+            }
+            setUsageStats(nextStats);
+            setRecentCommandIds(nextRecent);
         }
         closeCommandPalette();
     };
@@ -800,9 +700,12 @@ export const CommandPalette = () => {
     if (!isVisibleCommandPalette) return null;
 
     return (
-        <Portal><div
+        <Portal>
+        {/* 백드롭 클릭 닫기는 마우스 보조 동작이며, 키보드는 input의 Escape(handleKeyDown)로 닫힘 */}
+        {/* eslint-disable-next-line jsx-a11y-x/click-events-have-key-events, jsx-a11y-x/no-noninteractive-element-interactions */}
+        <div
             className="fixed inset-0 z-50 flex items-start justify-center bg-inverse/50 pt-12 sm:pt-16 md:pt-24 px-4"
-            onClick={closeCommandPalette}
+            onClick={(e) => { if (e.target === e.currentTarget) closeCommandPalette(); }}
             role="dialog"
             aria-modal="true"
             aria-label={uiText("명령 팔레트")}
@@ -810,7 +713,6 @@ export const CommandPalette = () => {
             <div
                 ref={containerRef}
                 className="w-full max-w-sm sm:max-w-lg md:max-w-2xl rounded-lg bg-panel shadow-2xl"
-                onClick={(e) => e.stopPropagation()}
             >
                 {/* 검색 입력 */}
                 <div className="border-b border-line p-4">
@@ -824,7 +726,7 @@ export const CommandPalette = () => {
                         }}
                         onKeyDown={handleKeyDown}
                         placeholder={uiText("명령을 입력하세요...")}
-                        className="w-full bg-transparent text-foreground outline-none placeholder:text-muted"
+                        className="w-full rounded-sm bg-transparent text-foreground outline-none placeholder:text-muted focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:ring-offset-panel"
                         role="combobox" aria-haspopup="grid"
                         aria-expanded="true"
                         aria-controls="command-list"
@@ -832,7 +734,7 @@ export const CommandPalette = () => {
                         aria-label={uiText("명령 팔레트")}
                     />
                     {showPinnedOnly && (
-                        <div className="mt-2 inline-flex items-center rounded bg-amber-400/15 px-2 py-1 text-[11px] text-amber-200">
+                        <div className="mt-2 inline-flex items-center rounded border border-primary px-2 py-1 text-[11px] text-primary">
                             {t("palette.pinnedOnly")}
                         </div>
                     )}
@@ -853,7 +755,7 @@ export const CommandPalette = () => {
                                 return (
                                     <div
                                         key={row.id}
-                                        className="px-4 py-2 text-[10px] uppercase tracking-[0.08em] text-muted bg-panel border-y border-line"
+                                        className="px-4 py-2 text-[11px] uppercase tracking-[0.08em] text-muted bg-panel border-y border-line"
                                     >
                                         {row.label}
                                     </div>
@@ -865,6 +767,8 @@ export const CommandPalette = () => {
                             const isPinned = pinnedCommandIds.includes(command.id);
 
                             return (
+                                // grid 패턴: 포커스는 input에 두고 aria-activedescendant + 방향키/Enter로 행을 조작
+                                // eslint-disable-next-line jsx-a11y-x/click-events-have-key-events, jsx-a11y-x/interactive-supports-focus
                                 <div
                                     key={command.id}
                                     id={`command-${index}`}
@@ -880,7 +784,7 @@ export const CommandPalette = () => {
                                     <span role="gridcell" className="flex flex-col gap-0.5 min-w-0">
                                         <span className="text-sm flex items-center gap-2">
                                             <Highlight text={command.label} query={searchQuery} />
-                                            <span className="rounded px-1.5 py-0.5 text-[10px] leading-none bg-foreground/10 text-foreground">
+                                            <span className="rounded px-1.5 py-0.5 text-[11px] leading-none bg-foreground/10 text-foreground">
                                                 {t("palette." + command.category)}
                                             </span>
                                         </span>
@@ -898,8 +802,8 @@ export const CommandPalette = () => {
                                             }}
                                             aria-label={uiText(isPinned ? "고정 해제" : "명령 고정")}
                                             title={isPinned ? uiText("고정 해제") : uiText("명령 고정")}
-                                            className={`cursor-pointer rounded px-1.5 py-0.5 text-[11px] transition-colors ${isPinned
-                                                ? "text-amber-300 bg-amber-400/15"
+                                            className={`cursor-pointer inline-flex h-6 min-w-6 items-center justify-center rounded px-1.5 text-[11px] transition-colors ${isPinned
+                                                ? "text-primary bg-foreground/5"
                                                 : "text-muted hover:text-muted hover:bg-foreground/10"
                                                 }`}
                                         >

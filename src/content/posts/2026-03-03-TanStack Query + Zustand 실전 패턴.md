@@ -3,6 +3,7 @@ title: TanStack Query + Zustand 실전 패턴
 date: 2026-03-03
 summary: TanStack Query(서버 상태)와 Zustand(클라이언트 상태)를 함께 사용하는 실전 예제 - 인증, 장바구니, 무한스크롤, 필터링까지
 tags: [react, tanstack-query, zustand, 상태관리, 실전패턴, typescript, 인증, 장바구니]
+category: Frontend
 ---
 
 # TanStack Query + Zustand 실전 패턴

@@ -1,4 +1,4 @@
-import { useFocusTrap } from "../../hooks/useKeyboardNavigation";
+import { useFocusTrap } from "../../hooks/useFocusTrap";
 import { uiText } from "../../utils/uiText";
 import { useContext, useEffect, useRef, useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -16,7 +16,7 @@ import { Settings } from "./contents/settings/Settings";
 import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
 import { BLOG, CONTACT, DEFAULT, PROJECTS, RESUME } from "../../routes/route";
 import { useHandlePushPath } from "../../hooks/useHandlePushPath";
-import { LuBookOpen, LuFolderKanban, LuHouse, LuMail, LuMenu, LuScrollText } from "react-icons/lu";
+import { LuBookOpen, LuFolderKanban, LuHouse, LuMail, LuMenu, LuMinus, LuPlus, LuScrollText } from "react-icons/lu";
 
 const MOBILE_PRIMARY_NAV = [
     { path: DEFAULT, labelKey: "routes.home", Icon: LuHouse },
@@ -37,6 +37,8 @@ export const Aside = () => {
     }, [selectedNav]);
     const asideRef = useRef<HTMLDivElement>(null);
     const handleMouseDown = useDragging({ targetRef: asideRef, type: "sidebar" });
+    const stepSidebarWidth = (delta: number) =>
+        setLayoutState(previous => ({ ...previous, resizeSidebarWidth: Math.max(250, Math.min(600, window.innerWidth - 320, previous.resizeSidebarWidth + delta)) }));
     const isMobileSize = useCheckedMobileSize();
     const { t } = useTranslation();
     const handlePushPath = useHandlePushPath();
@@ -150,6 +152,8 @@ export const Aside = () => {
                             onClick={() => setSelectedNav(null)}
                         />
 
+                        {/* dialog 컨테이너에서 Escape로 닫기 위한 키 핸들러이므로 상호작용 요소 규칙 대상이 아님 */}
+                        {/* eslint-disable-next-line jsx-a11y-x/no-noninteractive-element-interactions */}
                         <div
                             ref={sheetRef}
                             role="dialog" aria-modal="true" aria-label={t("routes.tools")} tabIndex={-1}
@@ -247,7 +251,7 @@ export const Aside = () => {
                             }
                         >
                             <item.Icon className="h-5 w-5" />
-                            <span className="text-[10px] leading-none">{t(item.labelKey)}</span>
+                            <span className="text-[11px] leading-none">{t(item.labelKey)}</span>
                         </button>
                     ))}
                     <button
@@ -260,7 +264,7 @@ export const Aside = () => {
                         aria-expanded={Boolean(selectedNav)}
                     >
                         <LuMenu className="h-5 w-5" />
-                        <span className="text-[10px] leading-none">{t("routes.tools")}</span>
+                        <span className="text-[11px] leading-none">{t("routes.tools")}</span>
                     </button>
                 </nav>
 
@@ -296,8 +300,12 @@ export const Aside = () => {
             )}
 
             {selectedNav && (
+                <>
+                {/* 포커스 가능한 separator는 ARIA window splitter 패턴의 상호작용 위젯이므로 tabIndex/키 핸들러가 필요함 */}
+                {/* eslint-disable-next-line jsx-a11y-x/no-noninteractive-element-interactions */}
                 <div
                     role="separator"
+                    // eslint-disable-next-line jsx-a11y-x/no-noninteractive-tabindex
                     tabIndex={0}
                     aria-valuenow={layoutState.resizeSidebarWidth} aria-valuemin={250} aria-valuemax={600}
                     onKeyDown={event => {
@@ -331,6 +339,28 @@ export const Aside = () => {
                         <span className="block h-1 w-1 rounded-full bg-slate-300 group-hover:bg-primary transition-colors duration-200" />
                     </div>
                 </div>
+                {/* 드래그 없이 포인터 클릭만으로 너비 조절 (WCAG 2.5.7) */}
+                <div className="absolute bottom-3 right-3 z-10 flex flex-col gap-1">
+                    <button
+                        type="button"
+                        onClick={() => stepSidebarWidth(50)}
+                        aria-label={uiText("사이드바 넓히기")}
+                        title={uiText("사이드바 넓히기")}
+                        className="flex h-6 w-6 items-center justify-center rounded text-muted hover:bg-foreground/10 hover:text-foreground cursor-pointer"
+                    >
+                        <LuPlus aria-hidden="true" className="h-3.5 w-3.5" />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => stepSidebarWidth(-50)}
+                        aria-label={uiText("사이드바 좁히기")}
+                        title={uiText("사이드바 좁히기")}
+                        className="flex h-6 w-6 items-center justify-center rounded text-muted hover:bg-foreground/10 hover:text-foreground cursor-pointer"
+                    >
+                        <LuMinus aria-hidden="true" className="h-3.5 w-3.5" />
+                    </button>
+                </div>
+                </>
             )}
         </nav>
         </>

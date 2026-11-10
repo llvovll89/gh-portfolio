@@ -1,0 +1,32 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 댓글: 공개 읽기 전용. 생성/수정/삭제는 /api/comments (Admin SDK) 만 가능
+    match /blog_comments/{slug}/entries/{commentId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // 댓글 비밀번호 해시: 클라이언트 접근 전면 차단
+    match /blog_comment_secrets/{slug}/entries/{commentId} {
+      allow read, write: if false;
+    }
+
+    // 조회수: 읽기 공개, 쓰기는 정확히 +1 만 허용
+    match /blog_views/{slug} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly(['count'])
+                    && request.resource.data.count == 1;
+      allow update: if request.resource.data.keys().hasOnly(['count'])
+                    && request.resource.data.count == resource.data.count + 1;
+      allow delete: if false;
+    }
+
+    // 그 외 전부 차단
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

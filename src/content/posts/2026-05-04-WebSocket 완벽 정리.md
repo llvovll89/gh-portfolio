@@ -3,6 +3,8 @@ title: WebSocket 완벽 정리 — Spring Boot + React로 실시간 통신 구�
 date: 2026-05-04
 summary: WebSocket의 동작 원리부터 Spring Boot(STOMP) 서버 구현, React + TypeScript 클라이언트 연동까지 실전 예제로 한 번에 정리합니다.
 tags: [WebSocket, STOMP, Spring Boot, React, TypeScript, 실시간통신]
+category: Backend
+featured: true
 ---
 
 WebSocket은 단일 TCP 연결 위에서 **전이중(full-duplex)** 통신을 제공하는 프로토콜입니다. HTTP의 요청-응답 모델과 달리 서버가 클라이언트에게 먼저 데이터를 보낼 수 있어, 채팅·알림·실시간 대시보드 같은 기능에 필수적입니다.

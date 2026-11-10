@@ -65,16 +65,17 @@
 
 | Category | Tech |
 | --- | --- |
-| Frontend | React 19, TypeScript |
-| Build Tool | Vite 7 |
+| Frontend | React 19 (React Compiler), TypeScript |
+| Build Tool | Vite 8 (Rolldown) |
 | Styling | Tailwind CSS v4 |
 | Routing | React Router DOM v7 |
 | Backend | Java, Spring Boot, PostgreSQL, Oracle |
-| BaaS | Firebase v12 |
-| GitHub API | Octokit v5 |
+| BaaS | Firebase v12 (Firestore), firebase-admin (서버 함수) |
+| Serverless | Vercel Functions (`api/`) |
+| AI | Claude API (터미널 `ask` 명령) |
+| GitHub API | REST/GraphQL 프록시 (`api/github`, `api/contributions`) |
 | i18n | i18next, react-i18next |
-| HTTP | Axios |
-| Markdown | react-markdown, remark-gfm |
+| Markdown | react-markdown, remark-gfm, react-syntax-highlighter |
 | Icons | react-icons |
 | Deploy | Vercel |
 
@@ -117,3 +118,23 @@ src/
 - Pretendard Variable은 npm 패키지의 공식 글자 범위별 서브셋을 Vite로 자체 호스팅합니다. 폰트와 글 본문은 PWA가 전체 사전 다운로드하지 않습니다.
 - Vercel은 생성된 정적 경로를 제공하고, 알 수 없는 경로는 404로 처리합니다. 새 글과 프로젝트는 빌드 시 자동 반영됩니다.
 - 공통 오류 화면은 홈·목록·재시도를 제공하고, 대화상자는 포커스 제한과 복원을 지원합니다. UI 문구는 `uiText` 또는 i18next 키로 한국어·영어·일본어를 지원합니다. 블로그 본문은 원문 언어를 유지합니다.
+- `npm run smoke`: `vite preview`로 띄운 사이트를 시스템 Chrome/Edge로 열어 모든 라우트(라이트·다크)의 콘솔 에러와 axe(WCAG 2.2 AA) 위반을 점검합니다. CI에서도 실행됩니다.
+- 블로그 글 frontmatter의 `category`(Frontend/Backend/AI/CS/DevOps/Notes)와 `featured: true`로 분류·대표 글을 관리합니다. `Notes`는 기본 목록에서 숨겨지고 카테고리 선택·검색 시에만 노출됩니다.
+
+## 환경 변수
+
+| 이름 | 위치 | 용도 |
+| --- | --- | --- |
+| `VITE_FIREBASE_*` (6개) | Vercel, GitHub Secrets | Firestore 조회수·댓글 (없으면 해당 기능만 비활성화) |
+| `VITE_GA_ID` | Vercel | Google Analytics 4 |
+| `VITE_GIT_HUB_APP_ADMIN` | Vercel, GitHub Secrets | GitHub 활동 표시 대상 계정 (서버 프록시가 이 계정만 허용) |
+| `GITHUB_TOKEN` | Vercel (서버 전용) | GitHub API 프록시 인증 |
+| `FIREBASE_SERVICE_ACCOUNT` | Vercel (서버 전용) | 댓글 생성·수정·삭제 API의 Admin SDK 서비스 계정 JSON |
+| `ANTHROPIC_API_KEY` | Vercel (서버 전용) | 터미널 `ask` 명령 (Claude Haiku 5.5) |
+| `SITE_URL` | Vercel (선택) | `ask`가 컨텍스트로 읽을 `llms.txt`의 출처 (기본: 운영 도메인) |
+
+## 댓글 보안 구조 배포 순서
+
+1. Vercel에 `FIREBASE_SERVICE_ACCOUNT`, `ANTHROPIC_API_KEY`를 등록한 뒤 앱 배포
+2. `firebase deploy --only firestore:rules` — 클라이언트 쓰기를 막는 규칙 배포 (반드시 앱 배포 후)
+3. `node scripts/migrate-comment-secrets.mjs --dry-run`(환경변수 `FIREBASE_SERVICE_ACCOUNT` 필요)으로 대상을 확인한 뒤 플래그 없이 실행 — 공개 문서에 남은 레거시 비밀번호 해시를 비공개 컬렉션으로 이관

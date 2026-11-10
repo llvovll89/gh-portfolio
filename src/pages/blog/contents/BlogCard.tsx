@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
 import { LuEye } from "react-icons/lu";
 import type { BlogPost } from "../../../utils/loadPosts";
-import { getViewCount } from "../../../utils/blogViews";
+import { getListViewCount } from "../../../utils/viewCounts";
 import { getBodySnippet } from "../../../utils/fuseSearch";
 
 interface BlogCardProps {
@@ -27,7 +27,7 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
     );
 
     useEffect(() => {
-        getViewCount(p.slug).then(setViewCount).catch(() => {});
+        getListViewCount(p.slug).then(setViewCount).catch(() => {});
     }, [p.slug]);
 
     // 본문 스니펫: 검색어가 제목·요약에 없고 본문에만 있을 때 표시
@@ -55,23 +55,23 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
                         {p.date || "No Date"}
                     </time>
                     {p.readingTime && (
-                        <span className="text-[10px] font-medium text-muted blog-dark:text-muted">
+                        <span className="text-[11px] font-medium text-muted blog-dark:text-muted">
                             {t("pages.blog.readingMinutes", { count: parseInt(p.readingTime, 10) })}
                         </span>
                     )}
                     {viewCount !== null && viewCount > 0 && (
-                        <span className="flex items-center gap-1 text-[10px] font-medium text-muted blog-dark:text-muted">
+                        <span className="flex items-center gap-1 text-[11px] font-medium text-muted blog-dark:text-muted">
                             <LuEye className="w-3 h-3" />
                             {viewCount.toLocaleString()}
                         </span>
                     )}
                     {p.type === "html" && (
-                        <span className="text-[10px] font-semibold text-primary bg-primary/10 px-1.5 py-0.5 rounded">
+                        <span className="text-[11px] font-semibold text-primary bg-primary/10 px-1.5 py-0.5 rounded">
                             HTML
                         </span>
                     )}
                     {p.category && (
-                        <span className="text-[10px] font-semibold text-violet-600 blog-dark:text-violet-400 bg-violet-50 blog-dark:bg-violet-950/30 px-1.5 py-0.5 rounded">
+                        <span className="text-[11px] font-semibold text-violet-600 blog-dark:text-violet-400 bg-violet-50 blog-dark:bg-violet-950/30 px-1.5 py-0.5 rounded">
                             {p.category}
                         </span>
                     )}
@@ -80,7 +80,7 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
                             {p.tags.slice(0, 2).map((t) => (
                                 <span
                                     key={t}
-                                    className="text-[10px] font-medium text-primary bg-primary/10 px-1.5 py-0.5 rounded"
+                                    className="text-[11px] font-medium text-primary bg-primary/10 px-1.5 py-0.5 rounded"
                                 >
                                     {t}
                                 </span>

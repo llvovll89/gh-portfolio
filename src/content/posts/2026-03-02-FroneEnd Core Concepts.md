@@ -3,6 +3,7 @@ title: Frontend Core Concepts
 date: 2026-03-02
 summary: Frontend Core Concepts를 정리한 글 입니다.
 tags: [Frontend, react, js, hooks]
+category: Frontend
 ---
 
 # Frontend Core Concepts

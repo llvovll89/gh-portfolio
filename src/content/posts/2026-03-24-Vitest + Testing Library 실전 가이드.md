@@ -3,6 +3,7 @@ title: Vitest + Testing Library 실전 가이드
 date: 2026-03-24
 summary: Vite 기반 프로젝트에서 Vitest와 React Testing Library를 활용한 컴포넌트/훅 테스트 작성법을 실전 예제 중심으로 정리합니다. 단위 테스트부터 통합 테스트까지 다룹니다.
 tags: [Vitest, Testing Library, React, 테스트, 프론트엔드]
+category: Frontend
 ---
 
 프론트엔드 테스트는 "나중에 써야지"로 미루기 쉽지만, 한 번 익혀두면 리팩터링 공포가 사라지고 코드 자신감이 올라갑니다. **Vitest**는 Vite 생태계에 최적화된 테스트 러너이고, **React Testing Library(RTL)**는 사용자 관점에서 컴포넌트를 테스트하는 철학을 가집니다. 둘을 함께 쓰면 빠르고 실용적인 테스트를 작성할 수 있습니다.

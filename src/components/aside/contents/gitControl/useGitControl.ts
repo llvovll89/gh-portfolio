@@ -71,8 +71,9 @@ async function fetchPullRequests(owner: string, repo: RepoName): Promise<PullReq
 }
 
 export function useGitControl() {
-    const githubUsername = (import.meta.env.VITE_GITHUB_USERNAME as string) || "llvovll89";
-    const owner = GITHUB_OWNER || githubUsername;
+    // 서버 프록시는 GITHUB_OWNER(VITE_GIT_HUB_APP_ADMIN) 계정만 허용하므로 대시보드도 같은 계정을 우선 사용
+    const githubUsername = GITHUB_OWNER || (import.meta.env.VITE_GITHUB_USERNAME as string | undefined) || "llvovll89";
+    const owner = githubUsername;
 
     const [gitStates, setGitStates] = useState<Record<RepoName, RepoState>>(
         Object.fromEntries(REPOS.map((r) => [r, { ...EMPTY_REPO_STATE }])) as Record<RepoName, RepoState>
@@ -83,7 +84,7 @@ export function useGitControl() {
     const [showActivity, setShowActivity] = useState(false);
 
     useEffect(() => {
-        (async () => {
+        void (async () => {
             try {
                 const results = await Promise.all(
                     REPOS.map(async (repo) => {
@@ -113,13 +114,16 @@ export function useGitControl() {
 
     useEffect(() => {
         if (!selected) return;
-        (async () => {
+        // 브랜치를 빠르게 전환할 때 늦게 도착한 이전 응답이 덮어쓰지 않도록 취소 플래그 사용
+        let active = true;
+        void (async () => {
             try {
                 setGitStates((prev) => ({
                     ...prev,
                     [selected.repo]: { ...prev[selected.repo], commits: [] },
                 }));
                 const commits = await fetchCommits(owner, selected.repo, selected.branch);
+                if (!active) return;
                 setGitStates((prev) => ({
                     ...prev,
                     [selected.repo]: { ...prev[selected.repo], commits },
@@ -128,6 +132,9 @@ export function useGitControl() {
                 console.error("Error fetching commits:", error);
             }
         })();
+        return () => {
+            active = false;
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selected?.repo, selected?.branch]);
 

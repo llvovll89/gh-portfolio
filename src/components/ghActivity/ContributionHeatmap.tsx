@@ -106,7 +106,7 @@ const ContributionHeatmap = ({
       {hasMore && (
         <button
           onClick={() => setIsExpanded((s) => !s)}
-          className="mt-2 text-[10px] text-muted hover:text-foreground transition-colors"
+          className="mt-2 text-[11px] text-muted hover:text-foreground transition-colors"
         >
           {isExpanded ? uiText("접기") : uiText("더보기")}
         </button>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { matchPath } from "react-router-dom";
 import { DEFAULT, routesPath } from "../routes/route";
 import { NavType } from "../components/aside/constants/Nav.type";
@@ -61,7 +61,7 @@ function loadClosedTabs(): string[] {
         const stored = localStorage.getItem(CLOSED_TABS_STORAGE_KEY);
         if (!stored) return [];
 
-        const parsed = JSON.parse(stored);
+        const parsed: unknown = JSON.parse(stored);
         if (!Array.isArray(parsed)) return [];
 
         return parsed.filter((path: unknown): path is string => isAvailablePath(path));
@@ -75,7 +75,7 @@ function loadPinnedTabs(): string[] {
         const stored = localStorage.getItem(PINNED_TABS_STORAGE_KEY);
         if (!stored) return [];
 
-        const parsed = JSON.parse(stored);
+        const parsed: unknown = JSON.parse(stored);
         if (!Array.isArray(parsed)) return [];
 
         return [...new Set(parsed.filter((path: unknown): path is string => isAvailablePath(path)))];
@@ -134,21 +134,22 @@ export const NavigationProvider = ({ children }: { children: React.ReactNode }) 
         );
     }, [selectedPathState.list]);
 
+    // value 객체를 메모이제이션해 Provider 리렌더 시 전체 consumer 리렌더 방지
+    const value = useMemo(() => ({
+        selectedPath,
+        setSelectedPath,
+        selectedPathState,
+        setSelectedPathState,
+        selectedNav,
+        setSelectedNav,
+        closedTabs,
+        setClosedTabs,
+        pinnedTabs,
+        setPinnedTabs,
+    }), [selectedPath, selectedPathState, selectedNav, closedTabs, pinnedTabs]);
+
     return (
-        <NavigationContext.Provider
-            value={{
-                selectedPath,
-                setSelectedPath,
-                selectedPathState,
-                setSelectedPathState,
-                selectedNav,
-                setSelectedNav,
-                closedTabs,
-                setClosedTabs,
-                pinnedTabs,
-                setPinnedTabs,
-            }}
-        >
+        <NavigationContext.Provider value={value}>
             {children}
         </NavigationContext.Provider>
     );

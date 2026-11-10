@@ -43,7 +43,7 @@ export const GitControl = () => {
                 <div className="flex items-center gap-2">
                     <button
                         onClick={() => setShowActivity((s) => !s)}
-                        className="text-[10px] px-3 py-2 rounded bg-foreground/10 hover:bg-foreground/10"
+                        className="text-[11px] px-3 py-2 rounded bg-foreground/10 hover:bg-foreground/10"
                     >
                         Activity
                     </button>
@@ -58,26 +58,28 @@ export const GitControl = () => {
                 )}
                 {REPOS.map((repo) => (
                     <section key={repo} className="w-full border-b border-sub-gary/20">
-                        <div
+                        <button
+                            type="button"
                             onClick={() => handleRepoClick(repo)}
-                            className="px-3 py-2 bg-foreground/5 border-b border-sub-gary/20 cursor-pointer hover:bg-foreground/10 transition-colors"
+                            aria-expanded={selectedRepo === repo}
+                            className="block w-full text-left px-3 py-2 bg-foreground/5 border-b border-sub-gary/20 cursor-pointer hover:bg-foreground/10 transition-colors"
                         >
-                            <div className="flex items-center justify-between gap-2">
+                            <span className="flex items-center justify-between gap-2">
                                 <span className="text-xs font-semibold truncate">{repo}</span>
-                                <span className="text-[10px] text-muted shrink-0">
+                                <span className="text-[11px] text-muted shrink-0">
                                     {selectedRepo === repo ? "▼" : "▶"}
                                 </span>
-                            </div>
+                            </span>
 
                             {gitStates[repo].stats && (
-                                <div className="flex items-center gap-3 mt-2 text-[10px] text-muted">
-                                    <span className="flex items-center gap-1">⭐ {gitStates[repo].stats!.stars}</span>
-                                    <span className="flex items-center gap-1">🔀 {gitStates[repo].stats!.forks}</span>
-                                    <span className="flex items-center gap-1">👁️ {gitStates[repo].stats!.watchers}</span>
-                                    <span className="flex items-center gap-1">⚠️ {gitStates[repo].stats!.openIssues}</span>
-                                </div>
+                                <span className="flex items-center gap-3 mt-2 text-[11px] text-muted">
+                                    <span className="flex items-center gap-1">⭐ {gitStates[repo].stats.stars}</span>
+                                    <span className="flex items-center gap-1">🔀 {gitStates[repo].stats.forks}</span>
+                                    <span className="flex items-center gap-1">👁️ {gitStates[repo].stats.watchers}</span>
+                                    <span className="flex items-center gap-1">⚠️ {gitStates[repo].stats.openIssues}</span>
+                                </span>
                             )}
-                        </div>
+                        </button>
 
                         {selectedRepo === repo && (
                             <>
@@ -105,30 +107,33 @@ export const GitControl = () => {
                                             {gitStates[repo].branches.map((branch) => (
                                                 <div
                                                     key={`${repo}:${branch}`}
-                                                    onClick={() => {
-                                                        setSelected((prev) => {
-                                                            if (prev?.repo === repo && prev?.branch === branch) return null;
-                                                            return { repo, branch };
-                                                        });
-                                                    }}
                                                     className={`px-3 py-2 text-xs border-b hover:bg-sub-gary/10 cursor-pointer flex flex-col gap-1 ${
                                                         isSelected(repo, branch)
                                                             ? "text-green-500 border-green-500 border-t"
                                                             : "border-sub-gary/20"
                                                     }`}
                                                 >
-                                                    <div className="w-full flex items-center justify-between gap-2">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setSelected((prev) => {
+                                                                if (prev?.repo === repo && prev?.branch === branch) return null;
+                                                                return { repo, branch };
+                                                            });
+                                                        }}
+                                                        aria-pressed={isSelected(repo, branch)}
+                                                        className="w-full flex items-center justify-between gap-2 text-left cursor-pointer"
+                                                    >
                                                         <span className="truncate">{branch}</span>
                                                         {isSelected(repo, branch) && gitStates[repo].commits.length > 0 && (
-                                                            <span className="text-[10px] shrink-0">
+                                                            <span className="text-[11px] shrink-0">
                                                                 {t("gitControl.commits")} {gitStates[repo].commits.length}
                                                             </span>
                                                         )}
-                                                    </div>
+                                                    </button>
 
                                                     {isSelected(repo, branch) && gitStates[repo].commits.length > 0 && (
                                                         <section
-                                                            onClick={(e) => e.stopPropagation()}
                                                             className={`w-full max-h-100 ${backgroundClass} overflow-auto scrolls select-none text-foreground mt-2`}
                                                             style={backgroundStyle}
                                                         >
@@ -144,7 +149,7 @@ export const GitControl = () => {
                                                                 return (
                                                                     <article
                                                                         key={commit.sha}
-                                                                        className="w-full py-2 flex flex-col border-b border-sub-gary/20 hover:bg-sub-gary/10 cursor-default gap-1.5 text-[10px]"
+                                                                        className="w-full py-2 flex flex-col border-b border-sub-gary/20 hover:bg-sub-gary/10 cursor-default gap-1.5 text-[11px]"
                                                                     >
                                                                         <div className="w-full flex items-center justify-between gap-2">
                                                                             <div className="flex items-center gap-1 min-w-0 flex-1">
@@ -191,12 +196,12 @@ export const GitControl = () => {
                                                             )}
                                                             <div className="flex-1 min-w-0">
                                                                 <div className="flex items-center gap-2 mb-1">
-                                                                    <span className={`text-[10px] px-2 py-0.5 rounded shrink-0 ${
+                                                                    <span className={`text-[11px] px-2 py-0.5 rounded shrink-0 ${
                                                                         issue.state === "open" ? "bg-green-500/20 text-green-400" : "bg-purple-500/20 text-purple-400"
                                                                     }`}>
                                                                         {issue.state}
                                                                     </span>
-                                                                    <span className="text-[10px] text-muted shrink-0">#{issue.number}</span>
+                                                                    <span className="text-[11px] text-muted shrink-0">#{issue.number}</span>
                                                                 </div>
                                                                 <p className="text-xs font-medium mb-1 line-clamp-2">{issue.title}</p>
                                                                 {issue.labels.length > 0 && (
@@ -204,7 +209,7 @@ export const GitControl = () => {
                                                                         {issue.labels.slice(0, 3).map((label) => (
                                                                             <span
                                                                                 key={label.name}
-                                                                                className="text-[9px] px-1.5 py-0.5 rounded"
+                                                                                className="text-[11px] px-1.5 py-0.5 rounded"
                                                                                 style={{ backgroundColor: `#${label.color}40`, color: `#${label.color}` }}
                                                                             >
                                                                                 {label.name}
@@ -212,7 +217,7 @@ export const GitControl = () => {
                                                                         ))}
                                                                     </div>
                                                                 )}
-                                                                <p className="text-[10px] text-muted mt-1">
+                                                                <p className="text-[11px] text-muted mt-1">
                                                                     {new Date(issue.created_at).toLocaleDateString()}
                                                                 </p>
                                                             </div>
@@ -243,7 +248,7 @@ export const GitControl = () => {
                                                             )}
                                                             <div className="flex-1">
                                                                 <div className="flex items-center gap-2 mb-1">
-                                                                    <span className={`text-[10px] px-2 py-0.5 rounded ${
+                                                                    <span className={`text-[11px] px-2 py-0.5 rounded ${
                                                                         pr.state === "open" ? "bg-green-500/20 text-green-400"
                                                                         : pr.state === "closed" ? "bg-red-500/20 text-red-400"
                                                                         : "bg-purple-500/20 text-purple-400"
@@ -251,12 +256,12 @@ export const GitControl = () => {
                                                                         {pr.state}
                                                                     </span>
                                                                     {pr.draft && (
-                                                                        <span className="text-[10px] px-2 py-0.5 rounded bg-gray-500/20 text-gray-400">draft</span>
+                                                                        <span className="text-[11px] px-2 py-0.5 rounded bg-gray-500/20 text-gray-400">draft</span>
                                                                     )}
-                                                                    <span className="text-[10px] text-muted">#{pr.number}</span>
+                                                                    <span className="text-[11px] text-muted">#{pr.number}</span>
                                                                 </div>
                                                                 <p className="text-xs font-medium mb-1">{pr.title}</p>
-                                                                <p className="text-[10px] text-muted">
+                                                                <p className="text-[11px] text-muted">
                                                                     {new Date(pr.created_at).toLocaleDateString()}
                                                                 </p>
                                                             </div>

@@ -9,7 +9,7 @@ export const useRedirectionPage = () => {
 
     useEffect(() => {
         if (selectedPathState.list.length === 0) {
-            navigation(DEFAULT);
+            void navigation(DEFAULT);
         }
     }, [selectedPathState, navigation]);
 };

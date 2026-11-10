@@ -3,6 +3,7 @@ title: React Hook 심화 정리
 date: 2026-02-09
 summary: React Hook의 핵심 개념부터 성능 최적화, Custom Hook 작성까지 실전 예제와 함께 완벽 정리
 tags: [react, hooks, useState, useEffect, useCallback, useMemo, useRef, custom-hooks, performance]
+category: Frontend
 ---
 
 # React Hook 심화 정리

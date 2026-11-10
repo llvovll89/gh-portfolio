@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { getFirestore } from 'firebase/firestore'
+import { getFirestore, type Firestore } from 'firebase/firestore'
 
 // Firebase 설정
 const firebaseConfig = {
@@ -25,16 +25,10 @@ const missingKeys = REQUIRED_FIREBASE_ENV_KEYS.filter((key) => {
   return typeof value !== 'string' || !value.trim()
 })
 
+// 환경변수가 없어도 정적 콘텐츠(블로그 본문 등)는 동작하도록 예외 대신 기능만 비활성화
 if (missingKeys.length > 0) {
-  throw new Error(
-    `[Firebase] 필수 환경변수가 누락되었습니다: ${missingKeys.join(', ')}`,
-  )
+  console.warn(`[Firebase] 환경변수가 없어 조회수·댓글 기능을 비활성화합니다: ${missingKeys.join(', ')}`)
 }
 
-// Firebase 앱 초기화
-const app = initializeApp(firebaseConfig)
-
-// Firestore 인스턴스
-export const db = getFirestore(app)
-
-export default app
+// Firestore 인스턴스 (미설정 시 null)
+export const db: Firestore | null = missingKeys.length === 0 ? getFirestore(initializeApp(firebaseConfig)) : null

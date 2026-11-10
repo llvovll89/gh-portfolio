@@ -112,7 +112,7 @@ export const Bookmarks = () => {
             <div className="w-full h-[calc(100%-40px)] overflow-y-auto">
                 {showAddForm && (
                     <div className="p-3 border-b border-sub-gary/30 space-y-3">
-                        <p className="text-[10px] text-muted mb-2">
+                        <p className="text-[11px] text-muted mb-2">
                             {t("bookmarks.selectPage")}
                         </p>
 
@@ -146,7 +146,7 @@ export const Bookmarks = () => {
                         </div>
 
                         {/* 기존 페이지 목록 */}
-                        <p className="text-[10px] text-muted">{uiText("또는 페이지에서 선택:")}</p>
+                        <p className="text-[11px] text-muted">{uiText("또는 페이지에서 선택:")}</p>
                         <ul className="space-y-1">
                             {availablePages.map((page) => (
                                 <li key={page.path}>
@@ -178,7 +178,7 @@ export const Bookmarks = () => {
                     <div className="flex flex-col items-center justify-center h-full text-muted text-xs p-3">
                         <VscBookmark className="w-12 h-12 mb-2 opacity-30" />
                         <p>{t("bookmarks.noBookmarks")}</p>
-                        <p className="text-[10px] mt-1">{t("bookmarks.addPrompt")}</p>
+                        <p className="text-[11px] mt-1">{t("bookmarks.addPrompt")}</p>
                     </div>
                 ) : (
                     <ul className="w-full">
@@ -191,12 +191,13 @@ export const Bookmarks = () => {
                                     } w-full flex items-center gap-2 px-3 py-2 text-foreground cursor-pointer text-xs hover:bg-primary/20 border-b border-sub-gary/30`}
                             >
                                 <VscStarFull className="w-4 h-4 text-yellow-400 shrink-0" />
-                                <span
+                                <button
+                                    type="button"
                                     onClick={() => handleClickBookmark(bookmark.path)}
-                                    className="flex-1 truncate"
+                                    className="flex-1 truncate text-left"
                                 >
                                     {bookmark.name}
-                                </span>
+                                </button>
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();

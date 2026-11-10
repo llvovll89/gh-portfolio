@@ -1,11 +1,8 @@
 import { useTranslation } from "react-i18next";
+import { careers } from "../careerData";
 
 export const PersonalHistory = () => {
     const { t } = useTranslation();
-    const careers = [
-        { period: "2026. 02 -", company: "nanoCompany", position: "Full-stack Developer", active: true },
-        { period: "2023. 07 - 2026. 02", company: "company", position: "Frontend Developer", active: false },
-    ];
     return <section className="profile-section" aria-labelledby="profile-history">
         <h2 id="profile-history">{t("pages.profile.personalHistory.title")}</h2>
         <ol className="profile-careers">

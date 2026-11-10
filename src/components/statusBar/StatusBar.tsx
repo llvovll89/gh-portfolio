@@ -36,7 +36,7 @@ export const StatusBar = () => {
 
     return (
         <div
-            role="status"
+            role="group"
             aria-label={uiText("상태 표시줄")}
             className="fixed bottom-0 right-0 h-6 z-30 flex items-center justify-between px-3 text-[11px] font-mono select-none"
             style={{

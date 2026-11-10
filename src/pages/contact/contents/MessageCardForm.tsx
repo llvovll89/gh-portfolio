@@ -59,7 +59,7 @@ export const MessageCardForm = () => {
         setName(""); setFromEmail(""); setMessage("");
         setErrors({ name: "", email: "", message: "" }); setStatus("idle");
     };
-    return <form className="contact-form" onSubmit={handleSend} noValidate>
+    return <form className="contact-form" onSubmit={(event) => { void handleSend(event); }} noValidate>
         <header><h2>{t("pages.contact.messageForm.title")}</h2>
             <p id="contact-form-description">{t(EMAILJS_READY ? "pages.contact.messageForm.directDescription" : "pages.contact.messageForm.description")}</p>
         </header>

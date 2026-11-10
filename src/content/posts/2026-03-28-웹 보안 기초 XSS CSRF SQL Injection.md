@@ -3,6 +3,7 @@ title: 웹 보안 기초: XSS, CSRF, SQL Injection 실전 방어 가이드
 date: 2026-03-28
 summary: 웹 개발자라면 반드시 알아야 할 XSS, CSRF, SQL Injection의 공격 원리와 방어 방법을 실전 코드로 정리합니다. OWASP Top 10 기반으로 취약점별 대응 전략을 다룹니다.
 tags: [Security, XSS, CSRF, SQLInjection, OWASP, Web]
+category: CS
 ---
 
 웹 보안 취약점은 사용자 데이터 유출, 서비스 장애, 법적 책임으로 이어집니다. OWASP(Open Web Application Security Project)는 매년 가장 위험한 웹 취약점 Top 10을 발표하며, 이 중 XSS, CSRF, SQL Injection은 오랫동안 목록에 오른 대표적인 공격 유형입니다. 공격 원리를 이해해야 효과적으로 방어할 수 있습니다.

@@ -7,5 +7,6 @@ export function scrollToHeading(id: string, containerId: string, offset = 80) {
     const containerRect = container.getBoundingClientRect();
     const headingRect = heading.getBoundingClientRect();
     const top = headingRect.top - containerRect.top + container.scrollTop - offset;
-    container.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    container.scrollTo({ top: Math.max(0, top), behavior: reduceMotion ? "auto" : "smooth" });
 }

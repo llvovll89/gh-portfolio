@@ -14,7 +14,7 @@ export const useHandlePushPath = () => {
         }));
 
         // Aside를 닫지 않고 유지
-        navigate(path);
+        void navigate(path);
     };
 
     return handlePushPath;

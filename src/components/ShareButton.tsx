@@ -83,15 +83,15 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
     if (canNativeShare) {
         return (
             <button
-                onClick={handleNativeShare}
+                onClick={() => { void handleNativeShare(); }}
                 aria-label={uiText("포스트 공유")}
                 className={[
                     "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium",
-                    "text-zinc-400",
-                    "border border-zinc-700/50",
-                    "hover:text-zinc-200",
-                    "hover:border-zinc-600",
-                    "hover:bg-zinc-800/50",
+                    "text-muted",
+                    "border border-line",
+                    "hover:text-foreground",
+                    "hover:border-primary/50",
+                    "hover:bg-foreground/5",
                     "transition-all duration-200",
                 ].join(" ")}
             >
@@ -110,13 +110,13 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                 aria-expanded={open}
                 className={[
                     "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium",
-                    "text-zinc-400",
-                    "border border-zinc-700/50",
-                    "hover:text-zinc-200",
-                    "hover:border-zinc-600",
-                    "hover:bg-zinc-800/50",
+                    "text-muted",
+                    "border border-line",
+                    "hover:text-foreground",
+                    "hover:border-primary/50",
+                    "hover:bg-foreground/5",
                     "transition-all duration-200",
-                    open ? "bg-zinc-800/50 border-zinc-600" : "",
+                    open ? "bg-foreground/5 border-primary/50" : "",
                 ].join(" ")}
             >
                 <LuShare2 className="w-3.5 h-3.5" />
@@ -137,7 +137,7 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                 >
                     <button
                         role="menuitem"
-                        onClick={handleCopy}
+                        onClick={() => { void handleCopy(); }}
                         className={[
                             "w-full flex items-center gap-2.5 px-4 py-2.5 text-sm",
                             "text-zinc-300",

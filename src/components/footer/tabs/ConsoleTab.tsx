@@ -86,21 +86,21 @@ export const ConsoleTab = () => {
         <div className="h-full flex flex-col bg-slate-950 text-slate-100 font-mono text-[11px]">
             {/* 헤더 */}
             <div className="flex items-center justify-between px-3 py-1.5 border-b border-foreground/10 shrink-0">
-                <div className="flex items-center gap-2 text-[10px] text-muted">
+                <div className="flex items-center gap-2 text-[11px] text-muted">
                     <span className="h-2 w-2 rounded-full bg-red-400/80" />
                     <span className="h-2 w-2 rounded-full bg-yellow-300/80" />
                     <span className="h-2 w-2 rounded-full bg-green-400/80" />
                     <span className="ml-1">Output</span>
                 </div>
                 <div className="flex items-center gap-1">
-                    <button onClick={copy} disabled={!hasOutput} type="button"
-                        className="rounded px-2 py-0.5 text-[10px] font-medium border border-foreground/15 bg-foreground/5 hover:bg-foreground/10 text-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    <button onClick={() => { void copy(); }} disabled={!hasOutput} type="button"
+                        className="rounded px-2 py-0.5 text-[11px] font-medium border border-foreground/15 bg-foreground/5 hover:bg-foreground/10 text-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                     >{uiText("복사")}</button>
                     <button onClick={download} disabled={!hasOutput} type="button"
-                        className="rounded px-2 py-0.5 text-[10px] font-medium border border-foreground/15 bg-foreground/5 hover:bg-foreground/10 text-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                        className="rounded px-2 py-0.5 text-[11px] font-medium border border-foreground/15 bg-foreground/5 hover:bg-foreground/10 text-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                     >{uiText("다운로드")}</button>
                     <button onClick={clear} disabled={!hasOutput} type="button"
-                        className="rounded px-2 py-0.5 text-[10px] font-medium border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                        className="rounded px-2 py-0.5 text-[11px] font-medium border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                     >{uiText("초기화")}</button>
                 </div>
             </div>
@@ -110,10 +110,10 @@ export const ConsoleTab = () => {
                 {!hasOutput ? (
                     <div className="flex flex-col items-center justify-center h-full gap-1.5 text-muted select-none">
                         <span className="text-xs">{uiText("아직 출력이 없습니다")}</span>
-                        <span className="text-[10px]">{uiText("아래 입력창에서 명령어를 실행하세요")}</span>
+                        <span className="text-[11px]">{uiText("아래 입력창에서 명령어를 실행하세요")}</span>
                     </div>
                 ) : (
-                    <pre className="m-0 text-[10px] leading-relaxed whitespace-pre-wrap text-foreground">
+                    <pre className="m-0 text-[11px] leading-relaxed whitespace-pre-wrap text-foreground">
                         {lines.map((line, idx) => (
                             <div key={idx}>{renderWithLinks(line)}</div>
                         ))}
@@ -129,9 +129,12 @@ export const ConsoleTab = () => {
                 <span className="text-zinc-400 select-none shrink-0">$</span>
                 <textarea
                     rows={1}
+                    // 터미널 패널을 열면 바로 명령을 입력하는 것이 기대 UX (VS Code 터미널과 동일)
+                    // eslint-disable-next-line jsx-a11y-x/no-autofocus
                     autoFocus
                     placeholder="help"
-                    className="flex-1 resize-none outline-none bg-transparent text-zinc-100 placeholder:text-zinc-600 leading-relaxed"
+                    aria-label={uiText("콘솔 명령어 입력")}
+                    className="flex-1 resize-none outline-none focus-visible:ring-1 focus-visible:ring-zinc-300 rounded-sm bg-transparent text-zinc-100 placeholder:text-zinc-600 leading-relaxed"
                     onKeyDown={handleKeyDown}
                 />
             </div>

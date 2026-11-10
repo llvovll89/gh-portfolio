@@ -6,7 +6,7 @@ export const Footer = () => {
 
     return (
         <footer className="absolute bottom-0 left-0 w-full h-12 bg-main flex items-center justify-between px-4">
-            <p className="text-muted text-xs">© {year} Geon Ho Kim. All rights reserved.</p>
+            <p className="text-muted text-xs">© {year} Geonho Kim. All rights reserved.</p>
             <a
                 href="https://github.com/llvovll89"
                 target="_blank"

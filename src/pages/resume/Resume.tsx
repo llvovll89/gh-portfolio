@@ -32,7 +32,7 @@ export const Resume = () => {
             title: t("pages.resume.profileTitle"),
             Icon: LuUserRound,
             items: [
-                { label: t("pages.resume.name"), value: uiText("김건호 (Kim Geon Ho)") },
+                { label: t("pages.resume.name"), value: uiText("김건호 (Geonho Kim)") },
                 { label: t("pages.resume.email"), value: "svvvs5579@naver.com" },
             ],
         },
@@ -112,7 +112,7 @@ export const Resume = () => {
                             </div>
                             <button
                                 type="button"
-                                onClick={handleDownloadResume}
+                                onClick={() => { void handleDownloadResume(); }}
                                 disabled={downloadState === "loading"}
                                 className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-on-accent transition-transform hover:-translate-y-0.5 active:translate-y-px disabled:cursor-wait disabled:opacity-65 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
                             >

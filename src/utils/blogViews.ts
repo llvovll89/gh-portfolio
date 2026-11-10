@@ -1,5 +1,5 @@
 import { db } from "../firebase/config";
-import { doc, setDoc, getDoc, onSnapshot, increment } from "firebase/firestore";
+import { doc, setDoc, onSnapshot, increment } from "firebase/firestore";
 
 const COLLECTION = "blog_views";
 const SESSION_KEY = "viewed_posts";
@@ -7,7 +7,7 @@ const SESSION_KEY = "viewed_posts";
 function hasViewedInSession(slug: string): boolean {
     try {
         const raw = sessionStorage.getItem(SESSION_KEY);
-        const viewed: string[] = raw ? JSON.parse(raw) : [];
+        const viewed = (raw ? JSON.parse(raw) : []) as string[];
         return viewed.includes(slug);
     } catch {
         return false;
@@ -17,7 +17,7 @@ function hasViewedInSession(slug: string): boolean {
 function markViewedInSession(slug: string): void {
     try {
         const raw = sessionStorage.getItem(SESSION_KEY);
-        const viewed: string[] = raw ? JSON.parse(raw) : [];
+        const viewed = (raw ? JSON.parse(raw) : []) as string[];
         if (!viewed.includes(slug)) {
             viewed.push(slug);
             sessionStorage.setItem(SESSION_KEY, JSON.stringify(viewed));
@@ -29,21 +29,17 @@ function markViewedInSession(slug: string): void {
 
 export async function incrementViewCount(slug: string): Promise<void> {
     if (hasViewedInSession(slug)) return;
+    if (!db) return;
     markViewedInSession(slug);
     const ref = doc(db, COLLECTION, slug);
     await setDoc(ref, { count: increment(1) }, { merge: true });
-}
-
-export async function getViewCount(slug: string): Promise<number> {
-    const ref = doc(db, COLLECTION, slug);
-    const snap = await getDoc(ref);
-    return snap.exists() ? (snap.data().count as number) ?? 0 : 0;
 }
 
 export function subscribeViewCount(
     slug: string,
     callback: (count: number) => void
 ): () => void {
+    if (!db) return () => {};
     const ref = doc(db, COLLECTION, slug);
     return onSnapshot(ref, (snap) => {
         callback(snap.exists() ? (snap.data().count as number) ?? 0 : 0);

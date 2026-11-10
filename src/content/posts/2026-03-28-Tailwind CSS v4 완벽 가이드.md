@@ -3,6 +3,7 @@ title: Tailwind CSS v4 완벽 가이드: CSS-First 설정과 새로운 기능 �
 date: 2026-03-28
 summary: Tailwind CSS v4에서 도입된 CSS-first 설정, 새로운 엔진(Oxide), 동적 유틸리티, 컨테이너 쿼리 등 핵심 변경사항을 실전 예제와 함께 정리합니다. v3에서 v4로 마이그레이션하는 방법도 다룹니다.
 tags: [TailwindCSS, CSS, Frontend, Styling, v4]
+category: Frontend
 ---
 
 Tailwind CSS v4는 단순한 마이너 업데이트가 아닙니다. 설정 방식이 `tailwind.config.js`에서 CSS 파일로 완전히 이동했고, 새 엔진(Oxide)으로 빌드 속도가 최대 10배 빨라졌습니다. 기존 v3 사용자라면 반드시 변경사항을 확인하고 마이그레이션 전략을 세워야 합니다.

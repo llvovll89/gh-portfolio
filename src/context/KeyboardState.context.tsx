@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { KeyboardContext, type submitCliCommandType } from "./KeyboardState";
 
 export const KeyboardProvider = ({ children }: { children: React.ReactNode }) => {
@@ -9,27 +9,27 @@ export const KeyboardProvider = ({ children }: { children: React.ReactNode }) =>
     const [isVisibleCommandPalette, setIsVisibleCommandPalette] =
         useState<boolean>(false);
 
-    const toggleKeyboardInfo = () => {
+    const toggleKeyboardInfo = useCallback(() => {
         setIsVisibleKeyboardInfo((prev) => !prev);
-    };
+    }, []);
 
-    const toggleCommandPalette = () => {
+    const toggleCommandPalette = useCallback(() => {
         setIsVisibleCommandPalette((prev) => !prev);
-    };
+    }, []);
+
+    const value = useMemo(() => ({
+        isVisibleKeyboardInfo,
+        setIsVisibleKeyboardInfo,
+        toggleKeyboardInfo,
+        submitCliCommand,
+        setSubmitCliCommand,
+        isVisibleCommandPalette,
+        setIsVisibleCommandPalette,
+        toggleCommandPalette,
+    }), [isVisibleKeyboardInfo, toggleKeyboardInfo, submitCliCommand, isVisibleCommandPalette, toggleCommandPalette]);
 
     return (
-        <KeyboardContext.Provider
-            value={{
-                isVisibleKeyboardInfo,
-                setIsVisibleKeyboardInfo,
-                toggleKeyboardInfo,
-                submitCliCommand,
-                setSubmitCliCommand,
-                isVisibleCommandPalette,
-                setIsVisibleCommandPalette,
-                toggleCommandPalette,
-            }}
-        >
+        <KeyboardContext.Provider value={value}>
             {children}
         </KeyboardContext.Provider>
     );

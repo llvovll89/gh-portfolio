@@ -3,6 +3,7 @@ title: 웹 성능 최적화 완벽 가이드: Core Web Vitals 실전 기법
 date: 2026-03-28
 summary: LCP, INP, CLS 세 가지 Core Web Vitals 지표의 의미와 측정 방법을 이해하고, 이미지 최적화·코드 스플리팅·렌더링 전략 등 실무에서 바로 적용할 수 있는 성능 개선 기법을 정리합니다.
 tags: [Performance, CoreWebVitals, Web, Optimization, Frontend]
+category: Frontend
 ---
 
 웹 성능은 사용자 경험과 SEO 순위에 직접 영향을 줍니다. Google은 Core Web Vitals 세 지표를 검색 랭킹 신호로 사용하며, 좋은 점수는 이탈률 감소와 전환율 향상으로 이어집니다. 이 가이드에서는 지표의 의미부터 실전 최적화 기법까지 한 번에 정리합니다.
