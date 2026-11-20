@@ -51,8 +51,8 @@ export const BlogTagFilter = ({
                     : t("pages.blog.filter.allTags")
                 }
                 className={[
-                    "flex items-center gap-2 sm:h-11 h-9 px-4",
-                    "rounded-2xl border",
+                    "flex items-center gap-2 h-11 px-4",
+                    "rounded-md border",
                     selectedTags.length > 0
                         ? "border-primary/50 bg-primary/5 blog-dark:bg-primary/10"
                         : "border-line blog-dark:border-line bg-panel blog-dark:bg-panel",
@@ -85,7 +85,7 @@ export const BlogTagFilter = ({
                     className={[
                         "absolute top-full left-0 mt-2 z-50",
                         "w-72 max-h-96 overflow-y-auto",
-                        "rounded-2xl border",
+                        "rounded-[10px] border",
                         "border-line blog-dark:border-line",
                         "bg-panel blog-dark:bg-panel",
                         "shadow-lg shadow-zinc-900/10 blog-dark:shadow-black/30",
@@ -128,7 +128,7 @@ export const BlogTagFilter = ({
                                         key={tag}
                                         className={[
                                             "flex items-center gap-3 px-3 py-2.5",
-                                            "rounded-xl cursor-pointer",
+                                            "rounded-md cursor-pointer",
                                             "hover:bg-panel blog-dark:hover:bg-panel",
                                             "transition-colors duration-150",
                                             "group",

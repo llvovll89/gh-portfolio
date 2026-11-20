@@ -73,7 +73,7 @@ export const Contents = ({children, className}: ContentsProps) => {
             role="main"
             tabIndex={-1}
             className={`absolute right-0 flex flex-col sm:pb-10 editor-content overflow-x-hidden overflow-y-auto gap-4 scrolls
-                ${isMobileSize ? "top-16 h-[calc(100dvh-64px)] min-h-[calc(100dvh-64px)]" : "top-[68px] h-[calc(100dvh-92px)] min-h-[calc(100dvh-92px)]"}
+                ${isMobileSize ? "top-[69px] h-[calc(100dvh-69px)] min-h-[calc(100dvh-69px)]" : "top-[68px] h-[calc(100dvh-92px)] min-h-[calc(100dvh-92px)]"}
                 py-2 sm:py-3 md:py-4 ${isMobileSize ? "px-2 pb-24" : "px-2 sm:px-3 md:px-4 pb-2"} ${isFullscreen ? "justify-center" : ""} ${className} ${backgroundClass} ${textColor}`}
             style={{
                 width: `calc(100% - ${isMobileSize ? LAYOUT_CONSTANTS.MOBILE_SIDEBAR_WIDTH : layoutState.resizeSidebarWidth}px)`,
@@ -102,7 +102,7 @@ export const Contents = ({children, className}: ContentsProps) => {
                             behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
                         })
                     }
-                    className="fixed bottom-14 right-4 z-20 p-2.5 rounded-full bg-foreground/10 hover:bg-foreground/20 border border-foreground/10 text-muted hover:text-foreground backdrop-blur-sm transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg"
+                    className="fixed bottom-24 right-4 z-20 grid h-11 w-11 place-items-center rounded-full bg-foreground/10 hover:bg-foreground/20 border border-foreground/10 text-muted hover:text-foreground backdrop-blur-sm transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg"
                 >
                     <LuArrowUp className="w-4 h-4" />
                 </button>

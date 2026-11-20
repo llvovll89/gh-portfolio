@@ -19,6 +19,7 @@ import {PageErrorBoundary} from "./components/error/PageErrorBoundary";
 import {Toast} from "./components/toast/Toast";
 import {StatusBar} from "./components/statusBar/StatusBar";
 import {useThemeStyle} from "./hooks/useThemeStyle";
+import {useMatchedRoute} from "./hooks/useMatchedRoute";
 
 // Suspense 경계 안에 두어 lazy 라우트가 실제로 커밋된 뒤에만 프리렌더 콘텐츠를 제거 (페인트 전 교체)
 function PrerenderedContentCleanup() {
@@ -41,6 +42,7 @@ function AppContent() {
         location.pathname.startsWith("/blog/") &&
         location.pathname !== "/blog/";
     const {isTerminalVisible} = useContext(TerminalContext);
+    const matchedRoute = useMatchedRoute();
 
     useEffect(() => {
         try {
@@ -128,7 +130,7 @@ function AppContent() {
             </Suspense>
 
             {!isMobile && !isBlogDetailPage && isTerminalVisible && <Bottom />}
-            {!isMobile && <StatusBar />}
+            {!isMobile && <StatusBar fullWidth={isBlogDetailPage || !matchedRoute} />}
             <PWAInstallBanner />
             <PWAUpdateBanner />
             <Toast />

@@ -9,7 +9,8 @@ import {VSCODE_DARK} from "../../constants/vscodeTheme";
 
 const GIT_SUMMARY_UPDATED_EVENT = "portfolio-git-summary-updated";
 
-export const StatusBar = () => {
+// fullWidth: 사이드바가 없는 화면(블로그 글, 404)에서는 왼쪽 여백 없이 전체 너비로 표시
+export const StatusBar = ({fullWidth = false}: {fullWidth?: boolean}) => {
     const {layoutState} = useContext(LayoutContext);
     const isMobileSize = useCheckedMobileSize();
     const matchedRoute = useMatchedRoute();
@@ -40,7 +41,7 @@ export const StatusBar = () => {
             aria-label={uiText("상태 표시줄")}
             className="fixed bottom-0 right-0 h-6 z-30 flex items-center justify-between px-3 text-[11px] font-mono select-none"
             style={{
-                width: `calc(100% - ${layoutState.resizeSidebarWidth}px)`,
+                width: fullWidth ? "100%" : `calc(100% - ${layoutState.resizeSidebarWidth}px)`,
                 backgroundColor: "#17659a",
                 color: VSCODE_DARK.statusBarFg,
             }}

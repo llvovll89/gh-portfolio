@@ -22,7 +22,7 @@ export const BlogCategoryFilter = ({
                 onChange={(e) => onCategoryChange(e.target.value)}
                 aria-label={t("pages.blog.filter.categoryFilter")}
                 className={[
-                    "sm:h-11 h-9 pl-9 pr-8 rounded-2xl border text-sm",
+                    "h-11 pl-9 pr-8 rounded-md border text-sm",
                     "border-line blog-dark:border-line",
                     "bg-panel blog-dark:bg-panel",
                     "text-foreground blog-dark:text-foreground",

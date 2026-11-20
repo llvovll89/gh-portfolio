@@ -14,15 +14,15 @@ import { GitControl } from "./contents/gitControl/GitControl";
 import { Bookmarks } from "./contents/bookmarks/Bookmarks";
 import { Settings } from "./contents/settings/Settings";
 import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
-import { BLOG, CONTACT, DEFAULT, PROJECTS, RESUME } from "../../routes/route";
+import { BLOG, CONTACT, DEFAULT, PROFILE, PROJECTS } from "../../routes/route";
 import { useHandlePushPath } from "../../hooks/useHandlePushPath";
-import { LuBookOpen, LuFolderKanban, LuHouse, LuMail, LuMenu, LuMinus, LuPlus, LuScrollText } from "react-icons/lu";
+import { LuBookOpen, LuFolderKanban, LuHouse, LuMail, LuMenu, LuMinus, LuPlus, LuUserRound } from "react-icons/lu";
 
 const MOBILE_PRIMARY_NAV = [
     { path: DEFAULT, labelKey: "routes.home", Icon: LuHouse },
     { path: PROJECTS, labelKey: "routes.projects", Icon: LuFolderKanban },
     { path: BLOG, labelKey: "routes.blog", Icon: LuBookOpen },
-    { path: RESUME, labelKey: "routes.resume", Icon: LuScrollText },
+    { path: PROFILE, labelKey: "routes.profile", Icon: LuUserRound },
     { path: CONTACT, labelKey: "routes.contact", Icon: LuMail },
 ] as const;
 

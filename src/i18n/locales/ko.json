@@ -70,7 +70,7 @@
     "pages": {
         "profile": {
             "title": "Profile",
-            "skills": "Skills",
+            "skills": "기술 스택",
             "description": {
                 "intro": "React·TypeScript로 사용 흐름을 설계하고, Spring Boot·PostgreSQL로 그 흐름을 받치는 풀스택 웹 개발자 김건호입니다.",
                 "frontend": "약 2년 7개월간 프론트엔드 개발자로 웹 애플리케이션을 개발·유지보수했고, 현재는 백엔드까지 맡는 풀스택 개발자로 일하고 있습니다.",
@@ -96,10 +96,11 @@
                 "frontendExamples": "구현 사례: Hovie의 콘텐츠 탐색, 포트폴리오의 탭·단축키, GH ARCADE의 게임 검색.",
                 "backend": "Java와 Spring Boot, PostgreSQL과 Oracle을 백엔드 기술 스택으로 사용합니다.",
                 "backendExamples": "경력 및 담당 업무는 이력서 페이지에서 확인할 수 있습니다."
-            }
+            },
+            "downloadResume": "이력서 PDF"
         },
         "projects": {
-            "title": "Projects",
+            "title": "프로젝트",
             "subtitle": "기능 목록보다 문제와 역할, 구현 과정이 보이도록 정리한 작업 사례입니다.",
             "filterByTech": "기술로 필터",
             "moreFilters": "더 보기",
@@ -107,8 +108,8 @@
             "incomplete": "미완성",
             "unavailable": "준비 중",
             "sortLabel": "프로젝트 정렬",
-            "featuredProjects": "선정 프로젝트",
-            "archive": "프로젝트 아카이브",
+            "featuredProjects": "대표 프로젝트",
+            "archive": "보관한 프로젝트",
             "role": "담당 범위",
             "challenge": "문제",
             "contributions": "핵심 기여",
@@ -135,10 +136,14 @@
             "copyError": "복사하지 못했습니다. 주소창의 링크를 복사해 주세요.",
             "screenshot": "{{title}} 실행 화면",
             "decisions": "설계 결정",
-            "metrics": "측정 결과"
+            "metrics": "측정 결과",
+            "otherProjects": "다른 프로젝트",
+            "prevProject": "이전 프로젝트",
+            "nextProject": "다음 프로젝트",
+            "gallery": "{{title}} 화면 {{index}}"
         },
         "contact": {
-            "title": "Contact",
+            "title": "연락처",
             "subtitle": "채용/협업/사이드 프로젝트 문의 모두 환영합니다. 가장 빠른 채널은 이메일입니다.",
             "communicationCard": {
                 "quickContact": "빠르게 연락하기",
@@ -147,7 +152,6 @@
                 "emailCopied": "이메일이 복사되었습니다!",
                 "name": "이름",
                 "nameValue": "김건호",
-                "career": "경력",
                 "careerYearsMonths": "{{years}}년 {{months}}개월",
                 "careerMonths": "{{months}}개월",
                 "birthDate": "생년월일",
@@ -187,7 +191,7 @@
         },
         "blog": {
             "title": "Blog",
-            "posts": "포스트",
+            "posts": "블로그",
             "noPosts": "아직 글이 없습니다.",
             "addPostsHint": "에 .md 파일을 추가해보세요.",
             "noResults": "검색 결과가 없습니다",
@@ -206,7 +210,8 @@
                 "clearAll": "전체 해제",
                 "noTags": "사용 가능한 태그가 없습니다",
                 "removeTag": "{{tag}} 태그 제거",
-                "resetFilters": "필터 초기화"
+                "resetFilters": "필터 초기화",
+                "toggle": "필터"
             },
             "sort": {
                 "label": "정렬 순서: {{order}}",
@@ -221,7 +226,8 @@
             },
             "count": {
                 "total": "{{count}}개의 포스트",
-                "filtered": "{{filtered}} / {{total}}개 표시"
+                "filtered": "{{filtered}}개 표시 (전체 {{total}}개)",
+                "notesHidden": "글 {{count}}개 (Notes {{hidden}}개는 카테고리에서 선택)"
             },
             "searching": "본문 검색을 준비하고 있습니다.",
             "searchError": "본문 검색을 불러오지 못했습니다. 다시 시도해 주세요.",
@@ -243,9 +249,6 @@
             "skillsTitle": "기술 스택",
             "name": "이름",
             "email": "이메일",
-            "period": "기간",
-            "position": "직무",
-            "experiencePeriod": "2023.07 - 현재",
             "highSchool": "고등학교",
             "highSchoolValue": "청구고등학교 졸업 (2013.02)",
             "university": "대학교",
@@ -262,7 +265,13 @@
             "summary": "React와 TypeScript를 중심으로 빠르고 일관된 웹 경험을 만들고, 제품을 안정적으로 운영하는 풀스택 웹 개발자 김건호입니다.",
             "terminalPreview": "개발자 정보 터미널 미리보기",
             "viewProjects": "프로젝트 보기",
-            "getInTouch": "연락하기"
+            "getInTouch": "연락하기",
+            "featured": "대표 프로젝트",
+            "moreWork": "다른 프로젝트",
+            "recentPosts": "최근 글",
+            "allPosts": "블로그 전체 보기",
+            "viewProfile": "프로필 보기",
+            "codeLabel": "김건호 프로필을 코드로 표현한 미리보기"
         }
     },
     "routes": {
@@ -273,7 +282,7 @@
         "blog": "블로그",
         "blogDetail": "블로그 상세",
         "resume": "이력서",
-        "uses": "사용환경",
+        "uses": "사용 도구",
         "contact": "연락처",
         "notFound": "페이지 없음",
         "home": "홈",
@@ -413,7 +422,8 @@
         "loadError": {
             "title": "내용을 불러오지 못했습니다.",
             "description": "인터넷 연결을 확인한 후 다시 시도해 주세요. 목록으로 돌아가 다른 글을 읽을 수도 있습니다."
-        }
+        },
+        "suggestions": "이런 페이지는 어떠세요?"
     },
     "seo": {
         "title": "김건호 | 웹 개발자 포트폴리오",

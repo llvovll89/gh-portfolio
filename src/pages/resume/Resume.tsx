@@ -4,10 +4,12 @@ import {
     LuBriefcase,
     LuCode,
     LuDownload,
-    LuFileText,
     LuGraduationCap,
     LuUserRound,
 } from "react-icons/lu";
+import { PageHeader } from "../../components/pageHeader/PageHeader";
+import { careers } from "../profile/careerData";
+import { SKILL_GROUPS } from "../profile/skillData";
 import { useTranslation } from "react-i18next";
 import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
@@ -39,10 +41,11 @@ export const Resume = () => {
         {
             title: t("pages.resume.experienceTitle"),
             Icon: LuBriefcase,
-            items: [
-                { label: t("pages.resume.period"), value: t("pages.resume.experiencePeriod") },
-                { label: t("pages.resume.position"), value: "Full-stack Developer" },
-            ],
+            // 프로필과 같은 careerData를 사용해 두 페이지의 경력 표기가 어긋나지 않게 함
+            items: careers.map(career => ({
+                label: career.period,
+                value: `${t(`pages.profile.personalHistory.${career.company}`)}, ${career.position}`,
+            })),
         },
         {
             title: t("pages.resume.educationTitle"),
@@ -56,8 +59,7 @@ export const Resume = () => {
             title: t("pages.resume.skillsTitle"),
             Icon: LuCode,
             items: [
-                { label: "Frontend", value: "React, TypeScript, Redux, Tailwind CSS" },
-                { label: "Backend", value: "Java, Spring Boot, PostgreSQL, Oracle, Firebase" },
+                ...SKILL_GROUPS.map(group => ({ label: group.title, value: group.items.join(", ") })),
             ],
         },
     ];
@@ -95,37 +97,26 @@ export const Resume = () => {
             <Aside />
             <Contents className="select-none">
                 <section className="relative mx-auto w-full max-w-6xl px-2 pb-10 md:px-6">
-                    <header className="mb-8 border-b border-foreground/10 pb-7 sm:mb-10">
-                        <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-                            <div className="max-w-2xl">
-                                <div className="mb-3 flex items-center gap-3">
-                                    <span className="rounded-lg bg-primary/10 p-2" aria-hidden="true">
-                                        <LuFileText className="h-6 w-6 text-primary" />
-                                    </span>
-                                    <h1 className="text-[clamp(1.75rem,3vw,2.5rem)] font-extrabold tracking-tight text-foreground">
-                                        {t("pages.resume.title")}
-                                    </h1>
-                                </div>
-                                <p className="text-sm leading-6 text-muted sm:text-base">
-                                    {t("pages.resume.description")}
-                                </p>
-                            </div>
+                    <PageHeader
+                        title={t("pages.resume.title")}
+                        description={t("pages.resume.description")}
+                        actions={
                             <button
                                 type="button"
                                 onClick={() => { void handleDownloadResume(); }}
                                 disabled={downloadState === "loading"}
-                                className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-bold text-on-accent transition-transform hover:-translate-y-0.5 active:translate-y-px disabled:cursor-wait disabled:opacity-65 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+                                className="workbench-button workbench-button-primary"
                             >
-                                <LuDownload className="h-4 w-4" aria-hidden="true" />
+                                <LuDownload aria-hidden="true" />
                                 {downloadState === "loading"
                                     ? t("pages.resume.downloading")
                                     : t("pages.resume.download")}
                             </button>
-                        </div>
-                        <p className={`mt-3 min-h-5 text-sm ${downloadState === "error" ? "text-red-300" : "text-transparent"}`} role="status" aria-live="polite">
-                            {downloadState === "error" ? t("pages.resume.downloadError") : ""}
-                        </p>
-                    </header>
+                        }
+                    />
+                    <p className={`-mt-6 mb-2 min-h-5 text-sm ${downloadState === "error" ? "text-error" : "text-transparent"}`} role="status" aria-live="polite">
+                        {downloadState === "error" ? t("pages.resume.downloadError") : ""}
+                    </p>
 
                     <div className="resume-sections">
                         {sections.map(({ title, Icon, items }) => (

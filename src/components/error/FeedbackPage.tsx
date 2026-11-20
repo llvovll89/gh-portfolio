@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { LuArrowLeft, LuHouse, LuRefreshCw } from "react-icons/lu";
+import { LuArrowLeft, LuArrowUpRight, LuHouse, LuRefreshCw } from "react-icons/lu";
 
 export function FeedbackPage({ kind, onRetry, onHome, backTo }: { kind: "notFound" | "error" | "loadError"; onRetry?: () => void; onHome?: () => void; backTo?: string }) {
     const { t } = useTranslation();
@@ -14,6 +14,15 @@ export function FeedbackPage({ kind, onRetry, onHome, backTo }: { kind: "notFoun
                 {backTo && <Link to={backTo} className="workbench-button"><LuArrowLeft aria-hidden="true" />{t("feedback.backToList")}</Link>}
                 <Link to="/" onClick={onHome} className="workbench-button"><LuHouse aria-hidden="true" />{t("feedback.home")}</Link>
             </div>
+            {/* 404에서 바로 이어갈 수 있는 주요 페이지 */}
+            {kind === "notFound" && <nav className="mt-8 border-t border-line pt-6" aria-labelledby="feedback-suggestions">
+                <h2 id="feedback-suggestions" className="text-sm font-semibold text-muted">{t("feedback.suggestions")}</h2>
+                <ul className="mt-2">
+                    {([["/projects", "routes.projects"], ["/blog", "routes.blog"], ["/profile", "routes.profile"]] as const).map(([to, label]) => (
+                        <li key={to}><Link to={to} className="flex min-h-11 items-center justify-between border-b border-line text-sm hover:text-primary">{t(label)}<LuArrowUpRight aria-hidden="true" /></Link></li>
+                    ))}
+                </ul>
+            </nav>}
         </section>
     </main>;
 }

@@ -10,7 +10,7 @@ import {TableOfContents} from "./TableOfContents";
 import {Minimap} from "./Minimap";
 import {incrementViewCount, subscribeViewCount} from "../../../utils/blogViews";
 import {primeListViewCount} from "../../../utils/viewCounts";
-import {LuEye, LuChevronLeft, LuChevronRight} from "react-icons/lu";
+import {LuArrowLeft, LuEye, LuChevronLeft, LuChevronRight} from "react-icons/lu";
 import {logger} from "../../../utils/logger";
 import {BlogComments} from "../comments/BlogComments";
 import {useSeoMeta} from "../../../hooks/useSeoMeta";
@@ -56,7 +56,8 @@ export const Detail = () => {
 
     const tocItems = useMemo(() => {
         if (!post) return [];
-        return parseToc(post.body);
+        // 본문에 직접 쓴 '목차' 제목은 사이드 목차와 중복되므로 제외
+        return parseToc(post.body).filter(item => !/^(목차|table of contents|contents)$/i.test(item.text.trim()));
     }, [post]);
 
     // detail-content 자체가 스크롤 컨테이너 (h-dvh overflow-y-auto)
@@ -165,18 +166,15 @@ export const Detail = () => {
                 role="main" tabIndex={-1}
                 className="w-full h-dvh overflow-y-auto scrolls flex flex-col p-4 sm:p-6 md:py-10 md:px-15 bg-base-navy"
             >
-                <div className="mb-4">
-                    <Link
-                        to="/blog"
-                        className="text-sm underline underline-offset-4 text-muted hover:text-foreground transition-colors"
-                    >
-                        ← Posts
+                <div className="mb-4 mx-auto w-full max-w-275">
+                    <Link to="/blog" className="workbench-button">
+                        <LuArrowLeft aria-hidden="true" />{t("routes.blog")}
                     </Link>
                 </div>
 
-                <header className="mb-6">
+                <header className="mb-6 mx-auto w-full max-w-275">
                     <div className="flex items-start justify-between gap-3 sm:gap-4">
-                        <h1 className="text-[clamp(1.5rem,5vw,2.25rem)] font-extrabold tracking-tight text-foreground">
+                        <h1 className="max-w-[24em] break-keep text-[clamp(1.6rem,5vw,2.25rem)] font-bold leading-tight tracking-tight text-foreground">
                             {post.title}
                         </h1>
                         <div className="shrink-0 pt-1">
@@ -212,7 +210,7 @@ export const Detail = () => {
                         {post.tags?.map((t) => (
                             <span
                                 key={t}
-                                className="rounded-full border border-line bg-panel text-foreground px-2 py-0.5 text-xs"
+                                className="rounded-md border border-line bg-panel text-foreground px-2 py-0.5 text-xs"
                             >
                                 {t}
                             </span>
@@ -221,7 +219,7 @@ export const Detail = () => {
 
                     {post.summary ? (
                         <p
-                            className={`mt-2 text-muted ${post.type === "html" ? "leading-tight" : "leading-7"}`}
+                            className={`mt-3 max-w-[68ch] break-keep text-muted ${post.type === "html" ? "leading-tight" : "leading-7"}`}
                         >
                             {post.summary}
                         </p>
@@ -240,8 +238,8 @@ export const Detail = () => {
                 ) : (
                     <>
                         {tocItems.length > 0 && (
-                            <details className="xl:hidden mb-5 group rounded-lg border border-line bg-panel">
-                                <summary className="cursor-pointer select-none marker:content-none [&::-webkit-details-marker]:hidden px-4 py-2.5 text-sm font-semibold text-muted flex items-center justify-between">
+                            <details className="xl:hidden mb-5 mx-auto w-full max-w-275 group rounded-[10px] border border-line bg-panel">
+                                <summary className="cursor-pointer select-none marker:content-none [&::-webkit-details-marker]:hidden px-4 min-h-11 text-sm font-semibold text-muted flex items-center justify-between">
                                     {uiText("목차")}<svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"
@@ -269,7 +267,7 @@ export const Detail = () => {
                                                         DETAIL_SCROLL_ID,
                                                     );
                                                 }}
-                                                className={`block text-sm leading-snug py-1.5 text-muted hover:text-foreground transition-colors ${
+                                                className={`flex min-h-11 items-center text-sm leading-snug py-1.5 text-muted hover:text-foreground transition-colors ${
                                                     item.level === 3
                                                         ? "pl-4"
                                                         : "pl-0"
@@ -282,8 +280,9 @@ export const Detail = () => {
                                 </ul>
                             </details>
                         )}
-                        <div className="flex xl:gap-10 items-start">
-                            <div className="flex-1 min-w-0">
+                        {/* 본문 줄 길이를 80자 안쪽으로 유지하기 위해 본문 열 최대 폭을 제한 */}
+                        <div className="flex xl:gap-10 items-start mx-auto w-full max-w-275">
+                            <div className="flex-1 min-w-0 max-w-190">
                                 <MarkdownRenderer content={post.body} />
                                 <BlogComments slug={post.slug} />
                                 {/* 이전/다음 포스트 네비게이션 */}

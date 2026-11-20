@@ -32,7 +32,9 @@ const ProjectCard = ({ project, featured = false }: { project: Project; featured
                 <LuArrowUpRight className="h-5 w-5 shrink-0 text-muted transition-colors group-hover:text-primary" aria-hidden="true" />
             </div>
             <p className="mt-3 min-h-18 line-clamp-3 text-sm leading-6 text-muted">{project.description}</p>
-            <div className="mt-3 min-h-10">{project.role && <p className="line-clamp-2 border-l-2 border-primary/55 pl-3 text-[13px] leading-5 text-foreground"><span className="text-muted">{t("pages.projects.role")} </span>{project.role}</p>}</div>
+            {/* 큰 카드는 남는 공간에 결과 문장을 보여 줌 */}
+            {featured && project.outcome && <p className="mt-2 text-[15px] leading-7 text-foreground">{project.outcome}</p>}
+            <div className="mt-3 min-h-11">{project.role && <p className="line-clamp-2 border-l-2 border-primary/55 pl-3 text-[13px] leading-5 text-foreground"><span className="text-muted">{t("pages.projects.role")} </span>{project.role}</p>}</div>
             <div className="mt-auto flex flex-wrap gap-1.5 pt-3">
                 {project.skills.slice(0, featured ? 5 : 4).map((skill) => (
                     <span key={skill} className="rounded-md border border-foreground/9 bg-foreground/4 px-2 py-1 text-xs font-medium text-muted">{skill}</span>
@@ -56,25 +58,25 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
     const visibleSkills = showAllSkills ? allSkills : [...new Set([...primarySkills, ...(selectedSkill ? [selectedSkill] : [])])];
     const filteredProjects = useMemo(() => {
         const base = selectedSkill ? projects.filter((project) => project.skills.includes(selectedSkill)) : projects;
-        if (sortKey === "name") return [...base].sort((a, b) => a.title.localeCompare(b.title, "ko"));
-        // 기본 정렬: 아카이브 프로젝트는 목록 마지막에 배치
-        return [...base].sort((a, b) => Number(a.archived ?? false) - Number(b.archived ?? false));
+        return sortKey === "name" ? [...base].sort((a, b) => a.title.localeCompare(b.title, "ko")) : base;
     }, [projects, selectedSkill, sortKey]);
-    const featuredProject = sortKey === "default" ? featuredProjects.find(project => filteredProjects.includes(project)) : undefined;
-    const archiveProjects = filteredProjects.filter(project => project.id !== featuredProject?.id);
+    // 대표(featured) → 다른 프로젝트 → 보관(archived) 3단으로 나눠, 비중이 다른 작업이 같은 모양으로 섞이지 않게 함
+    const tierFeatured = sortKey === "default" ? featuredProjects.filter(project => filteredProjects.includes(project)) : filteredProjects.filter(project => project.featured);
+    const tierOther = filteredProjects.filter(project => !project.featured && !project.archived);
+    const tierArchived = filteredProjects.filter(project => project.archived && !project.featured);
 
     return (
         <>
             <div className="mb-7 flex flex-col gap-3 border-b border-foreground/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
                 <div className="min-w-0">
                     <p className="mb-2 text-[13px] font-medium text-muted">{t("pages.projects.filterByTech")}</p>
-                    <div className="flex flex-wrap gap-2" role="group" aria-label={t("pages.projects.filterByTech")}>
-                        <button type="button" aria-pressed={selectedSkill === null} onClick={() => setSelectedSkill(null)} className={`min-h-10 rounded-md border px-3 py-2 text-xs font-semibold ${selectedSkill === null ? "border-primary bg-primary text-on-accent" : "border-foreground/10 bg-foreground/4 text-muted hover:text-foreground"}`}>{t("pages.projects.filterAll")}</button>
-                        {visibleSkills.map((skill) => <button type="button" key={skill} aria-pressed={selectedSkill === skill} onClick={() => setSelectedSkill(skill)} className={`min-h-10 rounded-md border px-3 py-2 text-xs font-semibold ${selectedSkill === skill ? "border-primary bg-primary text-on-accent" : "border-foreground/10 bg-foreground/4 text-muted hover:text-foreground"}`}>{skill}</button>)}
-                        <button type="button" aria-expanded={showAllSkills} onClick={() => setShowAllSkills(value => !value)} className="min-h-10 rounded-md border border-foreground/15 px-3 py-2 text-xs text-primary">{t(showAllSkills ? "pages.projects.fewerFilters" : "pages.projects.moreFilters")}</button>
+                    <div className="flex gap-2 overflow-x-auto pb-1 scrolls sm:flex-wrap sm:overflow-visible sm:pb-0 [&>button]:shrink-0" role="group" aria-label={t("pages.projects.filterByTech")}>
+                        <button type="button" aria-pressed={selectedSkill === null} onClick={() => setSelectedSkill(null)} className={`min-h-11 rounded-md border px-3 py-2 text-xs font-semibold ${selectedSkill === null ? "border-primary bg-primary text-on-accent" : "border-foreground/10 bg-foreground/4 text-muted hover:text-foreground"}`}>{t("pages.projects.filterAll")}</button>
+                        {visibleSkills.map((skill) => <button type="button" key={skill} aria-pressed={selectedSkill === skill} onClick={() => setSelectedSkill(skill)} className={`min-h-11 rounded-md border px-3 py-2 text-xs font-semibold ${selectedSkill === skill ? "border-primary bg-primary text-on-accent" : "border-foreground/10 bg-foreground/4 text-muted hover:text-foreground"}`}>{skill}</button>)}
+                        <button type="button" aria-expanded={showAllSkills} onClick={() => setShowAllSkills(value => !value)} className="min-h-11 rounded-md border border-foreground/15 px-3 py-2 text-xs text-primary">{t(showAllSkills ? "pages.projects.fewerFilters" : "pages.projects.moreFilters")}</button>
                     </div>
                 </div>
-                <select aria-label={t("pages.projects.sortLabel")} value={sortKey} onChange={(event) => setSortKey(event.target.value as SortKey)} className="min-h-10 shrink-0 self-start sm:self-auto rounded-lg border border-foreground/10 bg-inset px-3 text-xs text-muted outline-none focus:border-primary">
+                <select aria-label={t("pages.projects.sortLabel")} value={sortKey} onChange={(event) => setSortKey(event.target.value as SortKey)} className="min-h-11 shrink-0 self-start sm:self-auto rounded-lg border border-foreground/10 bg-inset px-3 text-xs text-muted outline-none focus:border-primary">
                     <option value="default">{t("pages.projects.sortDefault")}</option>
                     <option value="name">{t("pages.projects.sortName")}</option>
                 </select>
@@ -85,19 +87,37 @@ export const ProjectContentsCards = ({ className }: CardProps) => {
                     <div><LuFolderOpen className="mx-auto h-8 w-8 text-muted" /><p className="mt-3 text-sm text-muted">{t("pages.projects.noProjects")}</p></div>
                 </div>
             ) : (
-                <div className={`space-y-10 ${className ?? ""}`}>
-                    {featuredProject && (
-                        <section aria-labelledby="featured-projects">
-                            <h2 id="featured-projects" className="mb-4 text-sm font-bold text-muted">{t("pages.projects.featuredProjects")}</h2>
-                            <ProjectCard project={featuredProject} featured />
+                <div className={className}>
+                    {tierFeatured.length > 0 && (
+                        <section className="project-tier" aria-labelledby="featured-projects">
+                            <h2 id="featured-projects">{t("pages.projects.featuredProjects")}</h2>
+                            <div className="project-featured-grid">
+                                {tierFeatured.map((project, index) => <ProjectCard key={project.id} project={project} featured={index === 0} />)}
+                            </div>
                         </section>
                     )}
-                    {archiveProjects.length > 0 && (
-                        <section aria-labelledby="project-archive">
-                            <h2 id="project-archive" className="mb-4 text-sm font-bold text-muted">{t("pages.projects.archive")}</h2>
-                            <div className="project-archive-grid grid auto-rows-fr gap-4 md:grid-cols-2 xl:grid-cols-3">
-                                {archiveProjects.map((project) => <ProjectCard key={project.id} project={project} />)}
+                    {tierOther.length > 0 && (
+                        <section className="project-tier" aria-labelledby="other-projects">
+                            <h2 id="other-projects">{t("pages.projects.otherProjects")}</h2>
+                            <div className="project-archive-grid grid gap-5 md:grid-cols-2">
+                                {tierOther.map((project) => <ProjectCard key={project.id} project={project} />)}
                             </div>
+                        </section>
+                    )}
+                    {tierArchived.length > 0 && (
+                        <section className="project-tier" aria-labelledby="project-archive">
+                            <h2 id="project-archive">{t("pages.projects.archive")}</h2>
+                            <ul className="project-archive-list">
+                                {tierArchived.map((project) => (
+                                    <li key={project.id}>
+                                        <Link to={projectPath(project)} className="project-archive-row">
+                                            <strong>{project.title}</strong>
+                                            <span>{project.description}</span>
+                                            <LuArrowUpRight aria-hidden="true" />
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
                         </section>
                     )}
                 </div>

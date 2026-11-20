@@ -17,8 +17,8 @@ export const BlogViewToggle = ({
             role="radiogroup"
             aria-label={t("pages.blog.view.label")}
             className={[
-                "inline-flex items-center gap-1 sm:h-11 h-9 p-1",
-                "rounded-2xl border",
+                "inline-flex items-center gap-1 h-11 p-1",
+                "rounded-md border",
                 "border-line blog-dark:border-line",
                 "bg-panel blog-dark:bg-panel",
             ].join(" ")}
@@ -30,7 +30,7 @@ export const BlogViewToggle = ({
                 onClick={() => onViewModeChange("list")}
                 className={[
                     "flex items-center gap-1.5 px-3 py-1.5",
-                    "rounded-xl text-sm font-medium",
+                    "rounded-[4px] text-sm font-medium",
                     "transition-all duration-200",
                     viewMode === "list"
                         ? "bg-panel blog-dark:bg-panel text-foreground blog-dark:text-foreground shadow-sm"
@@ -48,7 +48,7 @@ export const BlogViewToggle = ({
                 onClick={() => onViewModeChange("grid")}
                 className={[
                     "flex items-center gap-1.5 px-3 py-1.5",
-                    "rounded-xl text-sm font-medium",
+                    "rounded-[4px] text-sm font-medium",
                     "transition-all duration-200",
                     viewMode === "grid"
                         ? "bg-panel blog-dark:bg-panel text-foreground blog-dark:text-foreground shadow-sm"
@@ -66,7 +66,7 @@ export const BlogViewToggle = ({
                 onClick={() => onViewModeChange("grouped")}
                 className={[
                     "flex items-center gap-1.5 px-3 py-1.5",
-                    "rounded-xl text-sm font-medium",
+                    "rounded-[4px] text-sm font-medium",
                     "transition-all duration-200",
                     viewMode === "grouped"
                         ? "bg-panel blog-dark:bg-panel text-foreground blog-dark:text-foreground shadow-sm"

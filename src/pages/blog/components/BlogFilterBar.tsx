@@ -3,8 +3,10 @@ import { BlogTagFilter } from "./BlogTagFilter";
 import { BlogCategoryFilter } from "./BlogCategoryFilter";
 import { BlogSortToggle } from "./BlogSortToggle";
 import { BlogViewToggle } from "./BlogViewToggle";
-import { LuX } from "react-icons/lu";
+import { LuSlidersHorizontal, LuX } from "react-icons/lu";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import { useCheckedMobileSize } from "../../../hooks/useCheckedMobileSize";
 
 interface BlogFilterBarProps {
     searchQuery: string;
@@ -23,6 +25,8 @@ interface BlogFilterBarProps {
     tagCounts: Record<string, number>;
     totalPosts: number;
     filteredCount: number;
+    /** 기본 화면에서 숨겨진 Notes 글 수 (숫자 차이의 이유를 알려주기 위함) */
+    hiddenNotesCount?: number;
 }
 
 export const BlogFilterBar = ({
@@ -42,9 +46,15 @@ export const BlogFilterBar = ({
     tagCounts,
     totalPosts,
     filteredCount,
+    hiddenNotesCount = 0,
 }: BlogFilterBarProps) => {
     const { t } = useTranslation();
+    const isMobile = useCheckedMobileSize();
+    // 모바일에서는 검색창만 두고 나머지 컨트롤은 '필터' 버튼으로 접어 첫 화면에 글이 보이게 함
+    const [showControls, setShowControls] = useState(false);
     const hasActiveFilters = searchQuery || selectedTags.length > 0 || selectedCategory;
+    const activeFilterCount = selectedTags.length + (selectedCategory ? 1 : 0);
+    const controlsVisible = !isMobile || showControls;
 
     const clearAllFilters = () => {
         onSearchChange("");
@@ -65,8 +75,21 @@ export const BlogFilterBar = ({
                     />
                 </div>
 
+                {isMobile && (
+                    <button
+                        type="button"
+                        aria-expanded={showControls}
+                        aria-controls="blog-filter-controls"
+                        onClick={() => setShowControls(value => !value)}
+                        className="workbench-button self-start"
+                    >
+                        <LuSlidersHorizontal aria-hidden="true" />
+                        {t("pages.blog.filter.toggle")}{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
+                    </button>
+                )}
+
                 {/* 필터 및 정렬 버튼들 */}
-                <div className="flex sm:gap-3 gap-2 flex-wrap sm:flex-nowrap">
+                {controlsVisible && <div id="blog-filter-controls" className="flex sm:gap-3 gap-2 flex-wrap lg:flex-nowrap">
                     <BlogTagFilter
                         availableTags={availableTags}
                         selectedTags={selectedTags}
@@ -89,7 +112,7 @@ export const BlogFilterBar = ({
                         viewMode={viewMode}
                         onViewModeChange={onViewModeChange}
                     />
-                </div>
+                </div>}
             </div>
 
             {/* 선택된 태그 및 결과 정보 */}
@@ -135,7 +158,9 @@ export const BlogFilterBar = ({
                     >
                         {filteredCount === totalPosts
                             ? t("pages.blog.count.total", { count: totalPosts })
-                            : t("pages.blog.count.filtered", { filtered: filteredCount, total: totalPosts })}
+                            : hiddenNotesCount > 0 && filteredCount + hiddenNotesCount === totalPosts
+                                ? t("pages.blog.count.notesHidden", { count: filteredCount, hidden: hiddenNotesCount })
+                                : t("pages.blog.count.filtered", { filtered: filteredCount, total: totalPosts })}
                     </span>
 
                     {hasActiveFilters && (
@@ -143,8 +168,8 @@ export const BlogFilterBar = ({
                             type="button"
                             onClick={clearAllFilters}
                             className={[
-                                "text-xs font-medium px-3 py-1.5",
-                                "rounded-lg",
+                                "text-xs font-medium px-3 min-h-11",
+                                "rounded-md",
                                 "text-muted blog-dark:text-muted",
                                 "hover:text-foreground blog-dark:hover:text-foreground",
                                 "hover:bg-panel blog-dark:hover:bg-panel",

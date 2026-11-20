@@ -14,7 +14,8 @@ export const CardDescAndSkills = ({ project, headingLevel = 3 }: { project: Proj
             {!!project.metrics?.length && <section><Heading>{t("pages.projects.metrics")}</Heading><ul>{project.metrics.map(item => <li key={item}>{item}</li>)}</ul></section>}
             <section><Heading>{t("pages.projects.projectIntro")}</Heading><p>{project.detailedDescription}</p></section>
             <section><Heading>{t("pages.projects.techStack")}</Heading><div className="project-detail-tags">{project.skills.map(skill => <span key={skill}>{skill}</span>)}</div></section>
-            {!!project.projectMembers?.length && <section><Heading>{t("pages.projects.team")}</Heading><p>{project.projectMembers.join(", ")}</p></section>}
+            {/* 1인 프로젝트는 '팀 구성: 김건호'가 정보가 되지 않으므로 2인 이상일 때만 표시 */}
+            {project.projectMembers.length > 1 && <section><Heading>{t("pages.projects.team")}</Heading><p>{project.projectMembers.join(", ")}</p></section>}
         </div>
     );
 };

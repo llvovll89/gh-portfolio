@@ -50,28 +50,29 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
                 ].join(" ")}
             >
                 {/* 왼쪽 메타데이터 섹션 */}
-                <div className="flex flex-col items-start gap-2 sm:min-w-35 pb-3 sm:pb-0 sm:pr-6 border-b sm:border-b-0 sm:border-r border-line blog-dark:border-line">
-                    <time className="text-xs font-semibold text-muted blog-dark:text-muted uppercase tracking-wide">
+                {/* 모바일은 메타 정보를 한 줄로 흘려 제목이 첫 화면에 빨리 보이게 함 */}
+                <div className="flex flex-row flex-wrap items-center gap-x-3 gap-y-1.5 sm:flex-col sm:items-start sm:gap-2 sm:min-w-35 pb-2 sm:pb-0 sm:pr-6 sm:border-r border-line blog-dark:border-line">
+                    <time className="font-mono text-xs text-muted blog-dark:text-muted">
                         {p.date || "No Date"}
                     </time>
                     {p.readingTime && (
-                        <span className="text-[11px] font-medium text-muted blog-dark:text-muted">
+                        <span className="text-xs text-muted blog-dark:text-muted">
                             {t("pages.blog.readingMinutes", { count: parseInt(p.readingTime, 10) })}
                         </span>
                     )}
                     {viewCount !== null && viewCount > 0 && (
-                        <span className="flex items-center gap-1 text-[11px] font-medium text-muted blog-dark:text-muted">
+                        <span className="flex items-center gap-1 text-xs text-muted blog-dark:text-muted">
                             <LuEye className="w-3 h-3" />
                             {viewCount.toLocaleString()}
                         </span>
                     )}
                     {p.type === "html" && (
-                        <span className="text-[11px] font-semibold text-primary bg-primary/10 px-1.5 py-0.5 rounded">
+                        <span className="text-xs font-semibold text-primary bg-primary/10 px-1.5 py-0.5 rounded-md">
                             HTML
                         </span>
                     )}
                     {p.category && (
-                        <span className="text-[11px] font-semibold text-violet-600 blog-dark:text-violet-400 bg-violet-50 blog-dark:bg-violet-950/30 px-1.5 py-0.5 rounded">
+                        <span className="text-xs font-semibold text-violet-600 blog-dark:text-violet-400 bg-violet-50 blog-dark:bg-violet-950/30 px-1.5 py-0.5 rounded-md">
                             {p.category}
                         </span>
                     )}
@@ -80,7 +81,7 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
                             {p.tags.slice(0, 2).map((t) => (
                                 <span
                                     key={t}
-                                    className="text-[11px] font-medium text-primary bg-primary/10 px-1.5 py-0.5 rounded"
+                                    className="text-xs font-medium text-primary bg-primary/10 px-1.5 py-0.5 rounded-md"
                                 >
                                     {t}
                                 </span>
@@ -90,13 +91,13 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
                 </div>
 
                 {/* 오른쪽 콘텐츠 섹션 */}
-                <div className="flex-1 pt-3 sm:pt-0 sm:pl-6 min-w-0">
-                    <h3 className="text-base sm:text-xl font-bold leading-snug text-foreground mb-2 group-hover:text-primary transition-colors">
+                <div className="flex-1 pt-1 sm:pt-0 sm:pl-6 min-w-0">
+                    <h3 className="text-[17px] sm:text-xl font-semibold leading-snug text-foreground mb-2 group-hover:text-primary transition-colors">
                         {p.title}
                     </h3>
 
                     {(p.summary || (p.type !== "html" && p.body)) && (
-                        <p className="line-clamp-2 text-[clamp(0.75rem,1vw,0.875rem)] leading-relaxed text-muted blog-dark:text-foreground">
+                        <p className="line-clamp-2 text-sm leading-relaxed text-muted">
                             {p.summary ?? p.body}
                         </p>
                     )}
