@@ -8,7 +8,7 @@ import { Education } from "./contents/Education";
 import { PersonalHistory } from "./contents/PersonalHistory";
 import { useSeoMeta } from "../../hooks/useSeoMeta";
 import { useTranslation } from "react-i18next";
-import { LuMail } from "react-icons/lu";
+import { LuDownload, LuMail } from "react-icons/lu";
 import { FaGithub } from "react-icons/fa";
 import { CONTACT_EMAIL, CONTACT_GITHUB } from "../../constants/contact";
 
@@ -28,6 +28,8 @@ export const Profile = () => {
                         <div className="profile-links">
                             <a href={CONTACT_GITHUB} target="_blank" rel="noopener noreferrer"><FaGithub aria-hidden="true" /> GitHub</a>
                             <a href={`mailto:${CONTACT_EMAIL}`}><LuMail aria-hidden="true" /> {CONTACT_EMAIL}</a>
+                            {/* 모바일 하단 내비에서 이력서 탭이 빠졌으므로 프로필에서 바로 PDF를 받을 수 있게 함 */}
+                            <a href="/assets/resume/김건호_이력서.pdf" download="김건호_이력서.pdf"><LuDownload aria-hidden="true" /> {t("pages.profile.downloadResume")}</a>
                         </div>
                     </div>
                 </header>

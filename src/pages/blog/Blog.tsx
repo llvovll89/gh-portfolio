@@ -7,6 +7,7 @@ import { BlogListSkeleton } from "./components/BlogCardSkeleton";
 import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
+import { PageHeader } from "../../components/pageHeader/PageHeader";
 import { loadAllPosts } from "../../utils/loadAllPosts";
 import { useBlogSearch } from "../../hooks/useBlogSearch";
 import { BlogCard } from "./contents/BlogCard";
@@ -121,9 +122,7 @@ export const Blog = () => {
             <Contents>
                 <div data-blog-theme={blogTheme} style={{ colorScheme: blogTheme }} className="blog-page flex flex-col min-h-0 flex-1 sm:py-4 py-1 md:px-0 px-2">
                     <div className="flex-none mb-6">
-                        <h1 className="text-[clamp(0.85rem,1.5vw,1.25rem)] font-bold text-foreground blog-dark:text-foreground mb-4">
-                            {t("pages.blog.posts")}
-                        </h1>
+                        <PageHeader title={t("pages.blog.posts")} />
 
                         <BlogFilterBar
                             searchQuery={searchQuery}
@@ -142,6 +141,7 @@ export const Blog = () => {
                             tagCounts={tagCounts}
                             totalPosts={allPosts.length}
                             filteredCount={sortedPosts.length + featuredPosts.length}
+                            hiddenNotesCount={isDefaultView ? allPosts.filter(post => post.category === NOTES_CATEGORY).length : 0}
                         />
                     </div>
 
@@ -186,7 +186,7 @@ export const Blog = () => {
                             <>
                             {featuredPosts.length > 0 && (
                                 <section aria-labelledby="blog-featured-title" className="mb-6">
-                                    <h2 id="blog-featured-title" className="mb-3 text-sm font-bold text-muted">{t("pages.blog.featured")}</h2>
+                                    <h2 id="blog-featured-title" className="mb-3 text-xl font-semibold text-foreground">{t("pages.blog.featured")}</h2>
                                     <ul className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                                         {featuredPosts.map((p, i) => <BlogCard key={p.slug} p={p} searchQuery="" index={i} />)}
                                     </ul>

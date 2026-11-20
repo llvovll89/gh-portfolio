@@ -86,7 +86,7 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                 onClick={() => { void handleNativeShare(); }}
                 aria-label={uiText("포스트 공유")}
                 className={[
-                    "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium",
+                    "flex min-h-11 items-center gap-1.5 px-3 rounded-md text-xs font-medium",
                     "text-muted",
                     "border border-line",
                     "hover:text-foreground",
@@ -109,7 +109,7 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
                 aria-label={uiText("공유 옵션")}
                 aria-expanded={open}
                 className={[
-                    "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium",
+                    "flex min-h-11 items-center gap-1.5 px-3 rounded-md text-xs font-medium",
                     "text-muted",
                     "border border-line",
                     "hover:text-foreground",

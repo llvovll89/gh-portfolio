@@ -4,7 +4,7 @@ import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
 import { CommunicationCard } from "./contents/CommunicationCard";
 import { MessageCardForm } from "./contents/MessageCardForm";
-import { LuMailOpen } from "react-icons/lu";
+import { PageHeader } from "../../components/pageHeader/PageHeader";
 import { useTranslation } from "react-i18next";
 import { useSeoMeta } from "../../hooks/useSeoMeta";
 
@@ -18,19 +18,7 @@ export const Contact = () => {
             <Aside />
             <Contents>
                 <section className="contact-page relative w-full max-w-6xl mx-auto overflow-auto scrolls px-2 md:px-6">
-                    <div className="relative mb-6 sm:mb-10">
-                        <div className="flex items-center gap-3 sm:mb-3 mb-1.5">
-                            <div className="p-2 bg-primary/10 rounded-lg">
-                                <LuMailOpen className="w-6 h-6 text-primary" />
-                            </div>
-                            <h1 className="text-[clamp(1.5rem,3vw,2.25rem)] font-extrabold tracking-tight">
-                                {t("pages.contact.title")}
-                            </h1>
-                        </div>
-                        <p className="text-[clamp(0.78rem,1vw,0.875rem)] md:text-base text-muted max-w-2xl leading-relaxed">
-                            {t("pages.contact.subtitle")}
-                        </p>
-                    </div>
+                    <PageHeader title={t("pages.contact.title")} description={t("pages.contact.subtitle")} />
 
                     <div className="contact-layout">
                         {/* 왼쪽: 연락 카드 */}

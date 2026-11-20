@@ -70,7 +70,7 @@
     "pages": {
         "profile": {
             "title": "Profile",
-            "skills": "Skills",
+            "skills": "技術スタック",
             "description": {
                 "intro": "ReactとTypeScriptで利用フローを設計し、Spring BootとPostgreSQLでそのフローを支えるフルスタックWeb開発者、キム・ゴンホです。",
                 "frontend": "約2年7か月、フロントエンド開発者としてWebアプリケーションの開発・保守を担当し、現在はバックエンドまで担うフルスタック開発者として働いています。",
@@ -96,10 +96,11 @@
                 "frontendExamples": "実装例: Hovieのコンテンツ検索、このポートフォリオのタブとショートカット、GH ARCADEのゲーム検索。",
                 "backend": "Java、Spring Boot、リレーショナルデータベースを使用技術として紹介しています。",
                 "backendExamples": "Webアプリケーションの開発と保守の経験は履歴書で確認できます。"
-            }
+            },
+            "downloadResume": "履歴書 PDF"
         },
         "projects": {
-            "title": "Projects",
+            "title": "プロジェクト",
             "subtitle": "課題、担当範囲、実装プロセスが伝わるようにまとめた事例です。",
             "filterByTech": "技術で絞り込む",
             "moreFilters": "もっと見る",
@@ -107,8 +108,8 @@
             "incomplete": "制作中",
             "unavailable": "準備中",
             "sortLabel": "プロジェクトを並べ替え",
-            "featuredProjects": "主なプロジェクト",
-            "archive": "プロジェクト一覧",
+            "featuredProjects": "代表プロジェクト",
+            "archive": "アーカイブ",
             "role": "担当範囲",
             "challenge": "課題",
             "contributions": "主な貢献",
@@ -135,10 +136,14 @@
             "copyError": "コピーできませんでした。アドレスバーからコピーしてください。",
             "screenshot": "{{title}}の画面",
             "decisions": "設計上の判断",
-            "metrics": "計測結果"
+            "metrics": "計測結果",
+            "otherProjects": "その他のプロジェクト",
+            "prevProject": "前のプロジェクト",
+            "nextProject": "次のプロジェクト",
+            "gallery": "{{title}} 画面 {{index}}"
         },
         "contact": {
-            "title": "Contact",
+            "title": "連絡先",
             "subtitle": "採用・コラボ・サイドプロジェクトのご相談、お気軽にどうぞ。メールが最も速いです。",
             "communicationCard": {
                 "quickContact": "すぐに連絡する",
@@ -147,7 +152,6 @@
                 "emailCopied": "メールがコピーされました！",
                 "name": "名前",
                 "nameValue": "キム・ゴンホ",
-                "career": "経歴",
                 "careerYearsMonths": "{{years}}年{{months}}ヶ月",
                 "careerMonths": "{{months}}ヶ月",
                 "birthDate": "生年月日",
@@ -187,7 +191,7 @@
         },
         "blog": {
             "title": "Blog",
-            "posts": "投稿",
+            "posts": "ブログ",
             "noPosts": "まだ記事がありません。",
             "addPostsHint": "に.mdファイルを追加してみてください。",
             "noResults": "検索結果がありません",
@@ -206,7 +210,8 @@
                 "clearAll": "すべて解除",
                 "noTags": "利用可能なタグがありません",
                 "removeTag": "{{tag}}タグを削除",
-                "resetFilters": "フィルターをリセット"
+                "resetFilters": "フィルターをリセット",
+                "toggle": "フィルター"
             },
             "sort": {
                 "label": "並び順: {{order}}",
@@ -221,7 +226,8 @@
             },
             "count": {
                 "total": "{{count}}件の投稿",
-                "filtered": "{{filtered}} / {{total}}件表示"
+                "filtered": "{{filtered}}件表示 (全{{total}}件)",
+                "notesHidden": "{{count}}件の記事 (Notes {{hidden}}件はカテゴリから選択)"
             },
             "searching": "本文検索を準備しています。",
             "searchError": "本文検索を読み込めませんでした。もう一度お試しください。",
@@ -243,9 +249,6 @@
             "skillsTitle": "技術スタック",
             "name": "氏名",
             "email": "メール",
-            "period": "期間",
-            "position": "職種",
-            "experiencePeriod": "2023年7月 - 現在",
             "highSchool": "高校",
             "highSchoolValue": "チョング高校 卒業 (2013年2月)",
             "university": "大学",
@@ -262,7 +265,13 @@
             "summary": "ReactとTypeScriptを中心に、速く一貫したWeb体験を作り、安定した運用まで担うフルスタックWeb開発者、キム・ゴンホです。",
             "terminalPreview": "開発者情報のターミナルプレビュー",
             "viewProjects": "プロジェクトを見る",
-            "getInTouch": "お問い合わせ"
+            "getInTouch": "お問い合わせ",
+            "featured": "代表プロジェクト",
+            "moreWork": "その他のプロジェクト",
+            "recentPosts": "最近の記事",
+            "allPosts": "ブログをすべて見る",
+            "viewProfile": "プロフィールを見る",
+            "codeLabel": "キム・ゴンホのプロフィールをコードで表したプレビュー"
         }
     },
     "routes": {
@@ -273,7 +282,7 @@
         "blog": "ブログ",
         "blogDetail": "ブログ詳細",
         "resume": "履歴書",
-        "uses": "使用環境",
+        "uses": "使用ツール",
         "contact": "連絡先",
         "notFound": "ページなし",
         "home": "ホーム",
@@ -418,7 +427,8 @@
         "loadError": {
             "title": "内容を読み込めませんでした。",
             "description": "インターネット接続を確認して再試行してください。一覧に戻って別の記事を読むこともできます。"
-        }
+        },
+        "suggestions": "こちらのページはいかがですか"
     },
     "seo": {
         "title": "キム・ゴンホ | Web開発者ポートフォリオ",

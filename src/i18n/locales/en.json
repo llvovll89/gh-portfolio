@@ -96,7 +96,8 @@
                 "frontendExamples": "Examples: content discovery in Hovie, tabs and shortcuts in this portfolio, and game search in GH ARCADE.",
                 "backend": "My backend toolkit includes Java, Spring Boot, and relational databases.",
                 "backendExamples": "See my resume for web application development and maintenance experience."
-            }
+            },
+            "downloadResume": "Resume PDF"
         },
         "projects": {
             "title": "Projects",
@@ -107,8 +108,8 @@
             "incomplete": "In progress",
             "unavailable": "Coming soon",
             "sortLabel": "Sort projects",
-            "featuredProjects": "Selected projects",
-            "archive": "Project archive",
+            "featuredProjects": "Featured projects",
+            "archive": "Archived projects",
             "role": "Role",
             "challenge": "Challenge",
             "contributions": "Key contributions",
@@ -135,7 +136,11 @@
             "copyError": "Could not copy the link. Please copy it from the address bar.",
             "screenshot": "{{title}} screenshot",
             "decisions": "Key decisions",
-            "metrics": "Measured results"
+            "metrics": "Measured results",
+            "otherProjects": "Other projects",
+            "prevProject": "Previous project",
+            "nextProject": "Next project",
+            "gallery": "{{title}} screen {{index}}"
         },
         "contact": {
             "title": "Contact",
@@ -147,7 +152,6 @@
                 "emailCopied": "Email copied to clipboard!",
                 "name": "Name",
                 "nameValue": "Geonho Kim",
-                "career": "Experience",
                 "careerYearsMonths": "{{years}}yr {{months}}mo",
                 "careerMonths": "{{months}}mo",
                 "birthDate": "Birth Date",
@@ -187,7 +191,7 @@
         },
         "blog": {
             "title": "Blog",
-            "posts": "Posts",
+            "posts": "Blog",
             "noPosts": "No posts yet.",
             "addPostsHint": "Add .md files to",
             "noResults": "No results found",
@@ -206,7 +210,8 @@
                 "clearAll": "Clear All",
                 "noTags": "No tags available",
                 "removeTag": "Remove {{tag}} tag",
-                "resetFilters": "Reset Filters"
+                "resetFilters": "Reset Filters",
+                "toggle": "Filters"
             },
             "sort": {
                 "label": "Sort order: {{order}}",
@@ -221,7 +226,8 @@
             },
             "count": {
                 "total": "{{count}} posts",
-                "filtered": "{{filtered}} / {{total}} shown"
+                "filtered": "{{filtered}} of {{total}} shown",
+                "notesHidden": "{{count}} posts ({{hidden}} Notes under the category filter)"
             },
             "searching": "Preparing full-text search.",
             "searchError": "Could not load full-text search. Please try again.",
@@ -243,9 +249,6 @@
             "skillsTitle": "Technical skills",
             "name": "Name",
             "email": "Email",
-            "period": "Period",
-            "position": "Position",
-            "experiencePeriod": "Jul 2023 - Present",
             "highSchool": "High school",
             "highSchoolValue": "Cheonggu High School (Feb 2013)",
             "university": "University",
@@ -262,7 +265,13 @@
             "summary": "I'm Geonho Kim, a full-stack web developer building fast, consistent experiences with React and TypeScript, then keeping them reliable in production.",
             "terminalPreview": "Developer profile terminal preview",
             "viewProjects": "View Projects",
-            "getInTouch": "Get in Touch"
+            "getInTouch": "Get in Touch",
+            "featured": "Featured projects",
+            "moreWork": "Other projects",
+            "recentPosts": "Recent writing",
+            "allPosts": "All posts",
+            "viewProfile": "View profile",
+            "codeLabel": "Code-style preview of Geonho Kim's profile"
         }
     },
     "routes": {
@@ -418,7 +427,8 @@
         "loadError": {
             "title": "Content could not be loaded.",
             "description": "Check your internet connection and try again, or return to the list to browse other articles."
-        }
+        },
+        "suggestions": "Try one of these pages"
     },
     "seo": {
         "title": "Geonho Kim | Web Developer Portfolio",

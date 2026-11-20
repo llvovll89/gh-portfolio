@@ -25,8 +25,8 @@ export const BlogSortToggle = ({
             aria-label={t("pages.blog.sort.label", { order: orderLabel })}
             aria-pressed={sortOrder === "desc"}
             className={[
-                "flex items-center gap-2 sm:h-11 h-9 px-4",
-                "rounded-2xl border",
+                "flex items-center gap-2 h-11 px-4",
+                "rounded-md border",
                 "border-line blog-dark:border-line",
                 "bg-panel blog-dark:bg-panel",
                 "text-sm font-medium",

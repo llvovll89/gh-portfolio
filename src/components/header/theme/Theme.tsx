@@ -3,12 +3,11 @@ import { LuCheck, LuPalette } from "react-icons/lu";
 import { ThemeContext } from "../../../context/ThemeState";
 import { ThemeMode, THEME_COLORS, RECOMMENDED_COLORS } from "../../../context/constants/Theme.type";
 import { useClosePopup } from "../../../hooks/useClosePopup";
-import { useCheckedMobileSize } from "../../../hooks/useCheckedMobileSize";
 import { useTranslation } from "react-i18next";
 
-export const Theme = () => {
+// inline: 모바일 헤더 안에 배치하는 형태 (팝오버는 헤더 아래로 열림)
+export const Theme = ({ inline = false }: { inline?: boolean }) => {
     const { selectedTheme, setSelectedTheme } = useContext(ThemeContext);
-    const isMobile = useCheckedMobileSize();
     const { t } = useTranslation();
     const container = useRef<HTMLDivElement>(null);
     const open = selectedTheme.isVisibleThemeDropdown;
@@ -25,7 +24,7 @@ export const Theme = () => {
     return (
         // 팝오버 내부 어디에 포커스가 있든 Escape로 닫고 트리거로 포커스를 되돌리기 위한 위임 키 핸들러
         // eslint-disable-next-line jsx-a11y-x/no-static-element-interactions
-        <div ref={container} className={`theme-picker fixed right-3 z-100 ${isMobile ? "bottom-20" : "bottom-8"}`}
+        <div ref={container} className={inline ? "theme-picker theme-picker-inline" : "theme-picker fixed right-3 bottom-8 z-100"}
             onKeyDown={event => { if (event.key === "Escape") { close(); container.current?.querySelector("button")?.focus(); } }}>
             <button type="button" className="theme-trigger" aria-expanded={open} aria-controls={open ? "theme-options" : undefined}
                 aria-label={t("theme.select", { current: labels[selectedTheme.mode] })}

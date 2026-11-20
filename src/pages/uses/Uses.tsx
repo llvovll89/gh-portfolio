@@ -9,6 +9,8 @@ import { TbBrandTypescript, TbBrandVscode } from "react-icons/tb";
 import { SiPostman, SiTailwindcss, SiPostgresql, SiJira, SiFirebase } from "react-icons/si";
 import { BiLogoSpringBoot } from "react-icons/bi";
 import { useSeoMeta } from "../../hooks/useSeoMeta";
+import { PageHeader } from "../../components/pageHeader/PageHeader";
+import { LuArrowUpRight } from "react-icons/lu";
 
 export const Uses = () => {
     const { t } = useTranslation();
@@ -16,11 +18,7 @@ export const Uses = () => {
     const toolCategories = [
         {
             title: uiText("개발 도구"),
-            icon: "💻",
             description: uiText("일상적으로 사용하는 개발 도구들"),
-            tone: "from-blue-500/15 via-cyan-400/10 to-sky-500/5",
-            border: "border-blue-400/25",
-            glowColor: "bg-blue-500/20",
             tools: [
                 {
                     name: "Visual Studio Code",
@@ -44,11 +42,7 @@ export const Uses = () => {
         },
         {
             title: uiText("기술 스택"),
-            icon: "🛠️",
             description: uiText("주로 사용하는 프레임워크 및 라이브러리"),
-            tone: "from-emerald-500/15 via-green-400/10 to-teal-500/5",
-            border: "border-emerald-400/25",
-            glowColor: "bg-emerald-500/20",
             tools: [
                 {
                     name: "React",
@@ -96,11 +90,7 @@ export const Uses = () => {
         },
         {
             title: uiText("디자인 & 협업"),
-            icon: "🎨",
             description: uiText("디자인 및 팀 협업 도구"),
-            tone: "from-purple-500/15 via-pink-400/10 to-fuchsia-500/5",
-            border: "border-purple-400/25",
-            glowColor: "bg-purple-500/20",
             tools: [
                 {
                     name: "Figma",
@@ -129,92 +119,29 @@ export const Uses = () => {
             <Header />
             <Aside />
             <Contents className="select-none">
-                <section className="uses-page relative w-full max-w-7xl mx-auto overflow-auto scrolls px-2 md:px-6 py-4 md:py-8">
-                    <header className="mb-8"><h1 className="text-3xl font-bold text-foreground">{t("pages.uses.title")}</h1><p className="mt-3 text-sm leading-7 text-muted">{t("pages.uses.description")}</p></header>
-                    {/* 도구 카테고리 */}
-                    <div className="space-y-8 md:space-y-12">
-                        {toolCategories.map((category, idx) => (
-                            <article key={idx} className="space-y-4 md:space-y-6">
-                                {/* 카테고리 헤더 */}
-                                <div className="flex items-center gap-3 md:gap-5">
-                                    <h2 className="text-[clamp(1.2rem,2.5vw,1.8rem)] shrink-0 whitespace-nowrap font-bold text-foreground pr-2 flex items-center gap-2">
-                                        {category.title}
-                                    </h2>
-                                </div>
-
-                                <p className="text-xs md:text-sm text-muted pl-4">
-                                    {category.description}
-                                </p>
-
-                                {/* 도구 목록 */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-                                    {category.tools.map((tool, toolIdx) => (
-                                        <a
-                                            key={toolIdx}
-                                            href={tool.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={[
-                                                "tool-item group relative overflow-hidden",
-                                                "rounded-xl p-5",
-                                                "border",
-                                                "bg-linear-to-br",
-                                                "backdrop-blur-sm",
-                                                "transition-all duration-300",
-                                                "hover:shadow-xl hover:shadow-primary/10",
-                                                "hover:-translate-y-1",
-                                                "cursor-pointer",
-                                                category.tone,
-                                                category.border,
-                                            ].join(" ")}
-                                        >
-                                            {/* 배경 글로우 효과 */}
-                                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                                <div className={`absolute -top-20 -right-20 w-60 h-60 ${category.glowColor} rounded-full blur-3xl`} />
-                                            </div>
-
-                                            {/* 내용 */}
-                                            <div className="relative flex items-start gap-4">
-                                                {/* 아이콘 */}
-                                                <div className="shrink-0 w-12 h-12 rounded-lg bg-foreground/5 border border-foreground/10 flex items-center justify-center transition-transform group-hover:scale-110 group-hover:rotate-3">
-                                                    <tool.icon aria-hidden="true" focusable="false" className="w-6 h-6 text-foreground" />
-                                                </div>
-
-                                                {/* 텍스트 */}
-                                                <div className="flex-1 space-y-1.5">
-                                                    <h3 className="text-sm md:text-base font-bold text-foreground group-hover:text-primary transition-colors">
-                                                        {tool.name}
-                                                    </h3>
-                                                    <p className="text-xs md:text-sm text-muted leading-relaxed">
-                                                        {tool.description}
-                                                    </p>
-
-                                                    {/* 링크 표시 */}
-                                                    <div className="flex items-center gap-1 text-[11px] md:text-xs text-primary group-hover:text-primary transition-colors">
-                                                        <span>{uiText("자세히 보기")}</span>
-                                                        <svg className="w-3 h-3 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* 하단 액센트 */}
-                                            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-primary/0 to-transparent group-hover:via-primary/50 transition-all duration-300" />
+                <section className="uses-page relative w-full max-w-6xl mx-auto px-2 md:px-6 pb-8">
+                    <PageHeader title={t("pages.uses.title")} description={t("pages.uses.description")} />
+                    {/* 같은 모양의 카드를 반복하는 대신 훑어보기 쉬운 목록으로 표시 */}
+                    {toolCategories.map((category) => (
+                        <section key={category.title} className="uses-group" aria-labelledby={`uses-${category.title}`}>
+                            <h2 id={`uses-${category.title}`}>{category.title}</h2>
+                            <p>{category.description}</p>
+                            <ul className="uses-list">
+                                {category.tools.map((tool) => (
+                                    <li key={tool.name}>
+                                        <a href={tool.link} target="_blank" rel="noopener noreferrer" className="uses-item">
+                                            <tool.icon aria-hidden="true" focusable="false" />
+                                            <span><strong>{tool.name}</strong><span>{tool.description}</span></span>
+                                            <LuArrowUpRight aria-hidden="true" />
                                         </a>
-                                    ))}
-                                </div>
-                            </article>
-                        ))}
-                    </div>
-
-                    {/* 추가 정보 */}
-                    <div className="mt-8 md:mt-12 p-5 md:p-6 rounded-2xl bg-linear-to-br from-primary/5 to-primary/2 border border-primary/20">
-                        <h3 className="text-base md:text-lg font-bold text-foreground mb-3 flex items-center gap-2">
-                            {uiText("참고")}</h3>
-                        <p className="text-xs md:text-sm text-muted leading-relaxed">
-                            {uiText("이 목록은 현재 활발히 사용 중인 도구들입니다. 프로젝트와 상황에 따라 다른 도구들도 유연하게 사용합니다.")}</p>
-                    </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+                    ))}
+                    <p className="uses-note">
+                        {uiText("이 목록은 현재 활발히 사용 중인 도구들입니다. 프로젝트와 상황에 따라 다른 도구들도 유연하게 사용합니다.")}
+                    </p>
                 </section>
             </Contents>
         </>
