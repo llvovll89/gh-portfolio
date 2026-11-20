@@ -41,6 +41,14 @@ const getSharedPrefix = (values: string[]): string => {
 export const Cli = () => {
     const { submitCliCommand, setSubmitCliCommand } = useContext(KeyboardContext);
     const outputRef = useRef<HTMLDivElement>(null);
+    // clear 할 때마다 증가 — 진행 중이던 ask 응답이 비운 화면에 다시 붙지 않게 하는 세대 번호
+    const outputGenerationRef = useRef(0);
+    // 터미널을 닫은(언마운트) 뒤 도착한 ask 응답은 버림
+    const mountedRef = useRef(true);
+    useEffect(() => {
+        mountedRef.current = true;
+        return () => { mountedRef.current = false; };
+    }, []);
     const [inputValue, setInputValue] = useState("");
     const [history, setHistory] = useState<string[]>(loadStoredHistory);
     const [historyIndex, setHistoryIndex] = useState(-1);
@@ -196,8 +204,8 @@ export const Cli = () => {
             return;
         }
 
-        // Shift+Enter: 줄바꿈 허용 / 일반 Enter: 실행
-        if (event.key !== "Enter" || event.shiftKey) return;
+        // Shift+Enter: 줄바꿈 허용 / 일반 Enter: 실행 (한글 IME 조합 중 Enter 는 조합 확정이므로 실행하지 않음)
+        if (event.key !== "Enter" || event.shiftKey || event.nativeEvent.isComposing) return;
 
         event.preventDefault();
         event.stopPropagation();
@@ -217,6 +225,7 @@ export const Cli = () => {
 
         // clear 명령: 출력 비우기
         if (raw.toLowerCase() === "clear") {
+            outputGenerationRef.current++;
             setSubmitCliCommand({ value: "", isVisibleCommandUi: false });
             setInputValue("");
             return;
@@ -234,7 +243,11 @@ export const Cli = () => {
                 appendCommandLog(raw, "usage: ask <질문>  (예: ask 어떤 프로젝트를 만들었어?)");
             } else {
                 appendCommandLog(raw, "🤔 답변을 준비하고 있어요...");
-                void askPortfolio(question).then(answer => appendSystemLog(`ask › ${answer}`));
+                const generation = outputGenerationRef.current;
+                void askPortfolio(question).then(answer => {
+                    if (!mountedRef.current || generation !== outputGenerationRef.current) return;
+                    appendSystemLog(`ask › ${answer}`);
+                });
             }
             setInputValue("");
             return;
@@ -277,7 +290,7 @@ export const Cli = () => {
     };
 
     return (
-        <section className="w-full h-full flex flex-col bg-zinc-950 font-mono text-[11px]">
+        <section className="w-full h-full flex flex-col bg-zinc-950 font-mono text-2xs">
             {/* 출력 영역 */}
             <div
                 ref={outputRef}
@@ -318,7 +331,7 @@ export const Cli = () => {
             </div>
 
             {suggestions.length > 0 && inputValue.trim().length > 0 && (
-                <div className="shrink-0 border-t border-foreground/10 px-3 py-1 text-[11px] text-zinc-500 bg-zinc-950">
+                <div className="shrink-0 border-t border-foreground/10 px-3 py-1 text-2xs text-zinc-500 bg-zinc-950">
                     Tab 자동완성: {suggestions.slice(0, 4).join(" | ")}
                 </div>
             )}

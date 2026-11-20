@@ -83,10 +83,10 @@ export const ConsoleTab = () => {
     };
 
     return (
-        <div className="h-full flex flex-col bg-slate-950 text-slate-100 font-mono text-[11px]">
+        <div className="h-full flex flex-col bg-slate-950 text-slate-100 font-mono text-2xs">
             {/* 헤더 */}
             <div className="flex items-center justify-between px-3 py-1.5 border-b border-foreground/10 shrink-0">
-                <div className="flex items-center gap-2 text-[11px] text-muted">
+                <div className="flex items-center gap-2 text-2xs text-muted">
                     <span className="h-2 w-2 rounded-full bg-red-400/80" />
                     <span className="h-2 w-2 rounded-full bg-yellow-300/80" />
                     <span className="h-2 w-2 rounded-full bg-green-400/80" />
@@ -94,13 +94,13 @@ export const ConsoleTab = () => {
                 </div>
                 <div className="flex items-center gap-1">
                     <button onClick={() => { void copy(); }} disabled={!hasOutput} type="button"
-                        className="rounded px-2 py-0.5 text-[11px] font-medium border border-foreground/15 bg-foreground/5 hover:bg-foreground/10 text-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                        className="rounded px-2 py-0.5 text-2xs font-medium border border-foreground/15 bg-foreground/5 hover:bg-foreground/10 text-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                     >{uiText("복사")}</button>
                     <button onClick={download} disabled={!hasOutput} type="button"
-                        className="rounded px-2 py-0.5 text-[11px] font-medium border border-foreground/15 bg-foreground/5 hover:bg-foreground/10 text-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                        className="rounded px-2 py-0.5 text-2xs font-medium border border-foreground/15 bg-foreground/5 hover:bg-foreground/10 text-muted disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                     >{uiText("다운로드")}</button>
                     <button onClick={clear} disabled={!hasOutput} type="button"
-                        className="rounded px-2 py-0.5 text-[11px] font-medium border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                        className="rounded px-2 py-0.5 text-2xs font-medium border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                     >{uiText("초기화")}</button>
                 </div>
             </div>
@@ -110,10 +110,10 @@ export const ConsoleTab = () => {
                 {!hasOutput ? (
                     <div className="flex flex-col items-center justify-center h-full gap-1.5 text-muted select-none">
                         <span className="text-xs">{uiText("아직 출력이 없습니다")}</span>
-                        <span className="text-[11px]">{uiText("아래 입력창에서 명령어를 실행하세요")}</span>
+                        <span className="text-2xs">{uiText("아래 입력창에서 명령어를 실행하세요")}</span>
                     </div>
                 ) : (
-                    <pre className="m-0 text-[11px] leading-relaxed whitespace-pre-wrap text-foreground">
+                    <pre className="m-0 text-2xs leading-relaxed whitespace-pre-wrap text-foreground">
                         {lines.map((line, idx) => (
                             <div key={idx}>{renderWithLinks(line)}</div>
                         ))}

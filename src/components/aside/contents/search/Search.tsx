@@ -104,7 +104,7 @@ export const Search = () => {
                 </div>
 
                 {showResults && (
-                    <div className="text-[11px] text-muted px-0.5 flex items-center gap-1">
+                    <div className="text-2xs text-muted px-0.5 flex items-center gap-1">
                         {isDebouncing ? (
                             <span className="animate-pulse">{uiText("검색 중…")}</span>
                         ) : hasAnyResults ? (
@@ -127,7 +127,7 @@ export const Search = () => {
             {/* 검색어 히스토리 */}
             {shouldShowSearchHistory && (
                 <div className="w-full flex-1 p-2 text-foreground overflow-y-auto">
-                    <div className="px-2 py-1 text-[11px] text-muted flex items-center gap-1">
+                    <div className="px-2 py-1 text-2xs text-muted flex items-center gap-1">
                         <MdHistory />
                         {t("search.recentSearches")}
                     </div>
@@ -156,11 +156,11 @@ export const Search = () => {
             {/* 최근 방문 */}
             {showRecents && (
                 <div className="w-full flex-1 p-2 text-foreground overflow-y-auto">
-                    <div className="px-2 py-1 text-[11px] text-muted flex items-center justify-between">
+                    <div className="px-2 py-1 text-2xs text-muted flex items-center justify-between">
                         <span>{t("search.recentVisits")}</span>
                         <button
                             onClick={() => persistRecents([])}
-                            className="flex items-center gap-1 hover:text-primary transition-colors text-[11px]"
+                            className="flex items-center gap-1 hover:text-primary transition-colors text-2xs"
                             title={t("search.clearAll")}
                         >
                             <MdClearAll fontSize={14} />
@@ -220,13 +220,13 @@ export const Search = () => {
                         <div className="px-3 py-4 text-sm text-muted text-center">
                             <div className="text-2xl mb-1">🔍</div>
                             <div>{t("search.noResults")}</div>
-                            <div className="text-[11px] mt-1 text-muted">{uiText("다른 키워드로 검색해 보세요")}</div>
+                            <div className="text-2xs mt-1 text-muted">{uiText("다른 키워드로 검색해 보세요")}</div>
                         </div>
                     ) : (
                         <>
                             {results.length > 0 && (
                                 <section>
-                                    <div className="px-2 py-1 mb-1 text-[11px] text-muted uppercase tracking-widest flex items-center gap-1">
+                                    <div className="px-2 py-1 mb-1 text-2xs text-muted uppercase tracking-widest flex items-center gap-1">
                                         <FcOpenedFolder className="w-3 h-3" />
                                         Pages
                                         <span className="ml-auto text-muted normal-case tracking-normal">{results.length}</span>
@@ -265,7 +265,7 @@ export const Search = () => {
 
                             {blogResults.length > 0 && (
                                 <section className={results.length > 0 ? "mt-3" : ""}>
-                                    <div className="px-2 py-1 mb-1 text-[11px] text-muted uppercase tracking-widest flex items-center gap-1">
+                                    <div className="px-2 py-1 mb-1 text-2xs text-muted uppercase tracking-widest flex items-center gap-1">
                                         <FiFileText className="w-3 h-3" />
                                         Blog Posts
                                         <span className="ml-auto text-muted normal-case tracking-normal">{blogResults.length}</span>
@@ -298,13 +298,13 @@ export const Search = () => {
                                                     </div>
 
                                                     {post.snippet && (
-                                                        <p className="pl-5 mt-0.5 text-[11px] text-muted leading-relaxed line-clamp-2">
+                                                        <p className="pl-5 mt-0.5 text-2xs text-muted leading-relaxed line-clamp-2">
                                                             <HighlightedText text={post.snippet} keywords={keywords} />
                                                         </p>
                                                     )}
 
                                                     {(post.date || (post.tags?.length ?? 0) > 0) && (
-                                                        <div className="flex items-center gap-2 pl-5 mt-0.5 text-[11px] text-muted">
+                                                        <div className="flex items-center gap-2 pl-5 mt-0.5 text-2xs text-muted">
                                                             {post.date && <span>{post.date}</span>}
                                                             {post.tags?.slice(0, 3).map((tag) => (
                                                                 <span key={tag} className="text-primary/50">#{tag}</span>

@@ -116,7 +116,7 @@ export const TerminalCard = () => {
                 <span className="w-3 h-3 rounded-full bg-[#ff5f57]" />
                 <span className="w-3 h-3 rounded-full bg-[#febc2e]" />
                 <span className="w-3 h-3 rounded-full bg-[#28c840]" />
-                <span className="ml-2 text-[11px] text-muted select-none">
+                <span className="ml-2 text-2xs text-muted select-none">
                     terminal — zsh
                 </span>
             </div>

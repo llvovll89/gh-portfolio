@@ -93,7 +93,8 @@ export const Detail = () => {
         title: metadata?.title,
         description: metadata?.summary,
         url: slug ? `/blog/${slug}` : undefined,
-        type: "article",
+        // 없는 글(404)에는 빌드되지 않은 글 OG 이미지 대신 기본 이미지를 쓰도록 website 로 지정
+        type: metadata ? "article" : "website",
         noIndex: !metadata,
         publishedTime: metadata?.date,
     });

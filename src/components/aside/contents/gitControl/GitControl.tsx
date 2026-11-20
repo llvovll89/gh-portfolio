@@ -43,7 +43,7 @@ export const GitControl = () => {
                 <div className="flex items-center gap-2">
                     <button
                         onClick={() => setShowActivity((s) => !s)}
-                        className="text-[11px] px-3 py-2 rounded bg-foreground/10 hover:bg-foreground/10"
+                        className="text-2xs px-3 py-2 rounded bg-foreground/10 hover:bg-foreground/10"
                     >
                         Activity
                     </button>
@@ -66,13 +66,13 @@ export const GitControl = () => {
                         >
                             <span className="flex items-center justify-between gap-2">
                                 <span className="text-xs font-semibold truncate">{repo}</span>
-                                <span className="text-[11px] text-muted shrink-0">
+                                <span className="text-2xs text-muted shrink-0">
                                     {selectedRepo === repo ? "▼" : "▶"}
                                 </span>
                             </span>
 
                             {gitStates[repo].stats && (
-                                <span className="flex items-center gap-3 mt-2 text-[11px] text-muted">
+                                <span className="flex items-center gap-3 mt-2 text-2xs text-muted">
                                     <span className="flex items-center gap-1">⭐ {gitStates[repo].stats.stars}</span>
                                     <span className="flex items-center gap-1">🔀 {gitStates[repo].stats.forks}</span>
                                     <span className="flex items-center gap-1">👁️ {gitStates[repo].stats.watchers}</span>
@@ -88,7 +88,7 @@ export const GitControl = () => {
                                         <button
                                             key={tab}
                                             onClick={() => setActiveTab(tab)}
-                                            className={`flex-1 px-3 py-2 text-[11px] transition-colors ${
+                                            className={`flex-1 px-3 py-2 text-2xs transition-colors ${
                                                 activeTab === tab
                                                     ? "bg-foreground/10 text-foreground border-b-2 border-primary"
                                                     : "text-muted hover:text-foreground hover:bg-foreground/5"
@@ -126,7 +126,7 @@ export const GitControl = () => {
                                                     >
                                                         <span className="truncate">{branch}</span>
                                                         {isSelected(repo, branch) && gitStates[repo].commits.length > 0 && (
-                                                            <span className="text-[11px] shrink-0">
+                                                            <span className="text-2xs shrink-0">
                                                                 {t("gitControl.commits")} {gitStates[repo].commits.length}
                                                             </span>
                                                         )}
@@ -149,7 +149,7 @@ export const GitControl = () => {
                                                                 return (
                                                                     <article
                                                                         key={commit.sha}
-                                                                        className="w-full py-2 flex flex-col border-b border-sub-gary/20 hover:bg-sub-gary/10 cursor-default gap-1.5 text-[11px]"
+                                                                        className="w-full py-2 flex flex-col border-b border-sub-gary/20 hover:bg-sub-gary/10 cursor-default gap-1.5 text-2xs"
                                                                     >
                                                                         <div className="w-full flex items-center justify-between gap-2">
                                                                             <div className="flex items-center gap-1 min-w-0 flex-1">
@@ -196,12 +196,12 @@ export const GitControl = () => {
                                                             )}
                                                             <div className="flex-1 min-w-0">
                                                                 <div className="flex items-center gap-2 mb-1">
-                                                                    <span className={`text-[11px] px-2 py-0.5 rounded shrink-0 ${
+                                                                    <span className={`text-2xs px-2 py-0.5 rounded shrink-0 ${
                                                                         issue.state === "open" ? "bg-green-500/20 text-green-400" : "bg-purple-500/20 text-purple-400"
                                                                     }`}>
                                                                         {issue.state}
                                                                     </span>
-                                                                    <span className="text-[11px] text-muted shrink-0">#{issue.number}</span>
+                                                                    <span className="text-2xs text-muted shrink-0">#{issue.number}</span>
                                                                 </div>
                                                                 <p className="text-xs font-medium mb-1 line-clamp-2">{issue.title}</p>
                                                                 {issue.labels.length > 0 && (
@@ -209,7 +209,7 @@ export const GitControl = () => {
                                                                         {issue.labels.slice(0, 3).map((label) => (
                                                                             <span
                                                                                 key={label.name}
-                                                                                className="text-[11px] px-1.5 py-0.5 rounded"
+                                                                                className="text-2xs px-1.5 py-0.5 rounded"
                                                                                 style={{ backgroundColor: `#${label.color}40`, color: `#${label.color}` }}
                                                                             >
                                                                                 {label.name}
@@ -217,7 +217,7 @@ export const GitControl = () => {
                                                                         ))}
                                                                     </div>
                                                                 )}
-                                                                <p className="text-[11px] text-muted mt-1">
+                                                                <p className="text-2xs text-muted mt-1">
                                                                     {new Date(issue.created_at).toLocaleDateString()}
                                                                 </p>
                                                             </div>
@@ -248,7 +248,7 @@ export const GitControl = () => {
                                                             )}
                                                             <div className="flex-1">
                                                                 <div className="flex items-center gap-2 mb-1">
-                                                                    <span className={`text-[11px] px-2 py-0.5 rounded ${
+                                                                    <span className={`text-2xs px-2 py-0.5 rounded ${
                                                                         pr.state === "open" ? "bg-green-500/20 text-green-400"
                                                                         : pr.state === "closed" ? "bg-red-500/20 text-red-400"
                                                                         : "bg-purple-500/20 text-purple-400"
@@ -256,12 +256,12 @@ export const GitControl = () => {
                                                                         {pr.state}
                                                                     </span>
                                                                     {pr.draft && (
-                                                                        <span className="text-[11px] px-2 py-0.5 rounded bg-gray-500/20 text-gray-400">draft</span>
+                                                                        <span className="text-2xs px-2 py-0.5 rounded bg-gray-500/20 text-gray-400">draft</span>
                                                                     )}
-                                                                    <span className="text-[11px] text-muted">#{pr.number}</span>
+                                                                    <span className="text-2xs text-muted">#{pr.number}</span>
                                                                 </div>
                                                                 <p className="text-xs font-medium mb-1">{pr.title}</p>
-                                                                <p className="text-[11px] text-muted">
+                                                                <p className="text-2xs text-muted">
                                                                     {new Date(pr.created_at).toLocaleDateString()}
                                                                 </p>
                                                             </div>

@@ -120,7 +120,7 @@ export const MarchFirstOverlay = () => {
                         }}
                     />
                     <div lang="ko" className="flex flex-col min-w-0">
-                        <div className="text-[11px] text-muted font-medium tracking-wide">제 107주년</div>
+                        <div className="text-2xs text-muted font-medium tracking-wide">제 107주년</div>
                         <div className="text-sm font-bold text-foreground whitespace-nowrap">3·1절을 기념합니다</div>
                     </div>
                     <button

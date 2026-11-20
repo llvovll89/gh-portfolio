@@ -1,19 +1,25 @@
 rules_version = '2';
 
 // 이 Firebase 프로젝트(carrot-market-4ed07)는 포트폴리오와 Hovie 가 함께 사용합니다.
-// movies / tv / users 규칙은 Hovie 용이므로 삭제하지 마세요.
+// 이 파일이 두 앱 규칙의 단일 원본입니다. Hovie 저장소에서 규칙을 배포하면 아래 블로그 규칙이 사라지므로
+// 규칙 배포는 반드시 이 저장소에서만 하세요 (.firebaserc 로 대상 프로젝트 고정).
+//
+// 주의: 규칙은 OR 로 평가됩니다. 어떤 경로든 허용하는 규칙이 하나라도 있으면 아래의 `if false` 차단은 무력화되므로
+// `match /{document=**}` 같은 넓은 와일드카드 허용 규칙을 추가하지 마세요. (명시하지 않은 경로는 기본 거부)
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ── 방명록 (사이트에서 제거됨: 데이터는 보존, 접근 차단) ──
+    // ── 방명록 (사이트에서 제거됨: 데이터는 보존, 클라이언트 접근 없음) ──
     match /guestbook/{docId} {
       allow read, write: if false;
     }
 
-    // ── 블로그 조회수: 읽기 공개, 쓰기는 정확히 +1 만 ──
+    // ── 블로그 조회수: 읽기 공개, 쓰기는 실제 글 slug 형식 문서에 정확히 +1 만 ──
+    // slug 형식: 마크다운 'YYYY-MM-DD-제목', HTML 글 'html-제목'
     match /blog_views/{slug} {
       allow read: if true;
-      allow create: if request.resource.data.keys().hasOnly(['count'])
+      allow create: if slug.matches('^([0-9]{4}-[0-9]{2}-[0-9]{2}-|html-).{1,200}$')
+                    && request.resource.data.keys().hasOnly(['count'])
                     && request.resource.data.count == 1;
       allow update: if request.resource.data.keys().hasOnly(['count'])
                     && request.resource.data.count == resource.data.count + 1;
@@ -26,26 +32,50 @@ service cloud.firestore {
       allow write: if false;
     }
 
-    // ── 댓글 비밀번호 해시: 클라이언트 접근 전면 차단 ──
+    // ── 댓글 비밀번호 해시: 클라이언트 접근 없음 (Admin SDK 전용) ──
     match /blog_comment_secrets/{slug}/entries/{docId} {
       allow read, write: if false;
     }
 
-    // ── 영화 댓글 (Hovie, 기존 유지) ──
+    // ── API 사용량 카운터 (/api/ask 일일 상한): Admin SDK 전용 ──
+    match /api_usage/{docId} {
+      allow read, write: if false;
+    }
+
+    // ── Hovie 영화·TV 리뷰 ──
+    // 작성: 로그인 사용자 본인 명의로만, 필드·길이·별점(1~5)·작성 시각 검증
+    // 삭제: 작성자 본인만 / 수정: Hovie 에 수정 기능이 없으므로 허용하지 않음
+    function isValidReview() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['userId', 'userEmail', 'userDisplayName', 'userPhotoURL', 'content', 'rating', 'createdAt'])
+        && d.keys().hasAll(['userId', 'userDisplayName', 'content', 'rating', 'createdAt'])
+        && d.userId == request.auth.uid
+        && (!('userEmail' in d) || d.userEmail == null || d.userEmail == request.auth.token.email)
+        && d.userDisplayName is string && d.userDisplayName.size() > 0 && d.userDisplayName.size() <= 100
+        && (!('userPhotoURL' in d) || d.userPhotoURL == null || (d.userPhotoURL is string && d.userPhotoURL.size() <= 2048))
+        && d.content is string && d.content.size() > 0 && d.content.size() <= 5000
+        && d.rating is int && d.rating >= 1 && d.rating <= 5
+        && d.createdAt == request.time;
+    }
+
     match /movies/{movieId}/comments/{commentId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow create: if request.auth != null && isValidReview();
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow update: if false;
     }
 
-    // ── TV 댓글 (Hovie, 기존 유지) ──
     match /tv/{tvId}/comments/{commentId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow create: if request.auth != null && isValidReview();
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow update: if false;
     }
 
-    // ── 유저 데이터: 본인만 접근 (기존 유지) ──
+    // ── Hovie 유저 데이터(watchlist·watched·episodes): 로그인한 본인만 ──
+    // Hovie 는 이 경로의 필드로 권한을 판단하지 않으므로 필드 검증 대신 소유권만 확인
     match /users/{userId}/{document=**} {
-      allow read, write: if request.auth.uid == userId;
+      allow read, write: if request.auth != null && request.auth.uid == userId;
     }
   }
 }

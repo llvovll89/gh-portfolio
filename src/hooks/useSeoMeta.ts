@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { postOgImagePath } from "../utils/postMetadata";
+import { safeDecode } from "../utils/safeDecode";
 
 const SITE_URL = "https://kimgeonho.vercel.app";
 const DEFAULT_IMAGE = SITE_URL + "/og/thumbnail.webp";
@@ -19,7 +20,6 @@ function setMeta(kind: "name" | "property", name: string, content: string) {
     if (!meta) { meta = document.createElement("meta"); meta.setAttribute(kind, name); document.head.appendChild(meta); }
     meta.content = content;
 }
-const safeDecode = (value: string) => { try { return decodeURIComponent(value); } catch { return value; } };
 // 빌드(build/seo.ts)의 encodeURIComponent(slug) 경로와 같은 형태로 정규화해 canonical·스키마 URL 비교를 일치시킴
 const normalizeUrl = (value: string) => {
     const url = new URL(value, SITE_URL);

@@ -72,8 +72,7 @@ async function fetchPullRequests(owner: string, repo: RepoName): Promise<PullReq
 
 export function useGitControl() {
     // 서버 프록시는 GITHUB_OWNER(VITE_GIT_HUB_APP_ADMIN) 계정만 허용하므로 대시보드도 같은 계정을 우선 사용
-    const githubUsername = GITHUB_OWNER || (import.meta.env.VITE_GITHUB_USERNAME as string | undefined) || "llvovll89";
-    const owner = githubUsername;
+    const owner = GITHUB_OWNER || (import.meta.env.VITE_GITHUB_USERNAME as string | undefined) || "llvovll89";
 
     const [gitStates, setGitStates] = useState<Record<RepoName, RepoState>>(
         Object.fromEntries(REPOS.map((r) => [r, { ...EMPTY_REPO_STATE }])) as Record<RepoName, RepoState>
@@ -173,7 +172,7 @@ export function useGitControl() {
     };
 
     return {
-        githubUsername,
+        githubUsername: owner,
         gitStates,
         selected,
         setSelected,

@@ -62,7 +62,7 @@ export const LanguageSwitcher = () => {
                     strokeLinecap="round"
                 />
             </svg>
-            <span className="text-[11px] sm:text-xs font-bold font-mono tracking-wide">
+            <span className="text-2xs sm:text-xs font-bold font-mono tracking-wide">
                 {LANG_LABEL[current] ?? "KO"}
             </span>
         </button>

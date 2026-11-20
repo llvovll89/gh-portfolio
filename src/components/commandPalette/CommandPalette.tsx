@@ -734,7 +734,7 @@ export const CommandPalette = () => {
                         aria-label={uiText("명령 팔레트")}
                     />
                     {showPinnedOnly && (
-                        <div className="mt-2 inline-flex items-center rounded border border-primary px-2 py-1 text-[11px] text-primary">
+                        <div className="mt-2 inline-flex items-center rounded border border-primary px-2 py-1 text-2xs text-primary">
                             {t("palette.pinnedOnly")}
                         </div>
                     )}
@@ -755,7 +755,7 @@ export const CommandPalette = () => {
                                 return (
                                     <div
                                         key={row.id}
-                                        className="px-4 py-2 text-[11px] uppercase tracking-[0.08em] text-muted bg-panel border-y border-line"
+                                        className="px-4 py-2 text-2xs uppercase tracking-[0.08em] text-muted bg-panel border-y border-line"
                                     >
                                         {row.label}
                                     </div>
@@ -784,7 +784,7 @@ export const CommandPalette = () => {
                                     <span role="gridcell" className="flex flex-col gap-0.5 min-w-0">
                                         <span className="text-sm flex items-center gap-2">
                                             <Highlight text={command.label} query={searchQuery} />
-                                            <span className="rounded px-1.5 py-0.5 text-[11px] leading-none bg-foreground/10 text-foreground">
+                                            <span className="rounded px-1.5 py-0.5 text-2xs leading-none bg-foreground/10 text-foreground">
                                                 {t("palette." + command.category)}
                                             </span>
                                         </span>
@@ -802,7 +802,7 @@ export const CommandPalette = () => {
                                             }}
                                             aria-label={uiText(isPinned ? "고정 해제" : "명령 고정")}
                                             title={isPinned ? uiText("고정 해제") : uiText("명령 고정")}
-                                            className={`cursor-pointer inline-flex h-6 min-w-6 items-center justify-center rounded px-1.5 text-[11px] transition-colors ${isPinned
+                                            className={`cursor-pointer inline-flex h-6 min-w-6 items-center justify-center rounded px-1.5 text-2xs transition-colors ${isPinned
                                                 ? "text-primary bg-foreground/5"
                                                 : "text-muted hover:text-muted hover:bg-foreground/10"
                                                 }`}

@@ -32,7 +32,7 @@ export const ProblemsTab = () => {
     }
 
     return (
-        <div className="h-full overflow-y-auto scrolls font-mono text-[11px]">
+        <div className="h-full overflow-y-auto scrolls font-mono text-2xs">
             {items.map((item) => (
                 <a
                     key={`${item.repo}-${item.type}-${item.number}`}

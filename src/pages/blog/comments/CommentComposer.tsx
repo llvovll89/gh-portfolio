@@ -46,7 +46,11 @@ export function CommentComposer({ mode, slug, comment, onDone, onCancel }: Props
         if (!password) missing.push("password");
         if (missing.length > 0) {
             setInvalid(missing);
-            setError(isEdit ? "비밀번호를 입력하세요" : "이름, 비밀번호, 내용을 모두 입력해주세요.");
+            // 수정 모드는 내용·비밀번호 중 실제로 빠진 항목을 알려 줌 (포커스가 가는 칸과 메시지를 일치)
+            setError(!isEdit
+                ? "이름, 비밀번호, 내용을 모두 입력해주세요."
+                : missing.length > 1 ? "내용과 비밀번호를 입력하세요"
+                    : missing[0] === "message" ? "내용을 입력하세요" : "비밀번호를 입력하세요");
             focusField(missing[0]);
             return;
         }
@@ -79,7 +83,17 @@ export function CommentComposer({ mode, slug, comment, onDone, onCancel }: Props
     };
 
     return (
-        <div>
+        // 수정 위젯 안 어느 칸에서든 Esc 로 취소하고, 전역 Esc 단축키로 번지지 않게 막는 위임 키 핸들러
+        // eslint-disable-next-line jsx-a11y-x/no-static-element-interactions
+        <div
+            onKeyDown={(e) => {
+                if (isEdit && e.key === "Escape" && !e.nativeEvent.isComposing) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onCancel();
+                }
+            }}
+        >
             <div className={widgetFrame(invalid.length > 0)}>
                 <label htmlFor={`${id}-message`} className="block border-b border-line px-3 py-1.5 text-xs font-medium text-muted">
                     {isEdit ? uiText("댓글 수정") : uiText("새 댓글")}
@@ -97,7 +111,6 @@ export function CommentComposer({ mode, slug, comment, onDone, onCancel }: Props
                             e.stopPropagation();
                             void submit();
                         }
-                        if (isEdit && e.key === "Escape") onCancel();
                     }}
                     placeholder={isEdit ? undefined : uiText("글에 대한 의견이나 질문을 남겨주세요")}
                     className={`${bareField} block w-full resize-y min-h-20 px-3 py-2.5 text-sm leading-relaxed`}
@@ -136,10 +149,10 @@ export function CommentComposer({ mode, slug, comment, onDone, onCancel }: Props
                     </div>
 
                     <div className="ml-auto flex items-center gap-2">
-                        <span className="hidden text-[11px] tabular-nums text-muted sm:inline" aria-hidden="true">
+                        <span className="hidden text-2xs tabular-nums text-muted sm:inline" aria-hidden="true">
                             {message.length}/{MESSAGE_MAX}
                         </span>
-                        <span className="hidden items-center gap-1 text-[11px] text-muted md:inline-flex" aria-hidden="true">
+                        <span className="hidden items-center gap-1 text-2xs text-muted md:inline-flex" aria-hidden="true">
                             <kbd className="rounded border border-line bg-inset px-1 font-sans">Ctrl</kbd>
                             <kbd className="rounded border border-line bg-inset px-1 font-sans">Enter</kbd>
                         </span>

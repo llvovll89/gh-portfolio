@@ -45,7 +45,7 @@ export const KeyboardInfo = () => {
                             <div className="leading-tight">
                                 <p className="text-xs sm:text-sm font-semibold tracking-tight">
                                     {uiText("키보드 단축키")}</p>
-                                <p className="text-[11px] sm:text-xs text-muted">
+                                <p className="text-2xs sm:text-xs text-muted">
                                     {uiText("자주 쓰는 키 조합 모음")}</p>
                             </div>
                         </div>
@@ -100,7 +100,7 @@ export const KeyboardInfo = () => {
                     </ul>
 
                     <div className="relative px-3 sm:px-5 py-3 sm:py-4 border-t border-line flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-                        <p className="text-[11px] sm:text-xs text-muted">
+                        <p className="text-2xs sm:text-xs text-muted">
                             {uiText("팁:")}<span className="font-medium">ESC</span>{uiText("를 두 번 누르면 열려있는 UI를 한 번에 닫을 수 있어요.")}</p>
 
                         <button

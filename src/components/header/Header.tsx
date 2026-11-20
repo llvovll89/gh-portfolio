@@ -209,7 +209,7 @@ export const Header = () => {
                             <li
                                 key={route.path}
                                 className={`${selectedStyle(route.path).bgColor
-                                    } shrink-0 sm:min-w-24 md:min-w-30 w-max h-full border-r text-foreground border-sub-gary/30 text-[11px] sm:text-[12px] md:text-[13px] flex items-center cursor-pointer user-select-none gap-1 justify-center px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-inset`}
+                                    } shrink-0 sm:min-w-24 md:min-w-30 w-max h-full border-r text-foreground border-sub-gary/30 text-2xs sm:text-[12px] md:text-[13px] flex items-center cursor-pointer user-select-none gap-1 justify-center px-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-inset`}
                             >
                                 <Icon aria-hidden="true" className={`w-3.5 h-3.5 shrink-0 ${colorClass}`} />
                                 <Link to={route.path} aria-current={selectedPathState.state === route.path ? "page" : undefined} className="h-full min-w-0 flex-1 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-[-2px]">
@@ -228,7 +228,7 @@ export const Header = () => {
                                     className={`hidden sm:flex h-full min-w-6 px-1 items-center justify-center cursor-pointer rounded transition-colors shrink-0 ${isPinned ? "text-primary" : "text-muted hover:text-foreground"}`}
                                     title={isPinned ? uiText("고정 해제") : uiText("탭 고정")}
                                 >
-                                    <span className="text-[11px] sm:text-xs">
+                                    <span className="text-2xs sm:text-xs">
                                         {isPinned ? "★" : "☆"}
                                     </span>
                                 </button>
