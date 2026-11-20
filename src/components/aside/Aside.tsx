@@ -251,7 +251,7 @@ export const Aside = () => {
                             }
                         >
                             <item.Icon className="h-5 w-5" />
-                            <span className="text-[11px] leading-none">{t(item.labelKey)}</span>
+                            <span className="text-2xs leading-none">{t(item.labelKey)}</span>
                         </button>
                     ))}
                     <button
@@ -264,7 +264,7 @@ export const Aside = () => {
                         aria-expanded={Boolean(selectedNav)}
                     >
                         <LuMenu className="h-5 w-5" />
-                        <span className="text-[11px] leading-none">{t("routes.tools")}</span>
+                        <span className="text-2xs leading-none">{t("routes.tools")}</span>
                     </button>
                 </nav>
 

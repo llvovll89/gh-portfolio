@@ -39,7 +39,7 @@ export const StatusBar = ({fullWidth = false}: {fullWidth?: boolean}) => {
         <div
             role="group"
             aria-label={uiText("상태 표시줄")}
-            className="fixed bottom-0 right-0 h-6 z-30 flex items-center justify-between px-3 text-[11px] font-mono select-none"
+            className="fixed bottom-0 right-0 h-6 z-30 flex items-center justify-between px-3 text-2xs font-mono select-none"
             style={{
                 width: fullWidth ? "100%" : `calc(100% - ${layoutState.resizeSidebarWidth}px)`,
                 backgroundColor: "#17659a",

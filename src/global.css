@@ -33,6 +33,9 @@
         "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
         monospace;
 
+    /* 최소 글자 크기(메타·뱃지·상태바) — 정책이 바뀌면 이 값만 수정 */
+    --text-2xs: 0.6875rem;
+
     --user-select-none: none;
 }
 

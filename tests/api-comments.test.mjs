@@ -45,20 +45,62 @@ test("comment input parser enforces actions, lengths, and safe document ids", ()
     assert.deepEqual(create, { action: "create", slug: "2026-01-26-ts정리", name: "건호", message: "hi", password: "pw" });
     assert.equal(parseCommentAction({ action: "delete", slug: "2026-01-01-a", id: "abc", password: "pw" })?.action, "delete");
 
+    // slug 는 유효한 값으로 고정해 각 케이스가 slug 검사가 아닌 해당 필드 검사에서 거부되는지 확인
+    const slug = "2026-01-01-a";
     for (const bad of [
         null,
         { action: "create", slug: "random-spam", name: "n", message: "m", password: "pw" },
         { action: "create", slug: "a/b", name: "n", message: "m", password: "pw" },
         { action: "create", slug: "..", name: "n", message: "m", password: "pw" },
-        { action: "create", slug: "a", name: "n".repeat(41), message: "m", password: "pw" },
-        { action: "create", slug: "a", name: "n", message: "m".repeat(2001), password: "pw" },
-        { action: "create", slug: "a", name: "   ", message: "m", password: "pw" },
-        { action: "update", slug: "a", id: "__x__", message: "m", password: "pw" },
-        { action: "delete", slug: "a", id: "x", password: "" },
-        { action: "drop", slug: "a", id: "x", password: "pw" },
+        { action: "create", slug, name: "n".repeat(41), message: "m", password: "pw" },
+        { action: "create", slug, name: "n", message: "m".repeat(2001), password: "pw" },
+        { action: "create", slug, name: "   ", message: "m", password: "pw" },
+        { action: "update", slug, id: "__x__", message: "m", password: "pw" },
+        { action: "delete", slug, id: "x", password: "" },
+        { action: "drop", slug, id: "x", password: "pw" },
     ]) {
         assert.equal(parseCommentAction(bad), null, JSON.stringify(bad));
     }
+});
+
+test("each rejected comment case fails on its own field, not on the slug", () => {
+    const ok = { action: "create", slug: "2026-01-01-a", name: "n", message: "m", password: "pw" };
+    assert.ok(parseCommentAction(ok), "baseline must pass so the invalid cases above are meaningful");
+    assert.ok(parseCommentAction({ action: "update", slug: ok.slug, id: "x", message: "m", password: "pw" }));
+});
+
+const { parseBlogSlugs } = loadTypeScript("api/_lib/sitemap.ts");
+const { readRequestBody } = loadTypeScript("api/_lib/request.ts");
+const { quotaDay } = loadTypeScript("api/_lib/dailyQuota.ts");
+
+test("sitemap parser extracts decoded blog slugs only", () => {
+    const xml = "<urlset><url><loc>https://x.dev/</loc></url><url><loc>https://x.dev/blog/2026-05-04-WebSocket%20%EC%A0%95%EB%A6%AC</loc></url><url><loc>https://x.dev/blog/html-a_b</loc></url><url><loc>https://x.dev/projects/hovie</loc></url><url><loc>https://x.dev/blog/bad%E0%A4%A</loc></url></urlset>";
+    assert.deepEqual([...parseBlogSlugs(xml)], ["2026-05-04-WebSocket 정리", "html-a_b"]);
+});
+
+test("request body reader turns a throwing body getter or broken JSON into null", () => {
+    const throwing = { get body() { throw new SyntaxError("Unexpected token"); } };
+    assert.equal(readRequestBody(throwing), null);
+    assert.equal(readRequestBody({ body: "{bad" }), null);
+    assert.deepEqual(readRequestBody({ body: '{"a":1}' }), { a: 1 });
+    assert.deepEqual(readRequestBody({ body: { a: 1 } }), { a: 1 });
+});
+
+test("daily quota key uses the UTC date", () => {
+    assert.equal(quotaDay(new Date("2026-11-20T23:59:59Z")), "2026-11-20");
+    assert.equal(quotaDay(new Date("2026-11-21T00:00:00Z")), "2026-11-21");
+});
+
+// 에뮬레이터 없이도 잡을 수 있는 규칙 회귀(PR #17 처럼 블록이 통째로 빠지는 경우) 방지
+test("firestore.rules keeps every app's blocks and no catch-all allow", () => {
+    // 주석 안의 예시 문구는 제외하고 실제 규칙 코드만 검사
+    const rules = readFileSync("firestore.rules", "utf8").replace(/\/\/.*$/gm, "");
+    for (const path of ["/blog_views/{slug}", "/blog_comments/{slug}/entries/{docId}", "/blog_comment_secrets/{slug}/entries/{docId}", "/api_usage/{docId}", "/movies/{movieId}/comments/{commentId}", "/tv/{tvId}/comments/{commentId}", "/users/{userId}/{document=**}"]) {
+        assert.ok(rules.includes(`match ${path}`), path);
+    }
+    assert.doesNotMatch(rules, /match \/\{document=\*\*\}/, "a root catch-all match would override the explicit denies");
+    assert.doesNotMatch(rules, /allow write: if request\.auth != null;/, "Hovie reviews must check ownership, not just sign-in");
+    assert.equal(JSON.parse(readFileSync(".firebaserc", "utf8")).projects.default, "carrot-market-4ed07");
 });
 
 const { parseAskInput } = loadTypeScript("api/_lib/askInput.ts");

@@ -8,7 +8,7 @@ const OUTPUT_LINES = [
 
 export const OutputTab = () => {
     return (
-        <div className="h-full overflow-y-auto scrolls p-3 font-mono text-[11px] text-muted">
+        <div className="h-full overflow-y-auto scrolls p-3 font-mono text-2xs text-muted">
             {OUTPUT_LINES.map((line, i) => (
                 <div key={i} className="leading-5">
                     {line}

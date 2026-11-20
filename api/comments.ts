@@ -1,16 +1,10 @@
-import type { IncomingMessage, ServerResponse } from 'node:http'
 import { FieldValue } from 'firebase-admin/firestore'
 import { parseCommentAction } from './_lib/commentInput.js'
 import { hashCommentPassword, verifyCommentPassword } from './_lib/commentPassword.js'
 import { getAdminDb } from './_lib/firebaseAdmin.js'
 import { createRateLimiter } from './_lib/rateLimit.js'
-import { clientIp, readJsonBody } from './_lib/request.js'
-
-type Req = IncomingMessage & { body?: unknown }
-type Res = ServerResponse & {
-    status: (code: number) => Res
-    json: (data: unknown) => void
-}
+import { isKnownPostSlug } from './_lib/postSlugs.js'
+import { clientIp, readRequestBody, type ApiRequest, type ApiResponse } from './_lib/request.js'
 
 const WRONG_PASSWORD_DELAY_MS = 400
 // IP당 10분에 20회 (생성·수정·삭제 합산) — 스팸·비밀번호 대입 완화
@@ -20,15 +14,19 @@ const allow = createRateLimiter(20, 10 * 60 * 1000)
  * 댓글 생성/수정/삭제 — 비밀번호 해시는 공개 문서가 아닌
  * blog_comment_secrets/{slug}/entries/{id} 에 저장하고 클라이언트 접근은 규칙으로 차단
  */
-export default async function handler(req: Req, res: Res) {
+export default async function handler(req: ApiRequest, res: ApiResponse) {
     if (req.method !== 'POST') {
         res.setHeader('Allow', 'POST')
         return res.status(405).json({ error: 'method-not-allowed' })
     }
 
-    const input = parseCommentAction(readJsonBody(req.body))
+    const input = parseCommentAction(readRequestBody(req))
     if (!input) return res.status(400).json({ error: 'invalid-input' })
     if (!allow(clientIp(req))) return res.status(429).json({ error: 'rate-limited' })
+    // 형식만 맞는 가짜 slug 로 컬렉션이 생기지 않도록 실제 배포된 글인지 확인 (확인 불가(null)면 형식 검증만으로 허용)
+    if (input.action === 'create' && (await isKnownPostSlug(input.slug)) === false) {
+        return res.status(404).json({ error: 'not-found' })
+    }
 
     const db = getAdminDb()
     if (!db) return res.status(503).json({ error: 'not-configured' })

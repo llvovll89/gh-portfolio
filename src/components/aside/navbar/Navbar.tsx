@@ -165,7 +165,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                             {item.type === NavType.BOOKMARKS && bookmarkCount > 0 && (
                                 <span
                                     aria-hidden="true"
-                                    className={`absolute -top-1.5 -right-2 min-w-3.5 h-3.5 px-1 rounded-full text-[11px] font-bold leading-3.5 text-center bg-primary text-on-accent`}
+                                    className={`absolute -top-1.5 -right-2 min-w-3.5 h-3.5 px-1 rounded-full text-2xs font-bold leading-3.5 text-center bg-primary text-on-accent`}
                                 >
                                     {bookmarkCount > 99 ? "99+" : bookmarkCount}
                                 </span>
@@ -173,7 +173,7 @@ export const Navbar = ({ selectedNav, onClickNav }: NavbarProps) => {
                             {item.type === NavType.GIT_CONTROL && gitOpenCount > 0 && (
                                 <span
                                     aria-hidden="true"
-                                    className={`absolute -top-1.5 -right-2 min-w-3.5 h-3.5 px-1 rounded-full text-[11px] font-bold leading-3.5 text-center bg-primary text-on-accent`}
+                                    className={`absolute -top-1.5 -right-2 min-w-3.5 h-3.5 px-1 rounded-full text-2xs font-bold leading-3.5 text-center bg-primary text-on-accent`}
                                 >
                                     {gitOpenCount > 99 ? "99+" : gitOpenCount}
                                 </span>

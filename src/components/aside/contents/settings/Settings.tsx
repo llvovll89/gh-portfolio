@@ -84,7 +84,7 @@ export const Settings = () => {
             <div className="w-full border-b border-sub-gary/30 flex">
                 <button
                     onClick={() => setActiveTab("shortcuts")}
-                    className={`flex-1 px-3 py-2 text-[11px] transition-colors ${activeTab === "shortcuts"
+                    className={`flex-1 px-3 py-2 text-2xs transition-colors ${activeTab === "shortcuts"
                         ? "bg-primary/20 text-foreground border-b-2 border-primary"
                         : "text-muted hover:bg-sub-gary/20"
                         }`}
@@ -94,7 +94,7 @@ export const Settings = () => {
                 </button>
                 <button
                     onClick={() => setActiveTab("general")}
-                    className={`flex-1 px-3 py-2 text-[11px] transition-colors ${activeTab === "general"
+                    className={`flex-1 px-3 py-2 text-2xs transition-colors ${activeTab === "general"
                         ? "bg-primary/20 text-foreground border-b-2 border-primary"
                         : "text-muted hover:bg-sub-gary/20"
                         }`}
@@ -108,12 +108,12 @@ export const Settings = () => {
                 {activeTab === "shortcuts" ? (
                     <div className="p-3">
                         <div className="flex items-center justify-between mb-3">
-                            <p className="text-[11px] text-muted">
+                            <p className="text-2xs text-muted">
                                 {t("settings.keyboardShortcuts")}
                             </p>
                             <button
                                 onClick={resetAllShortcuts}
-                                className="flex items-center gap-1 px-2 py-1 text-[11px] text-muted hover:text-foreground hover:bg-sub-gary/20 rounded transition-colors"
+                                className="flex items-center gap-1 px-2 py-1 text-2xs text-muted hover:text-foreground hover:bg-sub-gary/20 rounded transition-colors"
                                 title={uiText("모두 초기화")}
                             >
                                 <VscRefresh className="w-3 h-3" />
@@ -126,12 +126,12 @@ export const Settings = () => {
                                     key={id}
                                     className="flex items-center justify-between p-2 bg-sub-gary/20 rounded hover:bg-sub-gary/30 transition-colors group"
                                 >
-                                    <span className="text-[11px] text-muted flex-1">
+                                    <span className="text-2xs text-muted flex-1">
                                         {getShortcutDescription(id)}
                                     </span>
                                     <div className="flex items-center gap-2">
                                         <kbd
-                                            className={`px-2 py-1 text-[11px] bg-sub-gary/40 text-foreground rounded border ${isCustomized(id)
+                                            className={`px-2 py-1 text-2xs bg-sub-gary/40 text-foreground rounded border ${isCustomized(id)
                                                     ? "border-primary/50"
                                                     : "border-sub-gary/30"
                                                 }`}
@@ -151,7 +151,7 @@ export const Settings = () => {
                                 </li>
                             ))}
                         </ul>
-                        <p className="mt-4 text-[11px] text-muted italic">
+                        <p className="mt-4 text-2xs text-muted italic">
                             {t("settings.shortcutsNote") ||
                                 uiText("* 단축키는 localStorage에 저장됩니다")}
                         </p>
@@ -159,7 +159,7 @@ export const Settings = () => {
                 ) : (
                     <div className="p-3 space-y-4">
                         <div>
-                            <label className="block text-[11px] text-muted mb-2">
+                            <label className="block text-2xs text-muted mb-2">
                                 {t("settings.language")}
                             </label>
                             <select
@@ -176,7 +176,7 @@ export const Settings = () => {
                         </div>
 
                         <div>
-                            <label className="block text-[11px] text-muted mb-2">
+                            <label className="block text-2xs text-muted mb-2">
                                 {t("settings.animationSpeed")}
                             </label>
                             <select
@@ -193,7 +193,7 @@ export const Settings = () => {
                         </div>
 
                         <div className="pt-3 border-t border-sub-gary/30">
-                            <p className="text-[11px] text-muted">
+                            <p className="text-2xs text-muted">
                                 {t("settings.storedInLocalStorage")}
                             </p>
                         </div>

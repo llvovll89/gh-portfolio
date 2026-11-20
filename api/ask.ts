@@ -1,22 +1,15 @@
-import type { IncomingMessage, ServerResponse } from 'node:http'
 import Anthropic from '@anthropic-ai/sdk'
 import { ASK_LIMITS, parseAskInput, type AskLang } from './_lib/askInput.js'
+import { consumeDailyQuota } from './_lib/dailyQuota.js'
+import { getAdminDb } from './_lib/firebaseAdmin.js'
 import { createRateLimiter } from './_lib/rateLimit.js'
-import { clientIp, readJsonBody } from './_lib/request.js'
-
-type Req = IncomingMessage & { body?: unknown }
-type Res = ServerResponse & {
-    status: (code: number) => Res
-    json: (data: unknown) => void
-}
+import { clientIp, readRequestBody, type ApiRequest, type ApiResponse } from './_lib/request.js'
+import { FALLBACK_SITE, fetchSiteFile } from './_lib/site.js'
 
 const MODEL = 'claude-haiku-5-5'
 const CONTEXT_TTL_MS = 10 * 60 * 1000
-const FALLBACK_SITE = 'https://kimgeonho.vercel.app'
-
-// Host 헤더는 위조될 수 있으므로 컨텍스트 출처는 환경변수(Vercel 제공 값)로만 결정
-const siteOrigin = () => process.env.SITE_URL
-    ?? (process.env.VERCEL_ENV === 'production' || !process.env.VERCEL_URL ? FALLBACK_SITE : `https://${process.env.VERCEL_URL}`)
+// 모든 인스턴스를 합친 하루 최대 질문 수 (IP 우회·인스턴스 분산으로 비용이 무제한 나가는 것을 막는 최종 상한)
+const DAILY_LIMIT = Number(process.env.ASK_DAILY_LIMIT) || 200
 
 const INSTRUCTIONS = `You are the terminal assistant on the portfolio website of 김건호 (Geonho Kim), a full-stack web developer.
 Visitors (often recruiters or other developers) type questions into the site's terminal with the \`ask\` command.
@@ -35,39 +28,37 @@ let client: Anthropic | null = null
 let cachedContext: { text: string; fetchedAt: number } | null = null
 const allow = createRateLimiter(ASK_LIMITS.maxPerWindow, ASK_LIMITS.windowMs)
 
-async function fetchLlmsTxt(origin: string): Promise<string> {
-    // 느린 응답이 함수 실행 시간을 잡아먹지 않도록 5초 제한
-    const response = await fetch(`${origin}/llms.txt`, { signal: AbortSignal.timeout(5000) })
-    if (!response.ok) throw new Error(`llms.txt ${response.status}`)
-    return (await response.text()).slice(0, 60_000)
-}
-
 async function loadContext(): Promise<string> {
     if (cachedContext && Date.now() - cachedContext.fetchedAt < CONTEXT_TTL_MS) return cachedContext.text
-    const origin = siteOrigin()
-    let text: string
-    try {
-        text = await fetchLlmsTxt(origin)
-    } catch (err) {
-        // Preview 배포 보호(401) 등으로 실패하면 운영 사이트의 문서로 대체
-        if (origin === FALLBACK_SITE) throw err
-        text = await fetchLlmsTxt(FALLBACK_SITE)
-    }
+    const text = (await fetchSiteFile('/llms.txt')).slice(0, 60_000)
     cachedContext = { text, fetchedAt: Date.now() }
     return text
 }
 
-export default async function handler(req: Req, res: Res) {
+export default async function handler(req: ApiRequest, res: ApiResponse) {
     res.setHeader('Cache-Control', 'no-store')
     if (req.method !== 'POST') {
         res.setHeader('Allow', 'POST')
         return res.status(405).json({ error: 'method-not-allowed' })
     }
 
-    const input = parseAskInput(readJsonBody(req.body))
+    const input = parseAskInput(readRequestBody(req))
     if (!input) return res.status(400).json({ error: 'invalid-input' })
     if (!process.env.ANTHROPIC_API_KEY) return res.status(503).json({ error: 'not-configured' })
     if (!allow(clientIp(req))) return res.status(429).json({ error: 'rate-limited' })
+
+    // 전역 일일 상한: 카운터를 확인할 수 없으면 비용 보호를 위해 호출하지 않음 (서비스 계정 미설정인 로컬 개발은 예외)
+    const db = getAdminDb()
+    if (db) {
+        try {
+            if (!(await consumeDailyQuota(db, 'ask', DAILY_LIMIT))) return res.status(429).json({ error: 'daily-limit' })
+        } catch (err) {
+            console.error('[api/ask] quota check failed', err)
+            return res.status(503).json({ error: 'quota-unavailable' })
+        }
+    } else if (process.env.VERCEL_ENV === 'production') {
+        return res.status(503).json({ error: 'not-configured' })
+    }
 
     try {
         const context = await loadContext()

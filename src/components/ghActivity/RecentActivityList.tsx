@@ -89,10 +89,10 @@ const RecentActivityList = ({ username }: { username: string }) => {
                     <div key={ev.id} className="text-[12px] text-muted border-b border-sub-gary/20">
                         <div className="flex items-center justify-between gap-2 overflow-hidden">
                             <div className="truncate min-w-0">{ev.type} — {ev.repo?.name ?? ""}</div>
-                            <div className="text-[11px] text-muted flex-shrink-0">{created}</div>
+                            <div className="text-2xs text-muted flex-shrink-0">{created}</div>
                         </div>
                         {ev.payload?.commits && (
-                            <div className="mt-1 text-[11px] text-muted">
+                            <div className="mt-1 text-2xs text-muted">
                                 {ev.payload.commits.slice(0, 2).map((c, i) => (
                                     <div key={i} className="truncate">{c.message}</div>
                                 ))}
@@ -104,7 +104,7 @@ const RecentActivityList = ({ username }: { username: string }) => {
             {hasMore && (
                 <button
                     onClick={() => setIsExpanded((s) => !s)}
-                    className="text-[11px] text-muted hover:text-foreground transition-colors text-left"
+                    className="text-2xs text-muted hover:text-foreground transition-colors text-left"
                 >
                     {isExpanded ? uiText("접기") : `더보기 (${events.length - COLLAPSED_COUNT}개)`}
                 </button>

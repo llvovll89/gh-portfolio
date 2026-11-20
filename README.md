@@ -32,11 +32,11 @@
 - 📝 **블로그**
   마크다운 렌더링, 태그 필터, 검색, 정렬, 그룹 뷰 지원
 
-- 📒 **방명록**
-  Firebase 연동으로 실시간 메시지 작성 및 조회
+- 💬 **블로그 댓글·조회수**
+  Firestore 실시간 구독, 댓글 작성·수정·삭제는 서버 함수(`/api/comments`)에서 비밀번호 검증
 
 - 📊 **GitHub 활동 대시보드**
-  GitHub API(Octokit)를 활용한 기여 히트맵 및 최근 활동 표시
+  서버 프록시(`/api/github`, `/api/contributions`)를 통한 기여 히트맵 및 최근 활동 표시
 
 - 🌐 **다국어 지원 (i18n)**
   i18next 기반 한국어 / 영어 / 일본어 전환 및 프로젝트 설명 번역 지원
@@ -131,7 +131,14 @@ src/
 | `GITHUB_TOKEN` | Vercel (서버 전용) | GitHub API 프록시 인증 |
 | `FIREBASE_SERVICE_ACCOUNT` | Vercel (서버 전용) | 댓글 생성·수정·삭제 API의 Admin SDK 서비스 계정 JSON |
 | `ANTHROPIC_API_KEY` | Vercel (서버 전용) | 터미널 `ask` 명령 (Claude Haiku 5.5) |
+| `ASK_DAILY_LIMIT` | Vercel (선택) | `ask` 전체 일일 질문 상한 (기본 200, Firestore `api_usage` 카운터) |
 | `SITE_URL` | Vercel (선택) | `ask`가 컨텍스트로 읽을 `llms.txt`의 출처 (기본: 운영 도메인) |
+
+## Firestore 규칙
+
+- `firestore.rules`는 같은 Firebase 프로젝트를 쓰는 **포트폴리오와 Hovie의 규칙 원본**입니다. 규칙 배포는 이 저장소에서만 하세요. Hovie 저장소에서 배포하면 블로그 규칙이 사라집니다.
+- `.firebaserc`로 배포 대상 프로젝트(`carrot-market-4ed07`)를 고정했습니다.
+- `npm test`가 규칙 파일에 각 앱의 블록이 모두 있는지, 루트 와일드카드 허용이 없는지 검사합니다.
 
 ## 댓글 보안 구조 배포 순서
 

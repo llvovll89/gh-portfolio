@@ -80,14 +80,18 @@ function DeleteConfirm({ id, slug, comment, onCancel }: { id: string; slug: stri
     const [error, setError] = useState("");
     const [deleting, setDeleting] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
+    // Enter 연타처럼 리렌더 전에 연속 호출돼도 DELETE 를 한 번만 보내기 위한 동기 잠금 (state 는 다음 렌더까지 반영되지 않음)
+    const inFlightRef = useRef(false);
     const errorId = `${id}-delete-error`;
 
     const confirm = async () => {
+        if (inFlightRef.current) return;
         if (!password) {
             setError("비밀번호를 입력하세요");
             inputRef.current?.focus();
             return;
         }
+        inFlightRef.current = true;
         setDeleting(true);
         try {
             // 성공 시 실시간 구독이 목록에서 제거하므로 별도 상태 갱신 불필요
@@ -97,6 +101,7 @@ function DeleteConfirm({ id, slug, comment, onCancel }: { id: string; slug: stri
             setError(wrong ? "비밀번호가 일치하지 않습니다" : "삭제에 실패했습니다.");
             inputRef.current?.focus();
             setDeleting(false);
+            inFlightRef.current = false;
         }
     };
 
@@ -115,8 +120,9 @@ function DeleteConfirm({ id, slug, comment, onCancel }: { id: string; slug: stri
                     aria-describedby={errorId}
                     onChange={(e) => { setPassword(e.target.value); setError(""); }}
                     onKeyDown={(e) => {
-                        if (e.key === "Enter") void confirm();
-                        if (e.key === "Escape") onCancel();
+                        if (e.nativeEvent.isComposing) return;
+                        if (e.key === "Enter") { e.preventDefault(); void confirm(); }
+                        if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); onCancel(); }
                     }}
                     className={`${bareField} min-w-0 flex-1 basis-32 px-1 py-1 text-sm`}
                     // 삭제 버튼을 누른 직후 바로 비밀번호를 입력하도록 이동 (트리거 버튼은 사라짐)

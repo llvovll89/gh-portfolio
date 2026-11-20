@@ -26,7 +26,7 @@ export const Breadcrumb = () => {
             <div
                 role="navigation"
                 aria-label={t("accessibility.breadcrumb")}
-                className={`absolute top-[45px] right-0 h-6 flex items-center gap-1.5 px-3 text-[11px] font-mono text-muted border-b border-sub-gary/10 z-20 ${backgroundClass}`}
+                className={`absolute top-[45px] right-0 h-6 flex items-center gap-1.5 px-3 text-2xs font-mono text-muted border-b border-sub-gary/10 z-20 ${backgroundClass}`}
                 style={{width: "100%", ...backgroundStyle}}
             >
                 <Icon aria-hidden="true" className={`w-3 h-3 shrink-0 ${colorClass}`} />
@@ -39,7 +39,7 @@ export const Breadcrumb = () => {
         <div
             role="navigation"
             aria-label={t("accessibility.breadcrumb")}
-            className={`absolute top-10 right-0 h-7 flex items-center gap-1.5 px-3 text-[11px] font-mono text-muted border-b border-sub-gary/10 z-20 ${backgroundClass}`}
+            className={`absolute top-10 right-0 h-7 flex items-center gap-1.5 px-3 text-2xs font-mono text-muted border-b border-sub-gary/10 z-20 ${backgroundClass}`}
             style={{
                 width: `calc(100% - ${layoutState.resizeSidebarWidth}px)`,
                 ...backgroundStyle,

@@ -1,18 +1,12 @@
-import type { IncomingMessage, ServerResponse } from 'node:http'
 import {
     CONTRIBUTIONS_QUERY,
     GITHUB_CACHE_CONTROL,
     getAllowedOwner,
     validateContributionsInput,
 } from './_lib/githubGuard.js'
+import type { ApiRequest, ApiResponse } from './_lib/request.js'
 
-type Req = IncomingMessage & { query: Record<string, string | string[]> }
-type Res = ServerResponse & {
-    status: (code: number) => Res
-    json: (data: unknown) => void
-}
-
-export default async function handler(req: Req, res: Res) {
+export default async function handler(req: ApiRequest, res: ApiResponse) {
     if (req.method !== 'GET') {
         res.setHeader('Allow', 'GET')
         return res.status(405).json({ error: 'Method not allowed' })
