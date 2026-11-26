@@ -70,10 +70,11 @@ test("blog filters sort by date, filter by category and AND-ed tags", () => {
     assert.equal(getTagCounts(posts).react, 2);
 });
 
-test("CLI suggests commands including ask and handles unknown input", () => {
-    assert.ok(getCliSuggestions("a").includes("ask"));
+test("CLI suggests commands and handles unknown input", () => {
+    assert.ok(getCliSuggestions("h").includes("help"));
+    assert.ok(!getCliSuggestions("a").includes("ask"), "ask command was removed");
     assert.deepEqual(getCliSuggestions("git st"), ["git status"]);
-    assert.match(runCliCommand("help"), /ask <질문>/);
+    assert.doesNotMatch(runCliCommand("help"), /ask <질문>/);
     assert.equal(runCliCommand("   "), "");
 });
 

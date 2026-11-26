@@ -74,7 +74,6 @@ test("each rejected comment case fails on its own field, not on the slug", () =>
 
 const { parseBlogSlugs } = loadTypeScript("api/_lib/sitemap.ts");
 const { readRequestBody, rejectCrossSite } = loadTypeScript("api/_lib/request.ts");
-const { quotaDay } = loadTypeScript("api/_lib/dailyQuota.ts");
 
 test("sitemap parser extracts decoded blog slugs only", () => {
     const xml = "<urlset><url><loc>https://x.dev/</loc></url><url><loc>https://x.dev/blog/2026-05-04-WebSocket%20%EC%A0%95%EB%A6%AC</loc></url><url><loc>https://x.dev/blog/html-a_b</loc></url><url><loc>https://x.dev/projects/hovie</loc></url><url><loc>https://x.dev/blog/bad%E0%A4%A</loc></url></urlset>";
@@ -103,11 +102,6 @@ test("cross-site guard requires JSON and a same-origin browser context", () => {
     assert.equal(rejectCrossSite(req({ ...json, origin: "null" })), 403);
 });
 
-test("daily quota key uses the UTC date", () => {
-    assert.equal(quotaDay(new Date("2026-11-20T23:59:59Z")), "2026-11-20");
-    assert.equal(quotaDay(new Date("2026-11-21T00:00:00Z")), "2026-11-21");
-});
-
 // 에뮬레이터 없이도 잡을 수 있는 규칙 회귀(PR #17 처럼 블록이 통째로 빠지는 경우) 방지
 test("firestore.rules keeps every app's blocks and no catch-all allow", () => {
     // 주석 안의 예시 문구는 제외하고 실제 규칙 코드만 검사
@@ -120,19 +114,9 @@ test("firestore.rules keeps every app's blocks and no catch-all allow", () => {
     assert.equal(JSON.parse(readFileSync(".firebaserc", "utf8")).projects.default, "carrot-market-4ed07");
 });
 
-const { parseAskInput } = loadTypeScript("api/_lib/askInput.ts");
 const { createRateLimiter } = loadTypeScript("api/_lib/rateLimit.ts");
 
-test("ask input is trimmed, length-capped, and language-normalized", () => {
-    assert.deepEqual(parseAskInput({ question: "  주요 프로젝트는? ", lang: "ko" }), { question: "주요 프로젝트는?", lang: "ko" });
-    assert.equal(parseAskInput({ question: "hi", lang: "fr" }).lang, "ko");
-    assert.equal(parseAskInput({ question: "q".repeat(301) }), null);
-    assert.equal(parseAskInput({ question: "   " }), null);
-    assert.equal(parseAskInput({ question: 42 }), null);
-    assert.equal(parseAskInput(null), null);
-});
-
-test("ask rate limiter allows a burst per key and recovers after the window", () => {
+test("rate limiter allows a burst per key and recovers after the window", () => {
     const allow = createRateLimiter(2, 1000);
     assert.equal(allow("a", 0), true);
     assert.equal(allow("a", 10), true);

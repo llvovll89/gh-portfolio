@@ -205,13 +205,13 @@ export default defineConfig(({ mode }) => {
                             return;
                         }
 
-                        // ── /api/comments, /api/ask (Vercel 함수 그대로 실행) ──
-                        if (urlObj.pathname === "/api/comments" || urlObj.pathname === "/api/ask") {
+                        // ── /api/comments (Vercel 함수 그대로 실행) ──
+                        if (urlObj.pathname === "/api/comments") {
                             const chunks: Buffer[] = [];
                             for await (const chunk of req) chunks.push(chunk as Buffer);
                             const raw = Buffer.concat(chunks).toString("utf8");
                             // process.env 에 undefined 를 대입하면 문자열 "undefined" 가 되므로 값이 있을 때만 주입
-                            for (const key of ["FIREBASE_SERVICE_ACCOUNT", "ANTHROPIC_API_KEY"]) {
+                            for (const key of ["FIREBASE_SERVICE_ACCOUNT"]) {
                                 if (!process.env[key] && env[key]) process.env[key] = env[key];
                             }
 

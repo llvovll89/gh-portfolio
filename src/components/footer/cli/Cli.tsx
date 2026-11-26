@@ -2,7 +2,6 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { KeyboardContext } from "../../../context/KeyboardState";
 import { getCliSuggestions, runCliCommand } from "../../../utils/runCliCommand";
 import { exportCliSession, type CliExportFormat } from "../../../utils/exportCliSession";
-import { askPortfolio } from "../../../utils/askPortfolio";
 import {
     CLI_TUTORIAL_STEPS,
     formatTutorialStep,
@@ -41,14 +40,6 @@ const getSharedPrefix = (values: string[]): string => {
 export const Cli = () => {
     const { submitCliCommand, setSubmitCliCommand } = useContext(KeyboardContext);
     const outputRef = useRef<HTMLDivElement>(null);
-    // clear 할 때마다 증가 — 진행 중이던 ask 응답이 비운 화면에 다시 붙지 않게 하는 세대 번호
-    const outputGenerationRef = useRef(0);
-    // 터미널을 닫은(언마운트) 뒤 도착한 ask 응답은 버림
-    const mountedRef = useRef(true);
-    useEffect(() => {
-        mountedRef.current = true;
-        return () => { mountedRef.current = false; };
-    }, []);
     const [inputValue, setInputValue] = useState("");
     const [history, setHistory] = useState<string[]>(loadStoredHistory);
     const [historyIndex, setHistoryIndex] = useState(-1);
@@ -225,7 +216,6 @@ export const Cli = () => {
 
         // clear 명령: 출력 비우기
         if (raw.toLowerCase() === "clear") {
-            outputGenerationRef.current++;
             setSubmitCliCommand({ value: "", isVisibleCommandUi: false });
             setInputValue("");
             return;
@@ -233,22 +223,6 @@ export const Cli = () => {
 
         if (raw.toLowerCase().startsWith("tutorial")) {
             runTutorialCommand(raw);
-            setInputValue("");
-            return;
-        }
-
-        if (/^ask(\s|$)/i.test(raw)) {
-            const question = raw.slice(3).trim();
-            if (!question) {
-                appendCommandLog(raw, "usage: ask <질문>  (예: ask 어떤 프로젝트를 만들었어?)");
-            } else {
-                appendCommandLog(raw, "🤔 답변을 준비하고 있어요...");
-                const generation = outputGenerationRef.current;
-                void askPortfolio(question).then(answer => {
-                    if (!mountedRef.current || generation !== outputGenerationRef.current) return;
-                    appendSystemLog(`ask › ${answer}`);
-                });
-            }
             setInputValue("");
             return;
         }

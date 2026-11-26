@@ -682,15 +682,5 @@
         "pin": "Pin {{name}} tab",
         "unpin": "Unpin {{name}} tab",
         "close": "Close {{name}} tab"
-    },
-    "ask": {
-        "invalid-input": "Please enter a question between 1 and 300 characters.",
-        "rate-limited": "Too many questions. Please try again in a few minutes.",
-        "daily-limit": "Today's question limit has been reached. Try again tomorrow or use the contact page.",
-        "not-configured": "AI answers are not set up yet. Please use the contact page.",
-        "refused": "I can't answer that. Try another question about Geonho.",
-        "fallback": "Could not get an answer. Please try again shortly.",
-        "network": "Could not get an answer because of a network error.",
-        "truncated": "(The answer was long, so part of it was cut off)"
     }
 }
