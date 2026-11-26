@@ -1,4 +1,5 @@
 import { updateGeneralSettings } from "@/utils/generalSettings";
+import { getShortcut } from "@/utils/shortcutConfig";
 import { Portal } from "../Portal";
 import { useModalBackground } from "../../hooks/useModalBackground";
 import { uiText } from "../../utils/uiText";
@@ -10,7 +11,6 @@ import { NavigationContext } from "@/context/NavigationContext";
 import { ThemeContext } from "@/context/ThemeState";
 import { NavType } from "@/components/aside/constants/Nav.type";
 import {
-    DEFAULT_KEY_COMBINATIONS,
     formatKeyCombo,
     LAYOUT_HEIGHTS,
     SHORTCUT_DESCRIPTIONS_KO,
@@ -101,7 +101,7 @@ export const CommandPalette = () => {
             label: uiText(shortcutDescriptions[KeyboardShortcutId.TOGGLE_KEYBOARD_INFO]),
             description: uiText("사용 가능한 키보드 단축키 전체 목록을 확인합니다"),
             shortcut: formatKeyCombo(
-                DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_KEYBOARD_INFO],
+                getShortcut(KeyboardShortcutId.TOGGLE_KEYBOARD_INFO),
             ),
             category: "System",
             keywords: ["shortcut", "help", "info", "단축키"],
@@ -112,7 +112,7 @@ export const CommandPalette = () => {
             label: shortcutDescriptions[KeyboardShortcutId.TOGGLE_FOOTER],
             description: uiText("하단 터미널 패널을 열거나 닫습니다"),
             shortcut: formatKeyCombo(
-                DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_FOOTER],
+                getShortcut(KeyboardShortcutId.TOGGLE_FOOTER),
             ),
             category: "Layout",
             keywords: ["terminal", "footer", "panel", "터미널"],
@@ -123,7 +123,7 @@ export const CommandPalette = () => {
             label: shortcutDescriptions[KeyboardShortcutId.TOGGLE_FOLDER],
             description: uiText("좌측 파일 탐색기 패널을 토글합니다"),
             shortcut: formatKeyCombo(
-                DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_FOLDER],
+                getShortcut(KeyboardShortcutId.TOGGLE_FOLDER),
             ),
             category: "Navigation",
             keywords: ["folder", "explorer", "files", "폴더"],
@@ -138,7 +138,7 @@ export const CommandPalette = () => {
             label: shortcutDescriptions[KeyboardShortcutId.TOGGLE_SEARCH],
             description: uiText("파일 및 콘텐츠 검색 패널을 열거나 닫습니다"),
             shortcut: formatKeyCombo(
-                DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_SEARCH],
+                getShortcut(KeyboardShortcutId.TOGGLE_SEARCH),
             ),
             category: "Navigation",
             keywords: ["search", "find", "검색"],
@@ -153,15 +153,12 @@ export const CommandPalette = () => {
             label: shortcutDescriptions[KeyboardShortcutId.TOGGLE_SIDEBAR],
             description: uiText("사이드바 전체를 숨기거나 표시합니다"),
             shortcut: formatKeyCombo(
-                DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_SIDEBAR],
+                getShortcut(KeyboardShortcutId.TOGGLE_SIDEBAR),
             ),
             category: "Layout",
             keywords: ["sidebar", "layout", "사이드바"],
             action: () => {
-                setLayoutState((prev) => ({
-                    ...prev,
-                    resizeSidebarWidth: prev.resizeSidebarWidth > 0 ? 0 : 250,
-                }));
+                setLayoutState((prev) => ({ ...prev, sidebarHidden: !prev.sidebarHidden }));
             },
         },
         {
@@ -169,7 +166,7 @@ export const CommandPalette = () => {
             label: shortcutDescriptions[KeyboardShortcutId.TOGGLE_PANEL],
             description: uiText("하단 패널을 열거나 닫습니다"),
             shortcut: formatKeyCombo(
-                DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_PANEL],
+                getShortcut(KeyboardShortcutId.TOGGLE_PANEL),
             ),
             category: "Layout",
             keywords: ["panel", "bottom", "터미널"],
@@ -180,7 +177,7 @@ export const CommandPalette = () => {
             label: shortcutDescriptions[KeyboardShortcutId.REOPEN_CLOSED_TAB],
             description: uiText("가장 최근에 닫은 탭을 다시 엽니다"),
             shortcut: formatKeyCombo(
-                DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.REOPEN_CLOSED_TAB],
+                getShortcut(KeyboardShortcutId.REOPEN_CLOSED_TAB),
             ),
             category: "Navigation",
             keywords: ["reopen", "tab", "undo close", "복원"],
@@ -196,7 +193,7 @@ export const CommandPalette = () => {
             label: shortcutDescriptions[KeyboardShortcutId.TOGGLE_PIN_CURRENT_TAB],
             description: uiText("현재 활성 탭을 고정하거나 해제합니다"),
             shortcut: formatKeyCombo(
-                DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_PIN_CURRENT_TAB],
+                getShortcut(KeyboardShortcutId.TOGGLE_PIN_CURRENT_TAB),
             ),
             category: "Navigation",
             keywords: ["pin", "tab", "current", "고정"],
@@ -332,7 +329,7 @@ export const CommandPalette = () => {
             label: uiText("사이드 패널: Git Control"),
             description: uiText("Git Control 패널을 열거나 닫습니다"),
             shortcut: formatKeyCombo(
-                DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_GIT_CONTROL],
+                getShortcut(KeyboardShortcutId.TOGGLE_GIT_CONTROL),
             ),
             category: "Navigation",
             keywords: ["git", "commit", "repo", "깃"],
@@ -347,7 +344,7 @@ export const CommandPalette = () => {
             label: uiText("사이드 패널: Bookmarks"),
             description: uiText("북마크 패널을 열거나 닫습니다"),
             shortcut: formatKeyCombo(
-                DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_BOOKMARKS],
+                getShortcut(KeyboardShortcutId.TOGGLE_BOOKMARKS),
             ),
             category: "Navigation",
             keywords: ["bookmark", "favorite", "북마크"],
@@ -362,7 +359,7 @@ export const CommandPalette = () => {
             label: uiText("사이드 패널: Settings"),
             description: uiText("설정 패널을 열거나 닫습니다"),
             shortcut: formatKeyCombo(
-                DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_SETTINGS],
+                getShortcut(KeyboardShortcutId.TOGGLE_SETTINGS),
             ),
             category: "Navigation",
             keywords: ["settings", "preferences", "설정"],

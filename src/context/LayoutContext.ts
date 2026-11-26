@@ -5,6 +5,8 @@ export interface LayoutState {
     resizeSidebarWidth: number;
     /** 탐색 패널을 펼쳤을 때 쓸 너비 (사용자가 조절한 값을 닫았다 열거나 페이지를 옮겨도 유지) */
     expandedSidebarWidth?: number;
+    /** Ctrl+B 로 사이드바 전체(액티비티 바 포함)를 숨긴 상태 — 페이지를 옮겨도 유지 */
+    sidebarHidden?: boolean;
 }
 
 export interface LayoutContextProps {

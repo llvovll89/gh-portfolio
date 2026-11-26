@@ -1,7 +1,7 @@
 import { uiText } from "../../utils/uiText";
 import { useCallback, useEffect, useRef, useState } from "react";
-import ContributionHeatmap from "./ContributionHeatmap";
-import RecentActivityList from "./RecentActivityList";
+import { ContributionHeatmap } from "./ContributionHeatmap";
+import { RecentActivityList } from "./RecentActivityList";
 
 type Day = { date: string; contributionCount: number; color?: string };
 type Week = { contributionDays: Day[] };
@@ -19,7 +19,7 @@ type ContributionsResponse = {
     };
 };
 
-const GhActivityDashboard = ({ username }: { username?: string }) => {
+export const GhActivityDashboard = ({ username }: { username?: string }) => {
     const user = username || (import.meta.env.VITE_GIT_HUB_APP_ADMIN as string);
     const [weeks, setWeeks] = useState<Week[]>([]);
     const [total, setTotal] = useState<number | null>(null);
@@ -105,4 +105,3 @@ const GhActivityDashboard = ({ username }: { username?: string }) => {
     );
 };
 
-export default GhActivityDashboard;

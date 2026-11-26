@@ -1,4 +1,5 @@
 import { uiText } from "../../../utils/uiText";
+import { downloadTextFile } from "../../../utils/downloadTextFile";
 import { KeyboardContext } from "@/context/KeyboardState";
 import { useContext, useEffect, useMemo, useRef } from "react";
 import { runCliCommand } from "@/utils/runCliCommand";
@@ -44,13 +45,7 @@ export const ConsoleTab = () => {
     };
 
     const download = () => {
-        const blob = new Blob([submitCliCommand.value ?? ""], { type: "text/plain;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `cli-output-${Date.now()}.txt`;
-        a.click();
-        URL.revokeObjectURL(url);
+        downloadTextFile(submitCliCommand.value ?? "", `cli-output-${Date.now()}.txt`);
     };
 
     const clear = () => {

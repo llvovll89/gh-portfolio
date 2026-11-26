@@ -1,3 +1,4 @@
+import { downloadTextFile } from "./downloadTextFile";
 export type CliExportFormat = "txt" | "md";
 
 const pad = (value: number) => value.toString().padStart(2, "0");
@@ -35,19 +36,7 @@ export const exportCliSession = (
     const fileName = `portfolio-cli-session-${stamp}.${extension}`;
 
     const normalized = format === "md" ? toMarkdown(content) : content || "(empty)";
-    const blob = new Blob([normalized], { type: "text/plain;charset=utf-8" });
-
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = fileName;
-    anchor.style.display = "none";
-
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
-
-    URL.revokeObjectURL(url);
+    downloadTextFile(normalized, fileName);
 
     return fileName;
 };

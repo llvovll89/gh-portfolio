@@ -28,7 +28,7 @@ const ActivitySkeleton = () => (
     </div>
 );
 
-const RecentActivityList = ({ username }: { username: string }) => {
+export const RecentActivityList = ({ username }: { username: string }) => {
     const { t } = useTranslation();
     const [events, setEvents] = useState<GitHubEvent[] | null>(null);
     const [loading, setLoading] = useState(false);
@@ -118,4 +118,3 @@ const RecentActivityList = ({ username }: { username: string }) => {
     );
 };
 
-export default RecentActivityList;

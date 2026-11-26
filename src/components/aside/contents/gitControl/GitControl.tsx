@@ -1,5 +1,5 @@
 import { useThemeStyle } from "../../../../hooks/useThemeStyle";
-import GhActivityDashboard from "../../../ghActivity/GhActivityDashboard";
+import { GhActivityDashboard } from "../../../ghActivity/GhActivityDashboard";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useGitControl } from "./useGitControl";

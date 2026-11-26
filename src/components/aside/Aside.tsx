@@ -38,6 +38,7 @@ export const Aside = () => {
         return () => clearTimeout(timer);
     }, [selectedNav]);
     const asideRef = useRef<HTMLDivElement>(null);
+    const prevSelectedNavRef = useRef(selectedNav);
     const handleMouseDown = useDragging({ targetRef: asideRef, type: "sidebar" });
     const stepSidebarWidth = (delta: number) =>
         setLayoutState(previous => ({ ...previous, resizeSidebarWidth: Math.max(250, Math.min(600, window.innerWidth - 320, previous.resizeSidebarWidth + delta)) }));
@@ -122,21 +123,20 @@ export const Aside = () => {
             }));
             return;
         }
+        // 숨긴 상태에서 단축키 등으로 패널을 새로 열면 숨김 해제 (mount 시점의 기존 값은 '새로 연 것'이 아님)
+        const openedNow = Boolean(selectedNav) && selectedNav !== prevSelectedNavRef.current;
+        prevSelectedNavRef.current = selectedNav;
         // 페이지마다 Aside 가 새로 mount 되므로, 고정값으로 덮어쓰지 않고 사용자가 조절한 펼친 너비를 보존·복원
+        // 숨김(Ctrl+B) → 0, 패널 열림 → 펼친 너비, 닫힘 → 액티비티 바 너비
         setLayoutState((prev) => {
+            if (openedNow && prev.sidebarHidden) prev = { ...prev, sidebarHidden: false };
             const isExpanded = prev.resizeSidebarWidth > NAVBAR_WIDTH;
-            if (selectedNav) {
-                const width = isExpanded ? prev.resizeSidebarWidth : prev.expandedSidebarWidth ?? NAVBAR_WIDTH + CONTENT_WIDTH;
-                return width === prev.resizeSidebarWidth ? prev : { ...prev, resizeSidebarWidth: width };
-            }
-            if (prev.resizeSidebarWidth === NAVBAR_WIDTH) return prev;
-            return {
-                ...prev,
-                expandedSidebarWidth: isExpanded ? prev.resizeSidebarWidth : prev.expandedSidebarWidth,
-                resizeSidebarWidth: NAVBAR_WIDTH,
-            };
+            const expandedSidebarWidth = isExpanded ? prev.resizeSidebarWidth : prev.expandedSidebarWidth;
+            const width = prev.sidebarHidden ? 0 : selectedNav ? expandedSidebarWidth ?? NAVBAR_WIDTH + CONTENT_WIDTH : NAVBAR_WIDTH;
+            if (width === prev.resizeSidebarWidth && expandedSidebarWidth === prev.expandedSidebarWidth && !openedNow) return prev;
+            return { ...prev, resizeSidebarWidth: width, expandedSidebarWidth };
         });
-    }, [selectedNav, isMobileSize, setLayoutState]);
+    }, [selectedNav, isMobileSize, layoutState.sidebarHidden, setLayoutState]);
 
     useEffect(() => {
         if (isMobileSize) {
