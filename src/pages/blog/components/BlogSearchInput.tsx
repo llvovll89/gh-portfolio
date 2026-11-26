@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LuSearch, LuX } from "react-icons/lu";
 import { useTranslation } from "react-i18next";
 
@@ -15,6 +15,20 @@ export const BlogSearchInput = ({
 }: BlogSearchInputProps) => {
     const { t } = useTranslation();
     const [isDebouncing, setIsDebouncing] = useState(false);
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    // "/" 로 검색창 포커스 (GitHub·MDN 과 같은 관례) — 입력 중이거나 수정키 조합이면 무시
+    useEffect(() => {
+        const handleSlash = (e: KeyboardEvent) => {
+            if (e.key !== "/" || e.ctrlKey || e.metaKey || e.altKey || e.defaultPrevented) return;
+            const target = e.target instanceof HTMLElement ? e.target : null;
+            if (target?.closest("input, textarea, select, [contenteditable='true'], [role='dialog']")) return;
+            e.preventDefault();
+            inputRef.current?.focus();
+        };
+        window.addEventListener("keydown", handleSlash);
+        return () => window.removeEventListener("keydown", handleSlash);
+    }, []);
 
     // 디바운싱 처리 (200ms) - 타이머(외부 시스템)와 동기화하는 표시 상태이므로 effect가 적절함
     useEffect(() => {
@@ -53,15 +67,17 @@ export const BlogSearchInput = ({
             </div>
 
             <input
+                ref={inputRef}
                 type="text"
                 role="searchbox"
+                aria-keyshortcuts="/"
                 aria-label={t("pages.blog.search.label")}
                 placeholder={t("pages.blog.search.placeholder")}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 onKeyDown={handleKeyDown}
                 className={[
-                    "w-full h-11 pl-10 pr-10",
+                    "peer w-full h-11 pl-10 pr-10",
                     "rounded-md border",
                     "border-line blog-dark:border-line",
                     "bg-panel blog-dark:bg-panel",
@@ -71,6 +87,16 @@ export const BlogSearchInput = ({
                     "transition-all duration-200",
                 ].join(" ")}
             />
+
+            {/* 단축키 힌트 — 비어 있고 포커스가 없을 때만 (peer-focus 로 숨김) */}
+            {!value && (
+                <kbd
+                    aria-hidden="true"
+                    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 rounded border border-line bg-inset px-1.5 py-0.5 font-mono text-2xs text-muted peer-focus:hidden"
+                >
+                    /
+                </kbd>
+            )}
 
             {value && (
                 <button

@@ -106,3 +106,22 @@ test("validatePost rejects missing titles, malformed dates, and unknown categori
     const html = '<title>H</title><meta name="date" content="2026-01-01">';
     assert.deepEqual(validatePost(parseHtmlPost("2026-01-01-h.html", html), html), [], "HTML 글은 category 없이도 허용");
 });
+
+const { getRelatedPosts } = loadTypeScript("src/utils/relatedPosts.ts");
+
+test("related posts rank by shared tags, keep Notes out of dev posts, and skip unrelated ones", () => {
+    const base = { body: "", readingTime: "", summary: "" };
+    const current = { ...base, slug: "cur", title: "C", date: "2026-05-01", tags: ["React", "TS"], category: "Frontend" };
+    const pool = [
+        current,
+        { ...base, slug: "both", title: "B", date: "2026-01-01", tags: ["react", "ts"], category: "Backend" },
+        { ...base, slug: "one-new", title: "O1", date: "2026-04-01", tags: ["React"], category: "Frontend" },
+        { ...base, slug: "one-old", title: "O2", date: "2026-02-01", tags: ["TS"], category: "Frontend" },
+        { ...base, slug: "notes", title: "N", date: "2026-06-01", tags: ["React", "TS"], category: "Notes" },
+        { ...base, slug: "none", title: "X", date: "2026-06-02", tags: ["Spring"], category: "Backend" },
+    ];
+    assert.deepEqual(getRelatedPosts(current, pool).map(p => p.slug), ["both", "one-new", "one-old"]);
+    assert.ok(!getRelatedPosts(current, pool, 10).some(p => p.slug === "notes" || p.slug === "none" || p.slug === "cur"));
+    const notesPost = { ...current, slug: "n2", category: "Notes" };
+    assert.ok(getRelatedPosts(notesPost, pool, 10).some(p => p.slug === "notes"), "Notes 글끼리는 연결");
+});
