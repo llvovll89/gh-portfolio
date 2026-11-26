@@ -130,7 +130,7 @@ function AppContent() {
             </Suspense>
 
             {!isMobile && !isBlogDetailPage && isTerminalVisible && <Bottom />}
-            {!isMobile && <StatusBar fullWidth={isBlogDetailPage || !matchedRoute} />}
+            {!isMobile && <StatusBar fullWidth={!matchedRoute} />}
             <PWAInstallBanner />
             <PWAUpdateBanner />
             <Toast />
