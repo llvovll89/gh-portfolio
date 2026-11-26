@@ -1,5 +1,6 @@
 import { uiText } from "../../utils/uiText";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { GITHUB_OWNER, githubFetch } from "../../http/api";
 
 type GitHubEvent = {
@@ -28,6 +29,7 @@ const ActivitySkeleton = () => (
 );
 
 const RecentActivityList = ({ username }: { username: string }) => {
+    const { t } = useTranslation();
     const [events, setEvents] = useState<GitHubEvent[] | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -109,7 +111,7 @@ const RecentActivityList = ({ username }: { username: string }) => {
                     onClick={() => setIsExpanded((s) => !s)}
                     className="text-2xs text-muted hover:text-foreground transition-colors text-left"
                 >
-                    {isExpanded ? uiText("접기") : `더보기 (${events.length - COLLAPSED_COUNT}개)`}
+                    {isExpanded ? uiText("접기") : t("gitControl.showMoreActivity", { count: events.length - COLLAPSED_COUNT })}
                 </button>
             )}
         </div>

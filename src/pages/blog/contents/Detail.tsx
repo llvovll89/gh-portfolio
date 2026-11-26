@@ -169,11 +169,26 @@ export const Detail = () => {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [prevPost, nextPost, navigate]);
 
+    // Contents 와 같은 위치·크기(헤더 아래, 사이드바 오른쪽)의 자체 스크롤 컨테이너 — 로딩 화면과 본문이 공유
+    const detailSectionClass = `absolute right-0 overflow-y-auto scrolls flex flex-col p-4 sm:p-6 md:py-10 md:px-15 bg-base-navy
+                    ${isMobileSize ? "top-[69px] h-[calc(100dvh-69px)] pb-28" : "top-[68px] h-[calc(100dvh-92px)]"}`;
+    const detailSectionStyle = {width: `calc(100% - ${isMobileSize ? 0 : layoutState.resizeSidebarWidth}px)`};
+
     if (!metadata) return <FeedbackPage kind="notFound" backTo="/blog" />;
     if (!post) {
         const failed = loaded?.error && loaded.slug === slug;
         if (failed) return <FeedbackPage kind="loadError" backTo="/blog" onRetry={() => setAttempt(value => value + 1)} />;
-        return <main id="main-content" data-route-loading="true" tabIndex={-1} className="min-h-dvh bg-base-navy p-6 text-foreground"><p role="status">{t("pages.blog.loadingPost")}</p><Link className="workbench-button mt-5" to="/blog">{t("feedback.backToList")}</Link></main>;
+        // 본문 로딩 중에도 셸을 유지해 이전/다음 글 이동 시 헤더·사이드바가 깜빡이지 않게 함
+        return (
+            <>
+                <Header />
+                <Aside />
+                <section id={DETAIL_SCROLL_ID} role="main" data-route-loading="true" tabIndex={-1} className={detailSectionClass} style={detailSectionStyle}>
+                    <p role="status" className="text-foreground">{t("pages.blog.loadingPost")}</p>
+                    <Link className="workbench-button mt-5 self-start" to="/blog">{t("feedback.backToList")}</Link>
+                </section>
+            </>
+        );
     }
 
     return (
@@ -198,9 +213,8 @@ export const Detail = () => {
             <section
                 id={DETAIL_SCROLL_ID}
                 role="main" tabIndex={-1}
-                className={`absolute right-0 overflow-y-auto scrolls flex flex-col p-4 sm:p-6 md:py-10 md:px-15 bg-base-navy
-                    ${isMobileSize ? "top-[69px] h-[calc(100dvh-69px)] pb-28" : "top-[68px] h-[calc(100dvh-92px)]"}`}
-                style={{width: `calc(100% - ${isMobileSize ? 0 : layoutState.resizeSidebarWidth}px)`}}
+                className={detailSectionClass}
+                style={detailSectionStyle}
             >
                 <div className="mb-4 mx-auto w-full max-w-275">
                     <Link to="/blog" className="workbench-button">

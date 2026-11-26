@@ -25,7 +25,8 @@
         "commits": "コミット",
         "noCommits": "コミットがありません",
         "viewProfile": "GitHubプロフィールへ",
-        "viewCommit": "コミットを見る"
+        "viewCommit": "コミットを見る",
+        "showMoreActivity": "もっと見る（{{count}}件）"
     },
     "extensions": {
         "title": "拡張機能",
@@ -236,7 +237,8 @@
             "loadingPost": "記事を読み込んでいます。",
             "loadError": "記事を読み込めませんでした。もう一度お試しください。",
             "readingMinutes": "約{{count}}分で読めます",
-            "featured": "注目の記事"
+            "featured": "注目の記事",
+            "seoDescription": "Web開発者キム・ゴンホの技術ブログ — 全{{count}}件の記事"
         },
         "resume": {
             "title": "履歴書",

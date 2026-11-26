@@ -5,6 +5,7 @@ import { uiText } from "../../utils/uiText";
 import { useContext, useEffect, useRef, useState } from "react";
 import { KeyboardContext } from "@/context/KeyboardState";
 import { LayoutContext } from "@/context/LayoutContext";
+import { TerminalContext } from "@/context/TerminalState";
 import { NavigationContext } from "@/context/NavigationContext";
 import { ThemeContext } from "@/context/ThemeState";
 import { NavType } from "@/components/aside/constants/Nav.type";
@@ -63,6 +64,16 @@ export const CommandPalette = () => {
         toggleKeyboardInfo,
     } = useContext(KeyboardContext);
     const { setLayoutState } = useContext(LayoutContext);
+    const { isTerminalVisible, setIsTerminalVisible } = useContext(TerminalContext);
+    // Ctrl+` 단축키(handleToggleFooterUI)와 같게 표시 여부와 높이를 함께 토글 — 높이만 바꾸면 숨겨진 터미널이 렌더되지 않음
+    const toggleTerminal = () => {
+        const next = !isTerminalVisible;
+        setIsTerminalVisible(next);
+        setLayoutState((prev) => ({
+            ...prev,
+            resizeFooterHeight: next ? LAYOUT_HEIGHTS.FOOTER_OPEN : LAYOUT_HEIGHTS.FOOTER_COLLAPSED,
+        }));
+    };
     const { setSelectedNav, closedTabs, setClosedTabs, selectedPathState, setPinnedTabs } = useContext(NavigationContext);
     const { setSelectedTheme } = useContext(ThemeContext);
     const handlePushPath = useHandlePushPath();
@@ -105,18 +116,7 @@ export const CommandPalette = () => {
             ),
             category: "Layout",
             keywords: ["terminal", "footer", "panel", "터미널"],
-            action: () => {
-                setLayoutState((prev) => {
-                    const isOpen =
-                        prev.resizeFooterHeight > LAYOUT_HEIGHTS.FOOTER_COLLAPSED;
-                    return {
-                        ...prev,
-                        resizeFooterHeight: isOpen
-                            ? LAYOUT_HEIGHTS.FOOTER_COLLAPSED
-                            : LAYOUT_HEIGHTS.FOOTER_OPEN,
-                    };
-                });
-            },
+            action: toggleTerminal,
         },
         {
             id: KeyboardShortcutId.TOGGLE_FOLDER,
@@ -173,18 +173,7 @@ export const CommandPalette = () => {
             ),
             category: "Layout",
             keywords: ["panel", "bottom", "터미널"],
-            action: () => {
-                setLayoutState((prev) => {
-                    const isOpen =
-                        prev.resizeFooterHeight > LAYOUT_HEIGHTS.FOOTER_COLLAPSED;
-                    return {
-                        ...prev,
-                        resizeFooterHeight: isOpen
-                            ? LAYOUT_HEIGHTS.FOOTER_COLLAPSED
-                            : LAYOUT_HEIGHTS.FOOTER_OPEN,
-                    };
-                });
-            },
+            action: toggleTerminal,
         },
         {
             id: KeyboardShortcutId.REOPEN_CLOSED_TAB,

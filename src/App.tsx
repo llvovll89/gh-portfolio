@@ -1,7 +1,7 @@
 import { useRouteFocus } from "./hooks/useRouteFocus";
 import { useTranslation } from "react-i18next";
 import {Route, Routes, useLocation} from "react-router-dom";
-import {Suspense, useEffect, useLayoutEffect, useRef} from "react";
+import {Suspense, useLayoutEffect} from "react";
 import {GlobalStateProvider} from "./context/GlobalState.context";
 import {TerminalContext} from "./context/TerminalState";
 import {KeyboardProvider} from "./context/KeyboardState.context";
@@ -34,70 +34,14 @@ function AppContent() {
     const isMobile = useCheckedMobileSize();
     const {backgroundClass, backgroundStyle} = useThemeStyle();
     const location = useLocation();
-    const scrollPositionKey = `v2:${isMobile ? "mobile" : "desktop"}:${location.pathname}`;
     usePageTracking();
     useRouteFocus();
-    const scrollPositionsRef = useRef<Record<string, number>>({});
     const isBlogDetailPage =
         location.pathname.startsWith("/blog/") &&
         location.pathname !== "/blog/";
     const {isTerminalVisible} = useContext(TerminalContext);
     const matchedRoute = useMatchedRoute();
 
-    useEffect(() => {
-        try {
-            const stored = localStorage.getItem("portfolio-scroll-positions");
-            if (!stored) return;
-            const parsed: unknown = JSON.parse(stored);
-            if (parsed && typeof parsed === "object") {
-                const nextPositions: Record<string, number> = {};
-                for (const [key, value] of Object.entries(parsed)) {
-                    if (typeof value === "number" && Number.isFinite(value)) {
-                        nextPositions[key] = value;
-                    }
-                }
-                scrollPositionsRef.current = nextPositions;
-            }
-        } catch {
-            // ignore storage parsing errors
-        }
-    }, []);
-
-    useEffect(() => {
-        const container = document.getElementById("main-content");
-        if (!container) return;
-
-        // 스크롤 중에는 메모리만 갱신하고, 저장은 스크롤이 멈춘 뒤·라우트 이탈·페이지 숨김 시점에만 수행
-        let persistTimer: ReturnType<typeof setTimeout> | undefined;
-        const persist = () => {
-            clearTimeout(persistTimer);
-            try {
-                localStorage.setItem(
-                    "portfolio-scroll-positions",
-                    JSON.stringify(scrollPositionsRef.current),
-                );
-            } catch {
-                // ignore storage errors
-            }
-        };
-
-        const handleScroll = () => {
-            scrollPositionsRef.current[scrollPositionKey] = container.scrollTop;
-            clearTimeout(persistTimer);
-            persistTimer = setTimeout(persist, 300);
-        };
-
-        const saved = scrollPositionsRef.current[scrollPositionKey] ?? 0;
-        container.scrollTop = saved;
-        container.addEventListener("scroll", handleScroll, {passive: true});
-        window.addEventListener("pagehide", persist);
-
-        return () => {
-            container.removeEventListener("scroll", handleScroll);
-            window.removeEventListener("pagehide", persist);
-            persist();
-        };
-    }, [scrollPositionKey]);
 
     return (
         <section
@@ -115,7 +59,8 @@ function AppContent() {
                             key={r.path}
                             path={r.path}
                             element={
-                                <PageErrorBoundary pageName={r.name}>
+                                // 라우트가 같은 자리에 렌더되어 boundary 인스턴스가 재사용되므로, 경로가 바뀌면 에러 상태를 초기화
+                                <PageErrorBoundary key={location.pathname} pageName={r.name}>
                                     <div
                                         key={location.pathname}
                                         className="page-enter"

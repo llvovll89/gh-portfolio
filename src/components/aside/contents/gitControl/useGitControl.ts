@@ -84,29 +84,33 @@ export function useGitControl() {
 
     useEffect(() => {
         void (async () => {
-            try {
-                const results = await Promise.all(
-                    REPOS.map(async (repo) => {
-                        const [branches, stats, issues, pullRequests] = await Promise.all([
-                            fetchBranches(owner, repo),
-                            fetchRepoStats(owner, repo),
-                            fetchIssues(owner, repo),
-                            fetchPullRequests(owner, repo),
-                        ]);
-                        return { repo, branches, stats, issues, pullRequests };
-                    }),
-                );
-
-                setGitStates((prev) => {
-                    const next = { ...prev };
-                    for (const r of results) {
-                        next[r.repo] = { ...next[r.repo], branches: r.branches, stats: r.stats, issues: r.issues, pullRequests: r.pullRequests };
+            // 저장소·엔드포인트별로 독립 처리 — 하나가 404·rate limit 으로 실패해도 나머지 결과는 표시
+            const results = await Promise.all(
+                REPOS.map(async (repo) => {
+                    const [branches, stats, issues, pullRequests] = await Promise.allSettled([
+                        fetchBranches(owner, repo),
+                        fetchRepoStats(owner, repo),
+                        fetchIssues(owner, repo),
+                        fetchPullRequests(owner, repo),
+                    ]);
+                    for (const result of [branches, stats, issues, pullRequests]) {
+                        if (result.status === "rejected") console.error(`Error fetching GitHub data (${repo}):`, result.reason);
                     }
-                    return next;
-                });
-            } catch (error) {
-                console.error("Error fetching GitHub data:", error);
-            }
+                    return {
+                        repo,
+                        ...(branches.status === "fulfilled" ? { branches: branches.value } : {}),
+                        ...(stats.status === "fulfilled" ? { stats: stats.value } : {}),
+                        ...(issues.status === "fulfilled" ? { issues: issues.value } : {}),
+                        ...(pullRequests.status === "fulfilled" ? { pullRequests: pullRequests.value } : {}),
+                    };
+                }),
+            );
+
+            setGitStates((prev) => {
+                const next = { ...prev };
+                for (const { repo, ...data } of results) next[repo] = { ...next[repo], ...data };
+                return next;
+            });
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

@@ -25,7 +25,8 @@
         "commits": "Commits",
         "noCommits": "No commits",
         "viewProfile": "View GitHub Profile",
-        "viewCommit": "View Commit"
+        "viewCommit": "View Commit",
+        "showMoreActivity": "Show more ({{count}})"
     },
     "extensions": {
         "title": "Extensions",
@@ -236,7 +237,8 @@
             "loadingPost": "Loading article.",
             "loadError": "Could not load this article. Please try again.",
             "readingMinutes": "{{count}} min read",
-            "featured": "Featured posts"
+            "featured": "Featured posts",
+            "seoDescription": "Geonho Kim's tech blog for web development — {{count}} posts in total"
         },
         "resume": {
             "title": "Resume",

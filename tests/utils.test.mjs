@@ -125,3 +125,12 @@ test("related posts rank by shared tags, keep Notes out of dev posts, and skip u
     const notesPost = { ...current, slug: "n2", category: "Notes" };
     assert.ok(getRelatedPosts(notesPost, pool, 10).some(p => p.slug === "notes"), "Notes 글끼리는 연결");
 });
+
+const { scoreRoute } = loadTypeScript("src/components/aside/contents/search/searchUtils.ts");
+
+test("sidebar search ranks only routes whose name matches the query", () => {
+    assert.equal(scoreRoute("home", ["zzzz"], "zzzz", { "/": 20 }, "/"), 0, "길이·빈도 보너스만으로 통과하면 안 됨");
+    assert.equal(scoreRoute("blog", ["react"], "react", {}, "/blog"), 0);
+    assert.ok(scoreRoute("blog", ["bl"], "bl", {}, "/blog") > 0);
+    assert.ok(scoreRoute("projects", ["proj"], "proj", {}, "/projects") > scoreRoute("profile", ["proj"], "proj", {}, "/profile"));
+});
