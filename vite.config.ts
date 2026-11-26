@@ -4,6 +4,7 @@ import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import { VitePWA } from "vite-plugin-pwa";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { blogContent } from "./build/blogContent";
 import { seoPages } from "./build/seo";
 import {
@@ -23,6 +24,8 @@ export default defineConfig(({ mode }) => {
         console.warn("[vite] VITE_GIT_HUB_TOKEN 은 더 이상 사용하지 않습니다. .env 에서 GITHUB_TOKEN 으로 이름을 바꿔 주세요.");
     }
     const GITHUB_OWNER = getAllowedOwner(env);
+    // Sentry 소스맵 업로드: 토큰이 있는 빌드(Vercel)에서만 — 로컬·CI 는 소스맵을 만들지도 올리지도 않음
+    const SENTRY_AUTH_TOKEN = env.SENTRY_AUTH_TOKEN || "";
 
     return {
         plugins: [
@@ -38,6 +41,8 @@ export default defineConfig(({ mode }) => {
                 devOptions: { enabled: false },
                 // 빌드 시 precache할 파일 패턴
                 workbox: {
+                    // build.sourcemap 을 따라 sw.js.map 이 공개 배포물에 생기지 않도록 끔
+                    sourcemap: false,
                     // SPA 셸 fallback 대상에서 정적 파일·API 제외 (설치 후 /rss.xml 등을 직접 열면 404 페이지가 뜨던 문제)
                     navigateFallbackDenylist: [/^\/api\//, /\.(?:xml|txt|pdf|webmanifest|json)$/],
                     // Detail·Firestore(config) 청크는 블로그 글을 열 때만 필요하므로 첫 방문 precache 에서 제외 (on-demand-scripts 런타임 캐시가 담당)
@@ -241,8 +246,20 @@ export default defineConfig(({ mode }) => {
                 },
             },
             seoPages(),
+            // 반드시 마지막 — 최종 번들에 Debug ID 를 넣고 소스맵을 Sentry 로 올린 뒤 배포물에서 .map 삭제 (원본 코드 공개 방지)
+            Boolean(SENTRY_AUTH_TOKEN) && sentryVitePlugin({
+                org: "llvovll89",
+                project: "gh-portfolio",
+                authToken: SENTRY_AUTH_TOKEN,
+                // 런타임 Sentry.init 의 release(VITE_VERCEL_GIT_COMMIT_SHA)와 같은 값
+                release: { name: env.VERCEL_GIT_COMMIT_SHA || undefined },
+                sourcemaps: { filesToDeleteAfterUpload: ["./dist/**/*.map"] },
+                telemetry: false,
+            }),
         ],
         build: {
+            // 'hidden': .map 은 만들되 번들에 sourceMappingURL 주석을 남기지 않음 (업로드 후 삭제)
+            sourcemap: SENTRY_AUTH_TOKEN ? "hidden" : false,
             // 해시 산출물은 /static 으로 분리 → vercel.json 에서 immutable 캐시 적용
             assetsDir: "static",
             rolldownOptions: {

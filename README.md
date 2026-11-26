@@ -72,6 +72,7 @@
 | Backend | Java, Spring Boot, PostgreSQL, Oracle |
 | BaaS | Firebase v12 (Firestore), firebase-admin (서버 함수) |
 | Serverless | Vercel Functions (`api/`) |
+| Monitoring | Sentry (에러 수집, 지연 로드), web-vitals → GA4 (LCP·INP·CLS) |
 | GitHub API | REST/GraphQL 프록시 (`api/github`, `api/contributions`) |
 | i18n | i18next, react-i18next |
 | Markdown | react-markdown, remark-gfm, react-syntax-highlighter |
@@ -129,6 +130,8 @@ src/
 | `VITE_GIT_HUB_APP_ADMIN` | Vercel, GitHub Secrets | GitHub 활동 표시 대상 계정 (서버 프록시가 이 계정만 허용) |
 | `GITHUB_TOKEN` | Vercel (서버 전용) | GitHub API 프록시 인증 |
 | `FIREBASE_SERVICE_ACCOUNT` | Vercel (서버 전용) | 댓글 생성·수정·삭제 API의 Admin SDK 서비스 계정 JSON |
+| `VITE_SENTRY_DSN` | Vercel (선택) | Sentry 에러 수집 DSN (공개 값). 없으면 에러 수집 비활성, 운영·preview 빌드에서만 동작 |
+| `SENTRY_AUTH_TOKEN` | Vercel (선택, Secret) | 빌드 시 소스맵을 Sentry 에 업로드 (`@sentry/vite-plugin`). 업로드 후 배포물에서 `.map` 삭제 |
 | `SITE_URL` | Vercel (선택) | 댓글 API가 실제 글인지 확인할 때 읽는 `sitemap.xml`의 출처 (기본: 운영 도메인) |
 
 ## Firestore 규칙
