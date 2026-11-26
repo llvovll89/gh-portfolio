@@ -131,6 +131,7 @@ src/
 | `GITHUB_TOKEN` | Vercel (서버 전용) | GitHub API 프록시 인증 |
 | `FIREBASE_SERVICE_ACCOUNT` | Vercel (서버 전용) | 댓글 생성·수정·삭제 API의 Admin SDK 서비스 계정 JSON |
 | `VITE_SENTRY_DSN` | Vercel (선택) | Sentry 에러 수집 DSN (공개 값). 없으면 에러 수집 비활성, 운영·preview 빌드에서만 동작 |
+| `SENTRY_AUTH_TOKEN` | Vercel (선택, Secret) | 빌드 시 소스맵을 Sentry 에 업로드 (`@sentry/vite-plugin`). 업로드 후 배포물에서 `.map` 삭제 |
 | `SITE_URL` | Vercel (선택) | 댓글 API가 실제 글인지 확인할 때 읽는 `sitemap.xml`의 출처 (기본: 운영 도메인) |
 
 ## Firestore 규칙
