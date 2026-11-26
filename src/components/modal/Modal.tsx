@@ -24,4 +24,3 @@ export const Modal = ({ isOpen, onClose, children, ariaLabel, initialFocusRef, c
         <div ref={ref} tabIndex={-1} role="dialog" aria-modal="true" aria-label={ariaLabel} className="max-h-[85dvh] w-full max-w-md overflow-y-auto rounded-xl border border-line bg-panel p-5 text-foreground shadow-xl" onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); onClose(); } }}>{children}</div>
     </div></Portal>;
 };
-export default Modal;

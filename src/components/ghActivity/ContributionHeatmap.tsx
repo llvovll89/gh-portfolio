@@ -48,7 +48,7 @@ const Cell = ({ day, small = false }: { day: Day; small?: boolean }) => {
   );
 };
 
-const ContributionHeatmap = ({
+export const ContributionHeatmap = ({
   weeks,
   loading = false,
   hasError = false,
@@ -115,4 +115,3 @@ const ContributionHeatmap = ({
   );
 };
 
-export default ContributionHeatmap;

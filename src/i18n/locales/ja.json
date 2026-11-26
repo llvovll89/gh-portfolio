@@ -63,7 +63,15 @@
             "toggleSearch": "検索UI切り替え",
             "executeCommand": "CLIコマンド実行",
             "closeAll": "すべてのUI閉じる"
-        }
+        },
+        "shortcutEdit": "ショートカットを変更",
+        "shortcutRecording": "キーの組み合わせを押してください · Escでキャンセル",
+        "shortcutNeedsModifier": "Ctrl・Alt・Shiftのいずれかと一緒に押してください。（F1〜F12は単独可）",
+        "shortcutReserved": "ブラウザが先に処理するショートカット（タブを閉じる・新しいタブ・新しいウィンドウ）のため使えません。",
+        "shortcutConflict": "すでに「{{name}}」で使われています。",
+        "shortcutSaveFailed": "設定を保存できませんでした。今回のアクセスでのみ適用されます。",
+        "shortcutSaved": "{{combo}}に変更しました。",
+        "shortcutsNote": "ショートカットはこのブラウザに保存されます。変更を押してから、使いたいキーの組み合わせを押してください。"
     },
     "footer": {
         "terminal": "ターミナル"

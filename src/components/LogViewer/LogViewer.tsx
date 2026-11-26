@@ -1,4 +1,5 @@
 import { uiText } from "../../utils/uiText";
+import { downloadTextFile } from "../../utils/downloadTextFile";
 import { useContext, useMemo } from "react";
 import { KeyboardContext } from "../../context/KeyboardState";
 import { Portal } from "../Portal";
@@ -51,15 +52,7 @@ export const LogViewer = () => {
     };
 
     const download = () => {
-        const blob = new Blob([submitCliCommand.value ?? ""], {
-            type: "text/plain;charset=utf-8",
-        });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `cli-output-${Date.now()}.txt`;
-        a.click();
-        URL.revokeObjectURL(url);
+        downloadTextFile(submitCliCommand.value ?? "", `cli-output-${Date.now()}.txt`);
     };
 
     return (

@@ -83,7 +83,7 @@ function AppContent() {
     );
 }
 
-function App() {
+export function App() {
     return (
         <GlobalStateProvider>
             <KeyboardProvider>
@@ -95,4 +95,3 @@ function App() {
     );
 }
 
-export default App;

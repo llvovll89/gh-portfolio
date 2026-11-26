@@ -12,6 +12,7 @@ function loadLayout(): LayoutState {
                 resizeFooterHeight: parsed.resizeFooterHeight ?? DEFAULT_LAYOUT.resizeFooterHeight,
                 resizeSidebarWidth: parsed.resizeSidebarWidth ?? DEFAULT_LAYOUT.resizeSidebarWidth,
                 expandedSidebarWidth: parsed.expandedSidebarWidth,
+                sidebarHidden: parsed.sidebarHidden,
             };
         }
     } catch {

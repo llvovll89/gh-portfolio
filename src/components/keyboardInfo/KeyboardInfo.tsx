@@ -3,6 +3,8 @@ import { uiText } from "../../utils/uiText";
 import { useContext } from "react";
 import { KeyboardContext } from "../../context/KeyboardState";
 import { keyboardKeyAndStateMock } from "./constants/mock";
+import { formatKeyCombo } from "../../constants/keyboardConstants";
+import { getShortcut } from "../../utils/shortcutConfig";
 import { Portal } from "../Portal";
 import { useFocusTrap } from "../../hooks/useFocusTrap";
 
@@ -94,7 +96,7 @@ export const KeyboardInfo = () => {
                                         "transition-colors",
                                     ].join(" ")}
                                 >
-                                    {item.key}
+                                    {item.id ? formatKeyCombo(getShortcut(item.id)) : item.key}
                                 </span>
                             </li>
                         ))}

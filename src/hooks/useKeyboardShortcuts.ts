@@ -5,21 +5,7 @@ import {
 } from "@/constants/keyboardConstants";
 import type { KeyCombination } from "@/types/Keyboard.types";
 import { KeyboardShortcutId } from "@/types/Keyboard.types";
-
-const STORAGE_KEY = "keyboard_shortcuts_config";
-
-const loadStoredShortcuts = (): Record<KeyboardShortcutId, KeyCombination> => {
-    try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            const parsed = JSON.parse(stored) as Partial<Record<KeyboardShortcutId, KeyCombination>>;
-            return { ...DEFAULT_KEY_COMBINATIONS, ...parsed };
-        }
-    } catch (error) {
-        console.error("Failed to load keyboard shortcuts:", error);
-    }
-    return DEFAULT_KEY_COMBINATIONS;
-};
+import { clearShortcuts, loadShortcuts, saveShortcuts } from "@/utils/shortcutConfig";
 
 /**
  * 단축키 설정 관리 훅
@@ -28,13 +14,13 @@ const loadStoredShortcuts = (): Record<KeyboardShortcutId, KeyCombination> => {
 export const useKeyboardShortcuts = () => {
     const [shortcuts, setShortcuts] = useState<
         Record<KeyboardShortcutId, KeyCombination>
-    >(loadStoredShortcuts);
+    >(loadShortcuts);
 
     // 단축키 업데이트
     const updateShortcut = (
         id: KeyboardShortcutId,
         combination: KeyCombination,
-    ): { success: boolean; error?: string } => {
+    ): { success: boolean; error?: string; conflictId?: KeyboardShortcutId } => {
         // 충돌 검사
         const conflict = (Object.entries(shortcuts) as [KeyboardShortcutId, KeyCombination][]).find(
             ([existingId, existingCombo]) =>
@@ -46,21 +32,13 @@ export const useKeyboardShortcuts = () => {
             return {
                 success: false,
                 error: `이미 ${conflict[0]}에서 사용 중인 단축키입니다.`,
+                conflictId: conflict[0],
             };
         }
 
         const newShortcuts = { ...shortcuts, [id]: combination };
         setShortcuts(newShortcuts);
-
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(newShortcuts));
-            return { success: true };
-        } catch {
-            return {
-                success: false,
-                error: "설정 저장에 실패했습니다.",
-            };
-        }
+        return saveShortcuts(newShortcuts) ? { success: true } : { success: false, error: "설정 저장에 실패했습니다." };
     };
 
     // 단축키 초기화
@@ -70,22 +48,13 @@ export const useKeyboardShortcuts = () => {
             [id]: DEFAULT_KEY_COMBINATIONS[id],
         };
         setShortcuts(newShortcuts);
-
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(newShortcuts));
-        } catch (error) {
-            console.error("Failed to save shortcuts:", error);
-        }
+        if (!saveShortcuts(newShortcuts)) console.error("Failed to save shortcuts");
     };
 
     // 모든 단축키 초기화
     const resetAllShortcuts = () => {
         setShortcuts(DEFAULT_KEY_COMBINATIONS);
-        try {
-            localStorage.removeItem(STORAGE_KEY);
-        } catch (error) {
-            console.error("Failed to reset shortcuts:", error);
-        }
+        clearShortcuts();
     };
 
     // 단축키가 사용자 정의되었는지 확인

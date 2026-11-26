@@ -1,7 +1,7 @@
+import { getShortcut } from "./shortcutConfig";
 import { NavType } from "@/components/aside/constants/Nav.type";
 import type { submitCliCommandType } from "@/context/KeyboardState";
 import {
-    DEFAULT_KEY_COMBINATIONS,
     ESC_DOUBLE_PRESS_TIMEOUT,
     LAYOUT_HEIGHTS,
     matchesKeyCombination,
@@ -28,7 +28,7 @@ export const handleToggleFooterUI: TerminalStateHandler = (
     setLayoutState,
     setIsTerminalVisible,
 ) => {
-    const combo = DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_FOOTER];
+    const combo = getShortcut(KeyboardShortcutId.TOGGLE_FOOTER);
 
     if (matchesKeyCombination(event, combo)) {
         event.preventDefault();
@@ -66,7 +66,7 @@ export const handleCloseKeyboardInfoUI: BooleanStateHandler = (
     setState,
 ) => {
     const combo =
-        DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_KEYBOARD_INFO];
+        getShortcut(KeyboardShortcutId.TOGGLE_KEYBOARD_INFO);
 
     if (matchesKeyCombination(event, combo)) {
         event.preventDefault();
@@ -83,7 +83,7 @@ const createNavToggleHandler = (
     navType: NavType,
 ): NavStateHandler =>
     (event, setSelectedNav) => {
-        if (matchesKeyCombination(event, DEFAULT_KEY_COMBINATIONS[shortcutId])) {
+        if (matchesKeyCombination(event, getShortcut(shortcutId))) {
             event.preventDefault();
             setSelectedNav((prev) => (prev === navType ? null : navType));
             return true;
@@ -107,7 +107,7 @@ export const handleCliEnterEvent: CliCommandHandler = (
     event,
     setSubmitCliCommand,
 ) => {
-    const combo = DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.CLI_ENTER];
+    const combo = getShortcut(KeyboardShortcutId.CLI_ENTER);
 
     if (matchesKeyCombination(event, combo)) {
         event.preventDefault();
@@ -141,7 +141,7 @@ const createEscapeHandler = () => {
             React.SetStateAction<boolean>
         >,
     ) => {
-        const combo = DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.ALL_CLEAR];
+        const combo = getShortcut(KeyboardShortcutId.ALL_CLEAR);
 
         if (matchesKeyCombination(event, combo)) {
             event.preventDefault();
@@ -182,16 +182,13 @@ export const handleToggleSidebarUI: LayoutStateHandler = (
     event,
     setLayoutState,
 ) => {
-    const combo = DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_SIDEBAR];
+    const combo = getShortcut(KeyboardShortcutId.TOGGLE_SIDEBAR);
 
     if (matchesKeyCombination(event, combo)) {
         event.preventDefault();
 
-        setLayoutState((prev) => ({
-            ...prev,
-            // 사이드바 너비 토글 (예: 0 <-> 250)
-            resizeSidebarWidth: prev.resizeSidebarWidth > 0 ? 0 : 250,
-        }));
+        // 너비는 Aside 가 숨김 여부·패널 열림 상태로 계산 (너비를 직접 0↔250 으로 바꾸면 패널이 닫혀 있을 때 빈 공간이 생김)
+        setLayoutState((prev) => ({ ...prev, sidebarHidden: !prev.sidebarHidden }));
     }
 };
 
@@ -207,7 +204,7 @@ export const handleTogglePanelUI: TerminalStateHandler = (
     setLayoutState,
     setIsTerminalVisible,
 ) => {
-    const combo = DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_PANEL];
+    const combo = getShortcut(KeyboardShortcutId.TOGGLE_PANEL);
 
     if (matchesKeyCombination(event, combo)) {
         event.preventDefault();
@@ -245,7 +242,7 @@ export const handleToggleCommandPalette: BooleanStateHandler = (
     setState,
 ) => {
     const combo =
-        DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.COMMAND_PALETTE];
+        getShortcut(KeyboardShortcutId.COMMAND_PALETTE);
 
     if (matchesKeyCombination(event, combo)) {
         event.preventDefault();
@@ -259,7 +256,7 @@ export const handleToggleCommandPalette: BooleanStateHandler = (
  * @description F11로 전체 화면을 토글함
  */
 export const handleToggleFullscreen = (event: KeyboardEvent) => {
-    const combo = DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_FULLSCREEN];
+    const combo = getShortcut(KeyboardShortcutId.TOGGLE_FULLSCREEN);
 
     if (matchesKeyCombination(event, combo)) {
         event.preventDefault();
@@ -285,7 +282,7 @@ export const handleReopenClosedTab = (
     navigate: (path: string) => void,
 ) => {
     const combo =
-        DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.REOPEN_CLOSED_TAB];
+        getShortcut(KeyboardShortcutId.REOPEN_CLOSED_TAB);
 
     if (!matchesKeyCombination(event, combo)) return;
 
@@ -315,7 +312,7 @@ export const handleTogglePinCurrentTab = (
     setPinnedTabs: React.Dispatch<React.SetStateAction<string[]>>,
 ) => {
     const combo =
-        DEFAULT_KEY_COMBINATIONS[KeyboardShortcutId.TOGGLE_PIN_CURRENT_TAB];
+        getShortcut(KeyboardShortcutId.TOGGLE_PIN_CURRENT_TAB);
 
     if (!matchesKeyCombination(event, combo)) return;
 
