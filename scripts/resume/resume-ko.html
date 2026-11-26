@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>김건호 이력서</title>
+<style>
+  /* 가변 폰트는 PDF 에 통째로 들어가 용량이 커지므로 쓰는 굵기의 정적 폰트만 사용 (PDF 에는 사용 글자만 서브셋) */
+  @font-face { font-family: "Pretendard"; src: url("../../node_modules/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2") format("woff2"); font-weight: 400; }
+  @font-face { font-family: "Pretendard"; src: url("../../node_modules/pretendard/dist/web/static/woff2/Pretendard-Medium.woff2") format("woff2"); font-weight: 500; }
+  @font-face { font-family: "Pretendard"; src: url("../../node_modules/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2") format("woff2"); font-weight: 700; }
+  @page { size: A4; margin: 12mm 14mm 10mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Pretendard", "Malgun Gothic", sans-serif; color: #1f2430; font-size: 9.3pt; line-height: 1.45; word-break: keep-all; }
+  a { color: #1a5fb4; text-decoration: none; }
+  header { display: flex; gap: 18px; align-items: center; border-bottom: 2px solid #1f2430; padding-bottom: 12px; }
+  header img { width: 76px; height: 98px; object-fit: cover; object-position: center 20%; border-radius: 4px; border: 1px solid #d5d9e0; }
+  .head-text { flex: 1; }
+  h1 { font-size: 22pt; letter-spacing: -0.5px; line-height: 1.15; }
+  h1 span { font-size: 12pt; font-weight: 500; color: #4c566a; margin-left: 8px; }
+  .role { font-size: 11pt; color: #3b4252; margin-top: 4px; }
+  .contact { margin-top: 8px; font-size: 9pt; color: #3b4252; display: flex; flex-wrap: wrap; gap: 4px 14px; }
+  section { margin-top: 10px; }
+  h2 { font-size: 11pt; color: #1a5fb4; border-bottom: 1px solid #d5d9e0; padding-bottom: 3px; margin-bottom: 7px; }
+  .entry { margin-bottom: 5px; break-inside: avoid; }
+  .entry-head { display: flex; justify-content: space-between; gap: 12px; }
+  .entry-title { font-weight: 700; }
+  .entry-sub { color: #4c566a; }
+  .date { color: #4c566a; white-space: nowrap; font-size: 9pt; }
+  ul { margin: 3px 0 0 16px; }
+  li { margin: 1px 0; }
+  .grid { display: grid; grid-template-columns: 92px 1fr; row-gap: 3px; }
+  .grid dt { font-weight: 700; }
+  .stack { color: #4c566a; font-size: 8.8pt; }
+</style>
+</head>
+<body>
+  <header>
+    <img src="../../public/assets/optimized/증명사진-b5a1be3a57-320.webp" alt="김건호 증명사진">
+    <div class="head-text">
+      <h1>김건호<span>Geonho Kim</span></h1>
+      <p class="role">풀스택 웹 개발자 · React / TypeScript / Spring Boot</p>
+      <div class="contact">
+        <a href="mailto:svvvs5579@naver.com">svvvs5579@naver.com</a>
+        <a href="https://github.com/llvovll89">github.com/llvovll89</a>
+        <a href="https://kimgeonho.vercel.app/">kimgeonho.vercel.app</a>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <h2>소개</h2>
+    <p>
+      React와 TypeScript로 사용 흐름을 설계하고 Spring Boot·PostgreSQL로 뒷받침하는 풀스택 웹 개발자입니다.
+      약 2년 반 동안 프론트엔드 개발자로 웹 애플리케이션을 개발·운영했고, 현재는 백엔드까지 맡는 풀스택 개발자로 일하고 있습니다.
+      화면·API·데이터 모델·배포를 하나의 흐름으로 이해하며 기능을 끝까지 책임지는 것을 중요하게 생각합니다.
+    </p>
+  </section>
+
+  <section>
+    <h2>경력</h2>
+    <div class="entry">
+      <div class="entry-head">
+        <div><span class="entry-title">나노IT</span> <span class="entry-sub">· 주임 · 웹 개발</span></div>
+        <div class="date">2026.02 ~ 재직중</div>
+      </div>
+      <ul>
+        <li>프론트엔드·백엔드 전반의 웹 애플리케이션 개발 및 유지보수</li>
+      </ul>
+    </div>
+    <div class="entry">
+      <div class="entry-head">
+        <div><span class="entry-title">㈜아이지아이에스</span> <span class="entry-sub">· 웹 개발팀 · 주임</span></div>
+        <div class="date">2023.07 ~ 2026.01</div>
+      </div>
+      <ul>
+        <li>웹 풀스택 개발 담당</li>
+        <li>공공사업 및 DFOS-STATION 기능 개발과 유지보수</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>주요 프로젝트</h2>
+    <div class="entry">
+      <div class="entry-head"><div><span class="entry-title">Run River</span> <span class="entry-sub">· 러닝·하이킹 앱 (웹·iOS·Android)</span></div><div class="date"><a href="https://run-river.vercel.app/">run-river.vercel.app</a></div></div>
+      <p>GPS로 러닝·하이킹을 기록하고, 인터넷이 끊겨도 오프라인 지도로 이어서 쓸 수 있는 모바일 운동 앱. MapLibre 공통 지도와 PMTiles 오프라인 지도 저장, KMZ/GPX 코스 연동, Capacitor로 iOS·Android 네이티브 앱까지 하나의 코드로 제공.</p>
+      <p class="stack">Next.js · TypeScript · Tailwind CSS · Supabase · MapLibre GL · PMTiles · Capacitor · PWA</p>
+    </div>
+    <div class="entry">
+      <div class="entry-head"><div><span class="entry-title">kimgeonho.dev</span> <span class="entry-sub">· 인터랙티브 포트폴리오</span></div><div class="date"><a href="https://kimgeonho.vercel.app/">kimgeonho.vercel.app</a></div></div>
+      <p>VS Code UI 컨셉의 포트폴리오. 탭·명령 팔레트·사용자 지정 단축키·터미널, 기술 블로그 60여 편, 한·영·일 3개 언어 UI. 정적 SEO 프리렌더, PWA, CSP, Sentry 에러 모니터링, Core Web Vitals 수집.</p>
+      <p class="stack">React · TypeScript · Vite · Tailwind CSS · React Router · Firebase · Vercel Functions</p>
+    </div>
+    <div class="entry">
+      <div class="entry-head"><div><span class="entry-title">Hovie</span> <span class="entry-sub">· 영화·드라마 탐색 사이트</span></div><div class="date"><a href="https://hovie.vercel.app/">hovie.vercel.app</a></div></div>
+      <p>TMDB API를 활용한 영화·드라마 정보 사이트. 탐색부터 예고편 확인까지 하나의 반응형 흐름, 로그인·관심 목록·리뷰 기능.</p>
+      <p class="stack">React · Tailwind CSS · TMDB API · Firebase · Vercel</p>
+    </div>
+    <div class="entry">
+      <div class="entry-head"><div><span class="entry-title">GH ARCADE</span> <span class="entry-sub">· 웹 게임 플랫폼</span></div><div class="date"><a href="https://variety-gaming-platform.vercel.app/">variety-gaming-platform.vercel.app</a></div></div>
+      <p>덱빌딩·3D 격투·퍼즐·전술 RPG부터 아이용 게임까지 브라우저에서 바로 플레이하는 플랫폼. 오늘의 도전·기록·업적과 게임 공통 키트 설계.</p>
+      <p class="stack">React · TypeScript · Vite · Tailwind CSS · Three.js · Zod</p>
+    </div>
+    <div class="entry">
+      <div class="entry-head"><div><span class="entry-title">잔고플랜</span> <span class="entry-sub">· 개인 재무 PWA</span></div><div class="date"><a href="https://balance-plan.vercel.app/">balance-plan.vercel.app</a></div></div>
+      <p>수입·지출·예산에 계좌 잔고와 대출·구독까지 한곳에서 관리. 비로그인 시 기기 저장, 로그인 시 Firebase 동기화.</p>
+      <p class="stack">React · TypeScript · Vite · Tailwind CSS · Firebase · Recharts · PWA</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>기술</h2>
+    <dl class="grid">
+      <dt>Frontend</dt><dd>React, TypeScript, JavaScript, Tailwind CSS, Redux, Next.js, Vite</dd>
+      <dt>Backend</dt><dd>Java, Spring Boot, PostgreSQL, Oracle, Firebase, Supabase</dd>
+      <dt>Tools</dt><dd>Git, GitHub Actions, Vercel, Sentry, Figma, Jira, Slack</dd>
+    </dl>
+  </section>
+
+  <section>
+    <h2>학력 · 병역 · 자격</h2>
+    <div class="entry">
+      <div class="entry-head"><div><span class="entry-title">대구대학교</span> <span class="entry-sub">· 컴퓨터소프트웨어 (4년제) 졸업</span></div><div class="date">2013.03 ~ 2020.02</div></div>
+    </div>
+    <div class="entry">
+      <div class="entry-head"><div><span class="entry-title">청구고등학교</span> <span class="entry-sub">· 졸업</span></div><div class="date">2010.03 ~ 2013.01</div></div>
+    </div>
+    <div class="entry">
+      <div class="entry-head"><div><span class="entry-title">육군</span> <span class="entry-sub">· 병장 만기전역</span></div><div class="date">2014.10 ~ 2016.07</div></div>
+    </div>
+    <div class="entry">
+      <div class="entry-head"><div><span class="entry-title">운전면허</span> <span class="entry-sub">· 1종 보통(2013.03), 1종 대형 특수트레일러(2017.02) · 경찰청</span></div></div>
+    </div>
+  </section>
+</body>
+</html>

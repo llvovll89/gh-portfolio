@@ -25,7 +25,7 @@ const list = (values: readonly string[]): Token[] => [
     ...values.flatMap((value, index) => [...str(value), ...(index < values.length - 1 ? [{ kind: "punct" as const, text: ", " }] : [])]),
     { kind: "punct", text: "]" },
 ];
-// "2023. 07 - 2026. 02" → "2023.07 ~ 2026.02"
+// "2023. 07 - 2026. 01" → "2023.07 ~ 2026.01"
 const formatPeriod = (period: string) => period.replace(/\.\s/g, ".").replace(/\s*-\s*/, " ~ ").trim();
 const field = (key: string, value: Token[]): Token[] => [
     { kind: "punct", text: "  " }, { kind: "key", text: key }, { kind: "punct", text: ": " }, ...value, { kind: "punct", text: "," },
