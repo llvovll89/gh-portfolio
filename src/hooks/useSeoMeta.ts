@@ -6,6 +6,7 @@ import { safeDecode } from "../utils/safeDecode";
 
 const SITE_URL = "https://kimgeonho.vercel.app";
 const DEFAULT_IMAGE = SITE_URL + "/og/thumbnail.webp";
+export const TITLE_SUFFIX = " | 김건호";
 interface SeoMetaOptions {
     title?: string;
     description?: string;
@@ -29,7 +30,8 @@ const normalizeUrl = (value: string) => {
 export function useSeoMeta({ title, description, image, url, type = "website", noIndex = false, publishedTime }: SeoMetaOptions = {}) {
     const location = useLocation();
     const { t, i18n } = useTranslation();
-    const fullTitle = title ? title + " | GH Portfolio" : t("seo.title");
+    // 빌드 시 prerender(build/seo.ts)와 같은 접미사 — 크롤러가 보는 정적 title 과 렌더 후 title 이 어긋나지 않게 함
+    const fullTitle = title ? title + TITLE_SUFFIX : t("seo.title");
     const summary = description ?? t("seo.description");
     const fullUrl = normalizeUrl(url ?? location.pathname);
     const postSlug = type === "article" ? new URL(fullUrl).pathname.match(/^\/blog\/([^/]+)$/)?.[1] : undefined;
@@ -47,7 +49,8 @@ export function useSeoMeta({ title, description, image, url, type = "website", n
             if (imageSize) setMeta("property", key, imageSize[index]);
             else document.head.querySelector('meta[property="' + key + '"]')?.remove();
         }
-        setMeta("property", "article:published_time", publishedTime ?? "");
+        if (type === "article" && publishedTime) setMeta("property", "article:published_time", publishedTime);
+        else document.head.querySelector('meta[property="article:published_time"]')?.remove();
         let canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
         if (!canonical) { canonical = document.createElement("link"); canonical.rel = "canonical"; document.head.appendChild(canonical); }
         canonical.href = fullUrl;

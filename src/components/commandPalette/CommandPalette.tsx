@@ -22,7 +22,8 @@ import { useHandlePushPath } from "@/hooks/useHandlePushPath";
 import {
     BLOG,
     CONTACT,
-    DEFAULT,    PROJECTS,
+    DEFAULT,
+    PROJECTS,
     RESUME,
     USES,
 } from "@/routes/route";
@@ -67,7 +68,7 @@ export const CommandPalette = () => {
     const handlePushPath = useHandlePushPath();
 
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [selectedIndex, setSelectedIndex] = useState(-1);
     const [recentCommandIds, setRecentCommandIds] = useState<string[]>(() => readStoredList(RECENT_COMMANDS_STORAGE_KEY));
     const [pinnedCommandIds, setPinnedCommandIds] = useState<string[]>(() => readStoredList(PINNED_COMMANDS_STORAGE_KEY));
     const [showPinnedOnly, setShowPinnedOnly] = useState(false);
@@ -605,7 +606,21 @@ export const CommandPalette = () => {
         return rows;
     })();
 
-    const activeIndex = Math.min(selectedIndex, Math.max(0, filteredCommands.length - 1));
+    // 방향키는 화면에 보이는 순서(카테고리·섹션별 묶음)를 따라야 하므로 렌더 순서대로의 index 목록을 사용
+    const navOrder = visibleRows.flatMap((row) => (row.type === "command" ? [row.index] : []));
+    // selectedIndex -1(초기화) 또는 목록에서 사라진 값이면 화면상 첫 행을 선택
+    const activeIndex = navOrder.includes(selectedIndex) ? selectedIndex : (navOrder[0] ?? 0);
+    const moveSelection = (delta: 1 | -1) => {
+        const position = navOrder.indexOf(activeIndex);
+        const next = navOrder[Math.min(navOrder.length - 1, Math.max(0, position + delta))];
+        if (next !== undefined) setSelectedIndex(next);
+    };
+
+    // 선택된 행이 목록 스크롤 영역(max-h-96) 밖으로 나가지 않게 함
+    useEffect(() => {
+        if (!isVisibleCommandPalette) return;
+        document.getElementById(`command-${activeIndex}`)?.scrollIntoView({ block: "nearest" });
+    }, [activeIndex, isVisibleCommandPalette]);
 
     // 팔레트가 열릴 때 입력창 포커스
     useEffect(() => {
@@ -619,7 +634,7 @@ export const CommandPalette = () => {
         if (e.altKey && e.key.toLowerCase() === "p") {
             e.preventDefault();
             setShowPinnedOnly((prev) => !prev);
-            setSelectedIndex(0);
+            setSelectedIndex(-1);
             return;
         }
 
@@ -633,12 +648,10 @@ export const CommandPalette = () => {
 
         if (e.key === "ArrowDown") {
             e.preventDefault();
-            setSelectedIndex((prev) =>
-                prev < filteredCommands.length - 1 ? prev + 1 : prev,
-            );
+            moveSelection(1);
         } else if (e.key === "ArrowUp") {
             e.preventDefault();
-            setSelectedIndex((prev) => (prev > 0 ? prev - 1 : prev));
+            moveSelection(-1);
         } else if (e.key === "Enter") {
             e.preventDefault();
             executeCommand(filteredCommands[activeIndex], performance.timeOrigin + e.timeStamp);
@@ -693,7 +706,7 @@ export const CommandPalette = () => {
     const closeCommandPalette = () => {
         setIsVisibleCommandPalette(false);
         setSearchQuery("");
-        setSelectedIndex(0);
+        setSelectedIndex(-1);
         setShowPinnedOnly(false);
     };
 
@@ -722,7 +735,7 @@ export const CommandPalette = () => {
                         value={searchQuery}
                         onChange={(e) => {
                             setSearchQuery(e.target.value);
-                            setSelectedIndex(0);
+                            setSelectedIndex(-1);
                         }}
                         onKeyDown={handleKeyDown}
                         placeholder={uiText("명령을 입력하세요...")}

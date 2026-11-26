@@ -2,6 +2,7 @@ import { uiText } from "../../utils/uiText";
 import { useContext, useMemo } from "react";
 import { KeyboardContext } from "../../context/KeyboardState";
 import { Portal } from "../Portal";
+import { useFocusTrap } from "../../hooks/useFocusTrap";
 
 const urlRegex = /(https?:\/\/[^\s]+)/g;
 
@@ -27,6 +28,8 @@ const renderWithLinks = (line: string) => {
 
 export const LogViewer = () => {
     const { submitCliCommand, setSubmitCliCommand } = useContext(KeyboardContext);
+    // 대화상자 안으로 포커스를 옮겨야 Escape 1회 닫기가 동작함
+    const containerRef = useFocusTrap(true);
 
     const lines = useMemo(() => {
         const v = submitCliCommand.value ?? "";
@@ -61,16 +64,18 @@ export const LogViewer = () => {
 
     return (
         <Portal>
-            {/* 백드롭 클릭 닫기는 마우스 보조 동작이며, 키보드는 전역 Escape 2회(handleAllClear) 및 닫기 버튼으로 닫힘 */}
-            {/* eslint-disable-next-line jsx-a11y-x/click-events-have-key-events, jsx-a11y-x/no-noninteractive-element-interactions */}
+            {/* 백드롭 클릭 닫기는 마우스 보조 동작이며, 키보드는 Escape 1회 및 닫기 버튼으로 닫힘 */}
+            {/* eslint-disable-next-line jsx-a11y-x/no-noninteractive-element-interactions */}
             <section
                 className="select-none fixed inset-0 z-999 flex items-center justify-center p-4 bg-[#0c1018]/50 backdrop-blur-md"
                 onClick={(e) => { if (e.target === e.currentTarget) close(); }}
+                onKeyDown={(e) => { if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); close(); } }}
                 role="dialog"
                 aria-modal="true"
                 aria-label="CLI Command Output"
             >
                 <div
+                    ref={containerRef}
                     className={[
                         "relative w-full max-w-sm sm:max-w-lg md:max-w-2xl lg:max-w-3xl overflow-hidden rounded-2xl",
                         "border border-line bg-panel text-foreground",

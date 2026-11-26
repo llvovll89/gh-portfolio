@@ -14,7 +14,7 @@ import { LuArrowUpRight } from "react-icons/lu";
 
 export const Uses = () => {
     const { t } = useTranslation();
-    useSeoMeta({ title: "Uses", description: uiText("김건호가 사용하는 개발 도구, 기술 스택, 환경 설정 소개"), url: "/uses" });
+    useSeoMeta({ title: t("routes.uses"), description: uiText("김건호가 사용하는 개발 도구, 기술 스택, 환경 설정 소개"), url: "/uses" });
     const toolCategories = [
         {
             title: uiText("개발 도구"),
@@ -118,7 +118,7 @@ export const Uses = () => {
         <>
             <Header />
             <Aside />
-            <Contents className="select-none">
+            <Contents>
                 <section className="uses-page relative w-full max-w-6xl mx-auto px-2 md:px-6 pb-8">
                     <PageHeader title={t("pages.uses.title")} description={t("pages.uses.description")} />
                     {/* 같은 모양의 카드를 반복하는 대신 훑어보기 쉬운 목록으로 표시 */}

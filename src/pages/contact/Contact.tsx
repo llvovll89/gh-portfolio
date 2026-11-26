@@ -10,7 +10,7 @@ import { useSeoMeta } from "../../hooks/useSeoMeta";
 
 export const Contact = () => {
     const { t } = useTranslation();
-    useSeoMeta({ title: "Contact", description: uiText("김건호에게 메시지를 보내세요. 이메일 또는 폼으로 연락할 수 있습니다."), url: "/contact" });
+    useSeoMeta({ title: t("routes.contact"), description: uiText("김건호에게 메시지를 보내세요. 이메일 또는 폼으로 연락할 수 있습니다."), url: "/contact" });
 
     return (
         <>

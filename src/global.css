@@ -228,9 +228,10 @@ body {
 .skeleton {
     background: linear-gradient(
         90deg,
-        rgba(255, 255, 255, 0.06) 25%,
-        rgba(255, 255, 255, 0.14) 50%,
-        rgba(255, 255, 255, 0.06) 75%
+        /* 흰색 고정값은 라이트 테마에서 보이지 않으므로 현재 테마 글자색 기준으로 섞음 */
+        color-mix(in srgb, var(--text-primary) 6%, transparent) 25%,
+        color-mix(in srgb, var(--text-primary) 14%, transparent) 50%,
+        color-mix(in srgb, var(--text-primary) 6%, transparent) 75%
     );
     background-size: 800px 100%;
     animation: skeleton-shimmer 1.4s ease-in-out infinite;
@@ -417,4 +418,22 @@ body {
     ::view-transition-new(*) {
         animation: none !important;
     }
+}
+
+/* 인쇄(Ctrl+P): IDE 셸은 숨기고 본문 스크롤 영역만 종이 흐름대로 출력 — /resume, 블로그 글 인쇄용 */
+@media print {
+  html, body, #root, #root > section { height: auto !important; min-height: 0 !important; overflow: visible !important; background: #fff !important; }
+  body * { visibility: hidden; }
+  #main-content, #main-content *, #detail-content, #detail-content * { visibility: visible; }
+  #main-content, #detail-content {
+    position: absolute !important; inset: 0 auto auto 0 !important;
+    width: 100% !important; height: auto !important; min-height: 0 !important;
+    overflow: visible !important; padding: 0 !important;
+  }
+  #main-content *, #detail-content * { color: #000 !important; background: transparent !important; box-shadow: none !important; text-shadow: none !important; }
+  /* 화면 전용 고정 요소(진행도 바·맨 위로 버튼)와 버튼류 제외 */
+  #main-content .fixed, #detail-content .fixed, #main-content button, #detail-content button, #detail-content details { display: none !important; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.8em; word-break: break-all; }
+  pre, table, img, h2, h3 { break-inside: avoid; }
+  h2, h3 { break-after: avoid; }
 }

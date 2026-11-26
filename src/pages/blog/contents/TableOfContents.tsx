@@ -1,7 +1,8 @@
 import { uiText } from "../../../utils/uiText";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { TocItem } from "../../../utils/parseToc";
-import { scrollToHeading } from "../../../utils/scrollToHeading";
+import { HEADING_SCROLL_OFFSET, scrollToHeading } from "../../../utils/scrollToHeading";
+import { isPlainLeftClick } from "../../../utils/isPlainLeftClick";
 import { DETAIL_SCROLL_ID } from "./Detail";
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
 
 export const TableOfContents = ({ items }: Props) => {
     const [activeId, setActiveId] = useState<string>(items[0]?.id ?? "");
+    const navRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
         if (items.length === 0) return;
@@ -24,7 +26,8 @@ export const TableOfContents = ({ items }: Props) => {
             rafId = requestAnimationFrame(() => {
                 rafId = null;
                 const containerRect = container.getBoundingClientRect();
-                const threshold = containerRect.top + 80;
+                // 클릭 이동 후 서브픽셀 반올림(80.2px 등)으로 바로 위 항목이 활성화되지 않도록 여유 2px
+                const threshold = containerRect.top + HEADING_SCROLL_OFFSET + 2;
 
                 let currentId = items[0]?.id ?? "";
                 for (const item of items) {
@@ -46,7 +49,20 @@ export const TableOfContents = ({ items }: Props) => {
         };
     }, [items]);
 
+    // 목차가 화면보다 길 때 현재 위치 항목이 목차 스크롤 영역 밖으로 나가지 않게 함
+    useEffect(() => {
+        const nav = navRef.current;
+        const active = nav?.querySelector<HTMLElement>('[aria-current="location"]');
+        if (!nav || !active) return;
+        const navRect = nav.getBoundingClientRect();
+        const activeRect = active.getBoundingClientRect();
+        if (activeRect.top < navRect.top || activeRect.bottom > navRect.bottom) {
+            nav.scrollTop += activeRect.top - navRect.top - nav.clientHeight / 2;
+        }
+    }, [activeId]);
+
     const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+        if (!isPlainLeftClick(e)) return;
         e.preventDefault();
         scrollToHeading(id, DETAIL_SCROLL_ID);
     };
@@ -56,8 +72,9 @@ export const TableOfContents = ({ items }: Props) => {
     return (
         // sticky top-6: detail-content(h-dvh overflow-y-auto)가 스크롤 컨테이너이므로 정상 동작
         <nav
+            ref={navRef}
             aria-label={uiText("목차")}
-            className="hidden xl:block sticky top-6 self-start w-52 shrink-0"
+            className="hidden xl:block sticky top-6 self-start w-52 shrink-0 max-h-[calc(100dvh-3rem)] overflow-y-auto scrolls"
         >
             <p className="text-xs font-semibold text-muted uppercase mb-3 tracking-widest">
                 {uiText("목차")}</p>

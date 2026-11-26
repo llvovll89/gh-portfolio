@@ -90,8 +90,8 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
                     ) : null}
                 </div>
 
-                {/* 오른쪽 콘텐츠 섹션 */}
-                <div className="flex-1 pt-1 sm:pt-0 sm:pl-6 min-w-0">
+                {/* 오른쪽 콘텐츠 섹션 — 글 제목·요약은 UI 언어와 무관하게 한국어 (스크린리더 발음용 lang) */}
+                <div lang="ko" className="flex-1 pt-1 sm:pt-0 sm:pl-6 min-w-0">
                     <h3 className="text-[17px] sm:text-xl font-semibold leading-snug text-foreground mb-2 group-hover:text-primary transition-colors">
                         {p.title}
                     </h3>

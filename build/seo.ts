@@ -9,9 +9,37 @@ import type { Plugin } from "vite";
 import { projects } from "../src/pages/projects/projectData";
 import { careers } from "../src/pages/profile/careerData";
 import { parseMarkdownPost, parseHtmlPost, plainSummary, postOgImagePath, type BlogPost } from "../src/utils/postMetadata";
+import { slugifyHeading } from "../src/utils/parseToc";
 
 export const SITE_URL = "https://kimgeonho.vercel.app";
 export const escapeHtml = (value: string) => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+
+type HeadingProps = { node?: unknown; children?: React.ReactNode };
+const headingText = (children: React.ReactNode): string =>
+    typeof children === "string" || typeof children === "number" ? String(children)
+        : Array.isArray(children) ? children.map(headingText).join("")
+            : children && typeof children === "object" && "props" in children ? headingText((children as { props: { children?: React.ReactNode } }).props.children) : "";
+
+/** 클라이언트 MarkdownRender 와 같은 규칙(slugifyHeading + 중복 순번)으로 h2/h3 id 를 붙여 정적 HTML 의 목차 앵커가 동작하게 함 */
+function headingIdComponents() {
+    const counts = new Map<string, number>();
+    const heading = (tag: "h2" | "h3") => ({ node, children, ...rest }: HeadingProps) => {
+        void node;
+        const base = slugifyHeading(headingText(children));
+        const count = (counts.get(base) ?? 0) + 1;
+        counts.set(base, count);
+        const id = (count > 1 ? base + "-" + count : base) || undefined;
+        return createElement(tag, { id, ...rest }, children);
+    };
+    // 글의 수동 목차는 GitHub 식 `--` 앵커를 쓰므로 heading id 와 같은 규칙으로 정규화 (footnote 등 이미 규칙에 맞는 앵커는 그대로)
+    const a = ({ node, href, children, ...rest }: HeadingProps & { href?: string }) => {
+        void node;
+        const anchor = href?.startsWith("#") ? "#" + slugifyHeading(decodeURIComponent(href.slice(1))) : href;
+        return createElement("a", { href: anchor, ...rest }, children);
+    };
+    return { h2: heading("h2"), h3: heading("h3"), a };
+}
+
 const absolute = (pathname: string) => new URL(pathname, SITE_URL).href;
 const json = (value: unknown) => JSON.stringify(value).replace(/</g, "\\u003c");
 const author = { "@type": "Person", "@id": SITE_URL + "/#person", name: "김건호", alternateName: "Geonho Kim", url: SITE_URL, jobTitle: "Full-stack Web Developer", sameAs: ["https://github.com/llvovll89"] };
@@ -86,26 +114,29 @@ export function seoPages(): Plugin {
             const pages: Page[] = [
                 { pathname: "/", title: "김건호 | 풀스택 웹 개발자 포트폴리오", description: ko.pages.home.summary, content: '<h1>김건호 · 웹 개발자</h1><p>' + escapeHtml(ko.pages.home.summary) + '</p><h2>프로젝트</h2><ul>' + projectLinks + '</ul>', schema: { "@type": "WebSite", name: "김건호 포트폴리오", url: SITE_URL, author }, lastmod: latestModified },
                 { pathname: "/projects", title: "프로젝트 | 김건호", description: "김건호의 웹 프로젝트와 기술 선택, 담당 역할, 구현 경험을 소개합니다.", content: '<h1>프로젝트</h1><ul>' + projectLinks + '</ul>', schema: { "@type": "CollectionPage", name: "프로젝트", url: absolute("/projects") } },
-                { pathname: "/blog", title: "기술 블로그 | 김건호", description: "React, TypeScript, 백엔드, 개발 도구와 실무 개념을 기록하는 김건호의 기술 블로그입니다.", content: '<h1>기술 블로그</h1><ul>' + blogLinks + '</ul>', schema: { "@type": "Blog", name: "김건호 기술 블로그", url: absolute("/blog"), author }, lastmod: latestModified },
+                { pathname: "/blog", title: "블로그 | 김건호", description: "React, TypeScript, 백엔드, 개발 도구와 실무 개념을 기록하는 김건호의 기술 블로그입니다.", content: '<h1>기술 블로그</h1><ul>' + blogLinks + '</ul>', schema: { "@type": "Blog", name: "김건호 기술 블로그", url: absolute("/blog"), author }, lastmod: latestModified },
                 { pathname: "/profile", title: "프로필 | 김건호", description: ko.pages.profile.description.intro, content: '<h1>김건호 프로필</h1>' + Object.values(ko.pages.profile.description).map(text => '<p>' + escapeHtml(String(text)) + '</p>').join("") + '<a href="/resume">이력서</a>', schema: { "@type": "ProfilePage", mainEntity: author } },
                 { pathname: "/resume", title: "이력서 | 김건호", description: "웹 개발자 김건호의 경력, 기술 스택, 학력과 프로젝트 경험을 확인하세요.", content: '<h1>김건호 이력서</h1><p>' + escapeHtml(ko.pages.resume.description) + '</p><p>React, TypeScript, Java, Spring Boot, PostgreSQL</p><a href="/assets/resume/' + encodeURIComponent("김건호_이력서.pdf") + '">PDF 이력서 다운로드</a>' },
                 { pathname: "/contact", title: "연락처 | 김건호", description: ko.pages.contact.subtitle, content: '<h1>연락처</h1><p>' + escapeHtml(ko.pages.contact.subtitle) + '</p><a href="mailto:svvvs5579@naver.com">svvvs5579@naver.com</a>' },
                 { pathname: "/uses", title: "사용 도구 | 김건호", description: ko.pages.uses.description, content: '<h1>사용 도구</h1><p>' + escapeHtml(ko.pages.uses.description) + '</p><p>Visual Studio Code, Git, GitHub, Postman, React, TypeScript, Tailwind CSS, Spring Boot, PostgreSQL, Figma, Jira, Slack</p>' },
             ];
             for (const project of projects) {
-                pages.push({ pathname: "/projects/" + project.slug, title: project.title + " | 김건호 프로젝트", description: project.description, content: '<h1>' + escapeHtml(project.title) + '</h1><p>' + escapeHtml(project.detailedDescription) + '</p>' + (project.role ? '<h2>담당 범위</h2><p>' + escapeHtml(project.role) + '</p>' : '') + '<h2>기술 스택</h2><p>' + escapeHtml(project.skills.join(", ")) + '</p><a href="' + escapeHtml(project.link.repositoryUrl) + '">GitHub 저장소</a>' + (project.link.projectUrl ? '<a href="' + escapeHtml(project.link.projectUrl) + '">프로젝트 실행</a>' : ''), schema: { "@type": "CreativeWork", name: project.title, description: project.description, url: absolute("/projects/" + project.slug), image: absolute(project.image), creator: author } });
+                pages.push({ pathname: "/projects/" + project.slug, title: project.title + " | 김건호", description: project.description, content: '<h1>' + escapeHtml(project.title) + '</h1><p>' + escapeHtml(project.detailedDescription) + '</p>' + (project.role ? '<h2>담당 범위</h2><p>' + escapeHtml(project.role) + '</p>' : '') + '<h2>기술 스택</h2><p>' + escapeHtml(project.skills.join(", ")) + '</p><a href="' + escapeHtml(project.link.repositoryUrl) + '">GitHub 저장소</a>' + (project.link.projectUrl ? '<a href="' + escapeHtml(project.link.projectUrl) + '">프로젝트 실행</a>' : ''), schema: { "@type": "CreativeWork", name: project.title, description: project.description, url: absolute("/projects/" + project.slug), image: absolute(project.image), creator: author } });
             }
             for (const post of posts) {
                 const pathname = "/blog/" + encodeURIComponent(post.slug);
-                const body = post.type === "html" ? '<p>' + escapeHtml(plainSummary(post.body, 1000000)) + '</p>' : renderToStaticMarkup(createElement(ReactMarkdown, { remarkPlugins: [remarkGfm], children: post.body }));
-                pages.push({ pathname, title: post.title + " | 김건호 블로그", description: post.summary ?? post.title, article: post, lastmod: postModified(post), content: '<article><h1>' + escapeHtml(post.title) + '</h1><time datetime="' + escapeHtml(post.date) + '">' + escapeHtml(post.date) + '</time>' + body + '</article>', schema: { "@type": "BlogPosting", headline: post.title, description: post.summary, datePublished: post.date || undefined, dateModified: postModified(post), author, publisher: author, inLanguage: "ko", image: absolute(postOgImagePath(post.slug)), mainEntityOfPage: absolute(pathname), url: absolute(pathname) } });
+                const body = post.type === "html" ? '<p>' + escapeHtml(plainSummary(post.body, 1000000)) + '</p>' : renderToStaticMarkup(createElement(ReactMarkdown, { remarkPlugins: [remarkGfm], components: headingIdComponents(), children: post.body }));
+                pages.push({ pathname, title: post.title + " | 김건호", description: post.summary ?? post.title, article: post, lastmod: postModified(post), content: '<article><h1>' + escapeHtml(post.title) + '</h1><time datetime="' + escapeHtml(post.date) + '">' + escapeHtml(post.date) + '</time>' + body + '</article>', schema: { "@type": "BlogPosting", headline: post.title, description: post.summary, datePublished: post.date || undefined, dateModified: postModified(post), author, publisher: author, inLanguage: "ko", image: absolute(postOgImagePath(post.slug)), mainEntityOfPage: absolute(pathname), url: absolute(pathname) } });
             }
             const nav = '<nav aria-label="주요 메뉴">' + pages.filter(page => page.pathname.split("/").length <= 2).map(page => '<a href="' + page.pathname + '">' + escapeHtml(page.title.split(" |")[0]) + '</a>').join(' · ') + '</nav>';
             const preview = process.env.VERCEL_ENV === "preview";
             for (const page of pages) {
                 const url = absolute(page.pathname);
                 const breadcrumbs = [{ "@type": "ListItem", position: 1, name: "홈", item: SITE_URL + "/" }];
-                if (page.pathname !== "/") breadcrumbs.push({ "@type": "ListItem", position: 2, name: page.title.split(" |")[0], item: url });
+                // 글·프로젝트 상세는 목록(블로그/프로젝트) 단계를 사이에 둠
+                const parent = page.pathname.startsWith("/blog/") ? { name: "블로그", pathname: "/blog" } : page.pathname.startsWith("/projects/") ? { name: "프로젝트", pathname: "/projects" } : null;
+                if (parent) breadcrumbs.push({ "@type": "ListItem", position: 2, name: parent.name, item: absolute(parent.pathname) });
+                if (page.pathname !== "/") breadcrumbs.push({ "@type": "ListItem", position: breadcrumbs.length + 1, name: page.title.split(" |")[0], item: url });
                 const schema = { "@context": "https://schema.org", "@graph": [author, ...(page.schema ? [page.schema] : []), { "@type": "BreadcrumbList", itemListElement: breadcrumbs }] };
                 let html = template.replace(/<title>[^<]*<\/title>/, '<title>' + escapeHtml(page.title) + '</title>');
                 const meta = (selector: string, value: string) => {

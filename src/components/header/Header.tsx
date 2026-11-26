@@ -271,8 +271,10 @@ export const Header = () => {
                         onClick={() => { void navigate(-1); }}
                         className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors"
                         title={uiText("뒤로 가기")}
+                        aria-label={uiText("뒤로 가기")}
                     >
                         <svg
+                            aria-hidden="true"
                             width="14"
                             height="14"
                             className="sm:w-4 sm:h-4"
@@ -295,8 +297,10 @@ export const Header = () => {
                         onClick={() => { void navigate(1); }}
                         className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors border-l border-sub-gary/10"
                         title={uiText("앞으로 가기")}
+                        aria-label={uiText("앞으로 가기")}
                     >
                         <svg
+                            aria-hidden="true"
                             width="14"
                             height="14"
                             className="sm:w-4 sm:h-4"
@@ -319,8 +323,10 @@ export const Header = () => {
                         onClick={() => { void navigate(0); }}
                         className="hidden sm:flex h-full px-3 sm:px-2 items-center justify-center cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors border-l border-sub-gary/10"
                         title={uiText("새로고침")}
+                        aria-label={uiText("새로고침")}
                     >
                         <svg
+                            aria-hidden="true"
                             width="14"
                             height="14"
                             className="sm:w-4 sm:h-4"
@@ -343,9 +349,11 @@ export const Header = () => {
                         onClick={toggleFullscreen}
                         className="hidden md:flex h-full items-center justify-center px-1.5 sm:px-2 cursor-pointer hover:bg-sub-gary/20 text-muted hover:text-foreground transition-colors border-l border-sub-gary/10"
                         title={isFullscreen ? uiText("전체 화면 종료 (F11)") : uiText("전체 화면 (F11)")}
+                        aria-label={isFullscreen ? uiText("전체 화면 종료 (F11)") : uiText("전체 화면 (F11)")}
                     >
                         {isFullscreen ? (
                             <svg
+                                aria-hidden="true"
                                 width="14"
                                 height="14"
                                 className="sm:w-4 sm:h-4"
@@ -362,6 +370,7 @@ export const Header = () => {
                             </svg>
                         ) : (
                             <svg
+                                aria-hidden="true"
                                 width="14"
                                 height="14"
                                 className="sm:w-4 sm:h-4"

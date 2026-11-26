@@ -32,11 +32,14 @@ export default defineConfig(({ mode }) => {
             babel({ presets: [reactCompilerPreset()] }),
             tailwindcss(),
             VitePWA({
-                registerType: "autoUpdate",
+                // autoUpdate 는 새 SW 활성화 시 페이지를 강제 새로고침해 작성 중인 댓글·문의가 사라지므로 배너로 사용자에게 맡김
+                registerType: "prompt",
                 // dev 환경에서도 SW 동작 확인 가능
                 devOptions: { enabled: false },
                 // 빌드 시 precache할 파일 패턴
                 workbox: {
+                    // SPA 셸 fallback 대상에서 정적 파일·API 제외 (설치 후 /rss.xml 등을 직접 열면 404 페이지가 뜨던 문제)
+                    navigateFallbackDenylist: [/^\/api\//, /\.(?:xml|txt|pdf|webmanifest|json)$/],
                     globIgnores: ["**/post-body-*.js", "**/searchPosts-*.js", "**/static/en-*.js", "**/static/ja-*.js", "blog/**", "projects/**", "profile/**", "resume/**", "contact/**", "uses/**", "404.html"],
                     globPatterns: [
                         "**/*.{js,css,html,ico,svg}",

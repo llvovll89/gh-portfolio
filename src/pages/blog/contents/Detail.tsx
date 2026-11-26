@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import {MarkdownRenderer} from "./MarkdownRender";
 import {parseToc} from "../../../utils/parseToc";
 import {scrollToHeading} from "../../../utils/scrollToHeading";
+import {isPlainLeftClick} from "../../../utils/isPlainLeftClick";
 import {TableOfContents} from "./TableOfContents";
 import {Minimap} from "./Minimap";
 import {incrementViewCount, subscribeViewCount} from "../../../utils/blogViews";
@@ -86,6 +87,13 @@ export const Detail = () => {
             container.removeEventListener("scroll", handleScroll);
             if (rafId !== null) cancelAnimationFrame(rafId);
         };
+    }, [post]);
+
+    // /blog/글#섹션 으로 진입(새 탭·공유 링크·새로고침)하면 본문이 비동기로 렌더된 뒤에 해당 섹션으로 이동
+    useEffect(() => {
+        if (!post || !window.location.hash) return;
+        const rafId = requestAnimationFrame(() => { scrollToHeading(window.location.hash, DETAIL_SCROLL_ID); });
+        return () => cancelAnimationFrame(rafId);
     }, [post]);
 
     // SEO 메타태그 업데이트 (title, og:title, og:description 등)
@@ -175,7 +183,7 @@ export const Detail = () => {
 
                 <header className="mb-6 mx-auto w-full max-w-275">
                     <div className="flex items-start justify-between gap-3 sm:gap-4">
-                        <h1 className="max-w-[24em] break-keep text-[clamp(1.6rem,5vw,2.25rem)] font-bold leading-tight tracking-tight text-foreground">
+                        <h1 lang="ko" className="max-w-[24em] break-keep text-[clamp(1.6rem,5vw,2.25rem)] font-bold leading-tight tracking-tight text-foreground">
                             {post.title}
                         </h1>
                         <div className="shrink-0 pt-1">
@@ -220,6 +228,7 @@ export const Detail = () => {
 
                     {post.summary ? (
                         <p
+                            lang="ko"
                             className={`mt-3 max-w-[68ch] break-keep text-muted ${post.type === "html" ? "leading-tight" : "leading-7"}`}
                         >
                             {post.summary}
@@ -262,6 +271,7 @@ export const Detail = () => {
                                             <a
                                                 href={`#${item.id}`}
                                                 onClick={(e) => {
+                                                    if (!isPlainLeftClick(e)) return;
                                                     e.preventDefault();
                                                     scrollToHeading(
                                                         item.id,

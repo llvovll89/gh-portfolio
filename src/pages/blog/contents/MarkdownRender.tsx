@@ -31,6 +31,7 @@ import groovyLang from "react-syntax-highlighter/dist/esm/languages/prism/groovy
 import batchLang from "react-syntax-highlighter/dist/esm/languages/prism/batch";
 import { slugifyHeading } from "../../../utils/parseToc";
 import { scrollToHeading } from "../../../utils/scrollToHeading";
+import { isPlainLeftClick } from "../../../utils/isPlainLeftClick";
 import { DETAIL_SCROLL_ID } from "./Detail";
 
 SyntaxHighlighter.registerLanguage("tsx", tsxLang);
@@ -128,103 +129,84 @@ type Props = {
     content: string;
 };
 
+type HastProps = { node?: unknown; className?: string };
+
+/**
+ * react-markdown 이 넘기는 hast `node` 는 DOM 속성(node="[object Object]")으로 새지 않게 제거하고,
+ * hast className(GFM task list 의 contains-task-list 등)은 덮어쓰지 않고 기본 스타일 뒤에 합침
+ */
+function domProps<P extends HastProps>(props: P, base: string): Omit<P, "node" | "className"> & { className: string } {
+    const { node, className, ...rest } = props;
+    void node;
+    return { ...rest, className: className ? `${base} ${className}` : base };
+}
+
 export const MarkdownRenderer = memo(({ content }: Props) => {
     const overflowXStyle = `max-w-full break-words`;
     const idCounts = new Map<string, number>();
+    const headingId = (children: unknown) => {
+        const baseId = slugifyHeading(extractText(children));
+        const count = (idCounts.get(baseId) ?? 0) + 1;
+        idCounts.set(baseId, count);
+        return (count > 1 ? `${baseId}-${count}` : baseId) || undefined;
+    };
+    const linkStyle = "text-primary underline underline-offset-4 text-[clamp(0.95rem,1.5vw,1.1rem)]";
 
     return (
-        <article className="w-full h-full flex flex-col bg-panel text-foreground md:p-4 p-3 rounded-[5px]">
+        <article lang="ko" className="w-full h-full flex flex-col bg-panel text-foreground md:p-4 p-3 rounded-[5px]">
             <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
                     h1: ({ children, ...props }) => (
-                        <h1
-                            className={`mt-6 mb-4 text-3xl font-bold ${overflowXStyle} text-[clamp(1.5rem,2.5vw,2.5rem)]`}
-                            {...props}
+                        <h1 {...domProps(props, `mt-6 mb-4 text-3xl font-bold ${overflowXStyle} text-[clamp(1.5rem,2.5vw,2.5rem)]`)}>{children}</h1>
+                    ),
+                    // footnote 제목처럼 hast 가 id 를 가진 경우 그 id 를 유지
+                    h2: ({ children, ...props }) => (
+                        <h2
+                            {...domProps(props, `mt-6 mb-3 text-2xl font-bold ${overflowXStyle} text-[clamp(1.25rem,2vw,2rem)]`)}
+                            id={props.id ?? headingId(children)}
                         >
                             {children}
-                        </h1>
+                        </h2>
                     ),
-                    h2: ({ children, ...props }) => {
-                        const text = extractText(children);
-                        const baseId = slugifyHeading(text);
-                        const count = (idCounts.get(baseId) ?? 0) + 1;
-                        idCounts.set(baseId, count);
-                        const id = count > 1 ? `${baseId}-${count}` : baseId;
-                        return (
-                            <h2
-                                id={id || undefined}
-                                className={`mt-6 mb-3 text-2xl font-bold ${overflowXStyle} text-[clamp(1.25rem,2vw,2rem)]`}
-                                {...props}
-                            >
-                                {children}
-                            </h2>
-                        );
-                    },
-                    h3: ({ children, ...props }) => {
-                        const text = extractText(children);
-                        const baseId = slugifyHeading(text);
-                        const count = (idCounts.get(baseId) ?? 0) + 1;
-                        idCounts.set(baseId, count);
-                        const id = count > 1 ? `${baseId}-${count}` : baseId;
-                        return (
-                            <h3
-                                id={id || undefined}
-                                className={`mt-5 mb-2 text-xl font-semibold ${overflowXStyle} text-[clamp(1.1rem,1.5vw,1.5rem)]`}
-                                {...props}
-                            >
-                                {children}
-                            </h3>
-                        );
-                    },
+                    h3: ({ children, ...props }) => (
+                        <h3
+                            {...domProps(props, `mt-5 mb-2 text-xl font-semibold ${overflowXStyle} text-[clamp(1.1rem,1.5vw,1.5rem)]`)}
+                            id={props.id ?? headingId(children)}
+                        >
+                            {children}
+                        </h3>
+                    ),
                     p: (props) => (
-                        <p
-                            className="my-3 leading-7 text-foreground text-[clamp(0.95rem,1.5vw,1.1rem)]"
-                            {...props}
-                        />
+                        <p {...domProps(props, "my-3 leading-7 text-foreground text-[clamp(0.95rem,1.5vw,1.1rem)]")} />
                     ),
                     a: ({ href, children, ...props }) => {
-                        const isAnchor = href?.startsWith("#");
-                        if (isAnchor) {
+                        if (href?.startsWith("#")) {
                             return (
                                 <a
+                                    {...domProps(props, linkStyle)}
                                     href={href}
-                                    className="text-primary underline underline-offset-4 text-[clamp(0.95rem,1.5vw,1.1rem)]"
                                     onClick={(e) => {
-                                        e.preventDefault();
-                                        const id = decodeURIComponent(href!.slice(1));
-                                        scrollToHeading(id, DETAIL_SCROLL_ID);
+                                        if (!isPlainLeftClick(e)) return;
+                                        // 대상 heading 을 못 찾으면 브라우저 기본 동작(footnote 등)에 맡김
+                                        if (scrollToHeading(href, DETAIL_SCROLL_ID)) e.preventDefault();
                                     }}
-                                    {...props}
                                 >
                                     {children}
                                 </a>
                             );
                         }
                         return (
-                            <a
-                                href={href}
-                                className="text-primary underline underline-offset-4 text-[clamp(0.95rem,1.5vw,1.1rem)]"
-                                target="_blank"
-                                rel="noreferrer"
-                                {...props}
-                            >
+                            <a {...domProps(props, linkStyle)} href={href} target="_blank" rel="noreferrer">
                                 {children}
                             </a>
                         );
                     },
-                    ul: (props) => (
-                        <ul className="my-3 list-disc pl-6" {...props} />
-                    ),
-                    ol: (props) => (
-                        <ol className="my-3 list-decimal pl-6" {...props} />
-                    ),
-                    li: (props) => <li className="my-1" {...props} />,
+                    ul: (props) => <ul {...domProps(props, "my-3 list-disc pl-6")} />,
+                    ol: (props) => <ol {...domProps(props, "my-3 list-decimal pl-6")} />,
+                    li: (props) => <li {...domProps(props, "my-1")} />,
                     blockquote: (props) => (
-                        <blockquote
-                            className="my-4 border-l-4 border-line pl-4 text-foreground text-[clamp(0.95rem,1.5vw,1.1rem)] italic"
-                            {...props}
-                        />
+                        <blockquote {...domProps(props, "my-4 border-l-4 border-line pl-4 text-foreground text-[clamp(0.95rem,1.5vw,1.1rem)] italic")} />
                     ),
                     pre: ({ children }) => <>{children}</>,
                     code: ({ className, children }) => {
@@ -242,37 +224,19 @@ export const MarkdownRenderer = memo(({ content }: Props) => {
                             </code>
                         );
                     },
-                    hr: (props) => (
-                        <hr
-                            className="my-6 border-line"
-                            {...props}
-                        />
-                    ),
-                    img: ({ alt, ...props }) => (
-                        <img
-                            loading="lazy"
-                            className="max-w-full h-auto rounded-lg my-4"
-                            alt={alt ?? ""}
-                            {...props}
-                        />
+                    hr: (props) => <hr {...domProps(props, "my-6 border-line")} />,
+                    img: (props) => (
+                        <img loading="lazy" {...domProps(props, "max-w-full h-auto rounded-lg my-4")} alt={props.alt ?? ""} />
                     ),
                     table: (props) => (
                         <div className="my-4 max-w-full overflow-x-auto scrolls">
-                            <table className="w-full border-collapse text-[clamp(0.85rem,1.5vw,1rem)]" {...props} />
+                            <table {...domProps(props, "w-full border-collapse text-[clamp(0.85rem,1.5vw,1rem)]")} />
                         </div>
                     ),
                     th: (props) => (
-                        <th
-                            className="border border-line bg-inset text-foreground px-3 py-2 text-left font-semibold whitespace-nowrap"
-                            {...props}
-                        />
+                        <th {...domProps(props, "border border-line bg-inset text-foreground px-3 py-2 text-left font-semibold whitespace-nowrap")} />
                     ),
-                    td: (props) => (
-                        <td
-                            className="border border-line px-3 py-2 align-top text-foreground"
-                            {...props}
-                        />
-                    ),
+                    td: (props) => <td {...domProps(props, "border border-line px-3 py-2 align-top text-foreground")} />,
                 }}
             >
                 {content}
