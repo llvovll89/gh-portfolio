@@ -20,7 +20,7 @@ export const useKeyboardShortcuts = () => {
     const updateShortcut = (
         id: KeyboardShortcutId,
         combination: KeyCombination,
-    ): { success: boolean; error?: string } => {
+    ): { success: boolean; error?: string; conflictId?: KeyboardShortcutId } => {
         // 충돌 검사
         const conflict = (Object.entries(shortcuts) as [KeyboardShortcutId, KeyCombination][]).find(
             ([existingId, existingCombo]) =>
@@ -32,6 +32,7 @@ export const useKeyboardShortcuts = () => {
             return {
                 success: false,
                 error: `이미 ${conflict[0]}에서 사용 중인 단축키입니다.`,
+                conflictId: conflict[0],
             };
         }
 

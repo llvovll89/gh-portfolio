@@ -5,9 +5,9 @@ import { updateGeneralSettings, useGeneralSettings } from "../../../../utils/gen
 import { VscSettingsGear, VscKey, VscRefresh } from "react-icons/vsc";
 import { useTranslation } from "react-i18next";
 import { useKeyboardShortcuts } from "../../../../hooks/useKeyboardShortcuts";
+import { ShortcutRow } from "./ShortcutRow";
 import { KeyboardShortcutId } from "../../../../types/Keyboard.types";
 import {
-    formatKeyCombo,
     SHORTCUT_DESCRIPTIONS_KO,
     SHORTCUT_DESCRIPTIONS_EN,
     SHORTCUT_DESCRIPTIONS_JA,
@@ -32,7 +32,7 @@ const SHORTCUT_IDS = [
 export const Settings = () => {
     const { backgroundStyle, backgroundClass } = useThemeStyle();
     const { t, i18n } = useTranslation();
-    const { shortcuts, resetShortcut, resetAllShortcuts, isCustomized } =
+    const { shortcuts, updateShortcut, resetShortcut, resetAllShortcuts, isCustomized } =
         useKeyboardShortcuts();
     const [activeTab, setActiveTab] = useState<"shortcuts" | "general">(
         "shortcuts",
@@ -106,33 +106,17 @@ export const Settings = () => {
                         </div>
                         <ul className="space-y-2">
                             {SHORTCUT_IDS.map((id) => (
-                                <li
+                                <ShortcutRow
                                     key={id}
-                                    className="flex items-center justify-between p-2 bg-sub-gary/20 rounded hover:bg-sub-gary/30 transition-colors group"
-                                >
-                                    <span className="text-2xs text-muted flex-1">
-                                        {getShortcutDescription(id)}
-                                    </span>
-                                    <div className="flex items-center gap-2">
-                                        <kbd
-                                            className={`px-2 py-1 text-2xs bg-sub-gary/40 text-foreground rounded border ${isCustomized(id)
-                                                    ? "border-primary/50"
-                                                    : "border-sub-gary/30"
-                                                }`}
-                                        >
-                                            {formatKeyCombo(shortcuts[id])}
-                                        </kbd>
-                                        {isCustomized(id) && (
-                                            <button
-                                                onClick={() => resetShortcut(id)}
-                                                className="opacity-0 group-hover:opacity-100 p-1 text-muted hover:text-foreground rounded transition-all"
-                                                title={uiText("기본값으로 복원")}
-                                            >
-                                                <VscRefresh className="w-3 h-3" />
-                                            </button>
-                                        )}
-                                    </div>
-                                </li>
+                                    label={getShortcutDescription(id)}
+                                    combo={shortcuts[id]}
+                                    customized={isCustomized(id)}
+                                    // '모든 UI 닫기'는 Esc 두 번으로 동작하고 Esc 는 녹화 취소 키라 편집 대상에서 제외
+                                    editable={id !== KeyboardShortcutId.ALL_CLEAR}
+                                    onSave={(combo) => updateShortcut(id, combo)}
+                                    onReset={() => resetShortcut(id)}
+                                    describe={(otherId) => getShortcutDescription(otherId as KeyboardShortcutId)}
+                                />
                             ))}
                         </ul>
                         <p className="mt-4 text-2xs text-muted italic">

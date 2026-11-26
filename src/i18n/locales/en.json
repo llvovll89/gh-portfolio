@@ -63,7 +63,15 @@
             "toggleSearch": "Toggle Search UI",
             "executeCommand": "Execute CLI Command",
             "closeAll": "Close All UI"
-        }
+        },
+        "shortcutEdit": "Change shortcut",
+        "shortcutRecording": "Press a key combo · Esc to cancel",
+        "shortcutNeedsModifier": "Press it together with Ctrl, Alt, or Shift. (F1–F12 work alone)",
+        "shortcutReserved": "The browser handles this shortcut first (close tab, new tab, new window), so it can't be used.",
+        "shortcutConflict": "Already used by '{{name}}'.",
+        "shortcutSaveFailed": "Couldn't save the setting. It applies to this visit only.",
+        "shortcutSaved": "Changed to {{combo}}.",
+        "shortcutsNote": "Shortcuts are saved in this browser. Click change, then press the key combo you want."
     },
     "footer": {
         "terminal": "Terminal"

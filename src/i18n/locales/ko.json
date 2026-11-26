@@ -63,7 +63,15 @@
             "toggleSearch": "검색 UI 토글",
             "executeCommand": "CLI 명령 실행",
             "closeAll": "모든 UI 닫기"
-        }
+        },
+        "shortcutEdit": "단축키 변경",
+        "shortcutRecording": "키 조합을 누르세요 · Esc 취소",
+        "shortcutNeedsModifier": "Ctrl·Alt·Shift 중 하나와 함께 눌러 주세요. (F1~F12 는 단독 가능)",
+        "shortcutReserved": "브라우저가 먼저 처리하는 단축키(탭 닫기·새 탭·새 창)라 사용할 수 없어요.",
+        "shortcutConflict": "이미 '{{name}}'에서 사용 중인 단축키예요.",
+        "shortcutSaveFailed": "설정을 저장하지 못했어요. 이번 접속에서만 적용됩니다.",
+        "shortcutSaved": "{{combo}}(으)로 변경했어요.",
+        "shortcutsNote": "단축키는 이 브라우저에 저장됩니다. '변경'을 누른 뒤 원하는 키 조합을 누르세요."
     },
     "footer": {
         "terminal": "터미널"
