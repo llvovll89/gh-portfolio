@@ -17,10 +17,10 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
         return Array.isArray(v) ? v[0] : v
     }
 
-    const variables = validateContributionsInput(
-        { login: get('login'), from: get('from'), to: get('to') },
-        getAllowedOwner(process.env),
-    )
+    const owner = getAllowedOwner(process.env)
+    if (!owner) return res.status(503).json({ error: 'GitHub owner not configured on server' })
+
+    const variables = validateContributionsInput({ login: get('login'), from: get('from'), to: get('to') }, owner)
 
     if (!variables) {
         return res.status(400).json({ error: 'Invalid login or date range' })
@@ -40,6 +40,7 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
                 'User-Agent': 'gh-portfolio',
             },
             body: JSON.stringify({ query: CONTRIBUTIONS_QUERY, variables }),
+            signal: AbortSignal.timeout(5000),
         })
         const data = await upstream.json()
         if (upstream.ok) res.setHeader('Cache-Control', GITHUB_CACHE_CONTROL)

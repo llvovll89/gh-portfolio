@@ -1,6 +1,8 @@
 // 댓글 API 입력 검증 (순수 함수 — 테스트 대상)
 
 export const COMMENT_LIMITS = { name: 40, message: 2000, password: 100, slug: 300 } as const
+// 새 댓글 비밀번호 최소 길이 — 기존 댓글(짧은 비밀번호)의 수정·삭제는 막지 않도록 create 에만 적용
+export const COMMENT_PASSWORD_MIN = 4
 
 export type CommentAction =
     | { action: 'create'; slug: string; name: string; message: string; password: string }
@@ -32,6 +34,7 @@ export function parseCommentAction(body: unknown): CommentAction | null {
     switch (b.action) {
         case 'create':
             if (!isText(b.name, COMMENT_LIMITS.name) || !isText(b.message, COMMENT_LIMITS.message)) return null
+            if (b.password.length < COMMENT_PASSWORD_MIN) return null
             return { action: 'create', slug: b.slug, name: b.name.trim(), message: b.message.trim(), password: b.password }
         case 'update':
             if (!isDocId(b.id, 100) || !isText(b.message, COMMENT_LIMITS.message)) return null

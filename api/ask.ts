@@ -3,7 +3,7 @@ import { ASK_LIMITS, parseAskInput, type AskLang } from './_lib/askInput.js'
 import { consumeDailyQuota } from './_lib/dailyQuota.js'
 import { getAdminDb } from './_lib/firebaseAdmin.js'
 import { createRateLimiter } from './_lib/rateLimit.js'
-import { clientIp, readRequestBody, type ApiRequest, type ApiResponse } from './_lib/request.js'
+import { clientIp, readRequestBody, rejectCrossSite, type ApiRequest, type ApiResponse } from './_lib/request.js'
 import { FALLBACK_SITE, fetchSiteFile } from './_lib/site.js'
 
 const MODEL = 'claude-haiku-5-5'
@@ -41,6 +41,8 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
         res.setHeader('Allow', 'POST')
         return res.status(405).json({ error: 'method-not-allowed' })
     }
+    const crossSite = rejectCrossSite(req)
+    if (crossSite) return res.status(crossSite).json({ error: crossSite === 415 ? 'unsupported-media-type' : 'forbidden' })
 
     const input = parseAskInput(readRequestBody(req))
     if (!input) return res.status(400).json({ error: 'invalid-input' })

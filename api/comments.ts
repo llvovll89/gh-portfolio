@@ -4,7 +4,7 @@ import { hashCommentPassword, verifyCommentPassword } from './_lib/commentPasswo
 import { getAdminDb } from './_lib/firebaseAdmin.js'
 import { createRateLimiter } from './_lib/rateLimit.js'
 import { isKnownPostSlug } from './_lib/postSlugs.js'
-import { clientIp, readRequestBody, type ApiRequest, type ApiResponse } from './_lib/request.js'
+import { clientIp, readRequestBody, rejectCrossSite, type ApiRequest, type ApiResponse } from './_lib/request.js'
 
 const WRONG_PASSWORD_DELAY_MS = 400
 // IP당 10분에 20회 (생성·수정·삭제 합산) — 스팸·비밀번호 대입 완화
@@ -19,6 +19,8 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
         res.setHeader('Allow', 'POST')
         return res.status(405).json({ error: 'method-not-allowed' })
     }
+    const crossSite = rejectCrossSite(req)
+    if (crossSite) return res.status(crossSite).json({ error: crossSite === 415 ? 'unsupported-media-type' : 'forbidden' })
 
     const input = parseCommentAction(readRequestBody(req))
     if (!input) return res.status(400).json({ error: 'invalid-input' })

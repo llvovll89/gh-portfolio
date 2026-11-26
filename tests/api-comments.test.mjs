@@ -41,22 +41,23 @@ test("legacy client-side hash formats still verify", async () => {
 });
 
 test("comment input parser enforces actions, lengths, and safe document ids", () => {
-    const create = parseCommentAction({ action: "create", slug: "2026-01-26-ts정리", name: " 건호 ", message: " hi ", password: "pw" });
-    assert.deepEqual(create, { action: "create", slug: "2026-01-26-ts정리", name: "건호", message: "hi", password: "pw" });
+    const create = parseCommentAction({ action: "create", slug: "2026-01-26-ts정리", name: " 건호 ", message: " hi ", password: "pass" });
+    assert.deepEqual(create, { action: "create", slug: "2026-01-26-ts정리", name: "건호", message: "hi", password: "pass" });
     assert.equal(parseCommentAction({ action: "delete", slug: "2026-01-01-a", id: "abc", password: "pw" })?.action, "delete");
 
     // slug 는 유효한 값으로 고정해 각 케이스가 slug 검사가 아닌 해당 필드 검사에서 거부되는지 확인
     const slug = "2026-01-01-a";
     for (const bad of [
         null,
-        { action: "create", slug: "random-spam", name: "n", message: "m", password: "pw" },
-        { action: "create", slug: "a/b", name: "n", message: "m", password: "pw" },
-        { action: "create", slug: "..", name: "n", message: "m", password: "pw" },
-        { action: "create", slug, name: "n".repeat(41), message: "m", password: "pw" },
-        { action: "create", slug, name: "n", message: "m".repeat(2001), password: "pw" },
-        { action: "create", slug, name: "   ", message: "m", password: "pw" },
+        { action: "create", slug: "random-spam", name: "n", message: "m", password: "pass" },
+        { action: "create", slug: "a/b", name: "n", message: "m", password: "pass" },
+        { action: "create", slug: "..", name: "n", message: "m", password: "pass" },
+        { action: "create", slug, name: "n".repeat(41), message: "m", password: "pass" },
+        { action: "create", slug, name: "n", message: "m".repeat(2001), password: "pass" },
+        { action: "create", slug, name: "   ", message: "m", password: "pass" },
         { action: "update", slug, id: "__x__", message: "m", password: "pw" },
         { action: "delete", slug, id: "x", password: "" },
+        { action: "create", slug, name: "n", message: "m", password: "abc" },
         { action: "drop", slug, id: "x", password: "pw" },
     ]) {
         assert.equal(parseCommentAction(bad), null, JSON.stringify(bad));
@@ -64,13 +65,15 @@ test("comment input parser enforces actions, lengths, and safe document ids", ()
 });
 
 test("each rejected comment case fails on its own field, not on the slug", () => {
-    const ok = { action: "create", slug: "2026-01-01-a", name: "n", message: "m", password: "pw" };
+    const ok = { action: "create", slug: "2026-01-01-a", name: "n", message: "m", password: "pass" };
     assert.ok(parseCommentAction(ok), "baseline must pass so the invalid cases above are meaningful");
     assert.ok(parseCommentAction({ action: "update", slug: ok.slug, id: "x", message: "m", password: "pw" }));
+    // 최소 길이는 새 댓글에만 — 기존 짧은 비밀번호 댓글도 수정·삭제 가능해야 함
+    assert.ok(parseCommentAction({ action: "delete", slug: ok.slug, id: "x", password: "1" }));
 });
 
 const { parseBlogSlugs } = loadTypeScript("api/_lib/sitemap.ts");
-const { readRequestBody } = loadTypeScript("api/_lib/request.ts");
+const { readRequestBody, rejectCrossSite } = loadTypeScript("api/_lib/request.ts");
 const { quotaDay } = loadTypeScript("api/_lib/dailyQuota.ts");
 
 test("sitemap parser extracts decoded blog slugs only", () => {
@@ -84,6 +87,20 @@ test("request body reader turns a throwing body getter or broken JSON into null"
     assert.equal(readRequestBody({ body: "{bad" }), null);
     assert.deepEqual(readRequestBody({ body: '{"a":1}' }), { a: 1 });
     assert.deepEqual(readRequestBody({ body: { a: 1 } }), { a: 1 });
+});
+
+test("cross-site guard requires JSON and a same-origin browser context", () => {
+    const req = headers => ({ headers: { host: "kimgeonho.vercel.app", ...headers } });
+    const json = { "content-type": "application/json; charset=utf-8" };
+    assert.equal(rejectCrossSite(req({ ...json, "sec-fetch-site": "same-origin" })), null);
+    assert.equal(rejectCrossSite(req({ ...json, origin: "https://kimgeonho.vercel.app" })), null);
+    assert.equal(rejectCrossSite(req(json)), null, "non-browser clients without Origin are allowed");
+    assert.equal(rejectCrossSite(req({ "content-type": "text/plain", "sec-fetch-site": "same-origin" })), 415);
+    assert.equal(rejectCrossSite(req({})), 415);
+    assert.equal(rejectCrossSite(req({ ...json, "sec-fetch-site": "cross-site" })), 403);
+    assert.equal(rejectCrossSite(req({ ...json, "sec-fetch-site": "same-site" })), 403);
+    assert.equal(rejectCrossSite(req({ ...json, origin: "https://evil.example" })), 403);
+    assert.equal(rejectCrossSite(req({ ...json, origin: "null" })), 403);
 });
 
 test("daily quota key uses the UTC date", () => {

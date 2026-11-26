@@ -17,8 +17,11 @@ import {
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), "");
-    // 로컬: VITE_GIT_HUB_TOKEN 또는 GITHUB_TOKEN 모두 지원
-    const GITHUB_TOKEN = env.GITHUB_TOKEN || env.VITE_GIT_HUB_TOKEN || "";
+    // VITE_ 접두사 변수는 코드에서 참조하는 순간 클라이언트 번들에 포함되므로 토큰은 GITHUB_TOKEN 만 사용
+    const GITHUB_TOKEN = env.GITHUB_TOKEN || "";
+    if (!GITHUB_TOKEN && env.VITE_GIT_HUB_TOKEN) {
+        console.warn("[vite] VITE_GIT_HUB_TOKEN 은 더 이상 사용하지 않습니다. .env 에서 GITHUB_TOKEN 으로 이름을 바꿔 주세요.");
+    }
     const GITHUB_OWNER = getAllowedOwner(env);
 
     return {
