@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { uiText } from "../../utils/uiText";
+import { safeDecode } from "../../utils/safeDecode";
 import { Link, useNavigate, useLocation, matchPath } from "react-router-dom";
 import { routesPath } from "../../routes/route";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
@@ -201,7 +202,7 @@ export const Header = () => {
                         : orderedTabs
                     ).map((path) => {
                         const matched = routesPath.find((r) => r.path !== "*" && matchPath({ path: r.path, end: true }, path));
-                        const route = matched ? { ...matched, path, name: matched.path.includes(":") ? path.split("/").pop() ?? matched.name : matched.name } : undefined;
+                        const route = matched ? { ...matched, path, name: matched.path.includes(":") ? safeDecode(path.split("/").pop() ?? matched.name) : matched.name } : undefined;
                         if (!route) return null;
                         const isPinned = pinnedTabs.includes(route.path);
                         const { Icon, colorClass } = getFileIcon(route.path);

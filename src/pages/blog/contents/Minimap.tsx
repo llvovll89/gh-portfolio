@@ -140,7 +140,7 @@ export const Minimap = ({ content, scrollContainerId }: MinimapProps) => {
     };
 
     return (
-        <div className="fixed right-0 top-0 h-dvh hidden xl:flex items-center pr-0.5 z-30 pointer-events-none">
+        <div className="fixed right-0 top-[68px] h-[calc(100dvh-92px)] hidden xl:flex items-center pr-0.5 z-30 pointer-events-none">
             <canvas
                 ref={canvasRef}
                 aria-hidden="true"

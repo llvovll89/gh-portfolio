@@ -437,3 +437,7 @@ body {
   pre, table, img, h2, h3 { break-inside: avoid; }
   h2, h3 { break-after: avoid; }
 }
+
+/* keep-all 은 띄어쓰기 단위로 줄바꿈하는 한국어 전용 — 띄어쓰기가 없는 일본어는 문장 전체가 한 단어가 되어
+   모바일에서 그리드 폭을 밀어내므로 일본어 문맥에서는 해제 (글 본문처럼 lang="ko" 인 영역은 영향 없음) */
+:lang(ja) { word-break: normal !important; overflow-wrap: anywhere; }

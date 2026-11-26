@@ -6,8 +6,8 @@
     "height": 1080
   },
   "/assets/images/projects/kimgeonho.png": {
-    "src": "/assets/optimized/kimgeonho-d2350a1fdb-1600.webp",
-    "srcSet": "/assets/optimized/kimgeonho-d2350a1fdb-320.webp 320w, /assets/optimized/kimgeonho-d2350a1fdb-640.webp 640w, /assets/optimized/kimgeonho-d2350a1fdb-960.webp 960w, /assets/optimized/kimgeonho-d2350a1fdb-1600.webp 1600w",
+    "src": "/assets/optimized/kimgeonho-a8b137f5e9-1600.webp",
+    "srcSet": "/assets/optimized/kimgeonho-a8b137f5e9-320.webp 320w, /assets/optimized/kimgeonho-a8b137f5e9-640.webp 640w, /assets/optimized/kimgeonho-a8b137f5e9-960.webp 960w, /assets/optimized/kimgeonho-a8b137f5e9-1600.webp 1600w",
     "width": 1920,
     "height": 1080
   },
@@ -24,20 +24,20 @@
     "height": 1080
   },
   "/assets/images/projects/run-river-mobile.png": {
-    "src": "/assets/optimized/run-river-mobile-013672362f-430.webp",
-    "srcSet": "/assets/optimized/run-river-mobile-013672362f-320.webp 320w, /assets/optimized/run-river-mobile-013672362f-430.webp 430w",
-    "width": 430,
-    "height": 540
+    "src": "/assets/optimized/run-river-mobile-cdab022eca-860.webp",
+    "srcSet": "/assets/optimized/run-river-mobile-cdab022eca-320.webp 320w, /assets/optimized/run-river-mobile-cdab022eca-640.webp 640w, /assets/optimized/run-river-mobile-cdab022eca-860.webp 860w",
+    "width": 860,
+    "height": 1080
   },
   "/assets/images/projects/run-river.png": {
-    "src": "/assets/optimized/run-river-afed4210a2-960.webp",
-    "srcSet": "/assets/optimized/run-river-afed4210a2-320.webp 320w, /assets/optimized/run-river-afed4210a2-640.webp 640w, /assets/optimized/run-river-afed4210a2-960.webp 960w",
-    "width": 960,
-    "height": 540
+    "src": "/assets/optimized/run-river-bf0d58aaff-1440.webp",
+    "srcSet": "/assets/optimized/run-river-bf0d58aaff-320.webp 320w, /assets/optimized/run-river-bf0d58aaff-640.webp 640w, /assets/optimized/run-river-bf0d58aaff-960.webp 960w, /assets/optimized/run-river-bf0d58aaff-1440.webp 1440w",
+    "width": 1440,
+    "height": 810
   },
   "/assets/images/projects/variety-gaming-platform.png": {
-    "src": "/assets/optimized/variety-gaming-platform-bf9966eee5-1440.webp",
-    "srcSet": "/assets/optimized/variety-gaming-platform-bf9966eee5-320.webp 320w, /assets/optimized/variety-gaming-platform-bf9966eee5-640.webp 640w, /assets/optimized/variety-gaming-platform-bf9966eee5-960.webp 960w, /assets/optimized/variety-gaming-platform-bf9966eee5-1440.webp 1440w",
+    "src": "/assets/optimized/variety-gaming-platform-8d419288a9-1440.webp",
+    "srcSet": "/assets/optimized/variety-gaming-platform-8d419288a9-320.webp 320w, /assets/optimized/variety-gaming-platform-8d419288a9-640.webp 640w, /assets/optimized/variety-gaming-platform-8d419288a9-960.webp 960w, /assets/optimized/variety-gaming-platform-8d419288a9-1440.webp 1440w",
     "width": 1440,
     "height": 900
   },
@@ -48,10 +48,10 @@
     "height": 1080
   },
   "/assets/images/projects/잔고플랜.png": {
-    "src": "/assets/optimized/잔고플랜-817b4d53ce-373.webp",
-    "srcSet": "/assets/optimized/잔고플랜-817b4d53ce-320.webp 320w, /assets/optimized/잔고플랜-817b4d53ce-373.webp 373w",
-    "width": 373,
-    "height": 666
+    "src": "/assets/optimized/잔고플랜-a3031e5277-746.webp",
+    "srcSet": "/assets/optimized/잔고플랜-a3031e5277-320.webp 320w, /assets/optimized/잔고플랜-a3031e5277-640.webp 640w, /assets/optimized/잔고플랜-a3031e5277-746.webp 746w",
+    "width": 746,
+    "height": 1332
   },
   "/assets/images/kimgeonho/증명사진.png": {
     "src": "/assets/optimized/증명사진-b5a1be3a57-320.webp",

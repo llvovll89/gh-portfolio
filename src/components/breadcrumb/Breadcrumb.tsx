@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { safeDecode } from "../../utils/safeDecode";
 import {useContext} from "react";
 import { useLocation } from "react-router-dom";
 import {LayoutContext} from "../../context/LayoutContext";
@@ -14,7 +15,7 @@ export const Breadcrumb = () => {
     const isMobileSize = useCheckedMobileSize();
     const matchedRoute = useMatchedRoute();
     const location = useLocation();
-    const fileName = matchedRoute?.path.includes(":") ? location.pathname.split("/").pop() : matchedRoute?.name;
+    const fileName = matchedRoute?.path.includes(":") ? safeDecode(location.pathname.split("/").pop() ?? "") : matchedRoute?.name;
 
     if (!matchedRoute) return null;
 

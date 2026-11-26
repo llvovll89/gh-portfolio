@@ -1,5 +1,5 @@
 import { uiText } from "../../../utils/uiText";
-import {useMemo, useState, useEffect, useRef, lazy, Suspense} from "react";
+import {useMemo, useState, useEffect, useRef, useContext, lazy, Suspense} from "react";
 import {useParams, Link, useNavigate} from "react-router-dom";
 import {loadAllPosts, loadPost, type BlogPost} from "../../../utils/loadAllPosts";
 import { useTranslation } from "react-i18next";
@@ -18,6 +18,10 @@ const BlogComments = lazy(() => import("../comments/BlogComments").then(module =
 import {useSeoMeta} from "../../../hooks/useSeoMeta";
 import { FeedbackPage } from "../../../components/error/FeedbackPage";
 import {ShareButton} from "../../../components/ShareButton";
+import {Header} from "../../../components/header/Header";
+import {Aside} from "../../../components/aside/Aside";
+import {LayoutContext} from "../../../context/LayoutContext";
+import {useCheckedMobileSize} from "../../../hooks/useCheckedMobileSize";
 
 // 빌드 타임에 결정되는 정적 데이터 — slug가 바뀔 때마다 재호출 방지
 const ALL_POSTS = loadAllPosts();
@@ -41,6 +45,8 @@ export const Detail = () => {
         return () => { active = false; };
     }, [slug, metadata, attempt]);
 
+    const {layoutState} = useContext(LayoutContext);
+    const isMobileSize = useCheckedMobileSize();
     const [showScrollButtons, setShowScrollButtons] = useState(false);
     const [viewCount, setViewCount] = useState<number | null>(null);
     const progressBarRef = useRef<HTMLDivElement>(null);
@@ -140,6 +146,13 @@ export const Detail = () => {
 
     const goBack = () => { void navigate("/blog"); };
 
+    // 플로팅 버튼: 모바일은 하단 내비 위, 데스크톱은 사이드바 오른쪽·상태바 위에 배치
+    const floatingStyle = (side: "left" | "right"): React.CSSProperties => ({
+        // 데스크톱 오른쪽은 테마 선택 버튼(fixed right-3 bottom-8)과 겹치지 않게 더 위로
+        bottom: isMobileSize ? "calc(5.5rem + env(safe-area-inset-bottom))" : side === "right" ? 96 : 40,
+        ...(side === "left" ? {left: (isMobileSize ? 0 : layoutState.resizeSidebarWidth) + 16} : {right: 24}),
+    });
+
     // ← / → 키로 이전/다음 포스트 이동
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -165,7 +178,10 @@ export const Detail = () => {
 
     return (
         <>
-            {/* 읽기 진행도 바 - Detail 페이지는 헤더 없으므로 top-0 */}
+            {/* 다른 페이지와 같은 IDE 셸(헤더·사이드바·모바일 하단 내비) — 글을 연 뒤에도 다른 메뉴로 이동 가능 */}
+            <Header />
+            <Aside />
+            {/* 읽기 진행도 바 (화면 최상단) */}
             <div className="fixed top-0 left-0 right-0 h-0.75 z-50 pointer-events-none">
                 <div
                     ref={progressBarRef}
@@ -175,14 +191,16 @@ export const Detail = () => {
             </div>
 
             {/*
-             * h-dvh + overflow-y-auto: 이 section 자체를 스크롤 컨테이너로 만들어
-             * - sticky TOC가 올바르게 동작 (scroll container = 자기 자신)
-             * - App root section의 overflow-y:auto 간섭 없음
+             * Contents 와 같은 위치·크기(헤더 아래, 사이드바 오른쪽)의 자체 스크롤 컨테이너
+             * - sticky TOC 가 올바르게 동작 (scroll container = 자기 자신)
+             * - 모바일은 하단 내비에 가리지 않도록 아래 여백 확보
              */}
             <section
                 id={DETAIL_SCROLL_ID}
                 role="main" tabIndex={-1}
-                className="w-full h-dvh overflow-y-auto scrolls flex flex-col p-4 sm:p-6 md:py-10 md:px-15 bg-base-navy"
+                className={`absolute right-0 overflow-y-auto scrolls flex flex-col p-4 sm:p-6 md:py-10 md:px-15 bg-base-navy
+                    ${isMobileSize ? "top-[69px] h-[calc(100dvh-69px)] pb-28" : "top-[68px] h-[calc(100dvh-92px)]"}`}
+                style={{width: `calc(100% - ${isMobileSize ? 0 : layoutState.resizeSidebarWidth}px)`}}
             >
                 <div className="mb-4 mx-auto w-full max-w-275">
                     <Link to="/blog" className="workbench-button">
@@ -389,7 +407,8 @@ export const Detail = () => {
                     <>
                         <button
                             onClick={goBack}
-                            className="fixed left-4 sm:left-6 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-50 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-panel text-foreground shadow-lg hover:bg-panel transition-all duration-300 ease-in-out opacity-90 hover:opacity-100"
+                            style={floatingStyle("left")}
+                            className="fixed z-40 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-panel text-foreground shadow-lg hover:bg-panel transition-all duration-300 ease-in-out opacity-90 hover:opacity-100"
                             aria-label={uiText("뒤로가기")}
                         >
                             <svg
@@ -410,7 +429,8 @@ export const Detail = () => {
 
                         <button
                             onClick={scrollToTop}
-                            className="fixed right-4 sm:right-6 bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-50 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-panel text-foreground shadow-lg hover:bg-panel transition-all duration-300 ease-in-out opacity-90 hover:opacity-100"
+                            style={floatingStyle("right")}
+                            className="fixed z-40 flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-panel text-foreground shadow-lg hover:bg-panel transition-all duration-300 ease-in-out opacity-90 hover:opacity-100"
                             aria-label={uiText("위로가기")}
                         >
                             <svg
