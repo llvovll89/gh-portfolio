@@ -184,6 +184,7 @@
                 "mailSubject": "Enquiry from {{name}}",
                 "success": "Your message was sent.",
                 "error": "Your message could not be sent. Try again or contact me by email.",
+                "openMailApp": "Open in your mail app with this message",
                 "mailOpened": "Requested your mail app to open. Complete sending there. Your message remains in this form.",
                 "messageHint": "Up to 500 characters. Press Ctrl or Command and Enter to send.",
                 "sending": "Sending"
@@ -435,6 +436,7 @@
         "description": "I'm Geonho Kim, a full-stack web developer building fast, consistent experiences with React and TypeScript, then keeping them reliable in production."
     },
     "ui": {
+        "fr3jul": "Related posts",
         "18249w": "Please enter a comment.",
         "17zbnys": "Please enter a comment and password.",
         "17u4648": "Password must be at least 4 characters.",

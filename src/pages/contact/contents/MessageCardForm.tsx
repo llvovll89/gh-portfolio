@@ -20,6 +20,12 @@ export const MessageCardForm = () => {
     const [status, setStatus] = useState<"idle" | "sending" | "success" | "error" | "mailOpened">("idle");
     const sending = useRef(false);
 
+    // 작성한 내용을 그대로 담은 mailto — EmailJS 미설정 시 기본 경로, 전송 실패 시 대체 경로 (입력 내용 유실 방지)
+    const composedMailto = () => {
+        const subject = t("pages.contact.messageForm.mailSubject", { name: name.trim() });
+        const body = `${message.trim()}\n\n${t("pages.contact.messageForm.name")}: ${name.trim()}\n${t("pages.contact.messageForm.email")}: ${fromEmail.trim()}`;
+        return buildContactMailto(CONTACT_EMAIL, subject, body);
+    };
     const handleSend = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (sending.current) return;
@@ -35,9 +41,7 @@ export const MessageCardForm = () => {
             return;
         }
         if (!EMAILJS_READY) {
-            const subject = t("pages.contact.messageForm.mailSubject", { name: name.trim() });
-            const body = `${message.trim()}\n\n${t("pages.contact.messageForm.name")}: ${name.trim()}\n${t("pages.contact.messageForm.email")}: ${fromEmail.trim()}`;
-            window.location.href = buildContactMailto(CONTACT_EMAIL, subject, body);
+            window.location.assign(composedMailto());
             setStatus("mailOpened");
             return;
         }
@@ -65,7 +69,7 @@ export const MessageCardForm = () => {
         </header>
         <div aria-live="polite" aria-atomic="true">
             {status === "success" && <p className="form-feedback form-success"><LuCheck aria-hidden="true" />{t("pages.contact.messageForm.success")}</p>}
-            {status === "error" && <p className="form-feedback form-error" role="alert">{t("pages.contact.messageForm.error")} <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>}
+            {status === "error" && <p className="form-feedback form-error" role="alert">{t("pages.contact.messageForm.error")} <a href={composedMailto()}>{t("pages.contact.messageForm.openMailApp")}</a> ({CONTACT_EMAIL})</p>}
             {status === "mailOpened" && <p className="form-feedback">{t("pages.contact.messageForm.mailOpened")}</p>}
         </div>
         <fieldset disabled={status === "sending"} className="contact-fields" aria-describedby="contact-form-description">

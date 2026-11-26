@@ -5,6 +5,7 @@ import { LuEye } from "react-icons/lu";
 import type { BlogPost } from "../../../utils/loadPosts";
 import { getListViewCount } from "../../../utils/viewCounts";
 import { getBodySnippet } from "../../../utils/fuseSearch";
+import { HighlightedText } from "../../../components/aside/contents/search/HighlightedText";
 
 interface BlogCardProps {
     p: BlogPost;
@@ -30,12 +31,14 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
         getListViewCount(p.slug).then(setViewCount).catch(() => {});
     }, [p.slug]);
 
+    // 검색어(2자 이상 단어) — 제목·요약·본문 스니펫 하이라이트와 스니펫 추출에 공통 사용
+    const keywords = useMemo(
+        () => searchQuery.trim().toLowerCase().split(/\s+/).filter(k => k.length >= 2),
+        [searchQuery],
+    );
+
     // 본문 스니펫: 검색어가 제목·요약에 없고 본문에만 있을 때 표시
-    const bodySnippet = useMemo(() => {
-        if (!searchQuery.trim()) return null;
-        const keywords = searchQuery.trim().toLowerCase().split(/\s+/).filter(k => k.length >= 2);
-        return getBodySnippet(p, keywords);
-    }, [p, searchQuery]);
+    const bodySnippet = useMemo(() => (keywords.length ? getBodySnippet(p, keywords) : null), [p, keywords]);
 
     return (
         <li className={`list-none${prefersReducedMotion ? "" : " animate-fade-in-up"}`} style={animStyle}>
@@ -93,18 +96,18 @@ export const BlogCard = ({ p, searchQuery = "", index = 0 }: BlogCardProps) => {
                 {/* 오른쪽 콘텐츠 섹션 — 글 제목·요약은 UI 언어와 무관하게 한국어 (스크린리더 발음용 lang) */}
                 <div lang="ko" className="flex-1 pt-1 sm:pt-0 sm:pl-6 min-w-0">
                     <h3 className="text-[17px] sm:text-xl font-semibold leading-snug text-foreground mb-2 group-hover:text-primary transition-colors">
-                        {p.title}
+                        <HighlightedText text={p.title} keywords={keywords} />
                     </h3>
 
                     {(p.summary || (p.type !== "html" && p.body)) && (
                         <p className="line-clamp-2 text-sm leading-relaxed text-muted">
-                            {p.summary ?? p.body}
+                            <HighlightedText text={p.summary ?? p.body} keywords={keywords} />
                         </p>
                     )}
 
                     {bodySnippet && (
                         <p className="mt-1.5 line-clamp-2 text-[clamp(0.7rem,1vw,0.8rem)] leading-relaxed text-muted italic border-l-2 border-primary/50 pl-2">
-                            {bodySnippet}
+                            <HighlightedText text={bodySnippet} keywords={keywords} />
                         </p>
                     )}
                 </div>

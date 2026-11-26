@@ -5,6 +5,7 @@ import {loadAllPosts, loadPost, type BlogPost} from "../../../utils/loadAllPosts
 import { useTranslation } from "react-i18next";
 import {MarkdownRenderer} from "./MarkdownRender";
 import {parseToc} from "../../../utils/parseToc";
+import {getRelatedPosts} from "../../../utils/relatedPosts";
 import {scrollToHeading} from "../../../utils/scrollToHeading";
 import {isPlainLeftClick} from "../../../utils/isPlainLeftClick";
 import {TableOfContents} from "./TableOfContents";
@@ -54,6 +55,8 @@ export const Detail = () => {
             nextPost: idx > 0 ? ALL_POSTS[idx - 1] : null,
         };
     }, [slug]);
+
+    const relatedPosts = useMemo(() => (metadata ? getRelatedPosts(metadata, ALL_POSTS) : []), [metadata]);
 
     const tocItems = useMemo(() => {
         if (!post) return [];
@@ -302,6 +305,31 @@ export const Detail = () => {
                         <div className="flex xl:gap-10 items-start mx-auto w-full max-w-275">
                             <div className="flex-1 min-w-0 max-w-190">
                                 <MarkdownRenderer content={post.body} />
+                                {/* 태그가 겹치는 관련 글 — 본문을 다 읽은 직후 다음 읽을거리 제시 */}
+                                {relatedPosts.length > 0 && (
+                                    <section aria-labelledby="related-posts-title" className="mt-10">
+                                        <h2 id="related-posts-title" className="mb-3 text-base font-bold text-foreground">
+                                            {uiText("관련 글")}
+                                        </h2>
+                                        <ul className="grid gap-3 sm:grid-cols-3">
+                                            {relatedPosts.map((related) => (
+                                                <li key={related.slug}>
+                                                    <Link
+                                                        to={`/blog/${related.slug}`}
+                                                        className="group flex h-full flex-col gap-1.5 rounded-xl border border-line bg-panel p-4 transition-colors hover:border-primary/50"
+                                                    >
+                                                        <span lang="ko" className="line-clamp-2 text-sm font-semibold text-foreground group-hover:text-primary">
+                                                            {related.title}
+                                                        </span>
+                                                        <time dateTime={related.date} className="mt-auto font-mono text-xs text-muted">
+                                                            {related.date}
+                                                        </time>
+                                                    </Link>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </section>
+                                )}
                                 <Suspense fallback={null}>
                                     <BlogComments slug={post.slug} />
                                 </Suspense>
