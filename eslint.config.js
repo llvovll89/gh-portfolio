@@ -34,4 +34,14 @@ export default defineConfig([
       globals: globals.node,
     },
   },
+  // 검증·마이그레이션 스크립트와 테스트도 기본 규칙(미사용 변수·undef 등)은 확인
+  {
+    files: ['scripts/**/*.mjs', 'tests/**/*.mjs'],
+    extends: [js.configs.recommended],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: globals.node,
+    },
+  },
 ])

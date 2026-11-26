@@ -1,4 +1,4 @@
-import { SETTINGS_STORAGE_KEY, SETTINGS_BADGE_STORAGE_KEY, SETTINGS_UPDATED_EVENT } from "@/constants/settings";
+import { updateGeneralSettings } from "@/utils/generalSettings";
 import { Portal } from "../Portal";
 import { useModalBackground } from "../../hooks/useModalBackground";
 import { uiText } from "../../utils/uiText";
@@ -80,19 +80,7 @@ export const CommandPalette = () => {
 
     const setLanguage = (next: "ko" | "en" | "ja") => {
         void i18n.changeLanguage(next);
-        try {
-            const existing = JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY) ?? "{}") as Record<string, unknown>;
-            localStorage.setItem(
-                SETTINGS_STORAGE_KEY,
-                JSON.stringify({ ...existing, language: next }),
-            );
-            localStorage.setItem(SETTINGS_BADGE_STORAGE_KEY, "1");
-            window.dispatchEvent(
-                new CustomEvent(SETTINGS_UPDATED_EVENT, { detail: { dirty: true } }),
-            );
-        } catch {
-            // ignore storage errors
-        }
+        updateGeneralSettings({ language: next });
     };
 
     // 사용 가능한 명령 목록

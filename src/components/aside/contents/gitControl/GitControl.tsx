@@ -141,7 +141,8 @@ export const GitControl = () => {
                                                                 const authorName =
                                                                     commit?.commit?.author?.name ?? commit?.author?.login ?? "unknown";
                                                                 const dateStr = commit?.commit?.author?.date
-                                                                    ? new Date(commit.commit.author.date).toISOString().split("T")[0]
+                                                                    // toISOString 은 UTC 라 KST 오전 9시 이전 커밋이 전날로 보이므로 이슈·PR 과 같이 로컬 날짜로 표시
+                                                                    ? new Date(commit.commit.author.date).toLocaleDateString()
                                                                     : "";
                                                                 const profileUrl = commit?.committer?.html_url ?? commit?.author?.html_url ?? undefined;
                                                                 const avatarUrl = commit?.committer?.avatar_url ?? commit?.author?.avatar_url ?? undefined;

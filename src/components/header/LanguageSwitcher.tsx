@@ -1,4 +1,4 @@
-import { SETTINGS_STORAGE_KEY, SETTINGS_BADGE_STORAGE_KEY, SETTINGS_UPDATED_EVENT } from "@/constants/settings";
+import { updateGeneralSettings } from "@/utils/generalSettings";
 import {useTranslation} from "react-i18next";
 
 const LANG_CYCLE: Record<string, string> = {ko: "en", en: "ja", ja: "ko"};
@@ -15,19 +15,7 @@ export const LanguageSwitcher = () => {
     const toggle = () => {
         const next = LANG_CYCLE[current] ?? "en";
         void i18n.changeLanguage(next);
-        try {
-        const existing = JSON.parse(
-            localStorage.getItem(SETTINGS_STORAGE_KEY) ?? "{}",
-        ) as Record<string, unknown>;
-        localStorage.setItem(
-            SETTINGS_STORAGE_KEY,
-            JSON.stringify({...existing, language: next}),
-        );
-        localStorage.setItem(SETTINGS_BADGE_STORAGE_KEY, "1");
-        window.dispatchEvent(
-            new CustomEvent(SETTINGS_UPDATED_EVENT, {detail: {dirty: true}}),
-        );
-        } catch { /* language switching still works when storage is unavailable */ }
+        updateGeneralSettings({language: next});
     };
 
     const nextLabel = LANG_LABEL[LANG_CYCLE[current] ?? "en"];

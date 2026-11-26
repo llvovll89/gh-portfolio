@@ -1,8 +1,7 @@
-import { SETTINGS_STORAGE_KEY, SETTINGS_BADGE_STORAGE_KEY, SETTINGS_UPDATED_EVENT } from "@/constants/settings";
 import { uiText } from "../../../../utils/uiText";
 import { useState } from "react";
 import { useThemeStyle } from "../../../../hooks/useThemeStyle";
-import { useLocalStorage } from "../../../../hooks/useLocalStorage";
+import { updateGeneralSettings, useGeneralSettings } from "../../../../utils/generalSettings";
 import { VscSettingsGear, VscKey, VscRefresh } from "react-icons/vsc";
 import { useTranslation } from "react-i18next";
 import { useKeyboardShortcuts } from "../../../../hooks/useKeyboardShortcuts";
@@ -13,11 +12,6 @@ import {
     SHORTCUT_DESCRIPTIONS_EN,
     SHORTCUT_DESCRIPTIONS_JA,
 } from "../../../../constants/keyboardConstants";
-
-interface GeneralSettings {
-    language: string;
-    animationSpeed: string;
-}
 
 
 const SHORTCUT_IDS = [
@@ -43,26 +37,16 @@ export const Settings = () => {
     const [activeTab, setActiveTab] = useState<"shortcuts" | "general">(
         "shortcuts",
     );
-    const [generalSettings, setGeneralSettings] = useLocalStorage<GeneralSettings>(
-        SETTINGS_STORAGE_KEY,
-        { language: "ko", animationSpeed: "normal" },
-    );
-
-    const saveSettings = (settings: GeneralSettings) => {
-        setGeneralSettings(settings);
-        localStorage.setItem(SETTINGS_BADGE_STORAGE_KEY, "1");
-        window.dispatchEvent(
-            new CustomEvent(SETTINGS_UPDATED_EVENT, { detail: { dirty: true } }),
-        );
-    };
+    // 헤더 언어 버튼·커맨드 팔레트에서 바꾼 값도 즉시 반영되도록 저장소를 구독 (자체 state 사본으로 덮어쓰지 않음)
+    const generalSettings = useGeneralSettings();
 
     const handleChangeLanguage = (lang: string) => {
-        saveSettings({ ...generalSettings, language: lang });
+        updateGeneralSettings({ language: lang });
         void i18n.changeLanguage(lang);
     };
 
     const handleChangeAnimationSpeed = (speed: string) => {
-        saveSettings({ ...generalSettings, animationSpeed: speed });
+        updateGeneralSettings({ animationSpeed: speed });
     };
 
     const getShortcutDescription = (id: KeyboardShortcutId): string => {

@@ -69,7 +69,9 @@ await browser.close();
 
 let failed = false;
 for (const r of results) {
-    const ok = r.errors.length === 0 && r.prerenderLeft === 0;
+    // serious/critical 접근성 위반은 회귀로 간주해 실패 처리 (minor/moderate 는 출력만)
+    const blocking = r.violations.filter(v => v.impact === "serious" || v.impact === "critical");
+    const ok = r.errors.length === 0 && r.prerenderLeft === 0 && blocking.length === 0;
     if (!ok) failed = true;
     console.log(`${ok ? "✓" : "✗"} [${r.theme}] ${decodeURIComponent(r.path)} — ${r.title}`);
     for (const e of r.errors) console.log("    console: " + e.slice(0, 200));

@@ -1,6 +1,6 @@
 import { uiText } from "../../utils/uiText";
-import { useCallback, useEffect, useState } from "react";
-import { GITHUB_OWNER } from "../../http/api";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { GITHUB_OWNER, githubFetch } from "../../http/api";
 
 type GitHubEvent = {
     id: string;
@@ -33,23 +33,23 @@ const RecentActivityList = ({ username }: { username: string }) => {
     const [error, setError] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
 
+    // 요청이 겹칠 때 늦게 도착한 이전 응답이 최신 결과를 덮지 않도록 요청 순번으로 구분
+    const requestIdRef = useRef(0);
+
     const fetchEvents = useCallback(async () => {
+        const requestId = ++requestIdRef.current;
         setLoading(true);
         setError(false);
         try {
             const owner = username || GITHUB_OWNER;
-            const qs = new URLSearchParams({
-                path: `/users/${owner}/events`,
-                per_page: "30",
-            });
-            const res = await fetch(`/api/github?${qs}`);
-            if (!res.ok) throw new Error(`events fetch failed: ${res.status}`);
-            setEvents((await res.json()) as GitHubEvent[]);
+            const data = await githubFetch(`/users/${owner}/events`, { per_page: "30" });
+            if (requestId === requestIdRef.current) setEvents(data as GitHubEvent[]);
         } catch {
+            if (requestId !== requestIdRef.current) return;
             setError(true);
             setEvents([]);
         } finally {
-            setLoading(false);
+            if (requestId === requestIdRef.current) setLoading(false);
         }
     }, [username]);
 
@@ -57,6 +57,9 @@ const RecentActivityList = ({ username }: { username: string }) => {
         // username이 바뀔 때 외부 API와 동기화하는 데이터 fetch이며, 로딩 상태 전환은 fetch 함수 내부에서 처리되므로 effect가 적절함
         // eslint-disable-next-line react-hooks/set-state-in-effect
         void fetchEvents();
+        // 언마운트·재요청 후 도착한 응답은 무시 (요청 순번 카운터라 cleanup 시점의 최신값을 올리는 것이 의도)
+        const counter = requestIdRef;
+        return () => { counter.current++; };
     }, [fetchEvents]);
 
     if (loading) return <ActivitySkeleton />;

@@ -435,6 +435,8 @@
         "description": "I'm Geonho Kim, a full-stack web developer building fast, consistent experiences with React and TypeScript, then keeping them reliable in production."
     },
     "ui": {
+        "18249w": "Please enter a comment.",
+        "17zbnys": "Please enter a comment and password.",
         "17u4648": "Password must be at least 4 characters.",
         "13da27c": "Bottom panel tabs",
         "1f3ypnj": "Console command input",

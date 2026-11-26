@@ -42,8 +42,15 @@ export function plainSummary(raw: string, maxLength = 160): string {
         .replace(/\s+/g, " ").trim().slice(0, maxLength);
 }
 
+/** 파일 경로 → URL slug (마크다운: 파일명, HTML: 'html-' + 날짜 접두사를 뺀 파일명) — 파서와 본문 로더가 같은 규칙을 쓰도록 단일화 */
+export function postSlugFromPath(path: string): string {
+    const filename = path.split(/[\\/]/).pop() ?? path;
+    if (/\.html$/i.test(filename)) return "html-" + filename.replace(/\.html$/i, "").replace(/^\d{4}-\d{2}-\d{2}-/, "");
+    return filename.replace(/\.md$/i, "");
+}
+
 export function parseMarkdownPost(path: string, raw: string): BlogPost {
-    const slug = (path.split(/[\\/]/).pop() ?? path).replace(/\.md$/i, "");
+    const slug = postSlugFromPath(path);
     const { frontmatter, body } = parseFrontmatter(raw);
     return {
         slug,
@@ -51,9 +58,11 @@ export function parseMarkdownPost(path: string, raw: string): BlogPost {
         date: String(frontmatter.date ?? ""),
         updated: frontmatter.updated ? String(frontmatter.updated) : undefined,
         summary: frontmatter.summary ? String(frontmatter.summary) : plainSummary(body),
-        tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : undefined,
+        // `tags: a, b` 처럼 대괄호 없이 쓴 경우도 목록으로 해석
+        tags: Array.isArray(frontmatter.tags) ? frontmatter.tags
+            : frontmatter.tags ? frontmatter.tags.split(",").map(tag => tag.trim()).filter(Boolean) : undefined,
         category: frontmatter.category ? String(frontmatter.category) : undefined,
-        featured: frontmatter.featured === "true" || undefined,
+        featured: String(frontmatter.featured).toLowerCase() === "true" || undefined,
         body,
         readingTime: calculateReadingTime(body),
         type: "md",
@@ -63,7 +72,7 @@ export function parseMarkdownPost(path: string, raw: string): BlogPost {
 export function parseHtmlPost(path: string, raw: string): BlogPost {
     const filename = (path.split(/[\\/]/).pop() ?? path).replace(/\.html$/i, "");
     const dateMatch = filename.match(/^(\d{4}-\d{2}-\d{2})-(.+)$/);
-    const slug = "html-" + (dateMatch?.[2] ?? filename);
+    const slug = postSlugFromPath(path);
     const meta = (name: string) => {
         const tags = raw.match(/<meta\b[^>]*>/gi) ?? [];
         for (const tag of tags) {
@@ -83,4 +92,17 @@ export function parseHtmlPost(path: string, raw: string): BlogPost {
         readingTime: "",
         type: "html",
     };
+}
+
+export const POST_CATEGORIES = ["Frontend", "Backend", "AI", "CS", "DevOps", "Notes"] as const;
+
+/** 빌드를 막아야 하는 메타데이터 오류 목록 (빈 배열이면 정상) — 제목 누락·잘못된 날짜·허용 외 category */
+export function validatePost(post: BlogPost, raw: string): string[] {
+    const errors: string[] = [];
+    if (post.type === "md" && !parseFrontmatter(raw).frontmatter.title) errors.push("frontmatter title 누락");
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(post.date) || Number.isNaN(Date.parse(post.date))) errors.push(`date 형식 오류: "${post.date}" (YYYY-MM-DD)`);
+    if (post.type === "md" && !POST_CATEGORIES.includes(post.category as (typeof POST_CATEGORIES)[number])) {
+        errors.push(`category 오류: "${post.category ?? ""}" (${POST_CATEGORIES.join(" | ")})`);
+    }
+    return errors;
 }

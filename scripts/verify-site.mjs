@@ -7,7 +7,12 @@ const root = "https://kimgeonho.vercel.app";
 const xml = fs.readFileSync("dist/sitemap.xml", "utf8");
 const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1].replace(/&amp;/g, "&"));
 assert.equal(new Set(urls).size, urls.length, "duplicate sitemap URLs");
-assert.ok(urls.length > 75, "missing published pages");
+// 고정 숫자 대신 실제 콘텐츠 파일 수와 비교 — 글이 늘거나 줄어도 누락만 정확히 잡음
+const postFiles = fs.readdirSync("src/content/posts").filter(file => file.endsWith(".md")).length
+    + fs.readdirSync("src/content/organizingfiles").filter(file => file.endsWith(".html")).length;
+const blogUrls = urls.filter(url => new URL(url).pathname.startsWith("/blog/"));
+assert.equal(blogUrls.length, postFiles, "sitemap blog URLs must match content files");
+assert.ok(urls.length > postFiles, "missing static/project pages");
 for (const url of urls) {
     const pathname = decodeURIComponent(new URL(url).pathname);
     const file = path.join("dist", pathname, "index.html");
