@@ -40,12 +40,12 @@ export const projects = [
             repositoryUrl: "https://github.com/llvovll89/Variety_Gaming_Platform",
             projectUrl: "https://variety-gaming-platform.vercel.app/",
         },
-        description: "전략, 액션, 캐주얼 게임을 한곳에서 탐색하고 바로 플레이하는 웹 게임 플랫폼입니다.",
-        detailedDescription: "삼국 영지, 삼국지 패업 PK, 메아리 미로, 슬리더 등 다양한 게임을 브라우저에서 즐길 수 있는 웹 게임 플랫폼입니다. 게임 이름과 태그 검색, 장르별 필터로 원하는 게임을 찾고 바로 실행할 수 있습니다. React와 TypeScript로 플랫폼을 구성하고 Three.js를 활용한 3D 게임을 제공합니다.",
+        description: "덱빌딩·3D 격투·퍼즐·전술 RPG부터 아이용 게임까지, 브라우저에서 바로 플레이하는 웹 게임 플랫폼입니다.",
+        detailedDescription: "별빛 야간열차(덱빌딩 로그라이크), 밥상 대격돌(3D 격투), 유령 이삿짐센터(3D 퍼즐), 삼국지 패업 PK(육각 턴제 전략) 등 다양한 장르의 게임을 브라우저에서 바로 즐길 수 있는 웹 게임 플랫폼입니다. 쉬는 시간에 맞춰 게임을 골라 주는 '지금 한 판', 매일 바뀌는 '오늘의 도전', 기록·업적을 제공하며, 모든 게임이 공통 키트(스토어·대화상자·플레이 기록 훅)를 공유하도록 설계했습니다.",
         skills: ["React", "TypeScript", "Vite", "Tailwind CSS", "Three.js", "Zod", "Vercel"],
         projectMembers: ["김건호"],
         role: "플랫폼 기획, UI 설계, 게임 개발, 배포",
-        contributions: ["게임 검색과 장르별 탐색 화면 구성", "전략·액션·캐주얼 게임 구현", "Three.js를 활용한 3D 게임 개발"],
+        contributions: ["시간대별 추천·오늘의 도전·기록과 업적 등 플랫폼 메타 시스템 설계", "덱빌딩·3D 격투·퍼즐·전술 RPG 등 장르별 게임 구현 (Three.js)", "게임 공통 키트(스토어·대화상자·플레이 기록 훅)와 ESLint·CI 도입"],
     },
     {
         id: 1,
@@ -83,17 +83,15 @@ export const projects = [
             repositoryUrl: "https://github.com/llvovll89/Run-River",
             projectUrl: "https://run-river.vercel.app/",
         },
-        description:
-            "카카오 지도 기반으로 러닝 경로를 설정하고 거리·시간·인터벌을 기록할 수 있는 러닝 앱입니다.",
-        detailedDescription:
-            "카카오 지도와 OSRM 라우팅을 활용하여 러닝·워킹 경로를 설정하고, 거리·시간·인터벌 모드로 운동을 기록하는 웹 애플리케이션입니다. 페이스 구간별 MET 기반 칼로리 계산, 결과 공유 카드, 음성 안내 기능을 제공하며, 주간 챌린지로 꾸준한 운동 습관을 지원합니다. PWA를 지원하여 모바일에서도 앱처럼 사용할 수 있습니다.",
-        skills: ["Next.js", "TypeScript", "Tailwind CSS", "Supabase", "Kakao Maps API", "OSRM", "PWA", "Vercel"],
+        description: "GPS로 러닝·하이킹을 기록하고, 인터넷이 끊겨도 오프라인 지도로 이어서 쓸 수 있는 모바일 운동 앱입니다.",
+        detailedDescription: "목표 거리·시간을 정하고 GPS로 경로와 페이스를 기록하는 러닝·하이킹 앱입니다. MapLibre GL 기반 공통 지도(OpenFreeMap)와 PMTiles 오프라인 지도 저장으로 신호가 약한 산길에서도 기록을 이어 가며, KMZ 코스 불러오기와 GPX 내보내기를 지원합니다. Next.js PWA와 Capacitor로 iOS·Android 네이티브 앱(백그라운드 GPS, 기기 저장·복구)까지 하나의 코드로 제공합니다.",
+        skills: ["Next.js", "TypeScript", "Tailwind CSS", "Supabase", "MapLibre GL", "PMTiles", "Capacitor", "PWA", "Vercel"],
         projectMembers: ["김건호"],
         featured: true,
         role: "제품 기획, 풀스택 개발, PWA",
-        challenge: "지도 위 경로 설정과 운동 기록을 모바일 환경에서도 끊김 없이 연결해야 했습니다.",
-        contributions: ["Kakao Maps와 OSRM 경로 계산 연동", "페이스와 MET 기반 기록 기능 구현", "음성 안내와 공유 카드, PWA 지원"],
-        outcome: "경로 계획, 기록, 결과 공유를 하나의 모바일 중심 러닝 경험으로 통합했습니다.",
+        challenge: "신호가 약하거나 끊긴 환경에서도 GPS 기록과 지도가 멈추지 않아야 했습니다.",
+        contributions: ["MapLibre 공통 지도와 PMTiles 오프라인 지도 저장", "GPS 기록·기기 저장과 복구, KMZ/GPX 코스 연동", "Capacitor iOS·Android 앱과 PWA 오프라인 대응"],
+        outcome: "러닝부터 오프라인 하이킹까지 웹·iOS·Android에서 하나의 코드로 기록하는 경험을 완성했습니다.",
     },
     {
         id: 3,
@@ -168,7 +166,6 @@ export const projects = [
     {
         id: 6,
         slug: "balance-plan",
-        archived: true,
         title: "잔고플랜",
         scale: "개인 프로젝트",
         image: "/assets/images/projects/잔고플랜.png",
@@ -176,11 +173,9 @@ export const projects = [
             repositoryUrl: "https://github.com/llvovll89/household_account_book",
             projectUrl: "https://balance-plan.vercel.app/",
         },
-        description:
-            "수입과 지출을 기록하고 월별 흐름을 확인할 수 있는 가계부 웹 애플리케이션입니다.",
-        detailedDescription:
-            "가계부 작성에 필요한 수입/지출 기록, 카테고리 관리, 월별 지출 흐름 확인 기능을 제공하는 프로젝트입니다. 일상적인 소비 패턴을 직관적으로 파악할 수 있도록 구성하여, 예산 관리와 지출 습관 개선에 도움을 줍니다.",
-        skills: ["React", "TypeScript", "Vite", "Tailwind CSS", "Firebase", "Vercel", "PWA"],
+        description: "수입·지출·예산에 계좌 잔고와 대출·구독까지 한곳에서 관리하는 개인 재무 PWA입니다.",
+        detailedDescription: "수입/지출 기록, 카테고리별 예산, 정기 내역 자동 반영, 월별·연간 분석을 제공하는 개인 재무 관리 PWA입니다. 기준일 잔액으로 실제 계좌 잔고를 추적하고, 대출 상환에 따른 남은 원금·완납 예정월과 순자산 추이, 구독(연간·달러 요금 포함), 계좌 간 이체·카드 대금 기록, 납부·예산 알림 센터를 지원합니다. 비로그인 시 기기에 저장하고, 로그인하면 Firebase로 동기화합니다.",
+        skills: ["React", "TypeScript", "Vite", "Tailwind CSS", "Firebase", "Recharts", "PWA", "Vercel"],
         projectMembers: ["김건호"],
     },
 ] as Project[];

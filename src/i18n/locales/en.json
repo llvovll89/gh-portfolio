@@ -314,13 +314,13 @@
     "projectContent": {
         "gh-arcade": {
             "scale": "Personal project",
-            "description": "A browser game platform for discovering and instantly playing strategy, action, and casual games.",
-            "detailedDescription": "A web game platform featuring Three Kingdoms strategy games, Echo Maze, Slither, and more. Players can search by name and tags, filter by genre, and launch games directly. The platform uses React and TypeScript, with Three.js for 3D games.",
+            "description": "A web game platform where you can instantly play everything from deck-builders, 3D brawlers, puzzles, and tactics RPGs to games for kids, right in the browser.",
+            "detailedDescription": "A web game platform with games across many genres, including Starlight Night Train (deck-building roguelike), Kitchen Clash (3D fighting), Ghost Movers (3D puzzle), and a hex-based turn strategy game inspired by Romance of the Three Kingdoms. It offers \"Play now\" picks matched to how much time you have, a daily challenge, records, and achievements, and every game shares a common kit (stores, dialogs, and play-report hooks).",
             "role": "Product planning, UI design, game development, and deployment",
             "contributions": [
-                "Built game search and genre navigation",
-                "Developed strategy, action, and casual games",
-                "Created 3D games with Three.js"
+                "Designed the platform meta systems: time-based picks, daily challenges, records, and achievements",
+                "Built games across genres, including deck-building, 3D fighting, puzzles, and tactics RPG (Three.js)",
+                "Introduced a shared game kit (stores, dialogs, play-report hooks) plus ESLint and CI"
             ],
             "projectMembers": [
                 "Geonho Kim"
@@ -344,16 +344,16 @@
         },
         "run-river": {
             "scale": "Personal project",
-            "description": "A running app for planning routes on Kakao Maps and tracking workouts by distance, time, or intervals.",
-            "detailedDescription": "Plan running and walking routes with Kakao Maps and OSRM, then record workouts in distance, time, or interval modes. Features include pace-based MET calorie estimates, shareable workout cards, voice guidance, and weekly challenges. PWA support provides an app-like mobile experience.",
+            "description": "A mobile workout app that records runs and hikes with GPS and keeps working on offline maps when the connection drops.",
+            "detailedDescription": "A running and hiking app that records your route and pace with GPS toward a distance or time goal. A shared MapLibre GL map (OpenFreeMap) and PMTiles offline map downloads keep recording on mountain trails with weak signal, and it supports importing KMZ courses and exporting GPX. One codebase ships a Next.js PWA plus native iOS and Android apps via Capacitor (background GPS, on-device save and restore).",
             "role": "Product planning, full-stack development, and PWA implementation",
-            "challenge": "Connect map-based route planning with workout tracking in a smooth mobile experience.",
+            "challenge": "GPS recording and the map had to keep working even with weak or no signal.",
             "contributions": [
-                "Integrated Kakao Maps with OSRM route calculation",
-                "Implemented pace and MET-based workout records",
-                "Added voice guidance, share cards, and PWA support"
+                "Shared MapLibre map and PMTiles offline map downloads",
+                "GPS recording with on-device save and restore, plus KMZ/GPX course support",
+                "Capacitor iOS and Android apps and offline-ready PWA"
             ],
-            "outcome": "Combined route planning, workout tracking, and sharing into a mobile-focused running experience.",
+            "outcome": "Delivered one codebase that records everything from runs to offline hikes on the web, iOS, and Android.",
             "projectMembers": [
                 "Geonho Kim"
             ]
@@ -404,8 +404,8 @@
         "balance-plan": {
             "title": "Balance Plan",
             "scale": "Personal project",
-            "description": "A personal finance app for recording income and expenses and reviewing monthly trends.",
-            "detailedDescription": "Record income and expenses, manage categories, and review monthly spending. The interface helps users understand spending patterns, manage budgets, and improve everyday financial habits.",
+            "description": "A personal finance PWA that manages income, spending, and budgets alongside account balances, loans, and subscriptions in one place.",
+            "detailedDescription": "A personal finance PWA with income and expense tracking, category budgets, automatic recurring items, and monthly and yearly analytics. It tracks real account balances from an as-of opening balance, projects remaining loan principal and payoff month from repayments, charts net worth, and supports subscriptions (including yearly and USD plans), transfers between accounts and card payments, and a notification center for due payments and budgets. Data stays on the device when signed out and syncs to Firebase when signed in.",
             "projectMembers": [
                 "Geonho Kim"
             ]
