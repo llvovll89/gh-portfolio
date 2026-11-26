@@ -15,12 +15,14 @@ import { Aside } from "../../components/aside/Aside";
 import { Contents } from "../../components/contents/Contents";
 import { Header } from "../../components/header/Header";
 import { useSeoMeta } from "../../hooks/useSeoMeta";
+import { RESUME_FILES, resumeLangFor, type ResumeLang } from "../../constants/resumeFiles";
 import { logger } from "../../utils/logger";
 
-const RESUME_URL = "/assets/resume/김건호_이력서.pdf";
 
 export const Resume = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const resumeLang = resumeLangFor(i18n.resolvedLanguage);
+    const otherLang = resumeLang === "ko" ? "en" : "ko";
     const [downloadState, setDownloadState] = useState<"idle" | "loading" | "error">("idle");
 
     useSeoMeta({
@@ -64,7 +66,8 @@ export const Resume = () => {
         },
     ];
 
-    const handleDownloadResume = async () => {
+    const handleDownloadResume = async (lang: ResumeLang = resumeLang) => {
+        const { url, fileName } = RESUME_FILES[lang];
         if (downloadState === "loading") return;
         setDownloadState("loading");
 
@@ -72,13 +75,13 @@ export const Resume = () => {
         let link: HTMLAnchorElement | null = null;
 
         try {
-            const response = await fetch(RESUME_URL);
+            const response = await fetch(url);
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
             objectUrl = URL.createObjectURL(await response.blob());
             link = document.createElement("a");
             link.href = objectUrl;
-            link.download = "김건호_이력서.pdf";
+            link.download = fileName;
             document.body.appendChild(link);
             link.click();
             setDownloadState("idle");
@@ -101,17 +104,29 @@ export const Resume = () => {
                         title={t("pages.resume.title")}
                         description={t("pages.resume.description")}
                         actions={
-                            <button
-                                type="button"
-                                onClick={() => { void handleDownloadResume(); }}
-                                disabled={downloadState === "loading"}
-                                className="workbench-button workbench-button-primary"
-                            >
-                                <LuDownload aria-hidden="true" />
-                                {downloadState === "loading"
-                                    ? t("pages.resume.downloading")
-                                    : t("pages.resume.download")}
-                            </button>
+                            <div className="flex flex-wrap items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => { void handleDownloadResume(); }}
+                                    disabled={downloadState === "loading"}
+                                    className="workbench-button workbench-button-primary"
+                                >
+                                    <LuDownload aria-hidden="true" />
+                                    {downloadState === "loading"
+                                        ? t("pages.resume.downloading")
+                                        : t("pages.resume.download")}
+                                </button>
+                                {/* 다른 언어본 — 한국어 UI 에서는 영문, en/ja UI 에서는 한국어 */}
+                                <button
+                                    type="button"
+                                    onClick={() => { void handleDownloadResume(otherLang); }}
+                                    disabled={downloadState === "loading"}
+                                    className="workbench-button"
+                                >
+                                    <LuDownload aria-hidden="true" />
+                                    {t(`pages.resume.download_${otherLang}`)}
+                                </button>
+                            </div>
                         }
                     />
                     <p className={`-mt-6 mb-2 min-h-5 text-sm ${downloadState === "error" ? "text-error" : "text-transparent"}`} role="status" aria-live="polite">

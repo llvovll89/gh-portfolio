@@ -263,7 +263,9 @@
             "highSchool": "High school",
             "highSchoolValue": "Cheonggu High School (Feb 2013)",
             "university": "University",
-            "universityValue": "Daegu University (Feb 2020)"
+            "universityValue": "Daegu University (Feb 2020)",
+            "download_en": "English version",
+            "download_ko": "Korean version"
         },
         "uses": {
             "title": "Uses",

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Geonho Kim - Resume</title>
+<style>
+  @page { size: A4; margin: 13mm 15mm 11mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif; color: #1f2430; font-size: 9.6pt; line-height: 1.42; }
+  a { color: #1a5fb4; text-decoration: none; }
+  header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #1f2430; padding-bottom: 10px; }
+  h1 { font-size: 22pt; letter-spacing: -0.5px; line-height: 1.1; }
+  .role { font-size: 11pt; color: #3b4252; margin-top: 4px; }
+  .contact { text-align: right; font-size: 9pt; line-height: 1.6; color: #3b4252; }
+  section { margin-top: 11px; }
+  h2 { font-size: 10.5pt; text-transform: uppercase; letter-spacing: 1.2px; color: #1a5fb4; border-bottom: 1px solid #d5d9e0; padding-bottom: 3px; margin-bottom: 7px; }
+  .summary { color: #2e3440; }
+  .entry { margin-bottom: 6px; break-inside: avoid; }
+  .entry-head { display: flex; justify-content: space-between; gap: 12px; }
+  .entry-title { font-weight: 600; }
+  .entry-sub { color: #4c566a; }
+  .date { color: #4c566a; white-space: nowrap; font-size: 9pt; }
+  ul { margin: 3px 0 0 16px; }
+  li { margin: 1px 0; }
+  .skills { display: grid; grid-template-columns: 92px 1fr; row-gap: 3px; }
+  .skills dt { font-weight: 600; }
+  .stack { color: #4c566a; font-size: 9pt; }
+</style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Geonho Kim</h1>
+      <p class="role">Full-stack Web Developer &middot; React / TypeScript / Spring Boot</p>
+    </div>
+    <div class="contact">
+      <div><a href="mailto:svvvs5579@naver.com">svvvs5579@naver.com</a></div>
+      <div><a href="https://kimgeonho.vercel.app/">kimgeonho.vercel.app</a></div>
+      <div><a href="https://github.com/llvovll89">github.com/llvovll89</a></div>
+      <div>Daegu, South Korea</div>
+    </div>
+  </header>
+
+  <section>
+    <h2>Summary</h2>
+    <p class="summary">
+      Full-stack web developer who designs user flows with React and TypeScript and backs them with Spring Boot and PostgreSQL.
+      Spent about two and a half years building and maintaining web applications as a frontend developer, and now works as a
+      full-stack developer who also owns the backend. Cares about running features end to end &mdash; UI, APIs, data model, and
+      deployment as one flow &mdash; and about the details repeat users feel, such as navigation, shortcuts, and keyboard accessibility.
+    </p>
+  </section>
+
+  <section>
+    <h2>Experience</h2>
+    <div class="entry">
+      <div class="entry-head">
+        <div><span class="entry-title">Nano IT</span> <span class="entry-sub">&mdash; Full-stack Developer</span></div>
+        <div class="date">Feb 2026 &ndash; Present</div>
+      </div>
+      <ul>
+        <li>Full-stack web application development across the frontend and backend.</li>
+      </ul>
+    </div>
+    <div class="entry">
+      <div class="entry-head">
+        <div><span class="entry-title">IGIS</span> <span class="entry-sub">&mdash; Frontend Developer, Web Development Team</span></div>
+        <div class="date">Jul 2023 &ndash; Feb 2026</div>
+      </div>
+      <ul>
+        <li>Developed and maintained web applications for public-sector projects.</li>
+        <li>Built and maintained features for the DFOS-STATION platform.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Selected Projects</h2>
+    <div class="entry">
+      <div class="entry-head"><div><span class="entry-title">Run River</span> <span class="entry-sub">&mdash; Running &amp; hiking app (web, iOS, Android)</span></div><div class="date"><a href="https://run-river.vercel.app/">run-river.vercel.app</a></div></div>
+      <p>Records runs and hikes with GPS and keeps working on offline maps when the connection drops. Shared MapLibre GL map with PMTiles offline downloads, KMZ/GPX course support, and native iOS/Android apps from one codebase via Capacitor.</p>
+      <p class="stack">Next.js &middot; TypeScript &middot; Tailwind CSS &middot; Supabase &middot; MapLibre GL &middot; PMTiles &middot; Capacitor &middot; PWA</p>
+    </div>
+    <div class="entry">
+      <div class="entry-head"><div><span class="entry-title">kimgeonho.dev</span> <span class="entry-sub">&mdash; Interactive developer portfolio</span></div><div class="date"><a href="https://kimgeonho.vercel.app/">kimgeonho.vercel.app</a></div></div>
+      <p>VS Code&ndash;inspired portfolio with tabs, a command palette, customizable shortcuts, a terminal, a 60+ post technical blog, and a UI in Korean, English, and Japanese. Prerendered SEO pages, PWA, CSP, Sentry error monitoring, and Core Web Vitals tracking.</p>
+      <p class="stack">React &middot; TypeScript &middot; Vite &middot; Tailwind CSS &middot; React Router &middot; Firebase &middot; Vercel Functions</p>
+    </div>
+    <div class="entry">
+      <div class="entry-head"><div><span class="entry-title">Hovie</span> <span class="entry-sub">&mdash; Movie &amp; TV discovery site</span></div><div class="date"><a href="https://hovie.vercel.app/">hovie.vercel.app</a></div></div>
+      <p>Movie and TV discovery website powered by the TMDB API, from browsing to trailers in one responsive flow, with sign-in, watchlists, and reviews.</p>
+      <p class="stack">React &middot; Tailwind CSS &middot; TMDB API &middot; Firebase &middot; Vercel</p>
+    </div>
+    <div class="entry">
+      <div class="entry-head"><div><span class="entry-title">GH ARCADE</span> <span class="entry-sub">&mdash; Web game platform</span></div><div class="date"><a href="https://variety-gaming-platform.vercel.app/">variety-gaming-platform.vercel.app</a></div></div>
+      <p>Browser game platform with deck-builders, 3D brawlers, puzzles, tactics RPGs, and games for kids, plus daily challenges, records, and achievements built on a shared game kit.</p>
+      <p class="stack">React &middot; TypeScript &middot; Vite &middot; Tailwind CSS &middot; Three.js &middot; Zod</p>
+    </div>
+    <div class="entry">
+      <div class="entry-head"><div><span class="entry-title">Balance Plan</span> <span class="entry-sub">&mdash; Personal finance PWA</span></div><div class="date"><a href="https://balance-plan.vercel.app/">balance-plan.vercel.app</a></div></div>
+      <p>Manages income, spending, and budgets alongside account balances, loans, and subscriptions, with local-first storage and Firebase sync.</p>
+      <p class="stack">React &middot; TypeScript &middot; Vite &middot; Tailwind CSS &middot; Firebase &middot; Recharts &middot; PWA</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Skills</h2>
+    <dl class="skills">
+      <dt>Frontend</dt><dd>React, TypeScript, JavaScript, Tailwind CSS, Redux, Next.js, Vite</dd>
+      <dt>Backend</dt><dd>Java, Spring Boot, PostgreSQL, Oracle, Firebase, Supabase</dd>
+      <dt>Tools</dt><dd>Git, GitHub Actions, Vercel, Sentry, Figma, Jira, Slack</dd>
+    </dl>
+  </section>
+
+  <section>
+    <h2>Education &amp; Military Service</h2>
+    <div class="entry">
+      <div class="entry-head"><div><span class="entry-title">Daegu University</span> <span class="entry-sub">&mdash; B.S. in Computer Software</span></div><div class="date">Mar 2013 &ndash; Feb 2020</div></div>
+    </div>
+    <div class="entry">
+      <div class="entry-head"><div><span class="entry-title">Republic of Korea Army</span> <span class="entry-sub">&mdash; Sergeant, honorably discharged</span></div><div class="date">Oct 2014 &ndash; Jul 2016</div></div>
+    </div>
+  </section>
+</body>
+</html>

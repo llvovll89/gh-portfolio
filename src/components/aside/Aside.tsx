@@ -172,7 +172,7 @@ export const Aside = () => {
                             aria-hidden={!selectedNav} inert={!selectedNav}
                             onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); setSelectedNav(null); } }}
                             className={[
-                                "fixed bottom-18 left-0 right-0 z-50 flex flex-col",
+                                "fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom))] left-0 right-0 z-50 flex flex-col",
                                 "sidebar-sheet transition-[transform,opacity] duration-250 ease-out",
                                 selectedNav ? "translate-y-0 opacity-100" : "translate-y-full opacity-0 pointer-events-none",
                                 backgroundClass,
@@ -230,7 +230,8 @@ export const Aside = () => {
                     id="main-navigation"
                     tabIndex={-1}
                     className={[
-                        "fixed bottom-4 left-0 right-0 z-50 mx-auto grid h-14 w-[95%] grid-cols-6 items-center rounded-2xl",
+                        // 홈 인디케이터(iOS) 위로 띄움
+                        "fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] left-0 right-0 z-50 mx-auto grid h-14 w-[95%] grid-cols-6 items-center rounded-2xl",
                         "border-t border-sub-gary/30",
                         backgroundClass,
                     ].join(" ")}

@@ -5,7 +5,7 @@ import { postOgImagePath } from "../utils/postMetadata";
 import { safeDecode } from "../utils/safeDecode";
 
 const SITE_URL = "https://kimgeonho.vercel.app";
-const DEFAULT_IMAGE = SITE_URL + "/og/thumbnail.webp";
+const DEFAULT_IMAGE = SITE_URL + "/og/default.png";
 export const TITLE_SUFFIX = " | 김건호";
 interface SeoMetaOptions {
     title?: string;
@@ -43,8 +43,8 @@ export function useSeoMeta({ title, description, image, url, type = "website", n
         setMeta("name", "robots", noIndex ? "noindex, follow" : "index, follow");
         for (const [key, value] of Object.entries({ title: fullTitle, description: summary, image: fullImage, url: fullUrl, type, locale: language === "ko" ? "ko_KR" : language === "ja" ? "ja_JP" : "en_US" })) setMeta("property", "og:" + key, value);
         for (const [key, value] of Object.entries({ title: fullTitle, description: summary, image: fullImage, url: fullUrl, card: "summary_large_image" })) setMeta("name", "twitter:" + key, value);
-        // 크기를 아는 이미지(포스트 OG 1200×630, 기본 썸네일 1024×1024)만 명시하고 그 외엔 제거
-        const imageSize = image ? undefined : postSlug ? ["1200", "630"] : ["1024", "1024"];
+        // 크기를 아는 이미지(포스트 OG·기본 OG 모두 1200×630)만 명시하고 그 외엔 제거
+        const imageSize = image ? undefined : ["1200", "630"];
         for (const [index, key] of ["og:image:width", "og:image:height"].entries()) {
             if (imageSize) setMeta("property", key, imageSize[index]);
             else document.head.querySelector('meta[property="' + key + '"]')?.remove();

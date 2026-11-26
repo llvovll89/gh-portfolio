@@ -76,7 +76,7 @@ export const Contents = ({children, className}: ContentsProps) => {
             tabIndex={-1}
             className={`absolute right-0 flex flex-col sm:pb-10 editor-content overflow-x-hidden overflow-y-auto gap-4 scrolls
                 ${isMobileSize ? "top-[69px] h-[calc(100dvh-69px)] min-h-[calc(100dvh-69px)]" : "top-[68px] h-[calc(100dvh-92px)] min-h-[calc(100dvh-92px)]"}
-                py-2 sm:py-3 md:py-4 ${isMobileSize ? "px-2 pb-24" : "px-2 sm:px-3 md:px-4 pb-2"} ${isFullscreen ? "justify-center" : ""} ${className} ${backgroundClass} ${textColor}`}
+                py-2 sm:py-3 md:py-4 ${isMobileSize ? "px-2 pb-[calc(6rem+env(safe-area-inset-bottom))]" : "px-2 sm:px-3 md:px-4 pb-2"} ${isFullscreen ? "justify-center" : ""} ${className} ${backgroundClass} ${textColor}`}
             style={{
                 width: `calc(100% - ${isMobileSize ? LAYOUT_CONSTANTS.MOBILE_SIDEBAR_WIDTH : layoutState.resizeSidebarWidth}px)`,
                 scrollPaddingBottom: footerInset,

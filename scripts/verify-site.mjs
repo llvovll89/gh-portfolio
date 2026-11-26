@@ -25,6 +25,9 @@ for (const url of urls) {
     const schema = JSON.parse(html.match(/<script id="seo-schema" type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)[1]);
     assert.equal(schema["@context"], "https://schema.org");
     assert.ok(/<main id="seo-content"[\s\S]*?<\/main><div id="root"><\/div>/.test(html), url + ": prerendered content must sit outside #root");
+    if (!pathname.startsWith("/blog/") && !pathname.startsWith("/projects/")) {
+        assert.ok(html.includes('property="og:image" content="' + root + '/og/default.png"'), url + ": default OG image");
+    }
     if (pathname.startsWith("/blog/")) {
         const article = schema["@graph"].find(item => item["@type"] === "BlogPosting");
         assert.ok(article?.headline && article.author && article.mainEntityOfPage === url && article.dateModified, url + ": article schema");
@@ -35,6 +38,8 @@ for (const url of urls) {
     }
 }
 assert.ok(xml.includes("<lastmod>"), "sitemap lastmod");
+const defaultOg = await sharp("dist/og/default.png").metadata();
+assert.ok(defaultOg.format === "png" && defaultOg.width === 1200 && defaultOg.height === 630, "default OG image size");
 const llms = fs.readFileSync("dist/llms.txt", "utf8");
 assert.match(llms, /^# .+\n\n> .+/, "llms.txt header");
 for (const section of ["## 프로젝트", "## 최신 블로그 글"]) assert.ok(llms.includes(section), "llms.txt " + section);
