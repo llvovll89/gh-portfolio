@@ -263,7 +263,9 @@
             "highSchool": "고등학교",
             "highSchoolValue": "청구고등학교 졸업 (2013.02)",
             "university": "대학교",
-            "universityValue": "대구대학교 졸업 (2020.02)"
+            "universityValue": "대구대학교 졸업 (2020.02)",
+            "download_en": "English 버전",
+            "download_ko": "한국어 버전"
         },
         "uses": {
             "title": "사용 도구",

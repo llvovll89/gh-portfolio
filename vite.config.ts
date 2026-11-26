@@ -50,7 +50,6 @@ export default defineConfig(({ mode }) => {
                     globPatterns: [
                         "**/*.{js,css,html,ico,svg}",
                         "assets/logo/*.png",
-                        "og/*.webp",
                     ],
                     // /api/* 는 NetworkFirst (GitHub API 프록시, 5분 캐시)
                     runtimeCaching: [

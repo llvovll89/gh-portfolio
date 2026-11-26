@@ -90,6 +90,28 @@ async function renderOgImage(post: BlogPost, file: string) {
     ]).png({ compressionLevel: 9, palette: true }).toFile(file);
 }
 
+// 사이트 기본 OG 이미지(1200×630 PNG) — 글 OG 와 같은 디자인 언어로 빌드 시 생성
+export const DEFAULT_OG_IMAGE_PATH = "/og/default.png";
+async function renderDefaultOgImage(file: string) {
+    const text = async (markup: string, weight: "Bold" | "Medium", size: number, width: number) => {
+        const { data, info } = await sharp({ text: { text: markup, font: "Pretendard " + weight + " " + size, fontfile: path.join(OG_FONT_DIR, "Pretendard-" + weight + ".otf"), width, rgba: true, wrap: "word", spacing: Math.round(size * .28) } }).png().toBuffer({ resolveWithObject: true });
+        return { data, width: info.width, height: info.height };
+    };
+    const label = await text('<span foreground="#75b8e8">GH · Portfolio</span>', "Bold", 26, 400);
+    const name = await text('<span foreground="#f3f6fa">김건호</span><span foreground="#a4aab3">  Geonho Kim</span>', "Bold", 84, 1040);
+    const role = await text('<span foreground="#dfe4ea">Full-stack Web Developer</span>', "Medium", 40, 1040);
+    const stack = await text('<span foreground="#a4aab3">React · TypeScript · Spring Boot · PostgreSQL</span>', "Medium", 30, 1040);
+    const site = await text('<span foreground="#75b8e8">kimgeonho.vercel.app</span>', "Medium", 28, 400);
+    const background = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#181b20"/><stop offset="1" stop-color="#0c0b10"/></linearGradient></defs><rect width="1200" height="630" fill="url(#g)"/><rect x="0" y="0" width="12" height="630" fill="#75b8e8"/><rect x="80" y="500" width="1040" height="1" fill="#ffffff" fill-opacity=".15"/></svg>');
+    await sharp(background).composite([
+        { input: label.data, left: 80, top: 72 },
+        { input: name.data, left: 80, top: 200 },
+        { input: role.data, left: 80, top: 200 + name.height + 24 },
+        { input: stack.data, left: 80, top: 200 + name.height + 24 + role.height + 18 },
+        { input: site.data, left: 1120 - site.width, top: 540 },
+    ]).png({ compressionLevel: 9, palette: true }).toFile(file);
+}
+
 export function seoPages(): Plugin {
     return {
         name: "static-search-pages",
@@ -116,7 +138,7 @@ export function seoPages(): Plugin {
                 { pathname: "/projects", title: "프로젝트 | 김건호", description: "김건호의 웹 프로젝트와 기술 선택, 담당 역할, 구현 경험을 소개합니다.", content: '<h1>프로젝트</h1><ul>' + projectLinks + '</ul>', schema: { "@type": "CollectionPage", name: "프로젝트", url: absolute("/projects") } },
                 { pathname: "/blog", title: "블로그 | 김건호", description: "React, TypeScript, 백엔드, 개발 도구와 실무 개념을 기록하는 김건호의 기술 블로그입니다.", content: '<h1>기술 블로그</h1><ul>' + blogLinks + '</ul>', schema: { "@type": "Blog", name: "김건호 기술 블로그", url: absolute("/blog"), author }, lastmod: latestModified },
                 { pathname: "/profile", title: "프로필 | 김건호", description: ko.pages.profile.description.intro, content: '<h1>김건호 프로필</h1>' + Object.values(ko.pages.profile.description).map(text => '<p>' + escapeHtml(String(text)) + '</p>').join("") + '<a href="/resume">이력서</a>', schema: { "@type": "ProfilePage", mainEntity: author } },
-                { pathname: "/resume", title: "이력서 | 김건호", description: "웹 개발자 김건호의 경력, 기술 스택, 학력과 프로젝트 경험을 확인하세요.", content: '<h1>김건호 이력서</h1><p>' + escapeHtml(ko.pages.resume.description) + '</p><p>React, TypeScript, Java, Spring Boot, PostgreSQL</p><a href="/assets/resume/' + encodeURIComponent("김건호_이력서.pdf") + '">PDF 이력서 다운로드</a>' },
+                { pathname: "/resume", title: "이력서 | 김건호", description: "웹 개발자 김건호의 경력, 기술 스택, 학력과 프로젝트 경험을 확인하세요.", content: '<h1>김건호 이력서</h1><p>' + escapeHtml(ko.pages.resume.description) + '</p><p>React, TypeScript, Java, Spring Boot, PostgreSQL</p><a href="/assets/resume/' + encodeURIComponent("김건호_이력서.pdf") + '">PDF 이력서 다운로드</a> · <a href="/assets/resume/GeonhoKim_Resume_EN.pdf">English resume (PDF)</a>' },
                 { pathname: "/contact", title: "연락처 | 김건호", description: ko.pages.contact.subtitle, content: '<h1>연락처</h1><p>' + escapeHtml(ko.pages.contact.subtitle) + '</p><a href="mailto:svvvs5579@naver.com">svvvs5579@naver.com</a>' },
                 { pathname: "/uses", title: "사용 도구 | 김건호", description: ko.pages.uses.description, content: '<h1>사용 도구</h1><p>' + escapeHtml(ko.pages.uses.description) + '</p><p>Visual Studio Code, Git, GitHub, Postman, React, TypeScript, Tailwind CSS, Spring Boot, PostgreSQL, Figma, Jira, Slack</p>' },
             ];
@@ -206,6 +228,7 @@ export function seoPages(): Plugin {
             fs.writeFileSync(path.join(outDir, "llms.txt"), llms);
             const ogDir = path.join(outDir, "og", "posts");
             fs.mkdirSync(ogDir, { recursive: true });
+            await renderDefaultOgImage(path.join(outDir, DEFAULT_OG_IMAGE_PATH));
             const queue = [...posts];
             await Promise.all(Array.from({ length: 4 }, async () => {
                 for (let post = queue.shift(); post; post = queue.shift()) await renderOgImage(post, path.join(outDir, postOgImagePath(post.slug)));

@@ -171,7 +171,7 @@ export const Detail = () => {
 
     // Contents 와 같은 위치·크기(헤더 아래, 사이드바 오른쪽)의 자체 스크롤 컨테이너 — 로딩 화면과 본문이 공유
     const detailSectionClass = `absolute right-0 overflow-y-auto scrolls flex flex-col p-4 sm:p-6 md:py-10 md:px-15 bg-base-navy
-                    ${isMobileSize ? "top-[69px] h-[calc(100dvh-69px)] pb-28" : "top-[68px] h-[calc(100dvh-92px)]"}`;
+                    ${isMobileSize ? "top-[69px] h-[calc(100dvh-69px)] pb-[calc(7rem+env(safe-area-inset-bottom))]" : "top-[68px] h-[calc(100dvh-92px)]"}`;
     const detailSectionStyle = {width: `calc(100% - ${isMobileSize ? 0 : layoutState.resizeSidebarWidth}px)`};
 
     if (!metadata) return <FeedbackPage kind="notFound" backTo="/blog" />;

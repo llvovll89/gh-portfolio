@@ -72,6 +72,14 @@ body {
     -webkit-text-size-adjust: 100%;
 }
 
+/* iOS 노치 대응 (viewport-fit=cover): 가로 모드에서 노치가 있는 좌우 영역을 비워 앱 셸 전체(절대 배치 자식 포함)를 안쪽으로 밀어냄
+   세로 모드 상단은 상태바 스타일 default 로 콘텐츠가 상태바 아래에서 시작하고, 하단 홈 인디케이터는 하단 고정 요소마다 보정 */
+body {
+    box-sizing: border-box;
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+}
+
 #root {
     width: 100%;
     height: 100%;

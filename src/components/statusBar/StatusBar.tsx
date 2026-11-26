@@ -41,7 +41,10 @@ export const StatusBar = ({fullWidth = false}: {fullWidth?: boolean}) => {
             aria-label={uiText("상태 표시줄")}
             className="fixed bottom-0 right-0 h-6 z-30 flex items-center justify-between px-3 text-2xs font-mono select-none"
             style={{
-                width: fullWidth ? "100%" : `calc(100% - ${layoutState.resizeSidebarWidth}px)`,
+                // body 의 좌측 safe-area 여백만큼 줄여 사이드바 오른쪽에서 시작하고, 우측 노치 영역은 배경만 채우고 글자는 안쪽에
+                width: fullWidth ? "100%" : `calc(100% - ${layoutState.resizeSidebarWidth}px - env(safe-area-inset-left, 0px))`,
+                paddingRight: "calc(0.75rem + env(safe-area-inset-right, 0px))",
+                ...(fullWidth ? { paddingLeft: "calc(0.75rem + env(safe-area-inset-left, 0px))" } : {}),
                 backgroundColor: "#17659a",
                 color: VSCODE_DARK.statusBarFg,
             }}

@@ -24,7 +24,7 @@ export const Theme = ({ inline = false }: { inline?: boolean }) => {
     return (
         // 팝오버 내부 어디에 포커스가 있든 Escape로 닫고 트리거로 포커스를 되돌리기 위한 위임 키 핸들러
         // eslint-disable-next-line jsx-a11y-x/no-static-element-interactions
-        <div ref={container} className={inline ? "theme-picker theme-picker-inline" : "theme-picker fixed right-3 bottom-8 z-100"}
+        <div ref={container} className={inline ? "theme-picker theme-picker-inline" : "theme-picker fixed right-[calc(0.75rem+env(safe-area-inset-right))] bottom-[calc(2rem+env(safe-area-inset-bottom))] z-100"}
             onKeyDown={event => { if (event.key === "Escape") { close(); container.current?.querySelector("button")?.focus(); } }}>
             <button type="button" className="theme-trigger" aria-expanded={open} aria-controls={open ? "theme-options" : undefined}
                 aria-label={t("theme.select", { current: labels[selectedTheme.mode] })}

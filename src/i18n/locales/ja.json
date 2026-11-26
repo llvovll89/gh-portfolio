@@ -263,7 +263,9 @@
             "highSchool": "高校",
             "highSchoolValue": "チョング高校 卒業 (2013年2月)",
             "university": "大学",
-            "universityValue": "大邱大学 卒業 (2020年2月)"
+            "universityValue": "大邱大学 卒業 (2020年2月)",
+            "download_en": "英語版",
+            "download_ko": "韓国語版"
         },
         "uses": {
             "title": "使用ツール",
