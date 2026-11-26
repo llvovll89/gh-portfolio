@@ -14,14 +14,15 @@ export const KeyboardInfo = () => {
 
     return (
         <Portal>
-            {/* 백드롭 클릭 닫기는 마우스 보조 동작이며, 키보드는 전역 Escape 2회(handleAllClear) 및 닫기 버튼으로 닫힘 */}
-            {/* eslint-disable-next-line jsx-a11y-x/click-events-have-key-events, jsx-a11y-x/no-noninteractive-element-interactions */}
+            {/* 백드롭 클릭 닫기는 마우스 보조 동작이며, 키보드는 Escape 1회 및 닫기 버튼으로 닫힘 */}
+            {/* eslint-disable-next-line jsx-a11y-x/no-noninteractive-element-interactions */}
             <section
                 className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0c1018]/50 backdrop-blur-md"
                 role="dialog"
                 aria-modal="true"
                 aria-label={uiText("키보드 단축키 안내")}
                 onClick={(e) => { if (e.target === e.currentTarget) setIsVisibleKeyboardInfo(false); }}
+                onKeyDown={(e) => { if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); setIsVisibleKeyboardInfo(false); } }}
             >
                 <div
                     ref={containerRef}

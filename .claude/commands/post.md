@@ -25,8 +25,11 @@ The user will provide a topic or title (via `$ARGUMENTS`). If no argument is giv
    date: {YYYY-MM-DD}
    summary: {2-3줄 핵심 요약}
    tags: [{관련 태그들, 콤마로 구분}]
+   category: {Frontend | Backend | AI | CS | DevOps | Notes 중 하나}
    ---
    ```
+   - `category` is required. Use `Notes` for non-development topics (life, cars, hobbies, etc.) so they stay out of the home "recent posts", the default blog list, and `llms.txt`.
+   - `date` and the filename date must use today's date in **Asia/Seoul (KST)**, not UTC.
 
 4. **Write the file** to `src/content/posts/{filename}`.
 

@@ -54,6 +54,12 @@ export function CommentComposer({ mode, slug, comment, onDone, onCancel }: Props
             focusField(missing[0]);
             return;
         }
+        if (!isEdit && password.length < 4) {
+            setInvalid(["password"]);
+            setError("비밀번호는 4자 이상 입력해주세요.");
+            focusField("password");
+            return;
+        }
 
         setSubmitting(true);
         try {

@@ -17,8 +17,11 @@ import {
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), "");
-    // 로컬: VITE_GIT_HUB_TOKEN 또는 GITHUB_TOKEN 모두 지원
-    const GITHUB_TOKEN = env.GITHUB_TOKEN || env.VITE_GIT_HUB_TOKEN || "";
+    // VITE_ 접두사 변수는 코드에서 참조하는 순간 클라이언트 번들에 포함되므로 토큰은 GITHUB_TOKEN 만 사용
+    const GITHUB_TOKEN = env.GITHUB_TOKEN || "";
+    if (!GITHUB_TOKEN && env.VITE_GIT_HUB_TOKEN) {
+        console.warn("[vite] VITE_GIT_HUB_TOKEN 은 더 이상 사용하지 않습니다. .env 에서 GITHUB_TOKEN 으로 이름을 바꿔 주세요.");
+    }
     const GITHUB_OWNER = getAllowedOwner(env);
 
     return {
@@ -29,12 +32,16 @@ export default defineConfig(({ mode }) => {
             babel({ presets: [reactCompilerPreset()] }),
             tailwindcss(),
             VitePWA({
-                registerType: "autoUpdate",
+                // autoUpdate 는 새 SW 활성화 시 페이지를 강제 새로고침해 작성 중인 댓글·문의가 사라지므로 배너로 사용자에게 맡김
+                registerType: "prompt",
                 // dev 환경에서도 SW 동작 확인 가능
                 devOptions: { enabled: false },
                 // 빌드 시 precache할 파일 패턴
                 workbox: {
-                    globIgnores: ["**/post-body-*.js", "**/searchPosts-*.js", "**/static/en-*.js", "**/static/ja-*.js", "blog/**", "projects/**", "profile/**", "resume/**", "contact/**", "uses/**", "404.html"],
+                    // SPA 셸 fallback 대상에서 정적 파일·API 제외 (설치 후 /rss.xml 등을 직접 열면 404 페이지가 뜨던 문제)
+                    navigateFallbackDenylist: [/^\/api\//, /\.(?:xml|txt|pdf|webmanifest|json)$/],
+                    // Detail·Firestore(config) 청크는 블로그 글을 열 때만 필요하므로 첫 방문 precache 에서 제외 (on-demand-scripts 런타임 캐시가 담당)
+                    globIgnores: ["**/post-body-*.js", "**/searchPosts-*.js", "**/Detail-*.js", "**/config-*.js", "**/static/en-*.js", "**/static/ja-*.js", "blog/**", "projects/**", "profile/**", "resume/**", "contact/**", "uses/**", "404.html"],
                     globPatterns: [
                         "**/*.{js,css,html,ico,svg}",
                         "assets/logo/*.png",
@@ -198,13 +205,13 @@ export default defineConfig(({ mode }) => {
                             return;
                         }
 
-                        // ── /api/comments, /api/ask (Vercel 함수 그대로 실행) ──
-                        if (urlObj.pathname === "/api/comments" || urlObj.pathname === "/api/ask") {
+                        // ── /api/comments (Vercel 함수 그대로 실행) ──
+                        if (urlObj.pathname === "/api/comments") {
                             const chunks: Buffer[] = [];
                             for await (const chunk of req) chunks.push(chunk as Buffer);
                             const raw = Buffer.concat(chunks).toString("utf8");
                             // process.env 에 undefined 를 대입하면 문자열 "undefined" 가 되므로 값이 있을 때만 주입
-                            for (const key of ["FIREBASE_SERVICE_ACCOUNT", "ANTHROPIC_API_KEY"]) {
+                            for (const key of ["FIREBASE_SERVICE_ACCOUNT"]) {
                                 if (!process.env[key] && env[key]) process.env[key] = env[key];
                             }
 

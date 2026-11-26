@@ -24,7 +24,7 @@ function loadTypeScript(file) {
 const { parseToc, slugifyHeading } = loadTypeScript("src/utils/parseToc.ts");
 const { sortPosts, filterPosts, extractAllCategories, getTagCounts } = loadTypeScript("src/utils/blogFilters.ts");
 const { getCliSuggestions, runCliCommand } = loadTypeScript("src/utils/runCliCommand.ts");
-const { parseMarkdownPost } = loadTypeScript("src/utils/postMetadata.ts");
+const { parseMarkdownPost, parseHtmlPost, validatePost } = loadTypeScript("src/utils/postMetadata.ts");
 
 test("TOC ignores headings inside fenced code blocks and numbers duplicates like the renderer", () => {
     const md = [
@@ -70,10 +70,11 @@ test("blog filters sort by date, filter by category and AND-ed tags", () => {
     assert.equal(getTagCounts(posts).react, 2);
 });
 
-test("CLI suggests commands including ask and handles unknown input", () => {
-    assert.ok(getCliSuggestions("a").includes("ask"));
+test("CLI suggests commands and handles unknown input", () => {
+    assert.ok(getCliSuggestions("h").includes("help"));
+    assert.ok(!getCliSuggestions("a").includes("ask"), "ask command was removed");
     assert.deepEqual(getCliSuggestions("git st"), ["git status"]);
-    assert.match(runCliCommand("help"), /ask <질문>/);
+    assert.doesNotMatch(runCliCommand("help"), /ask <질문>/);
     assert.equal(runCliCommand("   "), "");
 });
 
@@ -82,4 +83,26 @@ test("frontmatter category and featured flags are parsed", () => {
     assert.equal(post.category, "Notes");
     assert.equal(post.featured, true);
     assert.equal(parseMarkdownPost("y.md", "---\ntitle: T\n---\nb").featured, undefined);
+});
+
+test("frontmatter tags accept quoted arrays, bare comma lists, and YAML block lists", () => {
+    const tags = fm => parseMarkdownPost("x.md", "---\ntitle: T\n" + fm + "\n---\nb").tags;
+    assert.deepEqual(tags('tags: ["React", \'TS\']'), ["React", "TS"]);
+    assert.deepEqual(tags("tags: React, TS"), ["React", "TS"]);
+    assert.deepEqual(tags("tags:\n  - React\n  - \"TS\""), ["React", "TS"]);
+    assert.deepEqual(tags("tags: []"), []);
+    // 빈 값은 문자열로 남아 자동 요약 대상이 됨
+    assert.equal(parseMarkdownPost("x.md", "---\ntitle: T\nsummary:\n---\nhello body").summary, "hello body");
+    assert.equal(parseMarkdownPost("x.md", "---\ntitle: T\nfeatured: True\n---\nb").featured, true);
+});
+
+test("validatePost rejects missing titles, malformed dates, and unknown categories", () => {
+    const md = fm => { const raw = "---\n" + fm + "\n---\nb"; return validatePost(parseMarkdownPost("2026-01-01-x.md", raw), raw); };
+    assert.deepEqual(md("title: T\ndate: 2026-01-01\ncategory: Notes"), []);
+    assert.equal(md("date: 2026-01-01\ncategory: Notes").length, 1);
+    assert.equal(md("title: T\ndate: 2026/01/01\ncategory: Notes").length, 1);
+    assert.equal(md("title: T\ndate: 2026-01-01").length, 1);
+    assert.equal(md("title: T\ndate: 2026-01-01\ncategory: notes").length, 1);
+    const html = '<title>H</title><meta name="date" content="2026-01-01">';
+    assert.deepEqual(validatePost(parseHtmlPost("2026-01-01-h.html", html), html), [], "HTML 글은 category 없이도 허용");
 });

@@ -69,7 +69,7 @@
 
 ## GitHub 연동(외부 통합)
 - Octokit 클라이언트: `src/http/api.ts`
-  - 필요 env: `VITE_GIT_HUB_TOKEN`, `VITE_GIT_HUB_APP_ADMIN`, `VITE_GIT_HUB_APP_VERSION`
+  - 필요 env: `GITHUB_TOKEN`(서버 전용, `VITE_` 접두사 금지), `VITE_GIT_HUB_APP_ADMIN`, `VITE_GIT_HUB_APP_VERSION`
 - Git UI: `src/components/aside/contents/gitControl/GitControl.tsx`
   - 레포/브랜치 목록과 커밋 목록을 `octokit.request()`로 조회.
   - env가 없으면 네트워크 호출이 실패할 수 있으니, UI/에러 로그(콘솔) 처리 방식을 유지.

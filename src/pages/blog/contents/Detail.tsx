@@ -1,18 +1,19 @@
 import { uiText } from "../../../utils/uiText";
-import {useMemo, useState, useEffect, useRef} from "react";
+import {useMemo, useState, useEffect, useRef, lazy, Suspense} from "react";
 import {useParams, Link, useNavigate} from "react-router-dom";
 import {loadAllPosts, loadPost, type BlogPost} from "../../../utils/loadAllPosts";
 import { useTranslation } from "react-i18next";
 import {MarkdownRenderer} from "./MarkdownRender";
 import {parseToc} from "../../../utils/parseToc";
 import {scrollToHeading} from "../../../utils/scrollToHeading";
+import {isPlainLeftClick} from "../../../utils/isPlainLeftClick";
 import {TableOfContents} from "./TableOfContents";
 import {Minimap} from "./Minimap";
-import {incrementViewCount, subscribeViewCount} from "../../../utils/blogViews";
 import {primeListViewCount} from "../../../utils/viewCounts";
 import {LuArrowLeft, LuEye, LuChevronLeft, LuChevronRight} from "react-icons/lu";
 import {logger} from "../../../utils/logger";
-import {BlogComments} from "../comments/BlogComments";
+// Firestore SDK(~450KB)는 본문 렌더 후 별도 청크로 받도록 조회수·댓글을 지연 로드
+const BlogComments = lazy(() => import("../comments/BlogComments").then(module => ({ default: module.BlogComments })));
 import {useSeoMeta} from "../../../hooks/useSeoMeta";
 import { FeedbackPage } from "../../../components/error/FeedbackPage";
 import {ShareButton} from "../../../components/ShareButton";
@@ -88,6 +89,13 @@ export const Detail = () => {
         };
     }, [post]);
 
+    // /blog/글#섹션 으로 진입(새 탭·공유 링크·새로고침)하면 본문이 비동기로 렌더된 뒤에 해당 섹션으로 이동
+    useEffect(() => {
+        if (!post || !window.location.hash) return;
+        const rafId = requestAnimationFrame(() => { scrollToHeading(window.location.hash, DETAIL_SCROLL_ID); });
+        return () => cancelAnimationFrame(rafId);
+    }, [post]);
+
     // SEO 메타태그 업데이트 (title, og:title, og:description 등)
     useSeoMeta({
         title: metadata?.title,
@@ -102,14 +110,20 @@ export const Detail = () => {
     // 조회수 증가 + 실시간 구독
     useEffect(() => {
         if (!slug || !post) return;
-        incrementViewCount(slug).catch((e) =>
-            logger.error("조회수 증가 실패", e),
-        );
-        const unsubscribe = subscribeViewCount(slug, (count) => {
-            setViewCount(count);
-            primeListViewCount(slug, count);
-        });
-        return unsubscribe;
+        let active = true;
+        let unsubscribe: (() => void) | undefined;
+        import("../../../utils/blogViews").then(({ incrementViewCount, subscribeViewCount }) => {
+            if (!active) return;
+            incrementViewCount(slug).catch((e) => logger.error("조회수 증가 실패", e));
+            unsubscribe = subscribeViewCount(slug, (count) => {
+                setViewCount(count);
+                primeListViewCount(slug, count);
+            });
+        }).catch((e) => logger.error("조회수 모듈 로드 실패", e));
+        return () => {
+            active = false;
+            unsubscribe?.();
+        };
     }, [slug, post]);
 
     const scrollToTop = () => {
@@ -175,7 +189,7 @@ export const Detail = () => {
 
                 <header className="mb-6 mx-auto w-full max-w-275">
                     <div className="flex items-start justify-between gap-3 sm:gap-4">
-                        <h1 className="max-w-[24em] break-keep text-[clamp(1.6rem,5vw,2.25rem)] font-bold leading-tight tracking-tight text-foreground">
+                        <h1 lang="ko" className="max-w-[24em] break-keep text-[clamp(1.6rem,5vw,2.25rem)] font-bold leading-tight tracking-tight text-foreground">
                             {post.title}
                         </h1>
                         <div className="shrink-0 pt-1">
@@ -220,6 +234,7 @@ export const Detail = () => {
 
                     {post.summary ? (
                         <p
+                            lang="ko"
                             className={`mt-3 max-w-[68ch] break-keep text-muted ${post.type === "html" ? "leading-tight" : "leading-7"}`}
                         >
                             {post.summary}
@@ -234,7 +249,8 @@ export const Detail = () => {
                         loading="lazy"
                         className="w-full rounded-lg border border-line dark:border-line h-[70vh] sm:h-[80vh]"
                         title={post.title}
-                        sandbox=""
+                        // 스크립트·동일 출처는 계속 차단하고, 문서 안 target="_blank" 외부 링크만 새 탭으로 열리게 허용
+                        sandbox="allow-popups allow-popups-to-escape-sandbox"
                     />
                 ) : (
                     <>
@@ -262,6 +278,7 @@ export const Detail = () => {
                                             <a
                                                 href={`#${item.id}`}
                                                 onClick={(e) => {
+                                                    if (!isPlainLeftClick(e)) return;
                                                     e.preventDefault();
                                                     scrollToHeading(
                                                         item.id,
@@ -285,7 +302,9 @@ export const Detail = () => {
                         <div className="flex xl:gap-10 items-start mx-auto w-full max-w-275">
                             <div className="flex-1 min-w-0 max-w-190">
                                 <MarkdownRenderer content={post.body} />
-                                <BlogComments slug={post.slug} />
+                                <Suspense fallback={null}>
+                                    <BlogComments slug={post.slug} />
+                                </Suspense>
                                 {/* 이전/다음 포스트 네비게이션 */}
                                 {(prevPost || nextPost) && (
                                     <nav

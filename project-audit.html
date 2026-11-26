@@ -522,9 +522,9 @@
               .env 파일에 GitHub PAT가 평문으로 저장되어 있으며, 해당 파일이 버전 관리에 포함될 경우 퍼블릭 레포에 토큰이 그대로 노출됩니다.
               만료일 2026-12-18 전까지 악용될 수 있습니다. <strong>즉시 GitHub에서 해당 토큰을 Revoke하고 새로 발급</strong>해야 합니다.
             </div>
-            <span class="issue-file">.env → VITE_GIT_HUB_TOKEN=github_pat_11ATITZQI0...</span>
+            <span class="issue-file">.env → VITE_GIT_HUB_TOKEN=github_pat_***REDACTED***</span>
             <pre><span class="comment"># ❌ 현재 (절대 커밋 금지)</span>
-VITE_GIT_HUB_TOKEN=github_pat_11ATITZQI0X3jb6FG...
+VITE_GIT_HUB_TOKEN=github_pat_***REDACTED***
 
 <span class="comment"># ✅ 조치 방법</span>
 <span class="comment"># 1. GitHub Settings → Developer settings → Personal access tokens → Revoke</span>

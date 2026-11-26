@@ -17,6 +17,36 @@ export function clientIp(req: IncomingMessage): string {
     return first || req.socket.remoteAddress || 'unknown'
 }
 
+type HeaderSource = { headers: Record<string, string | string[] | undefined> }
+
+function header(req: HeaderSource, name: string): string | undefined {
+    const value = req.headers[name]
+    return Array.isArray(value) ? value[0] : value
+}
+
+/**
+ * 교차 출처 POST 차단 — 거부 사유(HTTP status)를 반환, 통과면 null.
+ * text/plain 같은 "단순 요청"은 CORS preflight 없이 다른 사이트에서 보낼 수 있으므로
+ * Content-Type 을 application/json 으로 강제하고, 브라우저가 붙이는 Sec-Fetch-Site / Origin 으로 동일 출처만 허용.
+ * 두 헤더가 모두 없으면(curl·서버 간 호출) 브라우저 CSRF 경로가 아니므로 허용.
+ */
+export function rejectCrossSite(req: HeaderSource): 403 | 415 | null {
+    const contentType = header(req, 'content-type') ?? ''
+    if (!/^application\/json\b/i.test(contentType.trim())) return 415
+
+    const fetchSite = header(req, 'sec-fetch-site')
+    if (fetchSite) return fetchSite === 'same-origin' ? null : 403
+
+    const origin = header(req, 'origin')
+    if (!origin) return null
+    const host = header(req, 'x-forwarded-host') ?? header(req, 'host')
+    try {
+        return host && new URL(origin).host === host ? null : 403
+    } catch {
+        return 403
+    }
+}
+
 /** 문자열 본문이면 JSON 파싱, 실패 시 null */
 export function readJsonBody(body: unknown): unknown {
     if (typeof body !== 'string') return body

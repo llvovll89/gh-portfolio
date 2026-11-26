@@ -24,7 +24,7 @@ export const PWAUpdateBanner = () => {
             style={{ zIndex: SURFACE_LAYERS.notice }}
             className={`fixed bottom-20 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3
                        px-5 py-3 rounded-xl shadow-2xl
-                       bg-[#1e1e2e] border border-foreground/10 text-foreground text-sm
+                       bg-panel border border-line text-foreground text-sm
                        ${closing ? "animate-[fadeOut_0.25s_ease-in_forwards]" : "animate-[fadeIn_0.3s_ease-out]"}`}
         >
             <span className="text-foreground">{uiText("새 버전이 있습니다.")}</span>

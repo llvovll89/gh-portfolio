@@ -1,5 +1,5 @@
 import { uiText } from "../../utils/uiText";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ContributionHeatmap from "./ContributionHeatmap";
 import RecentActivityList from "./RecentActivityList";
 
@@ -26,7 +26,11 @@ const GhActivityDashboard = ({ username }: { username?: string }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    // user 변경·재시도로 요청이 겹칠 때 늦게 도착한 이전 응답이 최신 결과를 덮지 않도록 요청 순번으로 구분
+    const requestIdRef = useRef(0);
+
     const fetchContributions = useCallback(async () => {
+        const requestId = ++requestIdRef.current;
         setLoading(true);
         setError(null);
         try {
@@ -43,14 +47,15 @@ const GhActivityDashboard = ({ username }: { username?: string }) => {
             if (!res.ok) throw new Error(`${res.status}`);
 
             const json = (await res.json()) as ContributionsResponse;
+            if (requestId !== requestIdRef.current) return;
             const calendar = json.data?.user?.contributionsCollection?.contributionCalendar;
 
             setWeeks(calendar?.weeks ?? []);
             setTotal(calendar?.totalContributions ?? 0);
         } catch {
-            setError("contributions");
+            if (requestId === requestIdRef.current) setError("contributions");
         } finally {
-            setLoading(false);
+            if (requestId === requestIdRef.current) setLoading(false);
         }
     }, [user]);
 
@@ -58,6 +63,9 @@ const GhActivityDashboard = ({ username }: { username?: string }) => {
         // user가 바뀔 때 외부 API와 동기화하는 데이터 fetch이며, 로딩 상태 전환은 fetch 함수 내부에서 처리되므로 effect가 적절함
         // eslint-disable-next-line react-hooks/set-state-in-effect
         void fetchContributions();
+        // 언마운트·재요청 후 도착한 응답은 무시 (요청 순번 카운터라 cleanup 시점의 최신값을 올리는 것이 의도)
+        const counter = requestIdRef;
+        return () => { counter.current++; };
     }, [fetchContributions]);
 
     return (

@@ -16,6 +16,8 @@ import { Settings } from "./contents/settings/Settings";
 import { useCheckedMobileSize } from "../../hooks/useCheckedMobileSize";
 import { BLOG, CONTACT, DEFAULT, PROFILE, PROJECTS } from "../../routes/route";
 import { useHandlePushPath } from "../../hooks/useHandlePushPath";
+import { isPlainLeftClick } from "../../utils/isPlainLeftClick";
+import { Link } from "react-router-dom";
 import { LuBookOpen, LuFolderKanban, LuHouse, LuMail, LuMenu, LuMinus, LuPlus, LuUserRound } from "react-icons/lu";
 
 const MOBILE_PRIMARY_NAV = [
@@ -226,10 +228,12 @@ export const Aside = () => {
                     aria-label={uiText("모바일 하단 네비게이션")}
                 >
                     {MOBILE_PRIMARY_NAV.map((item) => (
-                        <button
-                            type="button"
+                        <Link
+                            to={item.path}
                             key={item.path}
-                            onClick={() => {
+                            onClick={(e) => {
+                                if (!isPlainLeftClick(e)) return;
+                                e.preventDefault();
                                 setSelectedNav(null);
                                 handlePushPath(item.path);
                             }}
@@ -252,7 +256,7 @@ export const Aside = () => {
                         >
                             <item.Icon className="h-5 w-5" />
                             <span className="text-2xs leading-none">{t(item.labelKey)}</span>
-                        </button>
+                        </Link>
                     ))}
                     <button
                         type="button"

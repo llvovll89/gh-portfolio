@@ -24,7 +24,7 @@ export const Resume = () => {
     const [downloadState, setDownloadState] = useState<"idle" | "loading" | "error">("idle");
 
     useSeoMeta({
-        title: "Resume",
+        title: t("routes.resume"),
         description: uiText("웹 개발자 김건호의 경력, 기술 스택, 학력과 프로젝트 경험"),
         url: "/resume",
     });
@@ -35,7 +35,7 @@ export const Resume = () => {
             Icon: LuUserRound,
             items: [
                 { label: t("pages.resume.name"), value: uiText("김건호 (Geonho Kim)") },
-                { label: t("pages.resume.email"), value: "svvvs5579@naver.com" },
+                { label: t("pages.resume.email"), value: <a href="mailto:svvvs5579@naver.com" className="text-primary underline underline-offset-4">svvvs5579@naver.com</a> },
             ],
         },
         {
@@ -95,7 +95,7 @@ export const Resume = () => {
         <>
             <Header />
             <Aside />
-            <Contents className="select-none">
+            <Contents>
                 <section className="relative mx-auto w-full max-w-6xl px-2 pb-10 md:px-6">
                     <PageHeader
                         title={t("pages.resume.title")}

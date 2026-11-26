@@ -14,13 +14,11 @@
     "smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^1.7.0",
     "@emailjs/browser": "^4.4.1",
-    "@tailwindcss/vite": "^4.3.5",
     "firebase": "^12.19.0",
     "firebase-admin": "^14.5.0",
     "fuse.js": "^7.1.0",
-    "i18next": "^25.8.4",
+    "i18next": "^26.7.2",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-i18next": "^16.5.4",
@@ -28,14 +26,14 @@
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.18.5",
     "react-syntax-highlighter": "^16.1.1",
-    "remark-gfm": "^4.0.1",
-    "tailwindcss": "^4.3.5"
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
     "@babel/core": "^7.29.13",
     "@eslint/js": "^10.0.0",
     "@rolldown/plugin-babel": "^0.3.1",
+    "@tailwindcss/vite": "^4.3.5",
     "@types/babel__core": "^7.20.5",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
@@ -51,9 +49,15 @@
     "playwright-core": "^1.65.0",
     "pretendard": "^1.3.9",
     "sharp": "^0.35.5",
+    "tailwindcss": "^4.3.5",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.72.2",
     "vite": "^8.3.7",
     "vite-plugin-pwa": "^1.3.0"
+  },
+  "overrides": {
+    "@firebase/firestore": {
+      "@grpc/grpc-js": "^1.14.7"
+    }
   }
 }

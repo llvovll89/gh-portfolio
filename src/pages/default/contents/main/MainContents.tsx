@@ -11,6 +11,7 @@ import { careers } from "../../../profile/careerData";
 import { SKILL_GROUPS } from "../../../profile/skillData";
 import { loadAllPosts } from "../../../../utils/loadAllPosts";
 import { sortPosts } from "../../../../utils/blogFilters";
+import { isPlainLeftClick } from "../../../../utils/isPlainLeftClick";
 
 // 코드 패널의 한 줄을 구성하는 토큰 (색은 CSS 클래스로 테마 변수에 연결)
 type Token = { kind: "kw" | "key" | "str" | "punct"; text: string };
@@ -63,12 +64,13 @@ export const MainContents = () => {
                     <h1>{t("pages.home.headlineLine1")}<span>{t("pages.home.headlineLine2")}</span></h1>
                     <p className="home-summary">{t("pages.home.summary")}</p>
                     <div className="home-actions">
-                        <button type="button" onClick={() => handlePushPath(PROJECTS)} className="workbench-button workbench-button-primary">
+                        {/* 실제 링크로 두어 Ctrl/가운데 클릭·크롤러·speculation rules 프리페치가 동작하게 하고, 일반 클릭만 탭 상태와 함께 이동 */}
+                        <Link to={PROJECTS} onClick={(e) => { if (isPlainLeftClick(e)) { e.preventDefault(); handlePushPath(PROJECTS); } }} className="workbench-button workbench-button-primary">
                             {t("pages.home.viewProjects")} <LuArrowRight aria-hidden="true" />
-                        </button>
-                        <button type="button" onClick={() => handlePushPath(CONTACT)} className="workbench-button">
+                        </Link>
+                        <Link to={CONTACT} onClick={(e) => { if (isPlainLeftClick(e)) { e.preventDefault(); handlePushPath(CONTACT); } }} className="workbench-button">
                             <LuMail aria-hidden="true" /> {t("pages.home.getInTouch")}
-                        </button>
+                        </Link>
                     </div>
                 </div>
 
@@ -140,7 +142,7 @@ export const MainContents = () => {
                                 <li key={post.slug}>
                                     <Link className="home-row home-row-post" to={`/blog/${post.slug}`}>
                                         <time className="home-row-date" dateTime={post.date}>{post.date}</time>
-                                        <span className="home-row-title">{post.title}</span>
+                                        <span lang="ko" className="home-row-title">{post.title}</span>
                                         <LuArrowUpRight aria-hidden="true" />
                                     </Link>
                                 </li>

@@ -14,7 +14,7 @@ import { CONTACT_EMAIL, CONTACT_GITHUB } from "../../constants/contact";
 
 export const Profile = () => {
     const { t } = useTranslation();
-    useSeoMeta({ title: "Profile", description: uiText("풀스택 웹 개발자 김건호의 프로필, 기술 스택, 학력, 경력 소개"), url: "/profile" });
+    useSeoMeta({ title: t("routes.profile"), description: uiText("풀스택 웹 개발자 김건호의 프로필, 기술 스택, 학력, 경력 소개"), url: "/profile" });
     return <>
         <Header /><Aside />
         <Contents>
