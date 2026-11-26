@@ -15,7 +15,7 @@ const page = await browser.newPage();
 for (const { template, output } of targets) {
     await page.goto(pathToFileURL(resolve(template)).href, { waitUntil: "load" });
     // 웹폰트·사진 로드가 끝난 뒤 인쇄
-    await page.evaluate(() => document.fonts.ready);
+    await page.evaluate(() => globalThis.document.fonts.ready);
     await page.pdf({ path: output, format: "A4", printBackground: true, preferCSSPageSize: true });
     console.log(output);
 }
