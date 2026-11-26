@@ -1,5 +1,5 @@
 import { uiText } from "../../utils/uiText";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useEffectEvent, useRef, useState } from "react";
 import { LayoutContext } from "../../context/LayoutContext";
 import { useThemeStyle } from "../../hooks/useThemeStyle";
 import { useDragging } from "../../hooks/useDragging";
@@ -53,14 +53,18 @@ export const Bottom = () => {
         }
     );
 
-    // CLI 명령 실행(외부 KeyboardContext 이벤트) 시 콘솔 탭으로 자동 전환 + 패널 열기
+    // 외부(단축키 등)에서 CLI 출력이 생기면 패널을 열고 콘솔 탭으로 전환.
+    // TERMINAL 탭은 같은 출력 값에 자기 결과를 쓰므로, 터미널에서 명령을 칠 때마다 콘솔로 튕기지 않도록 그때는 전환하지 않음
+    // 최신 activeTab 을 읽되 탭 변경 자체로는 effect 가 다시 실행되지 않도록 effect event 로 분리
+    const handleCliOutput = useEffectEvent(() => {
+        if (activeTab !== "terminal") setActiveTab("console");
+        openFooter();
+    });
     useEffect(() => {
-        if (submitCliCommand.value && submitCliCommand.value.trim() !== "") {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setActiveTab("console");
-            openFooter();
-        }
-    }, [submitCliCommand.value, openFooter]);
+        // 외부 시스템(KeyboardContext 출력)과 패널 상태를 맞추는 동기화라 effect 가 적절함
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        if (submitCliCommand.value && submitCliCommand.value.trim() !== "") handleCliOutput();
+    }, [submitCliCommand.value]);
 
     // activeTab 변경 시 localStorage에 저장
     const handleTabChange = (tab: FooterTabType) => {

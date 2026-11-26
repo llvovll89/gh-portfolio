@@ -122,10 +122,20 @@ export const Aside = () => {
             }));
             return;
         }
-        setLayoutState((prev) => ({
-            ...prev,
-            resizeSidebarWidth: selectedNav ? NAVBAR_WIDTH + CONTENT_WIDTH : NAVBAR_WIDTH,
-        }));
+        // 페이지마다 Aside 가 새로 mount 되므로, 고정값으로 덮어쓰지 않고 사용자가 조절한 펼친 너비를 보존·복원
+        setLayoutState((prev) => {
+            const isExpanded = prev.resizeSidebarWidth > NAVBAR_WIDTH;
+            if (selectedNav) {
+                const width = isExpanded ? prev.resizeSidebarWidth : prev.expandedSidebarWidth ?? NAVBAR_WIDTH + CONTENT_WIDTH;
+                return width === prev.resizeSidebarWidth ? prev : { ...prev, resizeSidebarWidth: width };
+            }
+            if (prev.resizeSidebarWidth === NAVBAR_WIDTH) return prev;
+            return {
+                ...prev,
+                expandedSidebarWidth: isExpanded ? prev.resizeSidebarWidth : prev.expandedSidebarWidth,
+                resizeSidebarWidth: NAVBAR_WIDTH,
+            };
+        });
     }, [selectedNav, isMobileSize, setLayoutState]);
 
     useEffect(() => {
@@ -136,7 +146,7 @@ export const Aside = () => {
 
     useEffect(() => {
         if (!isMobileSize || !selectedNav || !displayedNav) return;
-        const elements = Array.from(document.querySelectorAll<HTMLElement>('#main-content, header[role="banner"], #main-navigation'));
+        const elements = Array.from(document.querySelectorAll<HTMLElement>('#main-content, #detail-content, header[role="banner"], #main-navigation'));
         const previous = elements.map(element => element.inert);
         for (const element of elements) element.inert = true;
         return () => elements.forEach((element, index) => { element.inert = previous[index]; });

@@ -54,6 +54,8 @@ export const Minimap = ({ content, scrollContainerId }: MinimapProps) => {
 
     const lines = useMemo(() => content.split("\n"), [content]);
     const canvasHeight = useMemo(() => Math.min(lines.length * LINE_H, 680), [lines.length]);
+    // 긴 글은 캔버스 높이(680) 안에 전체 줄을 축소해 그림 — 잘라내면 뷰포트 표시·클릭 이동(문서 전체 비율 기준)과 어긋남
+    const lineH = canvasHeight / Math.max(1, lines.length);
 
     const draw = useCallback(() => {
         const canvas = canvasRef.current;
@@ -66,13 +68,12 @@ export const Minimap = ({ content, scrollContainerId }: MinimapProps) => {
         let inCode = false;
 
         lines.forEach((line, i) => {
-            const y = i * LINE_H;
-            if (y >= canvasHeight) return;
+            const y = i * lineH;
 
             if (line.startsWith("```")) {
                 inCode = !inCode;
                 ctx.fillStyle = "rgba(100, 200, 130, 0.55)";
-                ctx.fillRect(0, y, MINIMAP_W, LINE_H);
+                ctx.fillRect(0, y, MINIMAP_W, lineH);
                 return;
             }
 
@@ -81,7 +82,7 @@ export const Minimap = ({ content, scrollContainerId }: MinimapProps) => {
 
             const w = Math.max(3, style.widthRatio * (MINIMAP_W - style.indent));
             ctx.fillStyle = style.color;
-            ctx.fillRect(style.indent, y, w, LINE_H - 0.5);
+            ctx.fillRect(style.indent, y, w, Math.max(0.5, lineH - 0.5));
         });
 
         // viewport overlay
@@ -93,7 +94,7 @@ export const Minimap = ({ content, scrollContainerId }: MinimapProps) => {
         ctx.strokeStyle = "rgba(255, 255, 255, 0.28)";
         ctx.lineWidth = 1;
         ctx.strokeRect(0.5, vpY + 0.5, MINIMAP_W - 1, vpH - 1);
-    }, [lines, canvasHeight]);
+    }, [lines, canvasHeight, lineH]);
 
     useEffect(() => {
         const container = document.getElementById(scrollContainerId);

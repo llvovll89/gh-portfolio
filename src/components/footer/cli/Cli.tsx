@@ -214,9 +214,24 @@ export const Cli = () => {
         setHistoryIndex(-1);
         writeHistory(nextHistory);
 
-        // clear 명령: 출력 비우기
+        // 튜토리얼 목표 명령을 입력했으면 다음 단계로 (clear 처럼 아래에서 일찍 끝나는 명령도 포함)
+        const advanceTutorial = () => {
+            if (tutorialStepIndex === null || !isExpectedTutorialCommand(tutorialStepIndex, raw)) return;
+            const isLastStep = tutorialStepIndex >= CLI_TUTORIAL_STEPS.length - 1;
+            if (isLastStep) {
+                setTutorialStepIndex(null);
+                appendSystemLog("tutorial: 완료! 다시 시작하려면 tutorial start 를 입력하세요.");
+            } else {
+                const nextStep = tutorialStepIndex + 1;
+                setTutorialStepIndex(nextStep);
+                appendSystemLog(["tutorial: good job", formatTutorialStep(nextStep)].join("\n"));
+            }
+        };
+
+        // clear 명령: 출력 비우기 (튜토리얼 마지막 단계 목표가 clear 이므로 진행 체크도 수행)
         if (raw.toLowerCase() === "clear") {
             setSubmitCliCommand({ value: "", isVisibleCommandUi: false });
+            advanceTutorial();
             setInputValue("");
             return;
         }
@@ -245,20 +260,7 @@ export const Cli = () => {
         const output = runCliCommand(raw);
         appendCommandLog(raw, output);
 
-        if (tutorialStepIndex !== null) {
-            const isMatched = isExpectedTutorialCommand(tutorialStepIndex, raw);
-            if (isMatched) {
-                const isLastStep = tutorialStepIndex >= CLI_TUTORIAL_STEPS.length - 1;
-                if (isLastStep) {
-                    setTutorialStepIndex(null);
-                    appendSystemLog("tutorial: 완료! 다시 시작하려면 tutorial start 를 입력하세요.");
-                } else {
-                    const nextStep = tutorialStepIndex + 1;
-                    setTutorialStepIndex(nextStep);
-                    appendSystemLog(["tutorial: good job", formatTutorialStep(nextStep)].join("\n"));
-                }
-            }
-        }
+        advanceTutorial();
 
         setInputValue("");
     };

@@ -12,6 +12,7 @@ import {LAYOUT_CONSTANTS} from "../../constants/layout";
 import {LuArrowUp} from "react-icons/lu";
 import {useLocation} from "react-router-dom";
 import {TerminalContext} from "../../context/TerminalState";
+import {useScrollRestoration} from "../../hooks/useScrollRestoration";
 
 interface ContentsProps {
     children?: React.ReactNode;
@@ -26,6 +27,7 @@ export const Contents = ({children, className}: ContentsProps) => {
     const [showScrollTop, setShowScrollTop] = useState(false);
     const [readProgress, setReadProgress] = useState(0);
     const sectionRef = useRef<HTMLElement>(null);
+    useScrollRestoration(sectionRef);
     const {isTerminalVisible} = useContext(TerminalContext);
     const {pathname} = useLocation();
     // 하단 터미널 패널(absolute)이 본문을 덮으므로 포커스 요소가 가려지지 않도록 그 높이만큼 여백 확보

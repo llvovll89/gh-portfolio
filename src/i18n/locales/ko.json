@@ -25,7 +25,8 @@
         "commits": "커밋",
         "noCommits": "커밋이 없습니다",
         "viewProfile": "깃허브 프로필 이동",
-        "viewCommit": "Commit 보러가기"
+        "viewCommit": "Commit 보러가기",
+        "showMoreActivity": "더보기 ({{count}}개)"
     },
     "extensions": {
         "title": "확장 프로그램",
@@ -236,7 +237,8 @@
             "loadingPost": "글을 불러오고 있습니다.",
             "loadError": "글을 불러오지 못했습니다. 다시 시도해 주세요.",
             "readingMinutes": "{{count}}분 읽기",
-            "featured": "대표 글"
+            "featured": "대표 글",
+            "seoDescription": "웹 개발자 김건호의 기술 블로그 — 총 {{count}}개의 포스트"
         },
         "resume": {
             "title": "이력서",

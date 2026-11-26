@@ -104,6 +104,9 @@ export function scoreRoute(
         }
     }
 
+    // 이름이 검색어와 전혀 맞지 않으면 결과에서 제외 (아래 길이·빈도 보너스만으로 모든 페이지가 통과하던 문제)
+    if (score === 0) return 0;
+
     if (matchedCount === keywords.length) score += 40;
     score += Math.max(0, 20 - routeName.length * 0.5);
     const frequency = frequencyMap[routePath] || 0;

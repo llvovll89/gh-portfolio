@@ -12,35 +12,29 @@ const TaegeukgiSVG = ({ style }: { style?: React.CSSProperties }) => (
         {/* 흰 배경 */}
         <rect width="90" height="60" fill="white" rx="2" />
 
-        {/* 태극 - yin-yang을 -45° 회전 */}
-        <g transform="translate(45,30) rotate(-45)">
-            {/* 빨간 원 전체 */}
+        {/*
+          * 국가 규격(위키미디어 Flag_of_South_Korea.svg 기준): 3:2 깃면의 대각선 각도 atan(2/3) = 33.69°
+          * 태극: 분할선이 건(좌상)–곤(우하) 대각선 위, 위쪽 빨강·아래쪽 파랑, 빨강 머리는 건 쪽·파랑 머리는 곤 쪽
+          * 괘: 건 좌상 · 감 우상 · 리 좌하 · 곤 우하, 막대는 각자의 대각선에 수직
+          */}
+        <g transform="translate(45,30) rotate(33.69)">
             <circle r="14" fill="#CD2E3A" />
-            {/* 아래쪽 파란 반원 */}
-            <path d="M -14,0 A 14,14 0 0,0 14,0 Z" fill="#003478" />
-            {/* 하단 작은 빨간 원 (파란 영역 안) */}
-            <circle cx="0" cy="7" r="7" fill="#CD2E3A" />
-            {/* 상단 작은 파란 원 (빨간 영역 안) */}
-            <circle cx="0" cy="-7" r="7" fill="#003478" />
+            {/* 대각선 아래쪽 파란 반원 */}
+            <path d="M -14,0 A 14,14 0 0,0 14,0 Z" fill="#0047A0" />
+            {/* 건 쪽 작은 빨간 원 · 곤 쪽 작은 파란 원 → S자 태극 */}
+            <circle cx="-7" cy="0" r="7" fill="#CD2E3A" />
+            <circle cx="7" cy="0" r="7" fill="#0047A0" />
         </g>
 
         {/* 건 ☰ 좌상단 - 3 solid bars */}
-        <g transform="translate(16,12) rotate(-45)" stroke="#000" strokeWidth="2.2" strokeLinecap="round" fill="none">
+        <g transform="translate(22.1,14.7) rotate(-56.31)" stroke="#000" strokeWidth="2.2" strokeLinecap="round" fill="none">
             <line x1="-7" y1="-4" x2="7" y2="-4" />
             <line x1="-7" y1="0"  x2="7" y2="0"  />
             <line x1="-7" y1="4"  x2="7" y2="4"  />
         </g>
 
-        {/* 이 ☲ 우상단 - solid / broken / solid */}
-        <g transform="translate(74,12) rotate(45)" stroke="#000" strokeWidth="2.2" strokeLinecap="round" fill="none">
-            <line x1="-7" y1="-4" x2="7"  y2="-4" />
-            <line x1="-7" y1="0"  x2="-2" y2="0"  />
-            <line x1="2"  y1="0"  x2="7"  y2="0"  />
-            <line x1="-7" y1="4"  x2="7"  y2="4"  />
-        </g>
-
-        {/* 감 ☵ 좌하단 - broken / solid / broken */}
-        <g transform="translate(16,48) rotate(45)" stroke="#000" strokeWidth="2.2" strokeLinecap="round" fill="none">
+        {/* 감 ☵ 우상단 - broken / solid / broken */}
+        <g transform="translate(67.9,14.7) rotate(56.31)" stroke="#000" strokeWidth="2.2" strokeLinecap="round" fill="none">
             <line x1="-7" y1="-4" x2="-2" y2="-4" />
             <line x1="2"  y1="-4" x2="7"  y2="-4" />
             <line x1="-7" y1="0"  x2="7"  y2="0"  />
@@ -48,8 +42,16 @@ const TaegeukgiSVG = ({ style }: { style?: React.CSSProperties }) => (
             <line x1="2"  y1="4"  x2="7"  y2="4"  />
         </g>
 
+        {/* 리 ☲ 좌하단 - solid / broken / solid */}
+        <g transform="translate(22.1,45.3) rotate(56.31)" stroke="#000" strokeWidth="2.2" strokeLinecap="round" fill="none">
+            <line x1="-7" y1="-4" x2="7"  y2="-4" />
+            <line x1="-7" y1="0"  x2="-2" y2="0"  />
+            <line x1="2"  y1="0"  x2="7"  y2="0"  />
+            <line x1="-7" y1="4"  x2="7"  y2="4"  />
+        </g>
+
         {/* 곤 ☷ 우하단 - 3 broken bars */}
-        <g transform="translate(74,48) rotate(-45)" stroke="#000" strokeWidth="2.2" strokeLinecap="round" fill="none">
+        <g transform="translate(67.9,45.3) rotate(-56.31)" stroke="#000" strokeWidth="2.2" strokeLinecap="round" fill="none">
             <line x1="-7" y1="-4" x2="-2" y2="-4" />
             <line x1="2"  y1="-4" x2="7"  y2="-4" />
             <line x1="-7" y1="0"  x2="-2" y2="0"  />
@@ -120,7 +122,7 @@ export const MarchFirstOverlay = () => {
                         }}
                     />
                     <div lang="ko" className="flex flex-col min-w-0">
-                        <div className="text-2xs text-muted font-medium tracking-wide">제 107주년</div>
+                        <div className="text-2xs text-muted font-medium tracking-wide">제 {new Date().getFullYear() - 1919}주년</div>
                         <div className="text-sm font-bold text-foreground whitespace-nowrap">3·1절을 기념합니다</div>
                     </div>
                     <button

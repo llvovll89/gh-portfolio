@@ -45,7 +45,7 @@ export const Blog = () => {
 
     useSeoMeta({
         title: uiText("블로그"),
-        description: `웹 개발자 김건호의 기술 블로그 — 총 ${allPosts.length}개의 포스트`,
+        description: t("pages.blog.seoDescription", { count: allPosts.length }),
         url: '/blog',
     });
 
