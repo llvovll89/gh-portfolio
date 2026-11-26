@@ -45,6 +45,9 @@ test("all published articles retain metadata and searchable content without ship
             assert.ok(!slugs.has(post.slug), "duplicate article slug: " + post.slug);
             slugs.add(post.slug);
             assert.ok(post.title && post.body && post.summary, path);
+            if (ext === ".md") {
+                assert.ok(["Frontend", "Backend", "AI", "CS", "DevOps", "Notes"].includes(post.category), "category: " + path);
+            }
             assert.equal(metadata.body, "", path);
             assert.equal(metadata.title, post.title, path);
             assert.equal(metadata.readingTime, post.readingTime, path);

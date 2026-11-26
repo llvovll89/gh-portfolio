@@ -16,7 +16,8 @@ export const ShareButton = ({ title, summary, url }: ShareButtonProps) => {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const fullUrl = `${BASE_URL}${url ?? window.location.pathname}`;
+    // URL 생성자로 공백·한글 slug를 percent-encoding (이미 인코딩된 pathname은 그대로 유지)
+    const fullUrl = new URL(url ?? window.location.pathname, BASE_URL).href;
     const text = summary ? `${title}\n${summary}` : title;
 
     // 외부 클릭 시 닫기
