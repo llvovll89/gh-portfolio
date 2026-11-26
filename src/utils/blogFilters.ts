@@ -117,7 +117,9 @@ export function filterPosts(
     selectedTags: string[],
     selectedCategory: string
 ): BlogPost[] {
-    let filtered = posts;
+    // 전문 검색 — Fuse.js (제목 · 태그 · 요약 · 본문 모두 포함)
+    // 필터 결과(매번 새 배열)가 아닌 전체 목록으로 검색해야 Fuse 인덱스가 캐시됨 → 이후 필터를 적용해도 관련도 순서는 유지
+    let filtered = searchQuery.trim() ? fuseSearch(posts, searchQuery) : posts;
 
     if (selectedCategory.trim()) {
         filtered = filtered.filter(
@@ -133,11 +135,6 @@ export function filterPosts(
                 post.tags!.includes(selectedTag)
             );
         });
-    }
-
-    // 전문 검색 — Fuse.js (제목 · 태그 · 요약 · 본문 모두 포함)
-    if (searchQuery.trim()) {
-        filtered = fuseSearch(filtered, searchQuery);
     }
 
     return filtered;

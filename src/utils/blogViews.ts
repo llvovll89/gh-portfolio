@@ -1,5 +1,6 @@
 import { db } from "../firebase/config";
 import { doc, setDoc, onSnapshot, increment } from "firebase/firestore";
+import { logger } from "./logger";
 
 const COLLECTION = "blog_views";
 const SESSION_KEY = "viewed_posts";
@@ -30,9 +31,10 @@ function markViewedInSession(slug: string): void {
 export async function incrementViewCount(slug: string): Promise<void> {
     if (hasViewedInSession(slug)) return;
     if (!db) return;
-    markViewedInSession(slug);
     const ref = doc(db, COLLECTION, slug);
     await setDoc(ref, { count: increment(1) }, { merge: true });
+    // 쓰기 성공 후에만 기록 — 실패(오프라인 등) 시 같은 세션에서 다시 시도할 수 있게 함
+    markViewedInSession(slug);
 }
 
 export function subscribeViewCount(
@@ -41,7 +43,13 @@ export function subscribeViewCount(
 ): () => void {
     if (!db) return () => {};
     const ref = doc(db, COLLECTION, slug);
-    return onSnapshot(ref, (snap) => {
-        callback(snap.exists() ? (snap.data().count as number) ?? 0 : 0);
-    });
+    return onSnapshot(
+        ref,
+        (snap) => {
+            const count: unknown = snap.exists() ? (snap.data() as { count?: unknown }).count : 0;
+            callback(typeof count === "number" ? count : 0);
+        },
+        // 권한·네트워크 오류 시 조회수만 숨기고 콘솔 미처리 오류로 남기지 않음
+        (error) => logger.warn("조회수 구독 실패", error),
+    );
 }

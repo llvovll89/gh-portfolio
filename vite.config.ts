@@ -40,7 +40,8 @@ export default defineConfig(({ mode }) => {
                 workbox: {
                     // SPA 셸 fallback 대상에서 정적 파일·API 제외 (설치 후 /rss.xml 등을 직접 열면 404 페이지가 뜨던 문제)
                     navigateFallbackDenylist: [/^\/api\//, /\.(?:xml|txt|pdf|webmanifest|json)$/],
-                    globIgnores: ["**/post-body-*.js", "**/searchPosts-*.js", "**/static/en-*.js", "**/static/ja-*.js", "blog/**", "projects/**", "profile/**", "resume/**", "contact/**", "uses/**", "404.html"],
+                    // Detail·Firestore(config) 청크는 블로그 글을 열 때만 필요하므로 첫 방문 precache 에서 제외 (on-demand-scripts 런타임 캐시가 담당)
+                    globIgnores: ["**/post-body-*.js", "**/searchPosts-*.js", "**/Detail-*.js", "**/config-*.js", "**/static/en-*.js", "**/static/ja-*.js", "blog/**", "projects/**", "profile/**", "resume/**", "contact/**", "uses/**", "404.html"],
                     globPatterns: [
                         "**/*.{js,css,html,ico,svg}",
                         "assets/logo/*.png",

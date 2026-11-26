@@ -22,7 +22,7 @@ function loadTypeScript(file) {
 }
 
 const { blogContent } = loadTypeScript("build/blogContent.ts");
-const { parseMarkdownPost, parseHtmlPost } = loadTypeScript("src/utils/postMetadata.ts");
+const { parseMarkdownPost, parseHtmlPost, plainSummary } = loadTypeScript("src/utils/postMetadata.ts");
 const { projects } = loadTypeScript("src/pages/projects/projectData.ts");
 
 function readGenerated(plugin, filename, query) {
@@ -51,7 +51,9 @@ test("all published articles retain metadata and searchable content without ship
             assert.equal(metadata.body, "", path);
             assert.equal(metadata.title, post.title, path);
             assert.equal(metadata.readingTime, post.readingTime, path);
-            assert.equal(searchable.body, post.body, path);
+            // 검색 인덱스에는 원문 대신 plain text 본문만 실림
+            assert.equal(searchable.body, plainSummary(post.body, Infinity), path);
+            assert.ok(!/<[a-z][^>]*>|```/i.test(searchable.body), "search body must be plain text: " + path);
             assert.equal(searchable.slug, metadata.slug, path);
         }
     }
