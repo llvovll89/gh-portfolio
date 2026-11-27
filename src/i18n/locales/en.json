@@ -324,6 +324,21 @@
         "selectColor": "Choose color {{color}}"
     },
     "projectContent": {
+        "language-study-room": {
+            "title": "Four-Language Study Notes",
+            "scale": "Personal project",
+            "description": "Study notes that teach each sentence side by side in Korean, Japanese, Chinese, and English, with Korean-script pronunciation for every foreign sentence.",
+            "detailedDescription": "Built for learners who only know Korean: the same sentence is compared in Japanese, Chinese, and English, and every foreign sentence carries Korean-script pronunciation with pitch and pace marks. Each of the three levels (basic, intermediate, advanced) starts with grammar concepts before vocabulary and conversation. It also offers a travel tab with full-screen \"show cards\", a TOEIC tab, auto-generated quizzes with a wrong-answer notebook, text-to-speech, and search across four languages. A prerendered React Router web app (offline PWA) and a single HTML file that works without JavaScript share one content source.",
+            "role": "Planning, content design, frontend development, testing, and deployment",
+            "contributions": [
+                "A single content source shared by the web app and the standalone HTML, with a data validation script",
+                "React Router prerendering and route loaders so each page ships only its own data (JS bundle 202KB → 12KB)",
+                "Playwright E2E covering JavaScript-off, offline, and mobile environments, plus service-worker offline support"
+            ],
+            "projectMembers": [
+                "Geonho Kim"
+            ]
+        },
         "gh-arcade": {
             "scale": "Personal project",
             "description": "A web game platform where you can instantly play everything from deck-builders, 3D brawlers, puzzles, and tactics RPGs to games for kids, right in the browser.",
@@ -340,16 +355,16 @@
         },
         "hovie": {
             "scale": "Personal project",
-            "description": "A movie and TV discovery website powered by the TMDB API.",
-            "detailedDescription": "Browse movies and TV shows by genre, then explore synopses, cast information, and trailers on detail pages. Responsive layouts support both desktop and mobile browsing.",
-            "role": "Planning, UI design, frontend development, and deployment",
-            "challenge": "Help users navigate a large catalog and move naturally from discovery to detailed information.",
+            "description": "A personal movie platform to discover movies and TV series, see where to stream them, and keep watch logs and reviews.",
+            "detailedDescription": "Built on the TMDB API, it offers trending, upcoming releases, side-by-side comparison, and discovery filtered by genre, rating, runtime, and Korean streaming services, plus detail pages with cast, trailers, and streaming availability. Firebase keeps each user's watchlist, rated watch history, per-season episode checks, and reviews. \"What to watch today\" picks titles by remaining time and subscribed services, and saved titles can be shared as a link. Supports dark and light themes and bottom tab navigation on mobile.",
+            "role": "Planning, UI design, frontend development, Firebase integration, and deployment",
+            "challenge": "Users needed a flow from deciding what to watch and where, through to logging what they watched, across a huge catalog.",
             "contributions": [
-                "Designed the TMDB content discovery structure",
-                "Implemented genre lists and detail pages",
-                "Built responsive layouts and deployed the service"
+                "Unified search (autocomplete, keyboard navigation, cancelling stale requests), discovery by streaming service, rating, and runtime, and infinite scroll",
+                "Watchlist, watch history, episode checks, and shared list snapshots backed by Firestore transactions",
+                "Normalized TV series into the movie type to reuse card and detail components; dark and light themes with CSS variables"
             ],
-            "outcome": "Delivered a responsive browsing flow from content discovery to trailer playback.",
+            "outcome": "Delivered one responsive flow from discovery and finding where to watch to logging and sharing.",
             "projectMembers": [
                 "Geonho Kim"
             ]

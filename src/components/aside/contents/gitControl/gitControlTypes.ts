@@ -78,4 +78,4 @@ export type RepoState = {
 
 export type TabType = "branches" | "issues" | "pullRequests";
 
-export const REPOS = ["gh-portfolio", "modart", "blacktie", "MealLog", "wedding-plan", "Variety_Gaming_Platform"] as const;
+export const REPOS = ["gh-portfolio", "hovie", "Run-River", "Variety_Gaming_Platform", "Language-Study-Room", "household_account_book", "MealLog", "wedding-plan"] as const;
