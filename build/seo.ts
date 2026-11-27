@@ -10,8 +10,9 @@ import { projects } from "../src/pages/projects/projectData";
 import { careers } from "../src/pages/profile/careerData";
 import { parseMarkdownPost, parseHtmlPost, plainSummary, postOgImagePath, type BlogPost } from "../src/utils/postMetadata";
 import { slugifyHeading } from "../src/utils/parseToc";
+import { SITE_URL, personSchema } from "../src/utils/personSchema";
 
-export const SITE_URL = "https://kimgeonho.vercel.app";
+export { SITE_URL };
 export const escapeHtml = (value: string) => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 
 type HeadingProps = { node?: unknown; children?: React.ReactNode };
@@ -42,7 +43,7 @@ function headingIdComponents() {
 
 const absolute = (pathname: string) => new URL(pathname, SITE_URL).href;
 const json = (value: unknown) => JSON.stringify(value).replace(/</g, "\\u003c");
-const author = { "@type": "Person", "@id": SITE_URL + "/#person", name: "김건호", alternateName: "Geonho Kim", url: SITE_URL, jobTitle: "Full-stack Web Developer", sameAs: ["https://github.com/llvovll89"] };
+const author = personSchema;
 
 const isDate = (value?: string) => !!value && /^\d{4}-\d{2}-\d{2}/.test(value);
 const postModified = (post: BlogPost) => isDate(post.updated) ? post.updated : isDate(post.date) ? post.date : undefined;

@@ -3,8 +3,8 @@ import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { postOgImagePath } from "../utils/postMetadata";
 import { safeDecode } from "../utils/safeDecode";
+import { SITE_URL, personSchema } from "../utils/personSchema";
 
-const SITE_URL = "https://kimgeonho.vercel.app";
 const DEFAULT_IMAGE = SITE_URL + "/og/default.png";
 export const TITLE_SUFFIX = " | 김건호";
 interface SeoMetaOptions {
@@ -60,7 +60,7 @@ export function useSeoMeta({ title, description, image, url, type = "website", n
         if (prerenderedUrl && normalizeUrl(prerenderedUrl) === fullUrl) return;
         if (!schema) { schema = document.createElement("script"); schema.id = "seo-schema"; schema.setAttribute("type", "application/ld+json"); document.head.appendChild(schema); }
         delete schema.dataset.url;
-        const person = { "@type": "Person", "@id": SITE_URL + "/#person", name: "김건호", alternateName: "Geonho Kim", url: SITE_URL, sameAs: ["https://github.com/llvovll89"] };
+        const person = personSchema;
         schema.textContent = JSON.stringify({ "@context": "https://schema.org", "@graph": [person, { "@type": type === "article" ? "BlogPosting" : "WebPage", name: fullTitle, headline: fullTitle, description: summary, url: fullUrl, image: fullImage, mainEntityOfPage: fullUrl, inLanguage: type === "article" ? "ko" : language, ...(type === "article" ? { author: person, datePublished: publishedTime } : {}) }] });
     }, [fullTitle, summary, fullImage, fullUrl, type, noIndex, publishedTime, language, image, postSlug]);
 }
