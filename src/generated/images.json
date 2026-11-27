@@ -1,13 +1,19 @@
 {
   "/assets/images/projects/hovie.png": {
-    "src": "/assets/optimized/hovie-914cf2b977-1600.webp",
-    "srcSet": "/assets/optimized/hovie-914cf2b977-320.webp 320w, /assets/optimized/hovie-914cf2b977-640.webp 640w, /assets/optimized/hovie-914cf2b977-960.webp 960w, /assets/optimized/hovie-914cf2b977-1600.webp 1600w",
+    "src": "/assets/optimized/hovie-7c4eea5e25-1600.webp",
+    "srcSet": "/assets/optimized/hovie-7c4eea5e25-320.webp 320w, /assets/optimized/hovie-7c4eea5e25-640.webp 640w, /assets/optimized/hovie-7c4eea5e25-960.webp 960w, /assets/optimized/hovie-7c4eea5e25-1600.webp 1600w",
     "width": 1920,
     "height": 1080
   },
   "/assets/images/projects/kimgeonho.png": {
     "src": "/assets/optimized/kimgeonho-a8b137f5e9-1600.webp",
     "srcSet": "/assets/optimized/kimgeonho-a8b137f5e9-320.webp 320w, /assets/optimized/kimgeonho-a8b137f5e9-640.webp 640w, /assets/optimized/kimgeonho-a8b137f5e9-960.webp 960w, /assets/optimized/kimgeonho-a8b137f5e9-1600.webp 1600w",
+    "width": 1920,
+    "height": 1080
+  },
+  "/assets/images/projects/language-study-room.png": {
+    "src": "/assets/optimized/language-study-room-d4e70757a3-1600.webp",
+    "srcSet": "/assets/optimized/language-study-room-d4e70757a3-320.webp 320w, /assets/optimized/language-study-room-d4e70757a3-640.webp 640w, /assets/optimized/language-study-room-d4e70757a3-960.webp 960w, /assets/optimized/language-study-room-d4e70757a3-1600.webp 1600w",
     "width": 1920,
     "height": 1080
   },
